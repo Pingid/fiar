@@ -1,0 +1,54 @@
+{
+  "name": "fiar",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar cms firebase plugin set",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "@fiar/core": "workspace:^",
+    "@fiar/workbench": "workspace:^",
+    "@fiar/content": "workspace:^",
+    "@fiar/assets": "workspace:^",
+    "@fiar/auth": "workspace:^",
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "@fiar/components": "workspace:^",
+    "typescript": "^5.1.6"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./style.css": {
+      "import": "./style.css",
+      "require": "./style.css"
+    },
+    "./plugins": {
+      "types": "./plugins/index.d.ts",
+      "import": "./plugins/index.js",
+      "require": "./plugins/index.cjs"
+    },
+    "./schema": {
+      "types": "./schema/index.d.ts",
+      "import": "./schema/index.js",
+      "require": "./schema/index.cjs"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "firestore": {
+    "rules": "firebase/firestore.rules",
+    "indexes": "firebase/firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "firebase/storage.rules"
+  },
+  "emulators": {
+    "firestore": {
+      "port": 8001
+    },
+    "storage": {
+      "port": 8002
+    },
+    "auth": {
+      "port": 8003
+    },
+    "functions": {
+      "port": 8004
+    }
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": ["node_modules", ".git", "firebase-debug.log", "firebase-debug.*.log", "src"],
+      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" install && npm --prefix \"$RESOURCE_DIR\" run build"]
+    }
+  ]
+}

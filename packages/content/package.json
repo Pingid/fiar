@@ -1,0 +1,336 @@
+{
+  "name": "@fiar/content",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar cms firebase content plugin",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "@fiar/workbench": "workspace:^",
+    "@fiar/core": "workspace:^",
+    "@fiar/components": "workspace:^",
+    "@heroicons/react": "^2.0.18",
+    "@tiptap/pm": "^2.0.4",
+    "@tiptap/react": "^2.0.4",
+    "@tiptap/starter-kit": "^2.0.4",
+    "dayjs": "^1.11.9",
+    "mcn": "^0.0.4",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.10.1",
+    "swr": "^2.2.0",
+    "typeofit": "^0.0.5",
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "@firebase/firestore": "^4.1.0",
+    "@types/react": "^18.2.17",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.14.2",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "@firebase/firestore": "^4.1.0",
+    "react": "^18",
+    "react-router-dom": "^6.14.2"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./components": {
+      "types": "./components/index.d.ts",
+      "import": "./components/index.js",
+      "require": "./components/index.cjs"
+    },
+    "./schema": {
+      "types": "./schema/index.d.ts",
+      "import": "./schema/index.js",
+      "require": "./schema/index.cjs"
+    },
+    "./components/collection": {
+      "types": "./components/collection/index.d.ts",
+      "import": "./components/collection/index.js",
+      "require": "./components/collection/index.cjs"
+    },
+    "./components/collection-actions": {
+      "types": "./components/collection-actions/index.d.ts",
+      "import": "./components/collection-actions/index.js",
+      "require": "./components/collection-actions/index.cjs"
+    },
+    "./components/collection-actions-create": {
+      "types": "./components/collection-actions-create/index.d.ts",
+      "import": "./components/collection-actions-create/index.js",
+      "require": "./components/collection-actions-create/index.cjs"
+    },
+    "./components/document": {
+      "types": "./components/document/index.d.ts",
+      "import": "./components/document/index.js",
+      "require": "./components/document/index.cjs"
+    },
+    "./components/document-actions": {
+      "types": "./components/document-actions/index.d.ts",
+      "import": "./components/document-actions/index.js",
+      "require": "./components/document-actions/index.cjs"
+    },
+    "./components/document-actions-archive": {
+      "types": "./components/document-actions-archive/index.d.ts",
+      "import": "./components/document-actions-archive/index.js",
+      "require": "./components/document-actions-archive/index.cjs"
+    },
+    "./components/document-actions-delete": {
+      "types": "./components/document-actions-delete/index.d.ts",
+      "import": "./components/document-actions-delete/index.js",
+      "require": "./components/document-actions-delete/index.cjs"
+    },
+    "./components/document-actions-edit": {
+      "types": "./components/document-actions-edit/index.d.ts",
+      "import": "./components/document-actions-edit/index.js",
+      "require": "./components/document-actions-edit/index.cjs"
+    },
+    "./components/document-actions-publish": {
+      "types": "./components/document-actions-publish/index.d.ts",
+      "import": "./components/document-actions-publish/index.js",
+      "require": "./components/document-actions-publish/index.cjs"
+    },
+    "./components/document-card": {
+      "types": "./components/document-card/index.d.ts",
+      "import": "./components/document-card/index.js",
+      "require": "./components/document-card/index.cjs"
+    },
+    "./components/field-array": {
+      "types": "./components/field-array/index.d.ts",
+      "import": "./components/field-array/index.js",
+      "require": "./components/field-array/index.cjs"
+    },
+    "./components/field-record": {
+      "types": "./components/field-record/index.d.ts",
+      "import": "./components/field-record/index.js",
+      "require": "./components/field-record/index.cjs"
+    },
+    "./components/field-ref": {
+      "types": "./components/field-ref/index.d.ts",
+      "import": "./components/field-ref/index.js",
+      "require": "./components/field-ref/index.cjs"
+    },
+    "./components/field-string": {
+      "types": "./components/field-string/index.d.ts",
+      "import": "./components/field-string/index.js",
+      "require": "./components/field-string/index.cjs"
+    },
+    "./components/field-text": {
+      "types": "./components/field-text/index.d.ts",
+      "import": "./components/field-text/index.js",
+      "require": "./components/field-text/index.cjs"
+    },
+    "./components/header": {
+      "types": "./components/header/index.d.ts",
+      "import": "./components/header/index.js",
+      "require": "./components/header/index.cjs"
+    },
+    "./components/icons": {
+      "types": "./components/icons/index.d.ts",
+      "import": "./components/icons/index.js",
+      "require": "./components/icons/index.cjs"
+    },
+    "./components/layout": {
+      "types": "./components/layout/index.d.ts",
+      "import": "./components/layout/index.js",
+      "require": "./components/layout/index.cjs"
+    },
+    "./components/list": {
+      "types": "./components/list/index.d.ts",
+      "import": "./components/list/index.js",
+      "require": "./components/list/index.cjs"
+    },
+    "./components/modal": {
+      "types": "./components/modal/index.d.ts",
+      "import": "./components/modal/index.js",
+      "require": "./components/modal/index.cjs"
+    },
+    "./components/pages": {
+      "types": "./components/pages/index.d.ts",
+      "import": "./components/pages/index.js",
+      "require": "./components/pages/index.cjs"
+    },
+    "./context/collection": {
+      "types": "./context/collection/index.d.ts",
+      "import": "./context/collection/index.js",
+      "require": "./context/collection/index.cjs"
+    },
+    "./context/config": {
+      "types": "./context/config/index.d.ts",
+      "import": "./context/config/index.js",
+      "require": "./context/config/index.cjs"
+    },
+    "./context/document": {
+      "types": "./context/document/index.d.ts",
+      "import": "./context/document/index.js",
+      "require": "./context/document/index.cjs"
+    },
+    "./context/field": {
+      "types": "./context/field/index.d.ts",
+      "import": "./context/field/index.js",
+      "require": "./context/field/index.cjs"
+    },
+    "./context/firestore-search": {
+      "types": "./context/firestore-search/index.d.ts",
+      "import": "./context/firestore-search/index.js",
+      "require": "./context/firestore-search/index.cjs"
+    },
+    "./context/tiptap": {
+      "types": "./context/tiptap/index.d.ts",
+      "import": "./context/tiptap/index.js",
+      "require": "./context/tiptap/index.cjs"
+    },
+    "./context/version": {
+      "types": "./context/version/index.d.ts",
+      "import": "./context/version/index.js",
+      "require": "./context/version/index.cjs"
+    },
+    "./schema/collection": {
+      "types": "./schema/collection/index.d.ts",
+      "import": "./schema/collection/index.js",
+      "require": "./schema/collection/index.cjs"
+    },
+    "./schema/config": {
+      "types": "./schema/config/index.d.ts",
+      "import": "./schema/config/index.js",
+      "require": "./schema/config/index.cjs"
+    },
+    "./schema/context": {
+      "types": "./schema/context/index.d.ts",
+      "import": "./schema/context/index.js",
+      "require": "./schema/context/index.cjs"
+    },
+    "./schema/document": {
+      "types": "./schema/document/index.d.ts",
+      "import": "./schema/document/index.js",
+      "require": "./schema/document/index.cjs"
+    },
+    "./schema/field": {
+      "types": "./schema/field/index.d.ts",
+      "import": "./schema/field/index.js",
+      "require": "./schema/field/index.cjs"
+    },
+    "./schema/util": {
+      "types": "./schema/util/index.d.ts",
+      "import": "./schema/util/index.js",
+      "require": "./schema/util/index.cjs"
+    },
+    "./util/paths": {
+      "types": "./util/paths/index.d.ts",
+      "import": "./util/paths/index.js",
+      "require": "./util/paths/index.cjs"
+    },
+    "./util/zustand": {
+      "types": "./util/zustand/index.d.ts",
+      "import": "./util/zustand/index.js",
+      "require": "./util/zustand/index.cjs"
+    },
+    "./context/collection/content": {
+      "types": "./context/collection/content/index.d.ts",
+      "import": "./context/collection/content/index.js",
+      "require": "./context/collection/content/index.cjs"
+    },
+    "./context/collection/data": {
+      "types": "./context/collection/data/index.d.ts",
+      "import": "./context/collection/data/index.js",
+      "require": "./context/collection/data/index.cjs"
+    },
+    "./context/collection/store": {
+      "types": "./context/collection/store/index.d.ts",
+      "import": "./context/collection/store/index.js",
+      "require": "./context/collection/store/index.cjs"
+    },
+    "./context/document/content": {
+      "types": "./context/document/content/index.d.ts",
+      "import": "./context/document/content/index.js",
+      "require": "./context/document/content/index.cjs"
+    },
+    "./context/document/data": {
+      "types": "./context/document/data/index.d.ts",
+      "import": "./context/document/data/index.js",
+      "require": "./context/document/data/index.cjs"
+    },
+    "./schema/collection/actions": {
+      "types": "./schema/collection/actions/index.d.ts",
+      "import": "./schema/collection/actions/index.js",
+      "require": "./schema/collection/actions/index.cjs"
+    },
+    "./schema/collection/context": {
+      "types": "./schema/collection/context/index.d.ts",
+      "import": "./schema/collection/context/index.js",
+      "require": "./schema/collection/context/index.cjs"
+    },
+    "./schema/collection/types": {
+      "types": "./schema/collection/types/index.d.ts",
+      "import": "./schema/collection/types/index.js",
+      "require": "./schema/collection/types/index.cjs"
+    },
+    "./schema/document/actions": {
+      "types": "./schema/document/actions/index.d.ts",
+      "import": "./schema/document/actions/index.js",
+      "require": "./schema/document/actions/index.cjs"
+    },
+    "./schema/document/context": {
+      "types": "./schema/document/context/index.d.ts",
+      "import": "./schema/document/context/index.js",
+      "require": "./schema/document/context/index.cjs"
+    },
+    "./schema/document/types": {
+      "types": "./schema/document/types/index.d.ts",
+      "import": "./schema/document/types/index.js",
+      "require": "./schema/document/types/index.cjs"
+    },
+    "./schema/field/array": {
+      "types": "./schema/field/array/index.d.ts",
+      "import": "./schema/field/array/index.js",
+      "require": "./schema/field/array/index.cjs"
+    },
+    "./schema/field/context": {
+      "types": "./schema/field/context/index.d.ts",
+      "import": "./schema/field/context/index.js",
+      "require": "./schema/field/context/index.cjs"
+    },
+    "./schema/field/record": {
+      "types": "./schema/field/record/index.d.ts",
+      "import": "./schema/field/record/index.js",
+      "require": "./schema/field/record/index.cjs"
+    },
+    "./schema/field/ref": {
+      "types": "./schema/field/ref/index.d.ts",
+      "import": "./schema/field/ref/index.js",
+      "require": "./schema/field/ref/index.cjs"
+    },
+    "./schema/field/string": {
+      "types": "./schema/field/string/index.d.ts",
+      "import": "./schema/field/string/index.js",
+      "require": "./schema/field/string/index.cjs"
+    },
+    "./schema/field/text": {
+      "types": "./schema/field/text/index.d.ts",
+      "import": "./schema/field/text/index.js",
+      "require": "./schema/field/text/index.cjs"
+    },
+    "./schema/field/types": {
+      "types": "./schema/field/types/index.d.ts",
+      "import": "./schema/field/types/index.js",
+      "require": "./schema/field/types/index.cjs"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+import { useNavigate } from 'react-router-dom'
+import React from 'react'
+
+import { DocumentActions, IContentDocument, createDocumentActions } from '../../../schema/document'
+import { useConfig } from '../../config'
+
+export type ContentDocumentActions = DocumentActions & { select: () => void; edit: () => void }
+export type ContentDocumentContext = Omit<IContentDocument, 'nodeId' | 'infer'> & {
+  actions?: Partial<ContentDocumentActions>
+}
+export const ContentDocumentContext = React.createContext<ContentDocumentContext | null>(null)
+export const ContentDocumentProvider = ContentDocumentContext.Provider
+export const useGetDocument = () => {
+  const schema = useConfig()
+  const nav = useNavigate()
+  return (document: ContentDocumentContext) => {
+    const actions = createDocumentActions({ ...schema, ...document })
+    const select = () => nav(`/content/${actions.refs.draft.path.split('/').slice(1).join('/')}`)
+    const edit = select
+    return { ...document, ...actions, select, edit, ...document.actions }
+  }
+}
+
+export const useDocument = <O extends boolean = false>(
+  optional?: O,
+): O extends true
+  ? undefined | ReturnType<ReturnType<typeof useGetDocument>>
+  : ReturnType<ReturnType<typeof useGetDocument>> => {
+  const get = useGetDocument()
+  const document = React.useContext(ContentDocumentContext)
+  if (!document && optional) return undefined as any
+  if (!document) throw new Error(`Missing ContentDocumentProvider`)
+  return get(document) as any
+}

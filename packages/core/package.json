@@ -1,0 +1,39 @@
+{
+  "name": "@fiar/core",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar ecosystem core types",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./types": {
+      "types": "./types/index.d.ts",
+      "import": "./types/index.js",
+      "require": "./types/index.cjs"
+    }
+  }
+}

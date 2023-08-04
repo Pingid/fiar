@@ -1,0 +1,99 @@
+{
+  "name": "@fiar/auth",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar cms firebase authentication plugin",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.18",
+    "@fiar/workbench": "workspace:^",
+    "@fiar/core": "workspace:^",
+    "@fiar/components": "workspace:^",
+    "firebase-functions": "^4.4.1",
+    "mcn": "^0.0.4",
+    "react-icons": "^4.10.1",
+    "swr": "^2.2.0"
+  },
+  "devDependencies": {
+    "@firebase/auth": "^1.1.0",
+    "@firebase/functions": "^0.10.0",
+    "firebase-admin": "^11.10.1",
+    "@types/react": "^18.2.17",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.14.2",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "@firebase/auth": "^1.1.0",
+    "@firebase/functions": "^0.10.0",
+    "firebase-admin": "^11.10.1",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.14.2"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./components": {
+      "types": "./components/index.d.ts",
+      "import": "./components/index.js",
+      "require": "./components/index.cjs"
+    },
+    "./context": {
+      "types": "./context/index.d.ts",
+      "import": "./context/index.js",
+      "require": "./context/index.cjs"
+    },
+    "./functions": {
+      "types": "./functions/index.d.ts",
+      "import": "./functions/index.js",
+      "require": "./functions/index.cjs"
+    },
+    "./components/auth-authorize": {
+      "types": "./components/auth-authorize/index.d.ts",
+      "import": "./components/auth-authorize/index.js",
+      "require": "./components/auth-authorize/index.cjs"
+    },
+    "./components/auth-login": {
+      "types": "./components/auth-login/index.d.ts",
+      "import": "./components/auth-login/index.js",
+      "require": "./components/auth-login/index.cjs"
+    },
+    "./components/auth-users": {
+      "types": "./components/auth-users/index.d.ts",
+      "import": "./components/auth-users/index.js",
+      "require": "./components/auth-users/index.cjs"
+    },
+    "./functions/config": {
+      "types": "./functions/config/index.d.ts",
+      "import": "./functions/config/index.js",
+      "require": "./functions/config/index.cjs"
+    },
+    "./functions/hooks": {
+      "types": "./functions/hooks/index.d.ts",
+      "import": "./functions/hooks/index.js",
+      "require": "./functions/hooks/index.cjs"
+    },
+    "./functions/users": {
+      "types": "./functions/users/index.d.ts",
+      "import": "./functions/users/index.js",
+      "require": "./functions/users/index.cjs"
+    }
+  }
+}

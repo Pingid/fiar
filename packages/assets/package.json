@@ -1,0 +1,99 @@
+{
+  "name": "@fiar/assets",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar cms assets plugin",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "@fiar/workbench": "workspace:^",
+    "@fiar/core": "workspace:^",
+    "@fiar/components": "workspace:^",
+    "@heroicons/react": "^2.0.18",
+    "@tiptap/extension-image": "^2.0.4",
+    "@tiptap/react": "^2.0.4",
+    "mcn": "^0.0.4",
+    "react-dropzone": "^14.2.3",
+    "swr": "^2.2.0",
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "@fiar/content": "workspace:^",
+    "@firebase/storage": "^0.11.2",
+    "@types/react": "^18.2.17",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.14.2",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "@fiar/content": "workspace:^",
+    "@firebase/storage": "^0.11.2",
+    "react": "^18.2.0",
+    "react-router-dom": "^6.14.2"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./components": {
+      "types": "./components/index.d.ts",
+      "import": "./components/index.js",
+      "require": "./components/index.cjs"
+    },
+    "./context": {
+      "types": "./context/index.d.ts",
+      "import": "./context/index.js",
+      "require": "./context/index.cjs"
+    },
+    "./fields": {
+      "types": "./fields/index.d.ts",
+      "import": "./fields/index.js",
+      "require": "./fields/index.cjs"
+    },
+    "./components/assets-browser": {
+      "types": "./components/assets-browser/index.d.ts",
+      "import": "./components/assets-browser/index.js",
+      "require": "./components/assets-browser/index.cjs"
+    },
+    "./components/content-field-assets": {
+      "types": "./components/content-field-assets/index.d.ts",
+      "import": "./components/content-field-assets/index.js",
+      "require": "./components/content-field-assets/index.cjs"
+    },
+    "./components/content-field-assets-image": {
+      "types": "./components/content-field-assets-image/index.d.ts",
+      "import": "./components/content-field-assets-image/index.js",
+      "require": "./components/content-field-assets-image/index.cjs"
+    },
+    "./components/icons": {
+      "types": "./components/icons/index.d.ts",
+      "import": "./components/icons/index.js",
+      "require": "./components/icons/index.cjs"
+    },
+    "./components/tiptap-control": {
+      "types": "./components/tiptap-control/index.d.ts",
+      "import": "./components/tiptap-control/index.js",
+      "require": "./components/tiptap-control/index.cjs"
+    },
+    "./fields/image": {
+      "types": "./fields/image/index.d.ts",
+      "import": "./fields/image/index.js",
+      "require": "./fields/image/index.cjs"
+    }
+  }
+}

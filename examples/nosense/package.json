@@ -1,0 +1,45 @@
+{
+  "name": "nosense",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build && pnpm postbuild",
+    "preview": "astro preview",
+    "astro": "astro",
+    "emulate": "../../scripts/env.js 'firebase emulators:start --project $FIREBASE_PROJECTID'",
+    "watch": "npm --prefix \"functions\" run watch",
+    "postbuild": "cd functions && npm install && npm run build"
+  },
+  "dependencies": {
+    "@astrojs/react": "^2.2.1",
+    "@astrojs/tailwind": "^4.0.0",
+    "@fiar/components": "workspace:^",
+    "@firebase/app": "^0.9.15",
+    "@firebase/auth": "^1.1.0",
+    "@firebase/firestore": "^4.1.0",
+    "@firebase/functions": "^0.10.0",
+    "@firebase/storage": "^0.11.2",
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "astro": "^2.9.3",
+    "fiar": "workspace:^",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-icons": "^4.10.1",
+    "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "firebase-admin": "^11.10.1",
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all"
+  }
+}

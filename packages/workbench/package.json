@@ -1,0 +1,79 @@
+{
+  "name": "@fiar/workbench",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar cms react dashboard",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "@fiar/core": "workspace:^",
+    "@fiar/components": "workspace:^",
+    "mcn": "^0.0.4",
+    "zustand": "^4.3.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
+    "react-router-dom": "^6.14.2",
+    "typeofit": "^0.0.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "typescript": "^5.1.6"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./components": {
+      "types": "./components/index.d.ts",
+      "import": "./components/index.js",
+      "require": "./components/index.cjs"
+    },
+    "./context": {
+      "types": "./context/index.d.ts",
+      "import": "./context/index.js",
+      "require": "./context/index.cjs"
+    },
+    "./types": {
+      "types": "./types/index.d.ts",
+      "import": "./types/index.js",
+      "require": "./types/index.cjs"
+    },
+    "./components/dashboard": {
+      "types": "./components/dashboard/index.d.ts",
+      "import": "./components/dashboard/index.js",
+      "require": "./components/dashboard/index.cjs"
+    },
+    "./components/landing": {
+      "types": "./components/landing/index.d.ts",
+      "import": "./components/landing/index.js",
+      "require": "./components/landing/index.cjs"
+    },
+    "./components/nav": {
+      "types": "./components/nav/index.d.ts",
+      "import": "./components/nav/index.js",
+      "require": "./components/nav/index.cjs"
+    },
+    "./components/router": {
+      "types": "./components/router/index.d.ts",
+      "import": "./components/router/index.js",
+      "require": "./components/router/index.cjs"
+    }
+  }
+}

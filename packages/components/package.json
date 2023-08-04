@@ -1,0 +1,132 @@
+{
+  "name": "@fiar/components",
+  "version": "0.0.0-alpha.3",
+  "description": "Fiar cms react component library",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
+  },
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/build.js --cjs-bundle",
+    "watch": "../../scripts/watch.js"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/typography": "^0.5.9",
+    "mcn": "^0.0.4",
+    "rdndmb-html5-to-touch": "^8.0.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dnd-multi-backend": "^8.0.1",
+    "react-icons": "^4.10.1",
+    "react-modal": "^3.16.1",
+    "react-textarea-autosize": "^8.5.2",
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-modal": "^3.16.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./style.css": {
+      "import": "./style.css",
+      "require": "./style.css"
+    },
+    "./components": {
+      "types": "./components/index.d.ts",
+      "import": "./components/index.js",
+      "require": "./components/index.cjs"
+    },
+    "./hooks": {
+      "types": "./hooks/index.d.ts",
+      "import": "./hooks/index.js",
+      "require": "./hooks/index.cjs"
+    },
+    "./tailwind": {
+      "types": "./tailwind/index.d.ts",
+      "import": "./tailwind/index.js",
+      "require": "./tailwind/index.cjs"
+    },
+    "./components/avatar": {
+      "types": "./components/avatar/index.d.ts",
+      "import": "./components/avatar/index.js",
+      "require": "./components/avatar/index.cjs"
+    },
+    "./components/button": {
+      "types": "./components/button/index.d.ts",
+      "import": "./components/button/index.js",
+      "require": "./components/button/index.cjs"
+    },
+    "./components/doccard": {
+      "types": "./components/doccard/index.d.ts",
+      "import": "./components/doccard/index.js",
+      "require": "./components/doccard/index.cjs"
+    },
+    "./components/done": {
+      "types": "./components/done/index.d.ts",
+      "import": "./components/done/index.js",
+      "require": "./components/done/index.cjs"
+    },
+    "./components/forms": {
+      "types": "./components/forms/index.d.ts",
+      "import": "./components/forms/index.js",
+      "require": "./components/forms/index.cjs"
+    },
+    "./components/header": {
+      "types": "./components/header/index.d.ts",
+      "import": "./components/header/index.js",
+      "require": "./components/header/index.cjs"
+    },
+    "./components/label": {
+      "types": "./components/label/index.d.ts",
+      "import": "./components/label/index.js",
+      "require": "./components/label/index.cjs"
+    },
+    "./components/loading": {
+      "types": "./components/loading/index.d.ts",
+      "import": "./components/loading/index.js",
+      "require": "./components/loading/index.cjs"
+    },
+    "./components/menu": {
+      "types": "./components/menu/index.d.ts",
+      "import": "./components/menu/index.js",
+      "require": "./components/menu/index.cjs"
+    },
+    "./components/modal": {
+      "types": "./components/modal/index.d.ts",
+      "import": "./components/modal/index.js",
+      "require": "./components/modal/index.cjs"
+    },
+    "./components/paginate": {
+      "types": "./components/paginate/index.d.ts",
+      "import": "./components/paginate/index.js",
+      "require": "./components/paginate/index.cjs"
+    },
+    "./components/reorder": {
+      "types": "./components/reorder/index.d.ts",
+      "import": "./components/reorder/index.js",
+      "require": "./components/reorder/index.cjs"
+    }
+  }
+}

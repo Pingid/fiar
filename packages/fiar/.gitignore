@@ -1,0 +1,9 @@
+/*
+/*/
+!/src/
+!.gitignore
+!package.json
+!tsconfig.json
+!.npmignore
+!tailwind.config.ts
+!README.md
