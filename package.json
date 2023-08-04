@@ -1,0 +1,39 @@
+{
+  "name": "fiarcms",
+  "version": "1.0.0",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "@example/*",
+      "@fiar/*",
+      "@docs"
+    ]
+  },
+  "private": true,
+  "scripts": {
+    "dev": "node ./scripts/dev.js",
+    "build": "pnpm run -r build",
+    "watch": "pnpm run --parallel watch",
+    "dev:packages": "pnpm run --filter '@fiar/*' --filter 'fiar' --parallel dev",
+    "build:packages": "pnpm run --filter '@fiar/*' --filter 'fiar' -r build",
+    "format": "pnpm run --parallel format",
+    "test": "pnpm run -r test run"
+  },
+  "devDependencies": {
+    "esbuild": "^0.18.17",
+    "fast-glob": "^3.3.1",
+    "node-pty": "^1.0.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "typescript": "^5.1.6"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all"
+  },
+  "dependencies": {
+    "natural": "^6.5.0"
+  }
+}

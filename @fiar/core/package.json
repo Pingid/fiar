@@ -1,0 +1,31 @@
+{
+  "name": "@fiar/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "module": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/cache.js 'src/**/*' '**/*.{js,d.ts} !node_modules' 'pnpm transform'",
+    "watch": "../../scripts/watch.js",
+    "transform": "../../scripts/build.js",
+    "format": "prettier --write ./src/**/*"
+  },
+  "dependencies": {
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,71 @@
+{
+  "name": "@fiar/ui",
+  "version": "0.0.1",
+  "description": "Fiar cms react component library",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "module": "index.js",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/minrx/core"
+  },
+  "license": "MIT",
+  "sideEffects": false,
+  "files": [
+    "lib",
+    "src",
+    "dom",
+    "README.md",
+    "package.json",
+    "!**/*.test.*",
+    "tsconfig.json"
+  ],
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/cache.js 'src/**/*' '**/*.{js,d.ts} !node_modules' 'pnpm transform'",
+    "watch": "../../scripts/watch.js",
+    "transform": "../../scripts/build.js",
+    "format": "prettier --write ./src/**/*"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.18",
+    "@tailwindcss/typography": "^0.5.9",
+    "mcn": "^0.0.4",
+    "rdndmb-html5-to-touch": "^8.0.1",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dnd-multi-backend": "^8.0.1",
+    "react-icons": "^4.10.1",
+    "react-modal": "^3.16.1",
+    "react-textarea-autosize": "^8.5.2",
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-modal": "^3.16.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.27",
+    "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all",
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+/*
+/*/
+!/src/
+!.gitignore
+!package.json
+!tsconfig.json
+!.npmignore

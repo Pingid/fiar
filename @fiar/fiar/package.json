@@ -1,0 +1,41 @@
+{
+  "name": "fiar",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "module": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/cache.js 'src/**/*' '**/*.{js,d.ts} !node_modules' 'pnpm transform'",
+    "watch": "../../scripts/watch.js",
+    "transform": "../../scripts/build.js",
+    "format": "prettier --write ./src/**/*"
+  },
+  "dependencies": {
+    "@fiar/core": "workspace:^",
+    "@fiar/workbench": "workspace:^",
+    "@fiar/content": "workspace:^",
+    "@fiar/assets": "workspace:^",
+    "@fiar/auth": "workspace:^",
+    "zustand": "^4.3.9"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "typescript": "^5.1.6"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all",
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "@fiar/workbench",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "module": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm watch",
+    "build": "../../scripts/cache.js 'src/**/*' '**/*.{js,d.ts} !node_modules' 'pnpm transform'",
+    "watch": "../../scripts/watch.js",
+    "transform": "../../scripts/build.js",
+    "format": "prettier --write ./src/**/*"
+  },
+  "dependencies": {
+    "@fiar/core": "workspace:^",
+    "@fiar/ui": "workspace:^",
+    "mcn": "^0.0.4",
+    "zustand": "^4.3.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
+    "react-router-dom": "^6.14.2",
+    "typeofit": "^0.0.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.17",
+    "@types/react-dom": "^18.2.7",
+    "prettier": "^3.0.0",
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "typescript": "^5.1.6"
+  },
+  "peerDependencies": {
+    "@firebase/app": "^0.9.15",
+    "@firebase/auth": "^1.1.0",
+    "@firebase/firestore": "^4.1.0"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 120,
+    "trailingComma": "all",
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ]
+  }
+}

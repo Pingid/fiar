@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: rgb(var(--color-active) / 1);
+  --ifm-color-content: rgb(var(--color-front) / 1);
+  --ifm-code-background: rgb(var(--color-back) / 1);
+  --ifm-navbar-background-color: rgb(var(--color-back) / 1);
+  --ifm-background-surface-color: rgb(var(--color-back) / 1);
+  --ifm-hover-overlay: rgb(var(--color-front) / 0);
+  --ifm-breadcrumb-item-background-active: rgb(var(--color-front) / 0);
+  --ifm-footer-background-color: rgb(var(--color-back) / 1);
+  --ifm-footer-color: rgb(var(--color-front) / 1);
+
+  --ifm-breadcrumb-border-radius: 0;
+  --ifm-breadcrumb-padding-horizontal: 0.1rem;
+  --ifm-navbar-height: 3rem;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: rgb(var(--color-active) / 1);
+  --ifm-color-content: rgb(var(--color-front) / 1);
+  --ifm-code-background: rgb(var(--color-back) / 1);
+  --ifm-navbar-background-color: rgb(var(--color-back) / 1);
+  --ifm-background-surface-color: rgb(var(--color-back) / 1);
+  --ifm-hover-overlay: : rgb(var(--color-front) / 0);
+  --ifm-breadcrumb-item-background-active: rgb(var(--color-front) / 0);
+  --ifm-footer-background-color: rgb(var(--color-back) / 1);
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.footer--dark {
+  --ifm-footer-background-color: rgb(var(--color-back) / 1);
+  --ifm-footer-color: rgb(var(--color-front) / 1);
+  --ifm-footer-title-color: rgb(var(--color-front) / 1);
+  --ifm-footer-link-color: rgb(var(--color-front) / 1);
+  @apply border-t;
+}
+
+.footer__link-item {
+  @apply flex items-center gap-1;
+}
+
+.breadcrumbs__item:first-child > a.breadcrumbs__link {
+  position: relative;
+  top: 0.48rem;
+}
+
+#__docusaurus > nav {
+  @apply border-b shadow-none;
+}
