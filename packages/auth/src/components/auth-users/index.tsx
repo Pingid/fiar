@@ -1,14 +1,16 @@
+import { Page } from '@fiar/workbench'
 import useMutation from 'swr/mutation'
 import useQuery from 'swr'
 import React from 'react'
 import cn from 'mcn'
 
-import { Avatar, Button, Header, InfoCard, Menu, Pagination } from '@fiar/components'
+import { Avatar, Button, InfoCard, Menu, Pagination } from '@fiar/components'
 import { httpsCallable, Functions } from '@firebase/functions'
 
 import ShieldExclamationIcon from '@heroicons/react/24/outline/ShieldExclamationIcon'
 import ShieldCheckIcon from '@heroicons/react/24/outline/ShieldCheckIcon'
 import LockClosedIcon from '@heroicons/react/24/outline/LockClosedIcon'
+import UsersIcon from '@heroicons/react/24/outline/UsersIcon'
 
 import type { UserManageFunctions } from '../../functions/users'
 import { useAuthConfig } from '../../context'
@@ -32,19 +34,15 @@ const UserList = (p: { functions: Functions }) => {
   const nextPageToken = list.data?.data.pageToken
   const next = nextPageToken ? () => setPage([...page, nextPageToken]) : undefined
   const prev = page.length > 0 ? () => setPage(page.slice(0, -1)) : undefined
-  const error = (
-    <>
-      {list.error?.message} {permit.error?.message}
-    </>
-  )
+
   return (
-    <>
-      <Header>
-        <Header.Content loading={list.isLoading} error={error}>
-          <Pagination page={page.length + 1} prev={prev} next={next} />
-        </Header.Content>
-      </Header>
-      <ul className="mt-6 space-y-6 pl-3 pr-2" data-testid="doc-list">
+    <Page
+      error={permit.error?.message || list.error?.message}
+      loading={list.isLoading || permit.isMutating}
+      breadcrumb={[{ title: 'Users', icon: <UsersIcon className="w-4" />, disabled: true }]}
+      actions={<Pagination page={page.length + 1} prev={prev} next={next} />}
+    >
+      <ul className="mt-6 space-y-6" data-testid="doc-list">
         {list.data?.data.users.map((x) => {
           const role = x.customClaims?.['fiar']
           return (
@@ -95,7 +93,7 @@ const UserList = (p: { functions: Functions }) => {
           )
         })}
       </ul>
-    </>
+    </Page>
   )
 }
 

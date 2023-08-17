@@ -1,7 +1,7 @@
 import { Page } from '@fiar/workbench/components/page'
 import { component } from '@fiar/workbench'
 import { Button } from '@fiar/components'
-import { Link } from 'react-router-dom'
+import { Link } from 'wouter'
 import { tp } from 'typeofit'
 
 import { ArrowRightIcon, CollectionIcon, ContentIcon, DocumentIcon } from '../icons'

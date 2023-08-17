@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'wouter'
 import React from 'react'
 
 import { DocumentActions, IContentDocument, createDocumentActions } from '../../../schema/document'
@@ -11,11 +11,11 @@ export type ContentDocumentContext = Omit<IContentDocument, 'nodeId' | 'infer'> 
 export const ContentDocumentContext = React.createContext<ContentDocumentContext | null>(null)
 export const ContentDocumentProvider = ContentDocumentContext.Provider
 export const useGetDocument = () => {
+  const [_, navigate] = useLocation()
   const schema = useConfig()
-  const nav = useNavigate()
   return (document: ContentDocumentContext) => {
     const actions = createDocumentActions({ ...schema, ...document })
-    const select = () => nav(`/content/${actions.refs.draft.path.split('/').slice(1).join('/')}`)
+    const select = () => navigate(`/content/${actions.refs.draft.path.split('/').slice(1).join('/')}`)
     const edit = select
     return { ...document, ...actions, select, edit, ...document.actions }
   }

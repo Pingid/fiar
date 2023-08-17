@@ -4,7 +4,7 @@ import { cn } from 'mcn'
 const variants = {
   default: 'bg-front/5 hover:bg-front/10 rounded-sm',
   link: 'hover border-b border-transparent hover:border-active hover:text-active disabled:border-transparent disabled:text-front',
-  ghost: 'hover:text-active border border-transparent hover:border-active rounded-sm',
+  ghost: 'hover:text-active rounded-sm',
   'ghost:error': 'hover:text-error border border-transparent hover:border-error rounded-sm',
   'ghost:archived': 'hover:text-archived border border-transparent hover:border-archived rounded-sm',
   outline: 'border disabled:opacity-70 hover:border-active hover:text-active',
@@ -14,6 +14,7 @@ const sizes = {
   default: 'px-3 py-1',
   lg: 'px-6 py-3',
   sm: 'text-sm',
+  none: '',
 }
 
 type SharedProps = {

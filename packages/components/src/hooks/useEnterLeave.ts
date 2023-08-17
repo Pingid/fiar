@@ -1,61 +1,41 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
-type Hook = (number | string)[]
-export const useEnterLeave = (props: { enter: Hook; leave?: Hook; enabled?: boolean }) => {
-  const ref = useRef<HTMLElement>()
-  const mounted = useRef(true)
-  const original = useRef<string>()
-  const entering = useRef(true)
+export const useEnterLeave = <T extends Record<string, Record<string, ReadonlyArray<string | number>>>>(config: T) => {
+  const s = useRef({
+    items: config,
+    elem: {} as { [K in keyof T]: HTMLElement | null },
+    last: {} as { [K in keyof T]: string[] },
+  })
+  useEffect(() => void (s.current.items = config))
 
-  let deps = [...props.enter, ...(props.leave || []), props.enabled]
-
-  const resolve = ([head, ...tail]: Hook, _entering: boolean): Promise<any> => {
-    if (entering.current !== _entering) return Promise.resolve()
-    if (typeof head === 'undefined') return Promise.resolve()
-    if (typeof head === 'number') {
-      return new Promise<void>((res) => setTimeout(() => res(), head)).then(() => resolve(tail, _entering))
-    }
-    if (!ref.current || !mounted.current) return Promise.resolve()
-    ref.current.className = original.current + head
-    return resolve(tail, _entering)
+  const exec = async (key: keyof T, items: (string | number)[]): Promise<void> => {
+    const [next, ...rest] = items
+    if (!next) return
+    if (typeof next === 'number') return new Promise((res) => setTimeout(res, next)).then(() => exec(key, rest))
+    ;(s.current.last[key] || []).forEach((item) => item && s.current.elem[key]?.classList.remove(item))
+    const list = next.split(' ')
+    list.forEach((item) => item && s.current.elem[key]?.classList.add(item))
+    s.current.last[key] = list
+    return exec(key, rest)
   }
 
-  const onEnter = useCallback(() => {
-    entering.current = true
-    resolve(props.enter, true)
-  }, deps)
+  const bind = useCallback(
+    <K extends keyof T>(target: K) =>
+      <H extends HTMLElement>(node: H | null) =>
+        (s.current.elem[target] = node),
+    [],
+  )
 
-  const onLeave = useCallback(() => {
-    entering.current = false
-    return resolve(props.leave || [], false)
-  }, deps)
-
-  useEffect(() => {
-    mounted.current = true
-    entering.current = true
-    return () => {
-      entering.current = false
-      if (ref.current) ref.current.className = original.current || ''
-      void (mounted.current = false)
-    }
+  const run = useCallback((action: { [K in keyof T]: keyof T[K] }[keyof T]) => {
+    return Promise.all(
+      Object.keys(config).map((key) => {
+        const target = config[key]
+        const anim = target?.[action as any]
+        if (anim) return exec(key, anim as any)
+        return Promise.resolve()
+      }),
+    )
   }, [])
 
-  useEffect(() => {
-    if (props.enabled === false) return
-    onEnter()
-  }, [onEnter])
-
-  return useMemo(
-    () => ({
-      ref: <H extends HTMLElement>(x: H | null) => {
-        ;(ref.current as any) = x
-        if (!ref.current) return
-        original.current = ref.current.className.trim() + ' '
-        if (typeof props.enter[0] === 'string') ref.current.className = original.current + props.enter[0]
-      },
-      leave: onLeave,
-      enter: onEnter,
-    }),
-    deps,
-  )
+  return [bind, run] as const
 }

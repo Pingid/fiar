@@ -1,12 +1,11 @@
-import { ContentModal } from '@fiar/content/components/modal'
 import { getDownloadURL, ref } from '@firebase/storage'
+import { WorkbenchPageModal } from '@fiar/workbench'
 import useMutation from 'swr/mutation'
 import { Editor } from '@tiptap/react'
 import React from 'react'
 
 import { SelectAssetProvider } from '../../context/select'
 import { useAssetConfig } from '../../context/config'
-import { AssetsBrowser } from '../assets-browser'
 import { is_image } from '../../context/assets'
 import { PhotoIcon } from '../icons'
 
@@ -23,19 +22,17 @@ export const TipTapControl = (p: { editor: Editor }): JSX.Element => {
       className="hover:bg-front/5 px-2 disabled:animate-pulse"
     >
       <PhotoIcon className="h-4 w-4" />
-      <ContentModal open={open} close={() => setopen(false)}>
-        <SelectAssetProvider
-          value={{
-            filter: (x) => is_image.test(x),
-            select: ({ fullPath }) => {
-              url.trigger(fullPath)
-              setopen(false)
-            },
-          }}
-        >
-          <AssetsBrowser />
-        </SelectAssetProvider>
-      </ContentModal>
+      <SelectAssetProvider
+        value={{
+          filter: (x) => is_image.test(x),
+          select: ({ fullPath }) => {
+            url.trigger(fullPath)
+            setopen(false)
+          },
+        }}
+      >
+        <WorkbenchPageModal open={open} close={() => setopen(false)} path="/assets" />
+      </SelectAssetProvider>
     </button>
   )
 }

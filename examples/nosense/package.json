@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "emulate": "../../scripts/env.js 'firebase emulators:start --project $FIREBASE_PROJECTID'",
+    "deploy": "../../scripts/env.js 'firebase deploy --project $FIREBASE_PROJECTID'",
     "watch": "npm --prefix \"functions\" run watch",
     "postbuild": "cd functions && npm install && npm run build"
   },
@@ -32,14 +33,6 @@
   },
   "devDependencies": {
     "dotenv": "^16.3.1",
-    "firebase-admin": "^11.10.1",
-    "prettier": "^3.0.0",
     "typescript": "^5.1.6"
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "printWidth": 120,
-    "trailingComma": "all"
   }
 }

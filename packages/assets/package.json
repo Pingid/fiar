@@ -34,14 +34,12 @@
     "@firebase/storage": "^0.11.2",
     "@types/react": "^18.2.17",
     "react": "^18.2.0",
-    "react-router-dom": "^6.14.2",
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
     "@fiar/content": "workspace:^",
     "@firebase/storage": "^0.11.2",
-    "react": "^18.2.0",
-    "react-router-dom": "^6.14.2"
+    "react": "^18.2.0"
   },
   "exports": {
     "./package.json": "./package.json",

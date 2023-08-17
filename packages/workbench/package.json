@@ -18,15 +18,17 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "@fiar/core": "workspace:^",
     "@fiar/components": "workspace:^",
+    "@fiar/core": "workspace:^",
+    "@heroicons/react": "^2.0.18",
     "mcn": "^0.0.4",
-    "zustand": "^4.3.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
-    "react-router-dom": "^6.14.2",
-    "typeofit": "^0.0.5"
+    "regexparam": "^2.0.1",
+    "typeofit": "^0.0.5",
+    "wouter": "^2.11.0",
+    "zustand": "^4.3.9"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",
@@ -55,15 +57,20 @@
       "import": "./types/index.js",
       "require": "./types/index.cjs"
     },
-    "./components/dashboard": {
-      "types": "./components/dashboard/index.d.ts",
-      "import": "./components/dashboard/index.js",
-      "require": "./components/dashboard/index.cjs"
+    "./components/hooks": {
+      "types": "./components/hooks/index.d.ts",
+      "import": "./components/hooks/index.js",
+      "require": "./components/hooks/index.cjs"
     },
     "./components/landing": {
       "types": "./components/landing/index.d.ts",
       "import": "./components/landing/index.js",
       "require": "./components/landing/index.cjs"
+    },
+    "./components/modal": {
+      "types": "./components/modal/index.d.ts",
+      "import": "./components/modal/index.js",
+      "require": "./components/modal/index.cjs"
     },
     "./components/nav": {
       "types": "./components/nav/index.d.ts",

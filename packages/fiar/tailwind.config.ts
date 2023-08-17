@@ -5,6 +5,7 @@ const _config: Config = {
   ...config,
   content: [
     './src/**/*.{ts,tsx}',
+    '../components/src/**/*.{ts,tsx}',
     '../workbench/src/**/*.{ts,tsx}',
     '../content/src/**/*.{ts,tsx}',
     '../assets/src/**/*.{ts,tsx}',
