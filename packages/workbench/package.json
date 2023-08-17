@@ -70,6 +70,11 @@
       "import": "./components/nav/index.js",
       "require": "./components/nav/index.cjs"
     },
+    "./components/page": {
+      "types": "./components/page/index.d.ts",
+      "import": "./components/page/index.js",
+      "require": "./components/page/index.cjs"
+    },
     "./components/router": {
       "types": "./components/router/index.d.ts",
       "import": "./components/router/index.js",
