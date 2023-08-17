@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'wouter'
 
 import { ContentVersionProvider } from '../../context/version'
 import { CollectionProvider } from '../../context/collection'
@@ -7,9 +7,9 @@ import { useConfig } from '../../context/config'
 import { isCol, isDoc } from '../../schema'
 
 export const CollectionPageProvider = (p: { children: React.ReactNode }): JSX.Element => {
-  const location = useLocation()
+  const [location] = useLocation()
   const schema = useConfig()
-  const path = location.pathname.replace(/^\/?content\/?/, '')
+  const path = location.replace(/^\/?content\/?/, '')
   const [version, ...col] = path.split('/')
   const content = schema.content.find((x) => x.ref === col.join('/'))
   if (!isCol(content)) return <>Missing collection {col.join('/')} in content</>
@@ -21,9 +21,9 @@ export const CollectionPageProvider = (p: { children: React.ReactNode }): JSX.El
 }
 
 export const DocumentPageProvider = (p: { children: React.ReactNode }): JSX.Element => {
-  const location = useLocation()
+  const [location] = useLocation()
   const schema = useConfig()
-  const path = location.pathname.replace(/^\/?content\/?/, '')
+  const path = location.replace(/^\/?content\/?/, '')
   const [version, ...doc] = path.split('/')
   const col = doc.slice(0, -1)
   const collection = schema.content.find((x) => x.ref === col.join('/'))

@@ -1,36 +1,74 @@
-import {
-  createBrowserRouter,
-  createHashRouter,
-  createMemoryRouter,
-  RouteObject,
-  RouterProvider,
-} from 'react-router-dom'
-import React from 'react'
+import { useLocationProperty, navigate } from 'wouter/use-location'
+import { Router, BaseLocationHook, Route, Switch } from 'wouter'
+import makeCachedMatcher from 'wouter/matcher'
+import { parse } from 'regexparam'
+import { useMemo } from 'react'
 
-import { useFiarAppState, useWorkbenchConfig } from '../../context'
+import { useWorkbenchPage, useWorkbenchPages, useWorkbenchProviders } from '../hooks'
+import { useFiarAppStore } from '../../context'
+import { MemoryRouter } from './memory'
 
-export const Router = (p: { children: JSX.Element | null }): JSX.Element | null => {
-  const providers = useFiarAppState((x) => x.providers || [])
-  const children = useFiarAppState((x) => x.pages || [])
-  const config = useWorkbenchConfig()
+const hashNavigate = (to: string) => navigate('#/' + to.replace(/^\//, ''))
+const hashLocation = () => window.location.hash.replace(/^#/, '') || '/'
+const useHashLocation: BaseLocationHook = () => [useLocationProperty(hashLocation), hashNavigate]
+const matcher = makeCachedMatcher((path: string) => {
+  const { keys, pattern } = parse(path)
+  return { keys: keys.map((name) => ({ name })), regexp: pattern }
+})
 
-  const router = React.useMemo(() => {
-    if (typeof document === 'undefined') return null
+export const WorkbenchRouter = (p: {
+  children: React.ReactNode
+  routing?: 'hash' | 'memory' | 'browser' | undefined
+  basename?: string | undefined
+  inital?: string
+}) => {
+  if (p.routing === 'hash') {
+    return (
+      <Router hook={useHashLocation} base={p.basename as string} matcher={matcher}>
+        {p.children}
+      </Router>
+    )
+  }
+  if (p.routing === 'memory') {
+    return (
+      <MemoryRouter initialPath={p.inital as string} base={p.basename as string} matcher={matcher}>
+        {p.children}
+      </MemoryRouter>
+    )
+  }
+  return (
+    <Router base={p.basename as string} matcher={matcher}>
+      {p.children}
+    </Router>
+  )
+}
 
-    const page = providers.reduce((a, Provider) => <Provider>{a}</Provider>, p.children)
+export const WorkbenchPages = () => {
+  const pages = useWorkbenchPages()
+  return pages.map((name) => <PageRoute key={name} component={name} />)
+}
 
-    const routes: RouteObject[] = [{ path: '/', element: page, children: children }]
+const PageRoute = (p: { component: `workbench:page:${string}` }) => {
+  const page = useWorkbenchPage(p.component)
+  if (!page) return undefined
+  return (
+    <Switch key={page.title}>
+      <Route path={`/${page.path}`}>{page.element}</Route>
+      <Route path={`/${page.path}/(.*)`}>{page.element}</Route>
+    </Switch>
+  )
+}
 
-    const routerConfig = { basename: config.basename || '/' }
-
-    return config.routing === 'hash'
-      ? createHashRouter(routes, routerConfig)
-      : config.routing === 'memory'
-      ? createMemoryRouter(routes, routerConfig)
-      : createBrowserRouter(routes, routerConfig)
-  }, [providers, children, config])
-
-  if (!router) return null
-
-  return <RouterProvider router={router} />
+export const WorkbenchProviders = (p: { children: JSX.Element }) => {
+  const providers = useWorkbenchProviders()
+  const store = useFiarAppStore()
+  return useMemo(
+    () =>
+      providers.reduce((a, name) => {
+        const Provider = store.getState().components[name]
+        if (!Provider) return a
+        return <Provider>{a}</Provider>
+      }, p.children),
+    [providers],
+  )
 }

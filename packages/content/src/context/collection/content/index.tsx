@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'wouter'
 import React from 'react'
 
 import { CollectionActions, createCollectionActions, IContentCollection } from '../../../schema/collection'
@@ -9,10 +9,10 @@ export const ContentCollectionContext = React.createContext<ContentCollectionCon
 export const ContentCollectionProvider = ContentCollectionContext.Provider
 export const useGetCollection = () => {
   const schema = useConfig()
-  const nav = useNavigate()
+  const [_, navigate] = useLocation()
   return (collection: ContentCollectionContext) => {
     const actions = createCollectionActions({ ...schema, ...collection })
-    const visit = () => nav(`/content/${actions.refs.draft.path.split('/').slice(1).join('/')}`)
+    const visit = () => navigate(`/content/${actions.refs.draft.path.split('/').slice(1).join('/')}`)
     return { ...collection, ...actions, ...collection.actions, visit }
   }
 }

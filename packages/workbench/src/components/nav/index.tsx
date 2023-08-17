@@ -1,17 +1,19 @@
 import { IoIosArrowForward } from 'react-icons/io'
-import { Link, useMatch } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { Link, useRoute } from 'wouter'
 import cn from 'mcn'
 
 import { Avatar } from '@fiar/components'
 
+import { useWorkbenchPage, useWorkbenchPages } from '../hooks'
 import { useFiarAppState } from '../../context'
 
 export const NavPanel = (): JSX.Element => {
   const [open, setopen] = useState(true)
-  const pages = useFiarAppState((x) => x.pages || [])
+  const pages = useWorkbenchPages()
 
-  const isPage = useMatch({ path: '/:page', end: false })
+  const isPage = useRoute('/:any')
+
   const text = cn('truncate transition-all', [open, 'opacity-100 max-w-full', 'opacity-0 max-w-0 pointer-events-none'])
   useEffect(() => void (isPage ? setopen(false) : null), [])
 
@@ -34,19 +36,9 @@ export const NavPanel = (): JSX.Element => {
           </button>
         </div>
         <ul className="mt-6 h-full w-full space-y-1 px-1 sm:px-3">
-          {pages
-            .filter((x) => !!x.title)
-            .map((y, i) => (
-              <NavPanelButton
-                key={`${y.path || y.title || i}`}
-                to={y.path || y.title?.toLocaleLowerCase() || ''}
-                onClick={() => setopen(false)}
-                icon={y.icon}
-                open={open}
-              >
-                {y.title || ''}
-              </NavPanelButton>
-            ))}
+          {pages.map((name) => (
+            <NavPanelButton key={name} name={name} onClose={() => setopen(false)} open={open} />
+          ))}
         </ul>
         <div className="pb-8">
           <AuthUser open={open} />
@@ -57,8 +49,8 @@ export const NavPanel = (): JSX.Element => {
 }
 
 const AuthUser = (p: { open: boolean }): JSX.Element | null => {
-  const user = useFiarAppState((x) => x.user)
-  const signout = useFiarAppState((x) => x.signout)
+  const user = useFiarAppState((x) => x.components['auth']?.user)
+  const signout = useFiarAppState((x) => x.components['auth']?.signout)
 
   const text = cn('truncate transition-all', [
     p.open,
@@ -84,15 +76,10 @@ const AuthUser = (p: { open: boolean }): JSX.Element | null => {
   )
 }
 
-const NavPanelButton = (p: {
-  children?: string
-  to: string
-  icon?: React.ReactNode
-  open?: boolean
-  onClick?: () => void
-  submenu?: { title: string }[]
-}) => {
-  const match = useMatch({ path: p.to, end: false })
+const NavPanelButton = (p: { name: `workbench:page:${string}`; open: boolean; onClose?: () => void }) => {
+  const page = useWorkbenchPage(p.name)
+
+  const [match] = useRoute(page?.path || '/')
   const text = cn('truncate transition-all', [
     p.open,
     'opacity-100 max-w-full',
@@ -100,14 +87,15 @@ const NavPanelButton = (p: {
   ])
   const btn = cn('w-full flex items-center px-2 gap-4 rounded-sm py-2', [!!match, 'bg-front/10', 'hover:bg-front/5'])
 
-  if (!p.icon) {
+  if (!page || !page.title) return null
+
+  if (!page.icon) {
     return (
       <li className="w-full">
-        <Link to={p.to} onClick={p.onClick}>
+        <Link to={`/${page.path}`} onClick={p.onClose}>
           <div className="w-full">
             <div className={cn(btn, 'py-[.6rem]')}>
-              <p className={cn('flex-1 truncate px-1 text-left')}>{p.children}</p>
-              {p.submenu && <IoIosArrowForward />}
+              <p className={cn('flex-1 truncate px-1 text-left')}>{page.title}</p>
             </div>
           </div>
         </Link>
@@ -117,11 +105,13 @@ const NavPanelButton = (p: {
 
   return (
     <li className="w-full">
-      <Link to={p.to} onClick={p.onClick}>
+      <Link to={page.path} onClick={p.onClose}>
         <div className="w-full">
           <div className={btn}>
-            <span className="inline-block h-5 w-5 shrink-0 text-2xl uppercase [&>*]:h-full [&>*]:w-full">{p.icon}</span>
-            <p className={cn('flex-1 text-left', text)}>{p.children}</p>
+            <span className="inline-block h-5 w-5 shrink-0 text-2xl uppercase [&>*]:h-full [&>*]:w-full">
+              {page.icon}
+            </span>
+            <p className={cn('flex-1 text-left', text)}>{page.title}</p>
           </div>
         </div>
       </Link>

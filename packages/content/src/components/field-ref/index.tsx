@@ -1,25 +1,25 @@
-import { DocumentReference } from '@firebase/firestore'
-import { component } from '@fiar/workbench'
+import { component, WorkbenchPageModal } from '@fiar/workbench'
 import { Button, Control } from '@fiar/components'
+import { doc } from '@firebase/firestore'
 import React from 'react'
 
-import { CollectionProvider, useCollection, useCollectionData } from '../../context/collection'
-import { DocumentProvider, useDocument, useGetDocument } from '../../context/document'
+import { DocumentProvider, useDocument } from '../../context/document'
 import { ContentDocumentActionsEdit } from '../document-actions-edit'
+import { CollectionProvider } from '../../context/collection'
 import { ContentDocumentActions } from '../document-actions'
-import { CollectionPagination } from '../collection'
+import { useConfig } from '../../context/config'
 import { DocumentCard } from '../document-card'
 import { useField } from '../../context/field'
 import { FieldRef } from '../../schema'
-import { ContentModal } from '../modal'
 import { LinkIcon } from '../icons'
 
 export const ContentFieldRef = component('content:field:ref', () => {
   const field = useField<FieldRef>({ equal: (a, b) => a?.path === b?.path })
   const [open, setopen] = React.useState(false)
+  const config = useConfig()
   const value = field.value()
   const to = field.options.to()
-  const doc = value?.id
+  const document = value?.id
     ? {
         field: to.field,
         label: '',
@@ -31,7 +31,7 @@ export const ContentFieldRef = component('content:field:ref', () => {
   return (
     <Control ref={field.ref} error={field.error} label={field.options.label}>
       <CollectionProvider value={to}>
-        <DocumentProvider value={doc}>
+        <DocumentProvider value={document}>
           {value ? (
             <div className="">
               <DocumentPreviewCard />
@@ -48,53 +48,25 @@ export const ContentFieldRef = component('content:field:ref', () => {
               </Button>
             </div>
           )}
-          <ContentModal open={open} close={() => setopen(false)}>
-            <div className="flex justify-start border-b pb-1 pl-2 pr-1">
-              <CollectionPagination />
-            </div>
-            <ContentCollectionList
-              select={(ref) => {
-                field.update(ref)
+          <WorkbenchPageModal
+            open={open}
+            close={() => setopen(false)}
+            path={`/content/draft/${to.ref}`}
+            onNav={(x) => {
+              const [_all, id] = new RegExp(`\/content\/draft\/${to.ref}\/(.*?)\/?$`).exec(x) || []
+              if (id) {
+                const ref = [config.contentPrefix, 'draft', to.ref, id]
+                field.update(doc(config.firestore, ref.join('/')))
                 setopen(false)
-              }}
-            />
-          </ContentModal>
+              }
+              return null
+            }}
+          />
         </DocumentProvider>
       </CollectionProvider>
     </Control>
   )
 })
-
-export const ContentCollectionList = (p: { select: (ref: DocumentReference<any>) => void }): JSX.Element => {
-  const data = useCollectionData((x) => x.pages[x.page])
-  const col = useCollection()!
-  const get = useGetDocument()
-  return (
-    <ul className="mt-6 h-full space-y-6 pb-6 pl-3 pr-2">
-      {data?.docs.map((x) => {
-        const label = x.data()?.[col.titleField] || 'Untitled'
-        const doc = {
-          ref: `${col.ref}/${x.id}`,
-          field: col.field,
-          label,
-          actions: { select: () => p.select(get(doc).refs.draft) },
-        }
-        return (
-          <DocumentProvider key={x.id} value={doc}>
-            <li className="flex">
-              <DocumentCard />
-              <div className="pt-1">
-                <ContentDocumentActions>
-                  <ContentDocumentActionsEdit />
-                </ContentDocumentActions>
-              </div>
-            </li>
-          </DocumentProvider>
-        )
-      })}
-    </ul>
-  )
-}
 
 const DocumentPreviewCard = () => {
   const doc = useDocument()!

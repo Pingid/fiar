@@ -9,24 +9,29 @@ import { AuthLogin } from '../auth-login'
 
 export const AuthAuthorise = component('auth:authorize', (p: { children: React.ReactNode }): JSX.Element => {
   const config = useAuthConfig()
-  const user = useFiarAppState((x) => x.user)
+  const user = useFiarAppState((x) => x.components.auth?.user)
   const store = useFiarAppStore()
   const [loading, setLoading] = useState(true)
 
   const setUser = useCallback(
     (user: User) =>
-      store.setState({
-        user: { ...user, displayName: user.displayName ?? '', email: user.email ?? '' },
-        signout: () => {
-          store.setState({ user: undefined })
-          return config.auth.signOut()
+      store.setState((x) => ({
+        components: {
+          ...x.components,
+          auth: {
+            user: { ...user, displayName: user.displayName ?? '', email: user.email ?? '' },
+            signout: () => {
+              store.setState((x) => ({ components: { ...x.components, auth: null } }))
+              return config.auth.signOut()
+            },
+          },
         },
-      }),
+      })),
     [],
   )
 
   useEffect(() => {
-    if (config.auth.currentUser) setUser(config.auth.currentUser)
+    config.auth.authStateReady().then(() => config.auth.currentUser && setUser(config.auth.currentUser))
     return onAuthStateChanged(config.auth, (x) => (x ? setUser(x) : null))
   }, [config, setUser])
 

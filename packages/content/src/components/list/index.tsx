@@ -16,8 +16,8 @@ export const ContentList = component('content:list', () => {
   const documents = schema.content.filter((x): x is IContentDocument => x.nodeId.description === 'document')
   return (
     <Page breadcrumb={[{ title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> }]}>
-      <div className="px-2">
-        <h4 className="text-front/50 mb-3 mt-6 text-sm font-semibold uppercase">Collections</h4>
+      <div className="mt-3 space-y-3">
+        <h4 className="text-front/50 text-sm font-semibold uppercase">Collections</h4>
         <ul className="w-full space-y-3">
           {collections.map((item) => (
             <CollectionProvider key={item.ref} value={item}>
@@ -25,7 +25,7 @@ export const ContentList = component('content:list', () => {
             </CollectionProvider>
           ))}
         </ul>
-        <h4 className="text-front/50 mb-3 mt-6 text-sm font-semibold uppercase">Documents</h4>
+        <h4 className="text-front/50 text-sm font-semibold uppercase">Documents</h4>
         <ul className="w-full space-y-3">
           {documents.map((item) => (
             <ContentVersionProvider key={item.ref} value="draft">

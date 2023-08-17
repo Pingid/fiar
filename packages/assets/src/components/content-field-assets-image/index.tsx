@@ -1,16 +1,15 @@
 import { StorageReference, getDownloadURL, ref } from '@firebase/storage'
-import { ContentModal } from '@fiar/content/components/modal'
+import { WorkbenchPageModal, component } from '@fiar/workbench'
 import { useField } from '@fiar/content/context/field'
-import { component } from '@fiar/workbench'
 import { Button, Control } from '@fiar/components'
 import React from 'react'
 import cn from 'mcn'
 
-import { is_image, useAssetConfig, useAssetUrl, SelectAssetProvider } from '../../context'
+import { SelectAssetProvider, is_image, useAssetConfig, useAssetUrl } from '../../context'
 import { AssetCardAction } from '../assets-browser/AssetCardAction'
 import { DownloadIcon, PhotoIcon, RemoveIcon } from '../icons'
 import { AssetCard } from '../assets-browser/AssetCard'
-import { AssetsBrowser } from '../assets-browser'
+// import { AssetsBrowser } from '../assets-browser'
 import { Asset } from '../assets-browser/Asset'
 import { FieldImage } from '../../fields'
 
@@ -45,19 +44,18 @@ export const ContentFieldAssetsImage = component('content:field:asset-image', ()
         </div>
       )}
       {value && <Preview image={value} remove={() => field.update(null)} />}
-      <ContentModal open={open} close={() => setopen(false)}>
-        <SelectAssetProvider
-          value={{
-            filter: (x) => is_image.test(x),
-            select: ({ fullPath, name, bucket }) => {
-              field.update({ fullPath, name, bucket })
-              setopen(false)
-            },
-          }}
-        >
-          <AssetsBrowser />
-        </SelectAssetProvider>
-      </ContentModal>
+
+      <SelectAssetProvider
+        value={{
+          filter: (x) => is_image.test(x),
+          select: ({ fullPath, name, bucket }) => {
+            field.update({ fullPath, name, bucket })
+            setopen(false)
+          },
+        }}
+      >
+        <WorkbenchPageModal open={open} close={() => setopen(false)} path="/assets" />
+      </SelectAssetProvider>
     </Control>
   )
 })

@@ -15,18 +15,14 @@ export const isUploadAsset = (x: StorageReference | UploadAsset): x is UploadAss
 export const useUploads: UseBoundStore<StoreApi<UploadState>> = create<UploadState>((set, get) => ({
   error: null,
   uploads: [],
+  loading: false,
   add: (files) => {
     files.forEach((x) => {
-      x.task.catch((e) => {
-        set({ error: e.message })
-        set((state) => ({ uploads: state.uploads.filter((y) => y !== x) }))
-      })
+      x.task.catch((e) => set((state) => ({ error: e.message, uploads: state.uploads.filter((y) => y !== x) })))
     })
     return set((state) => {
       const filtered = files.filter((x) => !state.uploads.some((y) => y.file === x.file))
-      return {
-        uploads: [...state.uploads, ...filtered],
-      }
+      return { uploads: [...state.uploads, ...filtered] }
     })
   },
   populate: (items: StorageReference[]) => {

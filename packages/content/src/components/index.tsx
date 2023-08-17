@@ -2,7 +2,6 @@ import '@fiar/core/types'
 
 import { ContentCollection } from './collection'
 import { ContentDocument } from './document'
-import { ContentLayout } from './layout'
 import { ContentList } from './list'
 import { ContentDocumentActionsPublish } from './document-actions-publish'
 import { ContentDocumentActionsArchive } from './document-actions-archive'
@@ -19,7 +18,6 @@ declare module '@fiar/core/types' {
   export interface FiarComponents {
     [ContentCollection.label]?: typeof ContentCollection.Component
     [ContentDocument.label]?: typeof ContentDocument.Component
-    [ContentLayout.label]?: typeof ContentLayout.Component
     [ContentList.label]?: typeof ContentList.Component
     [ContentDocumentActions.label]?: typeof ContentDocumentActions.Component
     [ContentDocumentActionsArchive.label]?: typeof ContentDocumentActionsArchive.Component

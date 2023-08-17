@@ -18,9 +18,9 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "@fiar/workbench": "workspace:^",
-    "@fiar/core": "workspace:^",
     "@fiar/components": "workspace:^",
+    "@fiar/core": "workspace:^",
+    "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.0.18",
     "@tiptap/pm": "^2.0.4",
     "@tiptap/react": "^2.0.4",
@@ -31,19 +31,18 @@
     "react-icons": "^4.10.1",
     "swr": "^2.2.0",
     "typeofit": "^0.0.5",
+    "wouter": "^2.11.0",
     "zustand": "^4.3.9"
   },
   "devDependencies": {
     "@firebase/firestore": "^4.1.0",
     "@types/react": "^18.2.17",
     "react": "^18.2.0",
-    "react-router-dom": "^6.14.2",
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
     "@firebase/firestore": "^4.1.0",
-    "react": "^18",
-    "react-router-dom": "^6.14.2"
+    "react": "^18"
   },
   "exports": {
     "./package.json": "./package.json",
@@ -147,20 +146,10 @@
       "import": "./components/icons/index.js",
       "require": "./components/icons/index.cjs"
     },
-    "./components/layout": {
-      "types": "./components/layout/index.d.ts",
-      "import": "./components/layout/index.js",
-      "require": "./components/layout/index.cjs"
-    },
     "./components/list": {
       "types": "./components/list/index.d.ts",
       "import": "./components/list/index.js",
       "require": "./components/list/index.cjs"
-    },
-    "./components/modal": {
-      "types": "./components/modal/index.d.ts",
-      "import": "./components/modal/index.js",
-      "require": "./components/modal/index.cjs"
     },
     "./components/pages": {
       "types": "./components/pages/index.d.ts",

@@ -1,13 +1,10 @@
-import { RouteObject } from 'react-router-dom'
 import '@fiar/core/types'
 
 declare module '@fiar/core/types' {
-  export interface FiarApp {
-    pages?: WorkbenchPage[]
-    providers?: WorkbenchProvider[]
-    user?: AuthUser | undefined
-    signout?: (() => Promise<void>) | undefined
-    Dashboard?: () => JSX.Element
+  export interface FiarComponents {
+    [provider: `workbench:provider:${string}`]: WorkbenchProvider
+    [page: `workbench:page:${string}`]: WorkbenchPage
+    auth?: { user?: AuthUser | undefined; signout?: (() => Promise<void>) | undefined } | null
   }
 }
 
@@ -18,5 +15,5 @@ export interface AuthUser {
   photoURL?: string | undefined | null
 }
 
-export type WorkbenchPage = RouteObject & { icon?: React.ReactNode; title: string }
-export type WorkbenchProvider = (p: { children: React.ReactNode }) => React.ReactNode
+export type WorkbenchPage = { element: JSX.Element; path: string; icon?: JSX.Element; title?: string }
+export type WorkbenchProvider = (p: { children: JSX.Element }) => JSX.Element

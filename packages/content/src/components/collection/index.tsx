@@ -17,18 +17,19 @@ import { DocumentMeta } from '../../schema'
 
 export const ContentCollection = component('content:collection', () => {
   const col = useCollection()!
+  const actions = (
+    <div className="flex gap-1">
+      <ContentCollectionActionsCreate />
+      <CollectionPagination />
+    </div>
+  )
   return (
     <Page
       breadcrumb={[
         { title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> },
         { title: col?.label || col?.ref, onClick: col?.visit, icon: <CollectionIcon className="w-4" /> },
       ]}
-      actions={
-        <div className="flex gap-1">
-          <ContentCollectionActionsCreate />
-          <CollectionPagination />
-        </div>
-      }
+      actions={actions}
     >
       <ContentCollectionList />
     </Page>
@@ -39,7 +40,7 @@ export const ContentCollectionList = (): JSX.Element => {
   const data = useCollectionData((x) => x.pages[x.page])
   const col = useCollection()!
   return (
-    <ul className="mt-6 space-y-6 pl-3 pr-2">
+    <ul className="mt-6 space-y-6">
       {data?.docs.map((x) => {
         const label = x.data()?.[col.titleField] || 'Untitled'
         return (
