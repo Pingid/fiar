@@ -1,5 +1,9 @@
+import { Page } from '../page'
+
 export const Landing = (): JSX.Element => (
-  <div className="flex w-full items-center justify-center">
-    <h1 className="break-words p-3 text-4xl">fiar</h1>
-  </div>
+  <Page breadcrumb={[{ title: 'Fiar', to: '/' }]}>
+    <div className="flex flex h-full w-full items-center justify-center">
+      <h1 className="break-words p-3 text-4xl">fiar</h1>
+    </div>
+  </Page>
 )

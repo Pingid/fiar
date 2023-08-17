@@ -1,12 +1,13 @@
 import { InfoCard, LoadingDots } from '@fiar/components'
+import { Page } from '@fiar/workbench/components/page'
 import { component } from '@fiar/workbench'
 import useQuery from 'swr'
 
 import { DocumentProvider, useDocument, useDocumentData } from '../../context/document'
 import { CollectionProvider, useCollection } from '../../context/collection'
+import { CollectionIcon, ContentIcon, DocumentIcon } from '../icons'
 import { IContentCollection, IContentDocument } from '../../schema'
 import { ContentVersionProvider } from '../../context/version'
-import { CollectionIcon, DocumentIcon } from '../icons'
 import { useConfig } from '../../context/config'
 
 export const ContentList = component('content:list', () => {
@@ -14,26 +15,28 @@ export const ContentList = component('content:list', () => {
   const collections = schema.content.filter((x): x is IContentCollection => x.nodeId.description === 'collection')
   const documents = schema.content.filter((x): x is IContentDocument => x.nodeId.description === 'document')
   return (
-    <div className="px-2">
-      <h4 className="text-front/50 mb-3 mt-6 text-sm font-semibold uppercase">Collections</h4>
-      <ul className="w-full space-y-3">
-        {collections.map((item) => (
-          <CollectionProvider key={item.ref} value={item}>
-            <ContentCollectionListCard />
-          </CollectionProvider>
-        ))}
-      </ul>
-      <h4 className="text-front/50 mb-3 mt-6 text-sm font-semibold uppercase">Documents</h4>
-      <ul className="w-full space-y-3">
-        {documents.map((item) => (
-          <ContentVersionProvider key={item.ref} value="draft">
-            <DocumentProvider value={item}>
-              <ContentDocumentListCard />
-            </DocumentProvider>
-          </ContentVersionProvider>
-        ))}
-      </ul>
-    </div>
+    <Page breadcrumb={[{ title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> }]}>
+      <div className="px-2">
+        <h4 className="text-front/50 mb-3 mt-6 text-sm font-semibold uppercase">Collections</h4>
+        <ul className="w-full space-y-3">
+          {collections.map((item) => (
+            <CollectionProvider key={item.ref} value={item}>
+              <ContentCollectionListCard />
+            </CollectionProvider>
+          ))}
+        </ul>
+        <h4 className="text-front/50 mb-3 mt-6 text-sm font-semibold uppercase">Documents</h4>
+        <ul className="w-full space-y-3">
+          {documents.map((item) => (
+            <ContentVersionProvider key={item.ref} value="draft">
+              <DocumentProvider value={item}>
+                <ContentDocumentListCard />
+              </DocumentProvider>
+            </ContentVersionProvider>
+          ))}
+        </ul>
+      </div>
+    </Page>
   )
 })
 

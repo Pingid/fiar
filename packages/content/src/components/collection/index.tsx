@@ -1,6 +1,6 @@
-import { Avatar, Button, Header, LoadingDots, Pagination } from '@fiar/components'
+import { Avatar, LoadingDots, Pagination } from '@fiar/components'
+import { Page } from '@fiar/workbench/components/page'
 import { component } from '@fiar/workbench'
-import { Link } from 'react-router-dom'
 import dayjs from 'dayjs'
 
 import { ContentCollectionActionsCreate } from '../collection-actions-create'
@@ -18,32 +18,20 @@ import { DocumentMeta } from '../../schema'
 export const ContentCollection = component('content:collection', () => {
   const col = useCollection()!
   return (
-    <>
-      <Header>
-        <Header.BreadCrumb>
-          <Button variant="link" size="sm" use={Link} to={'/content'} icon={<ContentIcon className="w-4" />}>
-            Content
-          </Button>
-          <Button
-            variant="link"
-            size="sm"
-            use="button"
-            disabled
-            onClick={() => col.visit()}
-            icon={<CollectionIcon className="w-4" />}
-          >
-            {col?.label || col?.ref}
-          </Button>
-        </Header.BreadCrumb>
-        <Header.Content>
-          <div className="flex gap-1">
-            <ContentCollectionActionsCreate />
-            <CollectionPagination />
-          </div>
-        </Header.Content>
-      </Header>
+    <Page
+      breadcrumb={[
+        { title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> },
+        { title: col?.label || col?.ref, onClick: col?.visit, icon: <CollectionIcon className="w-4" /> },
+      ]}
+      actions={
+        <div className="flex gap-1">
+          <ContentCollectionActionsCreate />
+          <CollectionPagination />
+        </div>
+      }
+    >
       <ContentCollectionList />
-    </>
+    </Page>
   )
 })
 
