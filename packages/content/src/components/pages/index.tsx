@@ -28,11 +28,12 @@ export const DocumentPageProvider = (p: { children: React.ReactNode }): JSX.Elem
   const col = doc.slice(0, -1)
   const collection = schema.content.find((x) => x.ref === col.join('/'))
   const document = schema.content.find((x) => x.ref === doc.join('/'))
-  if (isCol(collection)) {
+  const docId = doc[doc.length - 1]
+  if (isCol(collection) && docId) {
     return (
       <ContentVersionProvider value={version as any}>
         <CollectionProvider value={collection}>
-          <DocumentProvider value={{ ...collection, ref: doc.join('/'), label: '' }}>{p.children}</DocumentProvider>
+          <DocumentProvider value={collection.document(docId)}>{p.children}</DocumentProvider>
         </CollectionProvider>
       </ContentVersionProvider>
     )

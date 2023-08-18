@@ -1,4 +1,5 @@
 import { FieldRecord, IContentField, record } from '../../field'
+import type { IContentDocument } from '../../document'
 import { ID, id } from '../../util'
 
 export interface IContentCollection<
@@ -11,6 +12,7 @@ export interface IContentCollection<
   ref: R
   titleField: string
   field: FieldRecord<F>
+  document: (id: string) => IContentDocument<`${R}/${string}`, F>
 }
 
 export const col = <
@@ -21,12 +23,22 @@ export const col = <
   ref: R
   titleField: string
   fields: F
-}): IContentCollection<R, F> => ({
-  ...p,
-  field: record({ fields: p.fields }),
-  infer: undefined as any,
-  nodeId: id('collection'),
-})
+}): IContentCollection<R, F> => {
+  const field = record({ fields: p.fields })
+  return {
+    ...p,
+    field,
+    infer: undefined as any,
+    nodeId: id('collection'),
+    document: (docId: string) => ({
+      ref: `${p.ref}/${docId}`,
+      field: record({ fields: p.fields }),
+      label: (x) => x[p.titleField] || 'Untitled',
+      infer: undefined as any,
+      nodeId: id('document'),
+    }),
+  }
+}
 
 export const isCol = (x: unknown): x is IContentCollection =>
   !!(x && (x as IContentCollection)?.nodeId?.description === 'collection')

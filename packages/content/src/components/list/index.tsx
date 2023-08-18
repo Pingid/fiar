@@ -62,9 +62,11 @@ const ContentCollectionListCard = component('content:collection:list:card', () =
 const ContentDocumentListCard = component('content:document:list:card', () => {
   const doc = useDocument()!
   const status = useDocumentData((x) => x.status)
+  const title = useDocumentData((x) => x.title)
+
   return (
     <InfoCard
-      title={doc.label}
+      title={title}
       variant={['border']}
       icon={<DocumentIcon className="w-4" />}
       onClick={() => (status === 'Missing' ? doc.create().then(() => doc.select()) : doc.select())}

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { User, onAuthStateChanged } from '@firebase/auth'
+import { User, onAuthStateChanged, setPersistence, browserSessionPersistence } from '@firebase/auth'
 
 import { component, useFiarAppState, useFiarAppStore } from '@fiar/workbench'
 import { LoadingDots } from '@fiar/components'
@@ -31,11 +31,13 @@ export const AuthAuthorise = component('auth:authorize', (p: { children: React.R
   )
 
   useEffect(() => {
-    config.auth.authStateReady().then(() => config.auth.currentUser && setUser(config.auth.currentUser))
+    setPersistence(config.auth, browserSessionPersistence)
+    config.auth.authStateReady().then(() => {
+      setLoading(false)
+      config.auth.currentUser && setUser(config.auth.currentUser)
+    })
     return onAuthStateChanged(config.auth, (x) => (x ? setUser(x) : null))
   }, [config, setUser])
-
-  useEffect(() => void config.auth.authStateReady().then(() => setLoading(false)), [])
 
   if (loading) {
     return (

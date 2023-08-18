@@ -12,6 +12,7 @@ export type DocumentStoreState = {
   synced: boolean
   loading: boolean
   missing: boolean
+  title: string
   status: ReturnType<Exclude<ReturnType<typeof useDocument>, null | undefined>['status']>
   data: DocumentVersions['draft'] | null
   error: null | string
@@ -28,6 +29,7 @@ const initial = {
   synced: true,
   loading: true,
   missing: true,
+  title: 'Untitled',
   status: '' as ReturnType<Exclude<ReturnType<typeof useDocument>, null | undefined>['status']>,
   data: null as DocumentVersions['draft'] | null,
   error: null as null | string,
@@ -76,6 +78,7 @@ export const createDocumentStore = ({
   whenSubscribed(store, () => {
     const next = (_doc: DocumentSnapshot<any>) => {
       const data = {
+        title: doc.label(_doc.data()),
         data: _doc.data(),
         missing: !_doc.exists(),
         synced: !_doc.metadata.hasPendingWrites,

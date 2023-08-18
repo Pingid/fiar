@@ -44,7 +44,7 @@ export const ContentDocument = component('content:document', () => {
       {missing ? (
         <ContentDocumentMissing />
       ) : (
-        <div className="mx-auto h-full w-full max-w-4xl px-2">
+        <div className="mx-auto h-full w-full max-w-4xl">
           <ContentFieldProvider value={doc.field}>
             <ContentFieldRecord />
           </ContentFieldProvider>
