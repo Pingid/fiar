@@ -9,7 +9,6 @@ import { SelectAssetProvider, is_image, useAssetConfig, useAssetUrl } from '../.
 import { AssetCardAction } from '../assets-browser/AssetCardAction'
 import { DownloadIcon, PhotoIcon, RemoveIcon } from '../icons'
 import { AssetCard } from '../assets-browser/AssetCard'
-// import { AssetsBrowser } from '../assets-browser'
 import { Asset } from '../assets-browser/Asset'
 import { FieldImage } from '../../fields'
 
@@ -44,7 +43,6 @@ export const ContentFieldAssetsImage = component('content:field:asset-image', ()
         </div>
       )}
       {value && <Preview image={value} remove={() => field.update(null)} />}
-
       <SelectAssetProvider
         value={{
           filter: (x) => is_image.test(x),
@@ -83,7 +81,7 @@ export const Preview = (p: {
         </div>
       }
     >
-      <Asset url={data.data} />
+      <Asset url={data.data} loading={data.isLoading} />
     </AssetCard>
   )
 }

@@ -7,11 +7,12 @@ import { DocumentIcon } from '../icons'
 export const DocumentCard = (): JSX.Element => {
   const doc = useDocument()
   const status = useDocumentData((x) => x.status)
+  const title = useDocumentData((x) => x.title)
   const created = useDocumentData((x) => x.data?._meta?.created?.by)
   const updated = useDocumentData((x) => x.data?._meta?.updated?.at)
   return (
     <InfoCard
-      title={doc.label || 'Untitled'}
+      title={title}
       onClick={() => doc.select()}
       variant={['border']}
       icon={<DocumentIcon className="h-4 w-4" />}

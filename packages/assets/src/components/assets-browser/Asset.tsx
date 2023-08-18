@@ -29,7 +29,11 @@ export const Asset = component(
       return (
         <img
           src={p.url}
-          className={cn('h-full w-full object-contain transition delay-100', [p.loading, 'opacity-0', 'opacity-100'])}
+          className={cn('max-h-full w-full object-contain transition delay-100', [
+            p.loading,
+            'opacity-0',
+            'opacity-100',
+          ])}
         />
       )
 
@@ -39,7 +43,11 @@ export const Asset = component(
       return (
         <video
           controls
-          className={cn('h-full w-full object-contain transition delay-100', [p.loading, 'opacity-0', 'opacity-100'])}
+          className={cn('max-h-full w-full object-contain transition delay-100', [
+            p.loading,
+            'opacity-0',
+            'opacity-100',
+          ])}
         >
           <source src={p.url} />
           Download <a href={p.url} download target="__blank" />

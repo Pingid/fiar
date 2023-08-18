@@ -1,4 +1,3 @@
-import FireIcon from '@heroicons/react/24/outline/FireIcon'
 import { Button, LoadingDots } from '@fiar/components'
 import { Fragment } from 'react'
 import { Link } from 'wouter'
@@ -18,10 +17,7 @@ export const Page = (p: {
   breadcrumb?: PageBreadCrumb[]
   actions?: React.ReactNode
 }) => {
-  const breadcrumbs: PageBreadCrumb[] = [
-    { to: '/', title: 'fiar', icon: <FireIcon className="w-4" /> },
-    ...(p.breadcrumb || []),
-  ]
+  const breadcrumbs: PageBreadCrumb[] = [...(p.breadcrumb || [])]
   return (
     <div className="flex h-full w-full flex-col">
       <div className="bg-back sticky top-0 z-30">

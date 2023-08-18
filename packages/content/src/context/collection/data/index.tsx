@@ -10,7 +10,7 @@ export const [_CollectionDocumentProvider, _useCollectionDocuments] = provideSto
   const get = useGetDocument()
   return createCollectionStore({
     add: () => col.add(),
-    delete: (id) => get({ ref: `${col.ref}/${id}`, field: col.field, label: '' }).remove(),
+    delete: (id) => get(col.document(id)).remove(),
     get: (...constraints) => col.get('draft', constraints),
     on: (constraints, obs) => col.on('draft', constraints, obs),
   })

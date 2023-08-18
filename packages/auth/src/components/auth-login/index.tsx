@@ -36,7 +36,7 @@ export const AuthLogin = component(
     const signinSocial = useMutation(
       'auth',
       (_, p: { arg: AuthProvider }) =>
-        config.signin === 'popup' ? signInWithPopup(config.auth, p.arg) : signInWithRedirect(config.auth, p.arg),
+        config.signin === 'redirect' ? signInWithRedirect(config.auth, p.arg) : signInWithPopup(config.auth, p.arg),
       {
         onError: (e) => setError(e.message),
         onSuccess,

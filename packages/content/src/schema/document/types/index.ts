@@ -19,18 +19,19 @@ export interface IContentDocument<
 > {
   nodeId: ID<'document'>
   infer: { [K in keyof F]: F[K]['infer'] }
-  label: string
+  label: (doc: Record<string, any>) => string
   ref: R
   field: FieldRecord<F>
 }
 
 export const doc = <R extends string, F extends Record<string, IContentField> = Record<string, IContentField>>(p: {
-  label: string
+  label: string | ((doc: { [K in keyof F]: F[K]['infer'] }) => string)
   fields: F
   ref: R
 }): IContentDocument<R, F> => ({
   ...p,
   field: record({ fields: p.fields }),
+  label: (x) => (typeof p.label === 'string' ? p.label : p.label(x as any)),
   infer: undefined as any,
   nodeId: id('document'),
 })
