@@ -1,12 +1,8 @@
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import react from '@astrojs/react'
-import { config } from 'dotenv'
 import path from 'path'
 import fs from 'fs'
-
-const localEnv = config({ path: path.resolve('../../.env') })
-const env = { ...process.env, ...localEnv.parsed }
 
 const local = (root) => {
   const root_dir = path.resolve(`../../${root}`)
@@ -29,7 +25,7 @@ export default defineConfig({
   server: { port: 3001 },
   vite: {
     define: {
-      'process.env.FIRE_EMULATE': `'${env.FIRE_EMULATE || ''}'`,
+      'process.env.FIRE_EMULATE': `'${process.env.FIRE_EMULATE || ''}'`,
       'process.env.FIREBASE_API_KEY': `'${process.env.FIREBASE_API_KEY}'`,
       'process.env.FIREBASE_AUTH_DOMAIN': `'${process.env.FIREBASE_AUTH_DOMAIN}'`,
       'process.env.FIREBASE_PROJECT_ID': `'${process.env.FIREBASE_PROJECT_ID}'`,
