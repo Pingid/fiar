@@ -21,7 +21,6 @@ export const auth: Auth = getAuth(app)
 
 let saved: any = null
 if (process.env.FIRE_EMULATE) {
-  console.log({ saved })
   const get = import('../../../../firebase.json').then((x) => ((saved = x), connect(x)))
   const connect = (config: Awaited<typeof get>) => {
     connectFunctionsEmulator(functions, `localhost`, config.emulators.functions.port)
