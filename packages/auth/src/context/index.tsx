@@ -10,6 +10,7 @@ export type AuthConfig = {
   providers: AuthProvider[]
   functions?: Functions | undefined
   signin?: 'redirect' | 'popup' | undefined
+  disablePage?: boolean
 }
 
 export const useAuthConfig = () => {

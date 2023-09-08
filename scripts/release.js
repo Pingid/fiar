@@ -16,12 +16,13 @@ const main = async () => {
   }))
 
   for (const pkg of pkgs) {
+    console.log(pkg.json.name)
     const updated = JSON.parse(JSON.stringify({ ...pkg.json }))
     const sources = ['dependencies', 'peerDependencies', 'devDependencies']
     sources.forEach((source) => {
       if (!updated[source]) return
       for (const key in updated[source]) {
-        const local = pkgs.find((x) => pkg.json.name === key)
+        const local = pkgs.find((x) => x.json.name === key)
         if (local) updated[source][key] = local.json.version
       }
     })
@@ -29,7 +30,7 @@ const main = async () => {
     console.log(`Publishing ${pkg.json.name}@${pkg.json.version}`)
     child_process.spawnSync('npm', ['publish', '--access', 'public'], {
       stdio: 'inherit',
-      cwd: path.join(pkg.source, '../'),
+      cwd: path.parse(pkg.source).dir,
     })
     fs.writeFileSync(pkg.source, await util.format(JSON.stringify(pkg.json, null, 2), { filepath: pkg.source }))
   }
