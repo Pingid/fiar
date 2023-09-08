@@ -1,12 +1,13 @@
 import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon'
-import { Modal, useEnterLeave } from '@fiar/components'
+import { useTransitions } from 'react-class-transition'
+import { Modal } from '@fiar/components'
 import React, { useEffect } from 'react'
 
 import { WorkbenchPages, WorkbenchRouter } from '../router'
 import { MemoryNavigationProvider } from '../router/memory'
 
 export const WorkbenchModal = (p: { open: boolean; close: () => void; children: React.ReactNode }): JSX.Element => {
-  const [bind, run] = useEnterLeave({
+  const [bind, run] = useTransitions({
     wrapper: { enter: ['bg-black/0', 15, 'bg-black/60'], leave: [70, 'bg-black/0', 100] },
     container: {
       enter: ['translate-y-5 opacity-0', 100, 'translate-y-0 opacity-100'],
