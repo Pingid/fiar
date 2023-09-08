@@ -17,7 +17,7 @@ export const ContentList = component('content:list', () => {
   return (
     <Page breadcrumb={[{ title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> }]}>
       <div className="mt-3 space-y-3">
-        <h4 className="text-front/50 text-sm font-semibold uppercase">Collections</h4>
+        {collections.length > 0 && <h4 className="text-front/50 text-sm font-semibold uppercase">Collections</h4>}
         <ul className="w-full space-y-3">
           {collections.map((item) => (
             <CollectionProvider key={item.ref} value={item}>
@@ -25,7 +25,7 @@ export const ContentList = component('content:list', () => {
             </CollectionProvider>
           ))}
         </ul>
-        <h4 className="text-front/50 text-sm font-semibold uppercase">Documents</h4>
+        {documents.length > 0 && <h4 className="text-front/50 text-sm font-semibold uppercase">Documents</h4>}
         <ul className="w-full space-y-3">
           {documents.map((item) => (
             <ContentVersionProvider key={item.ref} value="draft">
