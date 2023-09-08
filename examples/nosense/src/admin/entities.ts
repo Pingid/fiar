@@ -23,6 +23,7 @@ export const articles = s.col({
     title: s.string({ label: 'Title' }),
     image: s.image({ label: 'Main image' }),
     body: s.text({ label: 'Content' }),
+    width: s.number({ label: 'Width' }),
     meta: seoPageMeta,
   },
 })

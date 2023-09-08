@@ -1,6 +1,6 @@
 {
   "name": "@fiar/content",
-  "version": "0.0.0-alpha.9",
+  "version": "0.0.0-alpha.10",
   "description": "Fiar cms firebase content plugin",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "keywords": [],
@@ -115,6 +115,11 @@
       "types": "./components/field-array/index.d.ts",
       "import": "./components/field-array/index.js",
       "require": "./components/field-array/index.cjs"
+    },
+    "./components/field-number": {
+      "types": "./components/field-number/index.d.ts",
+      "import": "./components/field-number/index.js",
+      "require": "./components/field-number/index.cjs"
     },
     "./components/field-record": {
       "types": "./components/field-record/index.d.ts",
@@ -295,6 +300,11 @@
       "types": "./schema/field/context/index.d.ts",
       "import": "./schema/field/context/index.js",
       "require": "./schema/field/context/index.cjs"
+    },
+    "./schema/field/number": {
+      "types": "./schema/field/number/index.d.ts",
+      "import": "./schema/field/number/index.js",
+      "require": "./schema/field/number/index.cjs"
     },
     "./schema/field/record": {
       "types": "./schema/field/record/index.d.ts",

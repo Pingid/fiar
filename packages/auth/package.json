@@ -1,6 +1,6 @@
 {
   "name": "@fiar/auth",
-  "version": "0.0.0-alpha.9",
+  "version": "0.0.0-alpha.10",
   "description": "Fiar cms firebase authentication plugin",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "keywords": [],
