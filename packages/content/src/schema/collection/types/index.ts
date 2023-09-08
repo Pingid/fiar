@@ -33,7 +33,7 @@ export const col = <
     document: (docId: string) => ({
       ref: `${p.ref}/${docId}`,
       field: record({ fields: p.fields }),
-      label: (x) => x[p.titleField] || 'Untitled',
+      label: (x) => x?.[p.titleField] || 'Untitled',
       infer: undefined as any,
       nodeId: id('document'),
     }),

@@ -1,7 +1,7 @@
 import { component, WorkbenchPageModal } from '@fiar/workbench'
 import { Button, Control } from '@fiar/components'
 import { doc } from '@firebase/firestore'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { DocumentProvider, useDocument } from '../../context/document'
 import { CollectionProvider } from '../../context/collection'
@@ -14,14 +14,14 @@ import { FieldRef } from '../../schema'
 
 export const ContentFieldRef = component('content:field:ref', () => {
   const field = useField<FieldRef>({ equal: (a, b) => a?.path === b?.path })
-  const [open, setopen] = React.useState(false)
+  const [open, setopen] = React.useState<string>()
   const config = useConfig()
   const value = field.value()
   const to = field.options.to()
   const document = value?.id
     ? {
         ...to.document(value.id),
-        actions: { select: () => setopen(true), remove: () => field.update(null) },
+        actions: { select: () => setopen(`/content/draft/${to.ref}`), remove: () => field.update(null) },
       }
     : null
 
@@ -31,14 +31,14 @@ export const ContentFieldRef = component('content:field:ref', () => {
         <DocumentProvider value={document}>
           {value ? (
             <div className="">
-              <DocumentPreviewCard />
+              <DocumentPreviewCard open={setopen} />
             </div>
           ) : (
             <div className="flex items-center justify-center py-2">
               <Button
                 variant="link"
                 className="flex items-center justify-center gap-1"
-                onClick={() => setopen(true)}
+                onClick={() => setopen(`/content/draft/${to.ref}`)}
                 icon={<LinkIcon className="w-4" />}
               >
                 Connect {to.label || to.ref}
@@ -46,15 +46,15 @@ export const ContentFieldRef = component('content:field:ref', () => {
             </div>
           )}
           <WorkbenchPageModal
-            open={open}
-            close={() => setopen(false)}
-            path={`/content/draft/${to.ref}`}
+            open={!!open}
+            close={() => setopen(undefined)}
+            path={open!}
             onNav={(x) => {
               const [_all, id] = new RegExp(`\/content\/draft\/${to.ref}\/(.*?)\/?$`).exec(x) || []
               if (id) {
                 const ref = [config.contentPrefix, 'draft', to.ref, id]
                 field.update(doc(config.firestore, ref.join('/')))
-                setopen(false)
+                setopen(undefined)
               }
               return null
             }}
@@ -65,9 +65,7 @@ export const ContentFieldRef = component('content:field:ref', () => {
   )
 })
 
-const DocumentPreviewCard = () => {
-  const [open, setopen] = useState(false)
-
+const DocumentPreviewCard = (p: { open: (x: string) => void }) => {
   const doc = useDocument()!
 
   return (
@@ -84,24 +82,14 @@ const DocumentPreviewCard = () => {
           <Button onClick={() => doc.remove()} variant="ghost" icon={<LinkIcon className="h-4 w-4" />}>
             Unlink
           </Button>
-          <Button onClick={() => setopen(true)} variant="ghost" icon={<EditIcon className="h-4 w-4" />}>
+          <Button
+            onClick={() => p.open(`/content/draft/${doc.ref}`)}
+            variant="ghost"
+            icon={<EditIcon className="h-4 w-4" />}
+          >
             Edit
           </Button>
         </ContentDocumentActions>
-        <WorkbenchPageModal
-          open={open}
-          close={() => setopen(false)}
-          path={`/content/draft/${doc.ref}`}
-          // onNav={(x) => {
-          //   // const [_all, id] = new RegExp(`\/content\/draft\/${to.ref}\/(.*?)\/?$`).exec(x) || []
-          //   // if (id) {
-          //   //   const ref = [config.contentPrefix, 'draft', to.ref, id]
-          //   //   field.update(doc(config.firestore, ref.join('/')))
-          //   //   setopen(false)
-          //   // }
-          //   return null
-          // }}
-        />
       </div>
     </div>
   )

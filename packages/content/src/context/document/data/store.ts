@@ -23,7 +23,7 @@ export type DocumentStoreState = {
   handler: ContentFieldEventHandler<any>
 }
 
-const documentCache = new Map<string, Partial<typeof initial>>()
+export const documentCache = new Map<string, Partial<typeof initial>>()
 
 const initial = {
   synced: true,

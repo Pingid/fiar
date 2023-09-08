@@ -7,8 +7,8 @@ import { articles, landing } from './entities'
 
 export const fiar = createFiar({
   plugins: [
-    fiarContent({ firestore, contentPrefix: 'fiar', content: [landing, articles] }),
-    fiarAssets({ storage, storagePrefix: 'fiar' }),
+    fiarContent({ firestore, contentPrefix: '_nosense', content: [landing, articles] }),
+    fiarAssets({ storage, storagePrefix: 'uploads/_nosense' }),
     fiarAuth({
       auth,
       functions,

@@ -18,7 +18,7 @@ export const ContentDocument = component('content:document', () => {
   const doc = useDocument()
   const missing = useDocumentData((x) => x.missing)
   const status = useDocumentData((x) => x.status)
-  const title = useDocumentData((x) => (col?.titleField ? x.data?.[col.titleField] || 'Untitled' : doc?.label))
+  const title = useDocumentData((x) => x.title)
 
   const breadcrumbs = [
     { title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> },

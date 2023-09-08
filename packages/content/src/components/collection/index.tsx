@@ -42,9 +42,8 @@ export const ContentCollectionList = (): JSX.Element => {
   return (
     <ul className="mt-6 space-y-6">
       {data?.docs.map((x) => {
-        const label = x.data()?.[col.titleField] || 'Untitled'
         return (
-          <DocumentProvider key={x.id} value={{ ref: `${col.ref}/${x.id}`, field: col.field, label }}>
+          <DocumentProvider key={x.id} value={col.document(x.id)}>
             <li className="flex">
               <DocumentCard />
               <div className="pt-1">

@@ -24,7 +24,9 @@
     "format": "prettier --write ./**/*.md",
     "test": "pnpm run -r test run",
     "bump": "./scripts/bump.js",
-    "release": "./scripts/release.js"
+    "release": "./scripts/release.js",
+    "emulate": "./scripts/env.js 'firebase emulators:start --project $FIREBASE_PROJECT_ID'",
+    "deploy": "./scripts/env.js 'firebase deploy --project $FIREBASE_PROJECT_ID'"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

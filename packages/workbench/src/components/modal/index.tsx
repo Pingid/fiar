@@ -26,7 +26,7 @@ export const WorkbenchModal = (p: { open: boolean; close: () => void; children: 
         ref={bind('wrapper')}
       >
         <div
-          className="bg-back relative grid max-h-full min-h-[70vh] w-full max-w-3xl rounded-md border transition-all"
+          className="bg-back relative grid max-h-full min-h-[70vh] w-full max-w-3xl rounded-md border transition-all [grid-template:1fr/1fr]"
           onClick={(e) => e.stopPropagation()}
           ref={bind('container')}
         >
