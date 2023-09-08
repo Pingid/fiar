@@ -45,36 +45,23 @@ export const AssetsBrowser = (): JSX.Element => {
 
   return (
     <Page
-      error={error || query.error}
+      error={error || query?.error?.message}
       loading={loading || query.isLoading}
       breadcrumb={[{ title: 'Assets', icon: <CloudIcon className="w-4" />, disabled: true }]}
       actions={
-        <div className="flex w-full justify-end">
-          {/* <div className="w-full pb-0.5 pr-1">
-            <input
-              type="range"
-              value={columns}
-              max={100}
-              min={0}
-              onChange={(e) => setcolumns(parseInt(e.target.value))}
-              className={cn(
-                '[&::-webkit-slider-runnable-track]:bg-front/10 [&::-webkit-slider-thumb]:bg-active [&::-webkit-slider-runnable-track]:h-0.5 [&::-webkit-slider-runnable-track]:rounded-full  [&::-webkit-slider-thumb]:-mt-0.5 [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border',
-                'w-full max-w-[20rem] appearance-none bg-transparent',
-              )}
-            />
-          </div> */}
+        <>
           <Button
             icon={<UploadIcon className="mr-1 h-5 w-5" />}
             use="label"
             htmlFor="upload"
             size="none"
             variant="ghost"
-            className="cursor-pointer pr-6"
+            className="cursor-pointer sm:pr-6"
           >
             Upload
           </Button>
           <input id="upload" {...getInputProps()} className="hover:bg-highlight rounded-md text-lg font-medium" />
-        </div>
+        </>
       }
     >
       <div className="">
