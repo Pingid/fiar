@@ -12,7 +12,7 @@ import {
 import React from 'react'
 
 import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
-import { Button, Control, Input } from '@fiar/components'
+import { Button, Control, Input, LoadingDots } from '@fiar/components'
 import useMutation from 'swr/mutation'
 
 import { component } from '@fiar/workbench/context'
@@ -43,6 +43,15 @@ export const AuthLogin = component(
       },
     )
     const mutating = signinEmail.isMutating || signinSocial.isMutating
+
+    if (mutating) {
+      return (
+        <div className="flex h-screen w-full items-center justify-center">
+          <LoadingDots />
+        </div>
+      )
+    }
+
     return (
       <div className="flex !h-[100dvh] h-[100vh] w-full items-center justify-center px-6">
         <div className={'relative mx-auto w-full max-w-md rounded-md border'}>
@@ -82,9 +91,9 @@ export const AuthLogin = component(
                   className="flex w-full items-center justify-center"
                   onClick={() => signinSocial.trigger(x)}
                   disabled={mutating}
+                  icon={selected?.icon}
                 >
-                  {selected?.icon && <div className="mr-2 h-6 w-6">{selected?.icon}</div>} Sign in via{' '}
-                  {selected?.title || x.providerId}
+                  Sign in via {selected?.title || x.providerId}
                 </Button>
               )
             })}
@@ -96,8 +105,8 @@ export const AuthLogin = component(
 )
 
 const providertypes: Record<string, { title: string; icon: JSX.Element }> = {
-  [GoogleAuthProvider.PROVIDER_ID]: { title: 'Google', icon: <BsGoogle className="h-full w-full" /> },
-  [TwitterAuthProvider.PROVIDER_ID]: { title: 'Twitter', icon: <BsTwitter className="h-full w-full" /> },
-  [GithubAuthProvider.PROVIDER_ID]: { title: 'Github', icon: <BsGithub className="h-full w-full" /> },
-  [FacebookAuthProvider.PROVIDER_ID]: { title: 'Facebook', icon: <BsFacebook className="h-full w-full" /> },
+  [GoogleAuthProvider.PROVIDER_ID]: { title: 'Google', icon: <BsGoogle className="mr-1" /> },
+  [TwitterAuthProvider.PROVIDER_ID]: { title: 'Twitter', icon: <BsTwitter className="mr-1" /> },
+  [GithubAuthProvider.PROVIDER_ID]: { title: 'Github', icon: <BsGithub className="mr-1" /> },
+  [FacebookAuthProvider.PROVIDER_ID]: { title: 'Facebook', icon: <BsFacebook className="mr-1" /> },
 }

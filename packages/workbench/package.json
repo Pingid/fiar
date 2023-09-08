@@ -28,7 +28,8 @@
     "regexparam": "^2.0.1",
     "typeofit": "^0.0.5",
     "wouter": "^2.11.0",
-    "zustand": "^4.3.9"
+    "zustand": "^4.3.9",
+    "react-class-transition": "^0.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",
