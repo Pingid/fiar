@@ -1,6 +1,6 @@
 {
   "name": "@fiar/auth",
-  "version": "0.0.0-alpha.7",
+  "version": "0.0.0-alpha.8",
   "description": "Fiar cms firebase authentication plugin",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "keywords": [],
@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
-    "@fiar/workbench": "workspace:^",
-    "@fiar/core": "workspace:^",
-    "@fiar/components": "workspace:^",
+    "@fiar/workbench": "0.0.0-alpha.7",
+    "@fiar/core": "0.0.0-alpha.7",
+    "@fiar/components": "0.0.0-alpha.7",
     "firebase-functions": "^4.4.1",
     "mcn": "^0.0.4",
     "react-icons": "^4.10.1",
