@@ -1,6 +1,6 @@
 {
   "name": "@fiar/components",
-  "version": "0.0.0-alpha.10",
+  "version": "0.0.0-alpha.11",
   "description": "Fiar cms react component library",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "keywords": [],
@@ -87,6 +87,11 @@
       "types": "./components/done/index.d.ts",
       "import": "./components/done/index.js",
       "require": "./components/done/index.cjs"
+    },
+    "./components/error": {
+      "types": "./components/error/index.d.ts",
+      "import": "./components/error/index.js",
+      "require": "./components/error/index.cjs"
     },
     "./components/forms": {
       "types": "./components/forms/index.d.ts",

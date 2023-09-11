@@ -1,4 +1,4 @@
-import { LoadingDots } from '@fiar/components'
+import { LoadingDots, ErrorMessage } from '@fiar/components'
 import { cn } from 'mcn'
 
 export const AssetCard = (p: {
@@ -36,8 +36,8 @@ export const AssetCard = (p: {
       <div className={cn('flex aspect-square items-center justify-center', [!p.embedded, 'bg-front/5'])}>
         {p.children}
       </div>
-      <div className={cn('absolute inset-0 items-center justify-center', [!!p.error, 'flex', 'hidden'])}>
-        <div className="text-error">{p.error}</div>
+      <div className={cn('absolute inset-0 items-center justify-center p-2', [!!p.error, 'flex', 'hidden'])}>
+        <ErrorMessage>{p.error}</ErrorMessage>
       </div>
       <div className={cn('absolute inset-0 items-center justify-center', [p.loading, 'flex', 'hidden'])}>
         <div>

@@ -1,4 +1,4 @@
-import { Button, LoadingDots } from '@fiar/components'
+import { Button, ErrorMessage, LoadingDots } from '@fiar/components'
 import { Fragment } from 'react'
 import { Link } from 'wouter'
 import cn from 'mcn'
@@ -51,18 +51,13 @@ export const Page = (p: {
             <span className="ml-2"> </span>
             <LoadingDots />
           </p>
-          <p className="text-error max-w-full pr-2 text-sm leading-snug">{error(p.error)}</p>
+          <div className="text-error grid max-w-full pr-2 text-sm leading-snug">
+            <ErrorMessage>{p.error}</ErrorMessage>
+          </div>
           <div className="place-self-end">{p.actions}</div>
         </div>
       </div>
       <div className="h-[150vh] h-full w-full px-[--wb-page-px]">{p.children}</div>
     </div>
   )
-}
-
-const error = (x: unknown) => {
-  if (typeof x === 'string') return x
-  if (x instanceof Error) return x.message
-  if (!x) return null
-  return JSON.stringify(x)
 }
