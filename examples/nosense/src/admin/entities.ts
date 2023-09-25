@@ -9,7 +9,7 @@ const seoPageMeta = s.record({
       validate: (value) => ({
         value: value ? value.slice(0, 160) : '',
         reason: 'Description must not excede 160 characters',
-        valid: !!value && value.length > 160,
+        valid: !!value && value.length < 160,
       }),
     }),
   },

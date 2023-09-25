@@ -4,10 +4,16 @@ import { Reorder } from '@fiar/components'
 import { ContentFieldProvider, useField } from '../../context/field'
 import { FieldArray } from '../../schema'
 import { PlusIcon } from '../icons'
+import { useEffect } from 'react'
 
 export const ContentFieldArray = component('content:field:array', () => {
   const ctx = useField<FieldArray>({ equal: (a, b) => JSON.stringify(a) === JSON.stringify(b) })
   const value: any[] = Array.isArray(ctx.value()) ? (ctx.value() as any) : []
+
+  const v = ctx.value()
+  useEffect(() => {
+    if (!Array.isArray(v) && !ctx.options.optional) ctx.update([])
+  }, [v])
 
   return (
     <div className="group/array ml-[var(--ml-left)]" ref={ctx.ref}>
