@@ -1,6 +1,6 @@
 {
   "name": "@fiar/assets",
-  "version": "0.0.0-alpha.11",
+  "version": "0.0.0-alpha.12",
   "description": "Fiar cms assets plugin",
   "author": "Dan Beaven <dm.beaven@gmail.com>",
   "keywords": [],
@@ -18,9 +18,9 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "@fiar/workbench": "workspace:^",
-    "@fiar/core": "workspace:^",
-    "@fiar/components": "workspace:^",
+    "@fiar/workbench": "0.0.0-alpha.12",
+    "@fiar/core": "0.0.0-alpha.12",
+    "@fiar/components": "0.0.0-alpha.12",
     "@heroicons/react": "^2.0.18",
     "@tiptap/extension-image": "^2.0.4",
     "@tiptap/react": "^2.0.4",
@@ -30,14 +30,14 @@
     "zustand": "^4.3.9"
   },
   "devDependencies": {
-    "@fiar/content": "workspace:^",
+    "@fiar/content": "0.0.0-alpha.12",
     "@firebase/storage": "^0.11.2",
     "@types/react": "^18.2.17",
     "react": "^18.2.0",
     "typescript": "^5.1.6"
   },
   "peerDependencies": {
-    "@fiar/content": "workspace:^",
+    "@fiar/content": "0.0.0-alpha.12",
     "@firebase/storage": "^0.11.2",
     "react": "^18.2.0"
   },
