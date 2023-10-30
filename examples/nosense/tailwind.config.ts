@@ -16,7 +16,7 @@ const _config: Config = {
   content: [
     './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
     ...readDirFromRoot('packages')
-      .map((x) => [`../../${x}/components/**/*.js`, `../../${x}/index.js`])
+      .map((x) => [`../../${x}/src/components/**/*.tsx`, `../../${x}/index.js`])
       .flat(),
   ],
 }

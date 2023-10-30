@@ -18,10 +18,10 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "zustand": "^4.3.9"
+    "zustand": "^4.4.4"
   },
   "devDependencies": {
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "exports": {
     "./package.json": "./package.json",

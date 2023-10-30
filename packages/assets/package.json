@@ -18,23 +18,23 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "@fiar/workbench": "0.0.0-alpha.12",
-    "@fiar/core": "0.0.0-alpha.12",
     "@fiar/components": "0.0.0-alpha.12",
+    "@fiar/core": "0.0.0-alpha.12",
+    "@fiar/workbench": "0.0.0-alpha.12",
     "@heroicons/react": "^2.0.18",
-    "@tiptap/extension-image": "^2.0.4",
-    "@tiptap/react": "^2.0.4",
+    "@tiptap/extension-image": "^2.1.12",
+    "@tiptap/react": "^2.1.12",
     "mcn": "^0.0.4",
     "react-dropzone": "^14.2.3",
-    "swr": "^2.2.0",
-    "zustand": "^4.3.9"
+    "swr": "^2.2.4",
+    "zustand": "^4.4.4"
   },
   "devDependencies": {
     "@fiar/content": "0.0.0-alpha.12",
     "@firebase/storage": "^0.11.2",
-    "@types/react": "^18.2.17",
+    "@types/react": "^18.2.33",
     "react": "^18.2.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "peerDependencies": {
     "@fiar/content": "0.0.0-alpha.12",

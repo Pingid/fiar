@@ -70,7 +70,7 @@ const AuthUser = (p: { open: boolean }): JSX.Element | null => {
   if (!user || !signout) return null
 
   return (
-    <div className="relative px-1 pb-4 sm:px-2" ref={ref}>
+    <div className="relative px-2 pb-4 sm:px-4" ref={ref}>
       <div className="flex flex-col gap-1">
         <button
           onClick={() => setopen((x) => !x)}

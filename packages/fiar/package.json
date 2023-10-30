@@ -23,11 +23,11 @@
     "@fiar/content": "workspace:^",
     "@fiar/core": "workspace:^",
     "@fiar/workbench": "workspace:^",
-    "zustand": "^4.3.9"
+    "zustand": "^4.4.4"
   },
   "devDependencies": {
     "@fiar/components": "workspace:^",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "exports": {
     "./package.json": "./package.json",
