@@ -16,10 +16,13 @@ export const useQueryAssets = () => {
 export const useRemoveAsset = (fullPath: string) => {
   const config = useAssetConfig()
   return useMutaton(config.storagePrefix, () => deleteObject(ref(config.storage, fullPath)), {
-    optimisticData: (x: { items: StorageReference[] }) => ({
+    optimisticData: (x: any) => ({
       ...x,
-      items: x.items.filter((y) => y.fullPath !== fullPath),
+      items: x?.items.filter((y: any) => y.fullPath !== fullPath) ?? [],
     }),
+    populateCache: true,
+    revalidate: true,
+    rollbackOnError: true,
   })
 }
 
