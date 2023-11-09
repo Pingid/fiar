@@ -45,6 +45,7 @@ const initial = {
 
 type CollectioStoreState = typeof initial & {
   prev_page: () => void
+  set_page: (n: number) => void
   next_page: () => Promise<void>
   add_doc: () => Promise<DocumentReference<any, any>>
   remove_doc: (id: string) => Promise<void>
@@ -105,6 +106,8 @@ export const createCollectionStore = (p: Props) => {
 
   const prev_page = () => store.setState((x) => ({ page: Math.max(x.page - 1, 0) }))
 
+  const set_page = (n: number) => store.setState({ page: n })
+
   const next_page = () => {
     const state = store.getState()
     const data = [...state.pages]
@@ -128,6 +131,7 @@ export const createCollectionStore = (p: Props) => {
   const store: StoreApi<CollectioStoreState> = createStore<CollectioStoreState>(() => ({
     ...initial,
     prev_page,
+    set_page,
     next_page,
     add_doc,
     remove_doc,

@@ -40,7 +40,16 @@ export const ContentDocument = component('content:document', () => {
   )
 
   return (
-    <Page breadcrumb={breadcrumbs} actions={actions}>
+    <Page
+      breadcrumb={breadcrumbs}
+      actions={actions}
+      action={
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <ContentDocumentActionsPublish />
+          <ContentDocumentActionsDelete />
+        </div>
+      }
+    >
       {missing ? (
         <ContentDocumentMissing />
       ) : (

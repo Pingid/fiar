@@ -1,7 +1,9 @@
-import { Avatar, LoadingDots, Pagination } from '@fiar/components'
+import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon'
 import { Page } from '@fiar/workbench/components/page'
+import { Avatar, LoadingDots } from '@fiar/components'
 import { component } from '@fiar/workbench'
 import dayjs from 'dayjs'
+import cn from 'mcn'
 
 import { ContentCollectionActionsCreate } from '../collection-actions-create'
 import { ContentDocumentActionsPublish } from '../document-actions-publish'
@@ -17,19 +19,16 @@ import { DocumentMeta } from '../../schema'
 
 export const ContentCollection = component('content:collection', () => {
   const col = useCollection()!
-  const actions = (
-    <div className="flex gap-1">
-      <ContentCollectionActionsCreate />
-      <CollectionPagination />
-    </div>
-  )
+  const error = useCollectionData((x) => x.error)
   return (
     <Page
+      error={error ?? ''}
       breadcrumb={[
         { title: 'Content', to: '/content', icon: <ContentIcon className="w-4" /> },
-        { title: col?.label || col?.ref, onClick: col?.visit, icon: <CollectionIcon className="w-4" /> },
+        { title: col?.label || col?.ref, onClick: col.visit, icon: <CollectionIcon className="w-4" /> },
       ]}
-      actions={actions}
+      action={<ContentCollectionActionsCreate />}
+      header={<CollectionPagination />}
     >
       <ContentCollectionList />
     </Page>
@@ -65,11 +64,37 @@ export const CollectionPagination = (): JSX.Element => {
   const r = useCollectionData()
   const page = r.pages[r.page]
   return (
-    <Pagination
-      page={r.page + 1}
-      next={!page?.last ? r.next_page : undefined}
-      prev={r.page !== 0 ? r.prev_page : undefined}
-    />
+    <div className="bg-front/5 flex w-full justify-between border-t px-3 py-0.5 text-sm">
+      <button
+        disabled={r.page === 0}
+        className={cn('flex items-center gap-1', [r.page === 0, 'opacity-20', 'hover:text-active'])}
+        onClick={() => r.prev_page()}
+      >
+        <ArrowLeftIcon className="h-4 w-4" /> previous
+      </button>
+      <div className="flex gap-1">
+        {r.pages
+          .slice(0, r.page + 1)
+          .map((_, i) => i)
+          .slice(-3)
+          .map((x) => (
+            <button
+              disabled={x === r.page}
+              className={cn([x !== r.page, 'hover:text-active text-xs opacity-60 hover:opacity-100'])}
+              onClick={() => r.set_page(x)}
+            >
+              {x + 1}
+            </button>
+          ))}
+      </div>
+      <button
+        disabled={!!page?.last}
+        className={cn('flex items-center gap-1', [page?.last, 'opacity-20', 'hover:text-active '])}
+        onClick={() => r.next_page()}
+      >
+        next <ArrowLeftIcon className="h-4 w-4 rotate-180" />
+      </button>
+    </div>
   )
 }
 
