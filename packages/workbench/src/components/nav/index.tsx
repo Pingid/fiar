@@ -1,12 +1,12 @@
-import LogoutIcon from '@heroicons/react/24/outline/ArrowLeftOnRectangleIcon'
+import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
-import { IoIosArrowForward } from 'react-icons/io'
+// import { IoIosArrowForward } from 'react-icons/io'
 import { Avatar, Button } from '@fiar/components'
 import { Link, useRoute } from 'wouter'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { useWorkbenchPage, useWorkbenchPages } from '../hooks'
-import { useFiarAppState } from '../../context'
+import { useWorkbenchPage, useWorkbenchPages } from '../hooks/index.js'
+import { useFiarAppState } from '../../context/index.js'
 
 export const NavPanel = (): JSX.Element => {
   const [isLanding] = useRoute('/')
@@ -30,7 +30,7 @@ export const NavPanel = (): JSX.Element => {
             <h1 className={cn('text-xl font-medium', text)}>fiar</h1>
           </Link>
           <button onClick={() => setopen(!open)}>
-            <IoIosArrowForward className={cn('h-6 w-6 transition-transform', [open, 'rotate-180'])} />
+            {/* <IoIosArrowForward className={cn('h-6 w-6 transition-transform', [open, 'rotate-180'])} /> */}
           </button>
         </div>
         <ul className="mt-6 h-full w-full space-y-1 px-1 sm:px-3">
@@ -92,7 +92,7 @@ const AuthUser = (p: { open: boolean }): JSX.Element | null => {
             signout()
             setopen(false)
           }}
-          icon={<LogoutIcon className="w-4" />}
+          icon={<ArrowLeftOnRectangleIcon className="w-4" />}
         >
           Logout
         </Button>

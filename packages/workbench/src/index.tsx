@@ -2,15 +2,15 @@ import { ModalProvider } from '@fiar/components'
 import { createRoot } from 'react-dom/client'
 import { FiarPlugin } from '@fiar/core'
 
-import { WorkbenchRouter, WorkbenchProviders, WorkbenchPages } from './components/router'
-import { WorkbenchConfig, WorkbenchConfigProvider } from './context/config'
-import { Landing } from './components/landing'
-import { FiarAppContext } from './context'
-import { NavPanel } from './components'
+import { WorkbenchRouter, WorkbenchProviders, WorkbenchPages } from './components/router/index.js'
+import { WorkbenchConfig, WorkbenchConfigProvider } from './context/config.js'
+import { Landing } from './components/landing/index.js'
+import { FiarAppContext } from './context/index.js'
+import { NavPanel } from './components/index.js'
 
-export * from './components'
-export * from './context'
-export * from './types'
+export * from './components/index.js'
+export * from './context/index.js'
+export * from './types/index.js'
 
 export const fiarWorkbench =
   (config: WorkbenchConfig): FiarPlugin =>

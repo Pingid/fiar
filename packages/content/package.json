@@ -15,7 +15,8 @@
   "scripts": {
     "dev": "pnpm watch",
     "build": "../../scripts/build.js",
-    "watch": "../../scripts/watch.js"
+    "watch": "../../scripts/watch.js",
+    "test": "vitest  --environment jsdom"
   },
   "dependencies": {
     "@fiar/components": "workspace:^",
@@ -27,18 +28,25 @@
     "@tiptap/starter-kit": "^2.1.12",
     "dayjs": "^1.11.10",
     "mcn": "^0.0.4",
+    "react-error-boundary": "^4.0.11",
+    "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "swr": "^2.2.4",
     "typeofit": "^0.0.5",
     "wouter": "^2.12.1",
-    "zustand": "^4.4.4"
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@firebase/firestore": "^4.3.2",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
     "@types/react": "^18.2.33",
+    "jsdom": "^22.1.0",
     "react": "^18.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "@firebase/firestore": "^4.1.3",
@@ -60,6 +68,11 @@
       "types": "./schema/index.d.ts",
       "import": "./schema/index.js",
       "require": "./schema/index.cjs"
+    },
+    "./v2": {
+      "types": "./v2/index.d.ts",
+      "import": "./v2/index.js",
+      "require": "./v2/index.cjs"
     },
     "./components/collection": {
       "types": "./components/collection/index.d.ts",
@@ -236,6 +249,51 @@
       "import": "./util/zustand/index.js",
       "require": "./util/zustand/index.cjs"
     },
+    "./v2/collection": {
+      "types": "./v2/collection/index.d.ts",
+      "import": "./v2/collection/index.js",
+      "require": "./v2/collection/index.cjs"
+    },
+    "./v2/components": {
+      "types": "./v2/components/index.d.ts",
+      "import": "./v2/components/index.js",
+      "require": "./v2/components/index.cjs"
+    },
+    "./v2/config": {
+      "types": "./v2/config/index.d.ts",
+      "import": "./v2/config/index.js",
+      "require": "./v2/config/index.cjs"
+    },
+    "./v2/content": {
+      "types": "./v2/content/index.d.ts",
+      "import": "./v2/content/index.js",
+      "require": "./v2/content/index.cjs"
+    },
+    "./v2/document": {
+      "types": "./v2/document/index.d.ts",
+      "import": "./v2/document/index.js",
+      "require": "./v2/document/index.cjs"
+    },
+    "./v2/field": {
+      "types": "./v2/field/index.d.ts",
+      "import": "./v2/field/index.js",
+      "require": "./v2/field/index.cjs"
+    },
+    "./v2/lib": {
+      "types": "./v2/lib/index.d.ts",
+      "import": "./v2/lib/index.js",
+      "require": "./v2/lib/index.cjs"
+    },
+    "./v2/schema": {
+      "types": "./v2/schema/index.d.ts",
+      "import": "./v2/schema/index.js",
+      "require": "./v2/schema/index.cjs"
+    },
+    "./v2/util": {
+      "types": "./v2/util/index.d.ts",
+      "import": "./v2/util/index.js",
+      "require": "./v2/util/index.cjs"
+    },
     "./context/collection/content": {
       "types": "./context/collection/content/index.d.ts",
       "import": "./context/collection/content/index.js",
@@ -330,6 +388,61 @@
       "types": "./schema/field/types/index.d.ts",
       "import": "./schema/field/types/index.js",
       "require": "./schema/field/types/index.cjs"
+    },
+    "./v2/collection/card": {
+      "types": "./v2/collection/card/index.d.ts",
+      "import": "./v2/collection/card/index.js",
+      "require": "./v2/collection/card/index.cjs"
+    },
+    "./v2/collection/list": {
+      "types": "./v2/collection/list/index.d.ts",
+      "import": "./v2/collection/list/index.js",
+      "require": "./v2/collection/list/index.cjs"
+    },
+    "./v2/components/array": {
+      "types": "./v2/components/array/index.d.ts",
+      "import": "./v2/components/array/index.js",
+      "require": "./v2/components/array/index.cjs"
+    },
+    "./v2/components/boolean": {
+      "types": "./v2/components/boolean/index.d.ts",
+      "import": "./v2/components/boolean/index.js",
+      "require": "./v2/components/boolean/index.cjs"
+    },
+    "./v2/components/number": {
+      "types": "./v2/components/number/index.d.ts",
+      "import": "./v2/components/number/index.js",
+      "require": "./v2/components/number/index.cjs"
+    },
+    "./v2/components/ref": {
+      "types": "./v2/components/ref/index.d.ts",
+      "import": "./v2/components/ref/index.js",
+      "require": "./v2/components/ref/index.cjs"
+    },
+    "./v2/components/string": {
+      "types": "./v2/components/string/index.d.ts",
+      "import": "./v2/components/string/index.js",
+      "require": "./v2/components/string/index.cjs"
+    },
+    "./v2/components/struct": {
+      "types": "./v2/components/struct/index.d.ts",
+      "import": "./v2/components/struct/index.js",
+      "require": "./v2/components/struct/index.cjs"
+    },
+    "./v2/document/card": {
+      "types": "./v2/document/card/index.d.ts",
+      "import": "./v2/document/card/index.js",
+      "require": "./v2/document/card/index.cjs"
+    },
+    "./v2/document/form": {
+      "types": "./v2/document/form/index.d.ts",
+      "import": "./v2/document/form/index.js",
+      "require": "./v2/document/form/index.cjs"
+    },
+    "./v2/document/title": {
+      "types": "./v2/document/title/index.d.ts",
+      "import": "./v2/document/title/index.js",
+      "require": "./v2/document/title/index.cjs"
     }
   }
 }

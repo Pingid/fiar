@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
-import { useProxyState } from './useProxyState'
-import { useRefArg } from './useRefArg'
+import { useProxyState } from './useProxyState.js'
+import { useRefArg } from './useRefArg.js'
 
 export const useAsync = <A, P extends { disabled?: boolean; deps?: any[]; extra?: Record<string, any> }>(
   handler: () => Promise<A>,

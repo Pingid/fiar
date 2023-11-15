@@ -1,19 +1,15 @@
+import { ShieldExclamationIcon, ShieldCheckIcon, LockClosedIcon, UsersIcon } from '@heroicons/react/24/outline'
 import { Page } from '@fiar/workbench'
 import useMutation from 'swr/mutation'
 import useQuery from 'swr'
 import React from 'react'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
 import { Avatar, Button, InfoCard, Menu, Pagination } from '@fiar/components'
 import { httpsCallable, Functions } from '@firebase/functions'
 
-import ShieldExclamationIcon from '@heroicons/react/24/outline/ShieldExclamationIcon'
-import ShieldCheckIcon from '@heroicons/react/24/outline/ShieldCheckIcon'
-import LockClosedIcon from '@heroicons/react/24/outline/LockClosedIcon'
-import UsersIcon from '@heroicons/react/24/outline/UsersIcon'
-
-import type { UserManageFunctions } from '../../functions/users'
-import { useAuthConfig } from '../../context'
+import type { UserManageFunctions } from '../../functions/users/index.js'
+import { useAuthConfig } from '../../context/index.js'
 
 export const AuthUsers = (): JSX.Element => {
   const config = useAuthConfig()
@@ -40,7 +36,7 @@ const UserList = (p: { functions: Functions }) => {
       error={permit.error?.message || list.error?.message}
       loading={list.isLoading || permit.isMutating}
       breadcrumb={[{ title: 'Users', icon: <UsersIcon className="w-4" />, disabled: true }]}
-      actions={<Pagination page={page.length + 1} prev={prev} next={next} />}
+      action={<Pagination page={page.length + 1} prev={prev} next={next} />}
     >
       <ul className="mt-6 space-y-6" data-testid="doc-list">
         {list.data?.data.users.map((x) => {
@@ -63,7 +59,6 @@ const UserList = (p: { functions: Functions }) => {
               <Menu size="md" className="pt-1">
                 {(role === 'editor' || !role) && (
                   <Button
-                    variant="ghost"
                     icon={<ShieldExclamationIcon className="h-4 w-4" />}
                     onClick={() => permit.trigger({ uid: x.uid, role: 'admin' })}
                   >
@@ -72,7 +67,6 @@ const UserList = (p: { functions: Functions }) => {
                 )}
                 {(role === 'admin' || !role) && (
                   <Button
-                    variant="ghost"
                     icon={<ShieldCheckIcon className="h-4 w-4" />}
                     onClick={() => permit.trigger({ uid: x.uid, role: 'editor' })}
                   >
@@ -80,11 +74,7 @@ const UserList = (p: { functions: Functions }) => {
                   </Button>
                 )}
                 {role && (
-                  <Button
-                    variant="ghost"
-                    icon={<LockClosedIcon className="h-4 w-4" />}
-                    onClick={() => permit.trigger({ uid: x.uid })}
-                  >
+                  <Button icon={<LockClosedIcon className="h-4 w-4" />} onClick={() => permit.trigger({ uid: x.uid })}>
                     Revoke
                   </Button>
                 )}

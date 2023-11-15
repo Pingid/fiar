@@ -1,12 +1,12 @@
 import { StorageReference } from '@firebase/storage'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { useAssetUrl, useRemoveAsset } from '../../context'
-import { useSelectAsset } from '../../context/select'
-import { AssetCardAction } from './AssetCardAction'
-import { DownloadIcon, RemoveIcon } from '../icons'
-import { AssetCard } from './AssetCard'
-import { Asset } from './Asset'
+import { useAssetUrl, useRemoveAsset } from '../../context/index.js'
+import { useSelectAsset } from '../../context/select.js'
+import { AssetCardAction } from './AssetCardAction.js'
+import { DownloadIcon, RemoveIcon } from '../icons/index.js'
+import { AssetCard } from './AssetCard.js'
+import { Asset } from './Asset.js'
 
 export const Preview = (p: {
   image: Pick<StorageReference, 'name' | 'fullPath' | 'bucket'>

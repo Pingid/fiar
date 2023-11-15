@@ -1,21 +1,21 @@
-import ArrowLeftIcon from '@heroicons/react/24/outline/ArrowLeftIcon'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 import { Page } from '@fiar/workbench/components/page'
 import { Avatar, LoadingDots } from '@fiar/components'
 import { component } from '@fiar/workbench'
 import dayjs from 'dayjs'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { ContentCollectionActionsCreate } from '../collection-actions-create'
-import { ContentDocumentActionsPublish } from '../document-actions-publish'
-import { ContentDocumentActionsDelete } from '../document-actions-delete'
-import { ContentDocumentActionsEdit } from '../document-actions-edit'
-import { useCollectionData } from '../../context/collection/data'
-import { ContentDocumentActions } from '../document-actions'
-import { DocumentProvider } from '../../context/document'
-import { useCollection } from '../../context/collection'
-import { CollectionIcon, ContentIcon } from '../icons'
-import { DocumentCard } from '../document-card'
-import { DocumentMeta } from '../../schema'
+import { ContentCollectionActionsCreate } from '../collection-actions-create/index.js'
+import { ContentDocumentActionsPublish } from '../document-actions-publish/index.js'
+import { ContentDocumentActionsDelete } from '../document-actions-delete/index.js'
+import { ContentDocumentActionsEdit } from '../document-actions-edit/index.js'
+import { useCollectionData } from '../../context/collection/data/index.js'
+import { ContentDocumentActions } from '../document-actions/index.js'
+import { DocumentProvider } from '../../context/document/index.js'
+import { useCollection } from '../../context/collection/index.js'
+import { CollectionIcon, ContentIcon } from '../icons/index.js'
+import { DocumentCard } from '../document-card/index.js'
+import { DocumentMeta } from '../../schema/index.js'
 
 export const ContentCollection = component('content:collection', () => {
   const col = useCollection()!
@@ -64,7 +64,7 @@ export const CollectionPagination = (): JSX.Element => {
   const r = useCollectionData()
   const page = r.pages[r.page]
   return (
-    <div className="bg-front/5 flex w-full justify-between border-t px-3 py-0.5 text-sm">
+    <div className="flex w-full justify-between border-t px-3 py-0.5 text-sm">
       <button
         disabled={r.page === 0}
         className={cn('flex items-center gap-1', [r.page === 0, 'opacity-20', 'hover:text-active'])}

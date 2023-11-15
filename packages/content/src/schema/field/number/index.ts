@@ -1,4 +1,4 @@
-import { field, IContentField, ContentFieldOptions } from '../types'
+import { field, IContentField, ContentFieldOptions } from '../types/index.js'
 
 export interface FieldNumberOptions extends ContentFieldOptions<number> {}
 export type FieldNumber = IContentField<number, FieldNumberOptions>

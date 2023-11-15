@@ -25,7 +25,8 @@
     "firebase-functions": "^4.4.1",
     "mcn": "^0.0.4",
     "react-icons": "^4.11.0",
-    "swr": "^2.2.4"
+    "swr": "^2.2.4",
+    "wouter": "^2.12.1"
   },
   "devDependencies": {
     "@firebase/auth": "^1.3.2",
@@ -63,6 +64,11 @@
       "import": "./functions/index.js",
       "require": "./functions/index.cjs"
     },
+    "./v2": {
+      "types": "./v2/index.d.ts",
+      "import": "./v2/index.js",
+      "require": "./v2/index.cjs"
+    },
     "./components/auth-authorize": {
       "types": "./components/auth-authorize/index.d.ts",
       "import": "./components/auth-authorize/index.js",
@@ -92,6 +98,16 @@
       "types": "./functions/users/index.d.ts",
       "import": "./functions/users/index.js",
       "require": "./functions/users/index.cjs"
+    },
+    "./v2/authorize": {
+      "types": "./v2/authorize/index.d.ts",
+      "import": "./v2/authorize/index.js",
+      "require": "./v2/authorize/index.cjs"
+    },
+    "./v2/context": {
+      "types": "./v2/context/index.d.ts",
+      "import": "./v2/context/index.js",
+      "require": "./v2/context/index.cjs"
     }
   }
 }

@@ -1,13 +1,13 @@
 import { WorkbenchProvider, WorkbenchPage } from '@fiar/workbench'
 import { FiarPlugin } from '@fiar/core'
 
-import { AssetConfigProvider, AssetsConfig } from './context'
-import { AssetsBrowser } from './components/assets-browser'
-import { TipTapImageProvider } from './context/tiptap'
-import { CloudIcon } from './components/icons'
-import { components } from './components'
+import { AssetConfigProvider, AssetsConfig } from './context/index.js'
+import { AssetsBrowser } from './components/assets-browser/index.js'
+import { TipTapImageProvider } from './context/tiptap.js'
+import { CloudIcon } from './components/icons/index.js'
+import { components } from './components/index.js'
 
-export type { AssetsConfig } from './context'
+export type { AssetsConfig } from './context/index.js'
 
 export const fiarAssets =
   (config: AssetsConfig): FiarPlugin =>

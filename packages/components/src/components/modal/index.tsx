@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-import { useLockBodyScroll } from '../../hooks/useLockBodyScroll'
+import { useLockBodyScroll } from '../../hooks/useLockBodyScroll.js'
 
 const ModalContext = createContext<React.RefObject<HTMLDivElement> | null>(null)
 export const ModalProvider = ({

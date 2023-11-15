@@ -2,11 +2,11 @@ import { DocumentSnapshot, FirestoreError } from '@firebase/firestore'
 import { StoreApi, createStore } from 'zustand'
 import { tp } from 'typeofit'
 
-import { ContentFieldEventHandler, DocumentVersions, FieldValidation } from '../../../schema'
-import { narrow, whenSubscribed } from '../../../util/zustand'
-import { useContentVersion } from '../../version'
-import { lense } from '../../../util/paths'
-import { useDocument } from '../content'
+import { ContentFieldEventHandler, DocumentVersions, FieldValidation } from '../../../schema/index.js'
+import { narrow, whenSubscribed } from '../../../util/zustand/index.js'
+import { useContentVersion } from '../../version/index.js'
+import { lense } from '../../../util/paths/index.js'
+import { useDocument } from '../content/index.js'
 
 export type DocumentStoreState = {
   synced: boolean

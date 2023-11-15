@@ -1,4 +1,4 @@
-import UploadIcon from '@heroicons/react/24/outline/CloudArrowUpIcon'
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline'
 
 import { ref, uploadBytesResumable } from '@firebase/storage'
 import { useDropzone } from 'react-dropzone'
@@ -8,13 +8,13 @@ import { Page } from '@fiar/workbench'
 
 import { cn } from 'mcn'
 
-import { isUploadAsset, useUploads } from '../../context/uploads'
-import { useAssetConfig, useQueryAssets } from '../../context'
-import { useSelectAsset } from '../../context/select'
-import { DropLayer } from './DropLayer'
-import { CloudIcon } from '../icons'
-import { Preview } from './Preview'
-import { Upload } from './Upload'
+import { isUploadAsset, useUploads } from '../../context/uploads.js'
+import { useAssetConfig, useQueryAssets } from '../../context/index.js'
+import { useSelectAsset } from '../../context/select.js'
+import { CloudIcon } from '../icons/index.js'
+import { DropLayer } from './DropLayer.js'
+import { Preview } from './Preview.js'
+import { Upload } from './Upload.js'
 
 export const AssetsBrowser = (): JSX.Element => {
   const [columns] = useState(window.innerWidth < 500 ? 20 : 40)
@@ -48,14 +48,12 @@ export const AssetsBrowser = (): JSX.Element => {
       error={error || query?.error?.message}
       loading={loading || query.isLoading}
       breadcrumb={[{ title: 'Assets', icon: <CloudIcon className="w-4" />, disabled: true }]}
-      actions={
+      action={
         <>
           <Button
-            icon={<UploadIcon className="mr-1 h-5 w-5" />}
+            icon={<CloudArrowUpIcon className="mr-1 h-5 w-5" />}
             use="label"
             htmlFor="upload"
-            size="none"
-            variant="ghost"
             className="cursor-pointer sm:pr-6"
           >
             Upload

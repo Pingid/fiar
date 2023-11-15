@@ -26,8 +26,10 @@
     "@tiptap/react": "^2.1.12",
     "mcn": "^0.0.4",
     "react-dropzone": "^14.2.3",
+    "react-use": "^17.4.0",
     "swr": "^2.2.4",
-    "zustand": "^4.4.4"
+    "wouter": "^2.12.1",
+    "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@fiar/content": "0.0.0-alpha.12",
@@ -63,6 +65,11 @@
       "import": "./fields/index.js",
       "require": "./fields/index.cjs"
     },
+    "./v2": {
+      "types": "./v2/index.d.ts",
+      "import": "./v2/index.js",
+      "require": "./v2/index.cjs"
+    },
     "./components/assets-browser": {
       "types": "./components/assets-browser/index.d.ts",
       "import": "./components/assets-browser/index.js",
@@ -92,6 +99,51 @@
       "types": "./fields/image/index.d.ts",
       "import": "./fields/image/index.js",
       "require": "./fields/image/index.cjs"
+    },
+    "./v2/components": {
+      "types": "./v2/components/index.d.ts",
+      "import": "./v2/components/index.js",
+      "require": "./v2/components/index.cjs"
+    },
+    "./v2/context": {
+      "types": "./v2/context/index.d.ts",
+      "import": "./v2/context/index.js",
+      "require": "./v2/context/index.cjs"
+    },
+    "./v2/folder": {
+      "types": "./v2/folder/index.d.ts",
+      "import": "./v2/folder/index.js",
+      "require": "./v2/folder/index.cjs"
+    },
+    "./v2/hooks": {
+      "types": "./v2/hooks/index.d.ts",
+      "import": "./v2/hooks/index.js",
+      "require": "./v2/hooks/index.cjs"
+    },
+    "./v2/preview": {
+      "types": "./v2/preview/index.d.ts",
+      "import": "./v2/preview/index.js",
+      "require": "./v2/preview/index.cjs"
+    },
+    "./v2/schema": {
+      "types": "./v2/schema/index.d.ts",
+      "import": "./v2/schema/index.js",
+      "require": "./v2/schema/index.cjs"
+    },
+    "./v2/upload": {
+      "types": "./v2/upload/index.d.ts",
+      "import": "./v2/upload/index.js",
+      "require": "./v2/upload/index.cjs"
+    },
+    "./v2/folder/drop": {
+      "types": "./v2/folder/drop/index.d.ts",
+      "import": "./v2/folder/drop/index.js",
+      "require": "./v2/folder/drop/index.cjs"
+    },
+    "./v2/folder/empty": {
+      "types": "./v2/folder/empty/index.d.ts",
+      "import": "./v2/folder/empty/index.js",
+      "require": "./v2/folder/empty/index.cjs"
     }
   }
 }

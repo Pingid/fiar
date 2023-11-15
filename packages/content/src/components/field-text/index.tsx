@@ -1,12 +1,12 @@
 import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import { component } from '@fiar/workbench'
 import { Control } from '@fiar/components'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { TurnLeftIcon, TurnRightIcon } from '../icons'
-import { useTipTapConfig } from '../../context/tiptap'
-import { useField } from '../../context/field'
-import { FieldString } from '../../schema'
+import { TurnLeftIcon, TurnRightIcon } from '../icons/index.js'
+import { useTipTapConfig } from '../../context/tiptap/index.js'
+import { useField } from '../../context/field/index.js'
+import { FieldString } from '../../schema/index.js'
 
 export const ContentFieldText = component('content:field:text', () => {
   const field = useField<FieldString>()

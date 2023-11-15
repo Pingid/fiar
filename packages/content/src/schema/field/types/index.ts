@@ -1,4 +1,4 @@
-import { FieldContext } from '../context'
+import { FieldContext } from '../context/index.js'
 
 export interface ContentFieldOptions<T = any> {
   label?: string

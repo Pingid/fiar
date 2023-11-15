@@ -1,8 +1,8 @@
 import { component, RenderComponent } from '@fiar/workbench'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { ContentFieldProvider, useField } from '../../context/field'
-import { FieldRecord } from '../../schema'
+import { ContentFieldProvider, useField } from '../../context/field/index.js'
+import { FieldRecord } from '../../schema/index.js'
 
 export const ContentFieldRecord = component('content:field:record', () => {
   const ctx = useField<FieldRecord>()

@@ -1,4 +1,4 @@
-export * from './image'
+export * from './image/index.js'
 
 // import { useModalSwitch, Button, Box, Modal, Menu } from '@fiar/components'
 // import { useField } from '@fiar/cms/schema/field/Context'

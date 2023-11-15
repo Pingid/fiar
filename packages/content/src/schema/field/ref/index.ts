@@ -1,8 +1,8 @@
 import type { DocumentReference } from '@firebase/firestore'
 
-import { field, IContentField, ContentFieldOptions } from '../types'
-import { createDocumentActions } from '../../document'
-import { IContentCollection } from '../../collection'
+import { field, IContentField, ContentFieldOptions } from '../types/index.js'
+import { createDocumentActions } from '../../document/index.js'
+import { IContentCollection } from '../../collection/index.js'
 
 export interface FieldRefOptions<T extends IContentCollection<any, any>>
   extends ContentFieldOptions<DocumentReference<T['infer']>> {

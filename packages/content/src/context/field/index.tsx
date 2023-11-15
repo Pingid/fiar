@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-
-import { ContentFieldEventHandler, IContentField } from '../../schema/field'
-import { useDocumentDataStore } from '../document/data'
-import { DocumentVersions } from '../../schema/document'
-import { useDocument } from '../document'
-import { useConfig } from '../config'
 import { tp } from 'typeofit'
+
+import { ContentFieldEventHandler, IContentField } from '../../schema/field/index.js'
+import { useDocumentDataStore } from '../document/data/index.js'
+import { DocumentVersions } from '../../schema/document/index.js'
+import { useDocument } from '../document/index.js'
+import { useConfig } from '../config/index.js'
 
 export const ContentVersionContext = React.createContext<keyof DocumentVersions | null>(null)
 export const ContentVersionProvider = ContentVersionContext.Provider

@@ -1,4 +1,4 @@
-import { field, IContentField, ContentFieldOptions } from '../types'
+import { field, IContentField, ContentFieldOptions } from '../types/index.js'
 
 export interface FieldRecordOptions<
   T extends Record<string, IContentField<any, any>> = Record<string, IContentField<any, any>>,

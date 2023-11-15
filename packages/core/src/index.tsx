@@ -1,12 +1,13 @@
 import { createStore } from 'zustand'
 
-import { FiarApp, FiarPlugin, FiarComponents } from './types'
+import { FiarApp, FiarPlugin, FiarComponents } from './types/index.js'
 
-export * from './types'
+export * from './types/index.js'
 
 export const createFiar = (p: { plugins: FiarPlugin[]; components: FiarComponents }) => {
   const store = createStore<FiarApp>((set) => ({
     ...p,
+    plugins: {},
     components: { ...p.components },
     addComponents: (comp) => set((x) => ({ components: { ...x.components, ...comp } })),
     Dashboard: () => null,

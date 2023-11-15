@@ -1,6 +1,7 @@
 import React from 'react'
-import { LoadingDots } from '../loading'
-import cn from 'mcn'
+import { cn } from 'mcn'
+
+import { LoadingDots } from '../loading/index.js'
 
 export const Header = (p: { children: React.ReactNode }): JSX.Element => (
   <div className="bg-back sticky top-0 z-30">{p.children}</div>

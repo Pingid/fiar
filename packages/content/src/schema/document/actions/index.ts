@@ -11,8 +11,8 @@ import {
   updateDoc,
 } from '@firebase/firestore'
 
-import { DocumentContext } from '../context'
-import { DocumentVersions } from '../types'
+import { DocumentContext } from '../context/index.js'
+import { DocumentVersions } from '../types/index.js'
 
 export type DocumentActions = ReturnType<typeof createDocumentActions>
 

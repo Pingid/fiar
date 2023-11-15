@@ -1,7 +1,7 @@
 import { ElementRef } from 'react'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { forwardRef } from '../../util/forwardRef'
+import { forwardRefElement } from '../../util/forwardRef.js'
 
 type SharedProps = {
   label?: React.ReactNode
@@ -21,7 +21,7 @@ export const Control: {
   <P extends any, U extends (props: P) => React.ReactNode>(
     p: { use: U; icon?: React.ReactNode } & SharedProps & P,
   ): JSX.Element
-} = forwardRef(({ use = 'div', children, label, name, error, className, ...props }: any, ref) => {
+} = forwardRefElement(({ use = 'div', children, label, name, error, className, ...props }: any, ref) => {
   const Element = use as any
 
   return (
@@ -42,10 +42,7 @@ export const Control: {
       <Element
         {...props}
         ref={ref}
-        className={cn(
-          'border-front/5 bg-front/5 focus-within:border-active group w-full w-full rounded-sm border',
-          props.className,
-        )}
+        className={cn('border-front/5 bg-front/5 focus-within:border-active group w-full rounded-sm border', className)}
       >
         {children}
       </Element>

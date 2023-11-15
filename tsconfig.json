@@ -2,12 +2,15 @@
   "compilerOptions": {
     // "paths": { "tslib": ["node_modules/tslib/tslib.d.ts"] },
     // "baseUrl": ".",
-    "baseUrl": "./",
+    "baseUrl": ".",
+    "rootDir": ".",
     "target": "ESNext",
-    "module": "esnext",
-    "rootDir": "./src",
-    "outDir": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "jsx": "react-jsx",
+    "tsBuildInfoFile": ".tsbuildinfo",
 
+    "composite": true,
     "declaration": true /* Generate .d.ts files from TypeScript and JavaScript files in your project. */,
     "declarationMap": true,
 
@@ -36,14 +39,20 @@
     "noPropertyAccessFromIndexSignature": true /* Enforces using indexed accessors for keys declared using an indexed type. */,
     "allowUnusedLabels": true /* Disable error reporting for unused labels. */,
     "allowUnreachableCode": true /* Disable error reporting for unreachable code. */,
-    "moduleResolution": "Node",
     "resolveJsonModule": true,
 
     /* Completeness */
     "skipDefaultLibCheck": true /* Skip type checking .d.ts files that are included with TypeScript. */,
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["scripts"]
+  "references": [
+    { "path": "./packages/assets" },
+    { "path": "./packages/auth" },
+    { "path": "./packages/components" },
+    { "path": "./packages/content" },
+    { "path": "./packages/core" },
+    { "path": "./packages/fiar" },
+    { "path": "./packages/workbench" }
+  ],
+  "include": ["firebase.json"]
 }

@@ -19,21 +19,18 @@ const local = (root) => {
     .flat()
 }
 
+process.env.PUBLIC_FIRE_EMULATE = process.env.FIRE_EMULATE
+process.env.PUBLIC_FIREBASE_API_KEY = process.env.FIREBASE_API_KEY
+process.env.PUBLIC_FIREBASE_AUTH_DOMAIN = process.env.FIREBASE_AUTH_DOMAIN
+process.env.PUBLIC_FIREBASE_PROJECT_ID = process.env.FIREBASE_PROJECT_ID
+process.env.PUBLIC_FIREBASE_STORAGE_BUCKET = process.env.FIREBASE_STORAGE_BUCKET
+process.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID = process.env.FIREBASE_MESSAGING_SENDER_ID
+process.env.PUBLIC_FIREBASE_APP_ID = process.env.FIREBASE_APP_ID
+process.env.PUBLIC_FIREBASE_MEASUREMENT_ID = process.env.FIREBASE_MEASUREMENT_ID
+
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), react()],
   server: { port: 3001 },
-  vite: {
-    define: {
-      'process.env.FIRE_EMULATE': `'${process.env.FIRE_EMULATE || ''}'`,
-      'process.env.FIREBASE_API_KEY': `'${process.env.FIREBASE_API_KEY}'`,
-      'process.env.FIREBASE_AUTH_DOMAIN': `'${process.env.FIREBASE_AUTH_DOMAIN}'`,
-      'process.env.FIREBASE_PROJECT_ID': `'${process.env.FIREBASE_PROJECT_ID}'`,
-      'process.env.FIREBASE_STORAGE_BUCKET': `'${process.env.FIREBASE_STORAGE_BUCKET}'`,
-      'process.env.FIREBASE_MESSAGING_SENDER_ID': `'${process.env.FIREBASE_MESSAGING_SENDER_ID}'`,
-      'process.env.FIREBASE_APP_ID': `'${process.env.FIREBASE_APP_ID}'`,
-      'process.env.FIREBASE_MEASUREMENT_ID': `'${process.env.FIREBASE_MEASUREMENT_ID}'`,
-    },
-    resolve: { alias: [...local('packages')] },
-  },
+  vite: { resolve: { alias: [...local('packages')] } },
 })

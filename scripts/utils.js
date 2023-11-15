@@ -139,8 +139,9 @@ const replaceImportExtension = (files, file, ext) => {
   /** @type {any} */
   let { dir } = path.parse(file)
   return contents.replace(/((import|export).*from.*?['"])(\..*)(['"])/g, (_1, lft, _3, rel, rt) => {
+    if (/.*\.\w+$/.test(rel)) return `${lft}${rel}${rt}`
     const pth = path.join(dir, rel)
-    if (files.includes(`${pth}.ts`) || files.includes(`${pth}.tsx`)) {
+    if (files.includes(`${pth}.js`) || files.includes(`${pth}.ts`) || files.includes(`${pth}.tsx`)) {
       return `${lft}${rel}${ext}${rt}`
     }
     return `${lft}${rel}/index${ext}${rt}`
@@ -224,6 +225,18 @@ exports.packageExports = async () => {
       require: './index.cjs',
     },
   }
+
+  glob.sync('./src/*.ts', { onlyFiles: true, absolute: true }).forEach((root) => {
+    const out = path.relative(path.resolve(), root).replace(/\/?src\/?/, '')
+    const parsed = path.parse(out)
+    if (parsed.name === 'index') return
+    json.exports[`./${parsed.name}`] = {
+      types: `./${parsed.name}.d.ts`,
+      import: `./${parsed.name}.js`,
+      require: `./${parsed.name}.cjs`,
+    }
+  })
+
   json.main = 'index.js'
   json.types = 'index.d.ts'
   delete json['typings']

@@ -1,10 +1,10 @@
 import { useLocation } from 'wouter'
 
-import { ContentVersionProvider } from '../../context/version'
-import { CollectionProvider } from '../../context/collection'
-import { DocumentProvider } from '../../context/document'
-import { useConfig } from '../../context/config'
-import { isCol, isDoc } from '../../schema'
+import { ContentVersionProvider } from '../../context/version/index.js'
+import { CollectionProvider } from '../../context/collection/index.js'
+import { DocumentProvider } from '../../context/document/index.js'
+import { useConfig } from '../../context/config/index.js'
+import { isCol, isDoc } from '../../schema/index.js'
 
 export const CollectionPageProvider = (p: { children: React.ReactNode }): JSX.Element => {
   const [location] = useLocation()

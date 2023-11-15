@@ -1,6 +1,6 @@
 import { shallow } from 'zustand/shallow'
 
-import { useFiarAppState } from '../../context'
+import { useFiarAppState } from '../../context/index.js'
 
 export const useWorkbenchPages = () =>
   useFiarAppState(

@@ -1,3 +1,4 @@
-export * from './components'
-export * from './tailwind'
-export * from './hooks'
+export * from './components/index.js'
+export * from './tailwind/index.js'
+export * from './hooks/index.js'
+export * from './util/slots.js'

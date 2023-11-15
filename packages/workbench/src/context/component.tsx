@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useFiarAppState } from './fiar'
+import { useFiarAppState } from './fiar.js'
 
 export const useComponents = () => useFiarAppState((x) => x.components) as Record<string, any>
 

@@ -1,10 +1,10 @@
-import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useTransitions } from 'react-class-transition'
 import { Modal } from '@fiar/components'
 import React, { useEffect } from 'react'
 
-import { WorkbenchPages, WorkbenchRouter } from '../router'
-import { MemoryNavigationProvider } from '../router/memory'
+import { WorkbenchPages, WorkbenchRouter } from '../router/index.js'
+import { MemoryNavigationProvider } from '../router/memory.js'
 
 export const WorkbenchModal = (p: { open: boolean; close: () => void; children: React.ReactNode }): JSX.Element => {
   const [bind, run] = useTransitions({

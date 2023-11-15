@@ -2,8 +2,8 @@ import { Firestore } from '@firebase/firestore'
 import { AuthUser } from '@fiar/workbench'
 import React from 'react'
 
-import { IContentCollection, IContentDocument } from '../../schema'
-import { ContentContext } from '../../schema/context'
+import { IContentCollection, IContentDocument } from '../../schema/index.js'
+import { ContentContext } from '../../schema/context/index.js'
 
 export type ContentConfig = {
   contentPrefix: string

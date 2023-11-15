@@ -1,14 +1,12 @@
-import RemoveIcon from '@heroicons/react/20/solid/XMarkIcon'
-import PauseIcon from '@heroicons/react/24/outline/PauseIcon'
-import PlayIcon from '@heroicons/react/24/outline/PlayIcon'
+import { XMarkIcon, PauseIcon, PlayIcon } from '@heroicons/react/24/outline'
 
 import { useEffect, useState } from 'react'
 
-import { AssetCardAction } from './AssetCardAction'
-import { AssetCard } from './AssetCard'
-import { Asset } from './Asset'
+import { AssetCardAction } from './AssetCardAction.js'
+import { AssetCard } from './AssetCard.js'
+import { Asset } from './Asset.js'
 
-import { UploadAsset } from '../../context/uploads'
+import { UploadAsset } from '../../context/uploads.js'
 
 export const Upload = (p: { asset: UploadAsset; onDone: () => void }): JSX.Element => {
   const [progress, setprogress] = useState(0)
@@ -45,7 +43,7 @@ export const Upload = (p: { asset: UploadAsset; onDone: () => void }): JSX.Eleme
             </AssetCardAction>
           )}
           <AssetCardAction onClick={() => p.asset.task.cancel && p.asset.task.cancel()}>
-            <RemoveIcon className="h-full w-full" strokeWidth="2px" />
+            <XMarkIcon className="h-full w-full" strokeWidth="2px" />
           </AssetCardAction>
         </div>
       }

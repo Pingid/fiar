@@ -1,4 +1,4 @@
-import cn from 'mcn'
+import { cn } from 'mcn'
 
 export const ErrorMessage = (p: JSX.IntrinsicElements['p']) => (
   <p {...p} className={cn(p.className, 'text-error w-full truncate whitespace-break-spaces')}>

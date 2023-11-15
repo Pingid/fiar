@@ -1,11 +1,10 @@
+import { EllipsisVerticalIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useDrag, useDrop, useDragLayer } from 'react-dnd'
-import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon'
-import XMarkIcon from '@heroicons/react/24/outline/XMarkIcon'
 import { DndProvider } from 'react-dnd-multi-backend'
 import { HTML5toTouch } from 'rdndmb-html5-to-touch'
 import { cn } from 'mcn'
 
-import { useUpdatedRef } from '../../hooks'
+import { useUpdatedRef } from '../../hooks/index.js'
 
 export const Reorder = ({ children, className, ...props }: JSX.IntrinsicElements['ul']) => (
   <DndProvider options={HTML5toTouch}>
@@ -49,9 +48,8 @@ Reorder.Item = ({
             <XMarkIcon className="relative h-4 w-4" />
           </button>
           <div className="relative -left-2 flex cursor-move">
-            <div className="h-5 w-[5px]">
-              <EllipsisVerticalIcon className="h-5 w-5" />
-            </div>
+            <EllipsisVerticalIcon className="h-5 w-5" />
+            <div className="h-5 w-[5px]"></div>
             <div className="h-5 w-[5px]">
               <EllipsisVerticalIcon className="h-5 w-5" />
             </div>

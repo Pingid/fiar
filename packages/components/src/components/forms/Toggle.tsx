@@ -1,4 +1,4 @@
-import { forwardRefElem } from '../../util/forwardRef'
+import { forwardRefElem } from '../../util/forwardRef.js'
 
 export const Toggle = forwardRefElem<'label', {}>((p, ref) => (
   <label {...p} className="relative inline-flex cursor-pointer items-center" ref={ref}>

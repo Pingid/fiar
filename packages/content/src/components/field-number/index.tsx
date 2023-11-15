@@ -2,8 +2,8 @@ import { Control, Input } from '@fiar/components'
 import { component } from '@fiar/workbench'
 import { useEffect, useState } from 'react'
 
-import { useField } from '../../context/field'
-import { FieldNumber } from '../../schema'
+import { useField } from '../../context/field/index.js'
+import { FieldNumber } from '../../schema/index.js'
 
 export const ContentFieldNumber = component('content:field:number', () => {
   const field = useField<FieldNumber>()

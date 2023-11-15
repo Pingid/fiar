@@ -11,12 +11,12 @@ import {
 } from '@firebase/auth'
 import React from 'react'
 
-import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
+import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs/index.js'
 import { Button, Control, Input, LoadingDots } from '@fiar/components'
 import useMutation from 'swr/mutation'
 
 import { component } from '@fiar/workbench/context'
-import { useAuthConfig } from '../../context'
+import { useAuthConfig } from '../../context/index.js'
 
 export const AuthLogin = component(
   'auth:login',
@@ -74,9 +74,7 @@ export const AuthLogin = component(
                 />
               </Control>
               <div className="flex justify-end pt-3">
-                <Button variant="outline" size="lg" disabled={mutating}>
-                  Login
-                </Button>
+                <Button disabled={mutating}>Login</Button>
               </div>
             </form>
           )}
@@ -86,8 +84,6 @@ export const AuthLogin = component(
               return (
                 <Button
                   key={x.providerId}
-                  variant="outline"
-                  size="lg"
                   className="flex w-full items-center justify-center"
                   onClick={() => signinSocial.trigger(x)}
                   disabled={mutating}

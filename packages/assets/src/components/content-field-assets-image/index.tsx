@@ -3,14 +3,14 @@ import { WorkbenchPageModal, component } from '@fiar/workbench'
 import { useField } from '@fiar/content/context/field'
 import { Button, Control } from '@fiar/components'
 import React from 'react'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { SelectAssetProvider, is_image, useAssetConfig, useAssetUrl } from '../../context'
-import { AssetCardAction } from '../assets-browser/AssetCardAction'
-import { DownloadIcon, PhotoIcon, RemoveIcon } from '../icons'
-import { AssetCard } from '../assets-browser/AssetCard'
-import { Asset } from '../assets-browser/Asset'
-import { FieldImage } from '../../fields'
+import { SelectAssetProvider, is_image, useAssetConfig, useAssetUrl } from '../../context/index.js'
+import { AssetCardAction } from '../assets-browser/AssetCardAction.js'
+import { DownloadIcon, PhotoIcon, RemoveIcon } from '../icons/index.js'
+import { AssetCard } from '../assets-browser/AssetCard.js'
+import { Asset } from '../assets-browser/Asset.js'
+import { FieldImage } from '../../fields/index.js'
 
 export const ContentFieldAssetsImage = component('content:field:asset-image', (): JSX.Element => {
   const [open, setopen] = React.useState(false)
@@ -33,7 +33,6 @@ export const ContentFieldAssetsImage = component('content:field:asset-image', ()
       {!value && (
         <div className="flex items-center justify-center py-2">
           <Button
-            variant="link"
             className="flex items-center justify-center gap-1"
             onClick={() => setopen(true)}
             icon={<PhotoIcon className="w-4" />}

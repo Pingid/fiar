@@ -2,7 +2,7 @@ import useMutaton from 'swr/mutation'
 import useQuery from 'swr'
 
 import { StorageReference, deleteObject, getDownloadURL, listAll, ref } from '@firebase/storage'
-import { useAssetConfig } from './config'
+import { useAssetConfig } from './config.js'
 
 export const is_image = /\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$/i
 export const is_video = /\.(mp4|webm|ogg|avi|mov|wmv|flv|mkv)$/i

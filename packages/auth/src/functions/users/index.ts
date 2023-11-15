@@ -1,7 +1,7 @@
 import { HttpsError, onCall } from 'firebase-functions/v2/https'
 import { Auth } from 'firebase-admin/auth'
 
-import { CLAIM_KEY, userRoles } from '../config'
+import { CLAIM_KEY, userRoles } from '../config/index.js'
 
 export const createFiarUserListHandler = (auth: Auth) =>
   onCall({}, async (req) => {

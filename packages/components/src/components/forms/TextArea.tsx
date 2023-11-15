@@ -1,11 +1,11 @@
 import { cn } from 'mcn'
 
 import ReactTextareAutosize, { TextareaAutosizeProps as _TextareaAutosizeProps } from 'react-textarea-autosize'
-import { forwardRef } from '../../util/forwardRef'
+import { forwardRefElement } from '../../util/forwardRef.js'
 
 export interface TextareaAutosizeProps extends _TextareaAutosizeProps {}
 
-export const TextArea = forwardRef<'textarea', TextareaAutosizeProps>((props, ref) => (
+export const TextArea = forwardRefElement<'textarea', TextareaAutosizeProps>((props, ref) => (
   <ReactTextareAutosize
     {...(props as any)}
     className={cn(

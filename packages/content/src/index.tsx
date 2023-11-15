@@ -3,17 +3,17 @@ import StarterKit from '@tiptap/starter-kit'
 import { FiarPlugin } from '@fiar/core'
 import { useLocation } from 'wouter'
 
-import { CollectionPageProvider, DocumentPageProvider } from './components/pages'
-import { ContentConfig, ContentConfigProvider } from './context/config'
-import { ContentCollection } from './components/collection'
-import { TipTapConfigProvider } from './context/tiptap'
-import { ContentDocument } from './components/document'
-import { ContentIcon } from './components/icons'
-import { ContentList } from './components/list'
-import { components } from './components'
+import { CollectionPageProvider, DocumentPageProvider } from './components/pages/index.js'
+import { ContentConfig, ContentConfigProvider } from './context/config/index.js'
+import { ContentCollection } from './components/collection/index.js'
+import { TipTapConfigProvider } from './context/tiptap/index.js'
+import { ContentDocument } from './components/document/index.js'
+import { ContentIcon } from './components/icons/index.js'
+import { ContentList } from './components/list/index.js'
+import { components } from './components/index.js'
 
-export type { ContentConfig } from './context/config'
-export * from './components'
+export type { ContentConfig } from './context/config/index.js'
+export * from './components/index.js'
 
 export const fiarContent =
   (config: ContentConfig): FiarPlugin =>

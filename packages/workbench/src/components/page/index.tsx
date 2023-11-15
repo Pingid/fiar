@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Link } from 'wouter'
-import cn from 'mcn'
+import { cn } from 'mcn'
 
 import { ErrorMessage, LoadingDots, Menu } from '@fiar/components'
 
@@ -56,9 +56,11 @@ export const Page = (p: {
               })}
             </p>
             <div className="hidden sm:flex">{p.action}</div>
-            <Menu className="border-front border border p-1 sm:hidden" size="md">
-              {p.action}
-            </Menu>
+            {p.action && (
+              <Menu className="border-front border border p-1 sm:hidden" size="md">
+                {p.action}
+              </Menu>
+            )}
           </div>
         </div>
 

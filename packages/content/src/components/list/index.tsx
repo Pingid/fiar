@@ -1,14 +1,14 @@
-import { InfoCard, LoadingDots } from '@fiar/components'
+import { Card, InfoCard, LoadingDots } from '@fiar/components'
 import { Page } from '@fiar/workbench/components/page'
 import { component } from '@fiar/workbench'
 import useQuery from 'swr'
 
-import { DocumentProvider, useDocument, useDocumentData } from '../../context/document'
-import { CollectionProvider, useCollection } from '../../context/collection'
-import { CollectionIcon, ContentIcon, DocumentIcon } from '../icons'
-import { IContentCollection, IContentDocument } from '../../schema'
-import { ContentVersionProvider } from '../../context/version'
-import { useConfig } from '../../context/config'
+import { DocumentProvider, useDocument, useDocumentData } from '../../context/document/index.js'
+import { CollectionProvider, useCollection } from '../../context/collection/index.js'
+import { CollectionIcon, ContentIcon, DocumentIcon } from '../icons/index.js'
+import { IContentCollection, IContentDocument } from '../../schema/index.js'
+import { ContentVersionProvider } from '../../context/version/index.js'
+import { useConfig } from '../../context/config/index.js'
 
 export const ContentList = component('content:list', () => {
   const schema = useConfig()
@@ -24,6 +24,18 @@ export const ContentList = component('content:list', () => {
               <ContentCollectionListCard />
             </CollectionProvider>
           ))}
+          <Card>
+            <Card.Title>
+              <CollectionIcon className="w-4" />
+              Articles
+            </Card.Title>
+          </Card>
+          <Card>
+            <Card.Title>
+              <CollectionIcon className="w-4" />
+              books
+            </Card.Title>
+          </Card>
         </ul>
         {documents.length > 0 && <h4 className="text-front/50 text-sm font-semibold uppercase">Documents</h4>}
         <ul className="w-full space-y-3">

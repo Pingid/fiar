@@ -1,3 +1,3 @@
-export * from './component'
-export * from './config'
-export * from './fiar'
+export * from './component.js'
+export * from './config.js'
+export * from './fiar.js'

@@ -1,6 +1,6 @@
-import { FieldRecord, IContentField, record } from '../../field'
-import type { IContentDocument } from '../../document'
-import { ID, id } from '../../util'
+import { FieldRecord, IContentField, record } from '../../field/index.js'
+import type { IContentDocument } from '../../document/index.js'
+import { ID, id } from '../../util/index.js'
 
 export interface IContentCollection<
   R extends string = string,

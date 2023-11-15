@@ -1,12 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /_nosense/{document=**} {
-      allow read, write: if request.auth.token.fiar in ['editor', 'admin']
-    }
+    // match /_nosense/{document=**} {
+    //   allow read, write: if request.auth.token.fiar in ['editor', 'admin']
+    // }
+    // match /{document=**} {
+    //   allow read: if true;
+    //   allow write: if request.auth.token.fiar == 'admin'
+    // }
     match /{document=**} {
       allow read: if true;
-      allow write: if request.auth.token.fiar == 'admin'
+      allow write: if true;
     }
   }
 }

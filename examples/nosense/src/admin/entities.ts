@@ -1,6 +1,6 @@
-import * as s from 'fiar/schema'
+import * as s from 'fiar/v2/schema'
 
-const seoPageMeta = s.record({
+const seoPageMeta = s.struct({
   label: 'SEO page meta',
   fields: {
     title: s.string({ label: 'Page title' }),
@@ -15,21 +15,21 @@ const seoPageMeta = s.record({
   },
 })
 
-export const articles = s.col({
-  ref: 'articles',
+export const articles = s.defineCollection({
+  path: 'articles',
   label: 'Articles',
   titleField: 'title',
   fields: {
     title: s.string({ label: 'Title' }),
     image: s.image({ label: 'Main image' }),
-    body: s.text({ label: 'Content' }),
+    // body: s.text({ label: 'Content' }),
     width: s.number({ label: 'Width' }),
     meta: seoPageMeta,
   },
 })
 
-export const landing = s.doc({
-  ref: 'pages/landing',
+export const landing = s.defineDocument({
+  path: 'pages/landing',
   label: 'Landing page',
   fields: {
     meta: seoPageMeta,

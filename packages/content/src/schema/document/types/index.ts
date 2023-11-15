@@ -1,8 +1,8 @@
 import type { Timestamp } from '@firebase/firestore'
 import type { AuthUser } from '@fiar/workbench'
 
-import { FieldRecord, IContentField, record } from '../../field'
-import { ID, id } from '../../util'
+import { FieldRecord, IContentField, record } from '../../field/index.js'
+import { ID, id } from '../../util/index.js'
 
 type DocumentMetaInfo = { at: Timestamp; by?: AuthUser | undefined | null }
 export type DocumentMeta = { created: DocumentMetaInfo; updated?: DocumentMetaInfo; published?: DocumentMetaInfo }
@@ -19,7 +19,7 @@ export interface IContentDocument<
 > {
   nodeId: ID<'document'>
   infer: { [K in keyof F]: F[K]['infer'] }
-  label: (doc: Record<string, any>) => string
+  label: (doc?: Record<string, any>) => string
   ref: R
   field: FieldRecord<F>
 }

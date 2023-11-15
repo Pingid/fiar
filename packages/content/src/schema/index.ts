@@ -1,3 +1,3 @@
-export * from './collection/types'
-export * from './document/types'
-export * from './field'
+export * from './collection/types/index.js'
+export * from './document/types/index.js'
+export * from './field/index.js'

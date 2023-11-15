@@ -1,8 +1,8 @@
 import { useLocation } from 'wouter'
 import React from 'react'
 
-import { CollectionActions, createCollectionActions, IContentCollection } from '../../../schema/collection'
-import { useConfig } from '../../config'
+import { CollectionActions, createCollectionActions, IContentCollection } from '../../../schema/collection/index.js'
+import { useConfig } from '../../config/index.js'
 
 type ContentCollectionContext = Omit<IContentCollection, 'nodeId' | 'infer'> & { actions?: Partial<CollectionActions> }
 export const ContentCollectionContext = React.createContext<ContentCollectionContext | null>(null)

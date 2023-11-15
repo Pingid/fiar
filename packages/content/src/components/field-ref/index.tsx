@@ -3,14 +3,14 @@ import { Button, Control } from '@fiar/components'
 import { doc } from '@firebase/firestore'
 import React from 'react'
 
-import { DocumentProvider, useDocument } from '../../context/document'
-import { CollectionProvider } from '../../context/collection'
-import { ContentDocumentActions } from '../document-actions'
-import { useConfig } from '../../context/config'
-import { DocumentCard } from '../document-card'
-import { useField } from '../../context/field'
-import { EditIcon, LinkIcon } from '../icons'
-import { FieldRef } from '../../schema'
+import { DocumentProvider, useDocument } from '../../context/document/index.js'
+import { CollectionProvider } from '../../context/collection/index.js'
+import { ContentDocumentActions } from '../document-actions/index.js'
+import { useConfig } from '../../context/config/index.js'
+import { DocumentCard } from '../document-card/index.js'
+import { useField } from '../../context/field/index.js'
+import { EditIcon, LinkIcon } from '../icons/index.js'
+import { FieldRef } from '../../schema/index.js'
 
 export const ContentFieldRef = component('content:field:ref', () => {
   const field = useField<FieldRef>({ equal: (a, b) => a?.path === b?.path })
@@ -36,12 +36,11 @@ export const ContentFieldRef = component('content:field:ref', () => {
           ) : (
             <div className="flex items-center justify-center py-2">
               <Button
-                variant="link"
                 className="flex items-center justify-center gap-1"
                 onClick={() => setopen(`/content/draft/${to.ref}`)}
                 icon={<LinkIcon className="w-4" />}
               >
-                Connect {to.label || to.ref}
+                Connect {to.label ?? to.ref}
               </Button>
             </div>
           )}
@@ -79,14 +78,10 @@ const DocumentPreviewCard = (p: { open: (x: string) => void }) => {
             'content:document:actions:archive',
           ]}
         >
-          <Button onClick={() => doc.remove()} variant="ghost" icon={<LinkIcon className="h-4 w-4" />}>
+          <Button onClick={() => doc.remove()} icon={<LinkIcon className="h-4 w-4" />}>
             Unlink
           </Button>
-          <Button
-            onClick={() => p.open(`/content/draft/${doc.ref}`)}
-            variant="ghost"
-            icon={<EditIcon className="h-4 w-4" />}
-          >
+          <Button onClick={() => p.open(`/content/draft/${doc.ref}`)} icon={<EditIcon className="h-4 w-4" />}>
             Edit
           </Button>
         </ContentDocumentActions>

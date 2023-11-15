@@ -1,10 +1,20 @@
-import type { BeforeSignInResponse } from 'firebase-functions/lib/common/providers/identity'
 import { HttpsError, user } from 'firebase-functions/v1/auth'
-import { CLAIM_KEY, UserRole, userRoles } from '../config'
+import { type BlockingFunction } from 'firebase-functions'
+
+import { CLAIM_KEY, UserRole, userRoles } from '../config/index.js'
 
 export type UserAuthConfig = { users: [string | RegExp, UserRole][]; open?: boolean }
 
-export const createFiarBeforeSignIn = (config: UserAuthConfig) =>
+type BeforeSignInResponse = {
+  displayName?: string
+  disabled?: boolean
+  emailVerified?: boolean
+  photoURL?: string
+  customClaims?: object
+  sessionClaims?: object
+}
+
+export const createFiarBeforeSignIn = (config: UserAuthConfig): BlockingFunction =>
   user({}).beforeSignIn((user) => {
     if (userRoles.includes(user.customClaims?.[CLAIM_KEY])) return Promise.resolve()
     const match = config.users.find(([email]) =>

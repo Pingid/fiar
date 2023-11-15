@@ -4,9 +4,9 @@ import makeCachedMatcher from 'wouter/matcher'
 import { parse } from 'regexparam'
 import { useMemo } from 'react'
 
-import { useWorkbenchPage, useWorkbenchPages, useWorkbenchProviders } from '../hooks'
-import { useFiarAppStore } from '../../context'
-import { MemoryRouter } from './memory'
+import { useWorkbenchPage, useWorkbenchPages, useWorkbenchProviders } from '../hooks/index.js'
+import { useFiarAppStore } from '../../context/index.js'
+import { MemoryRouter } from './memory.js'
 
 const hashNavigate = (to: string) => navigate('#/' + to.replace(/^\//, ''))
 const hashLocation = () => window.location.hash.replace(/^#/, '') || '/'

@@ -4,8 +4,8 @@ import { User, onAuthStateChanged, setPersistence, browserSessionPersistence } f
 import { component, useFiarAppState, useFiarAppStore } from '@fiar/workbench'
 import { LoadingDots } from '@fiar/components'
 
-import { useAuthConfig } from '../../context'
-import { AuthLogin } from '../auth-login'
+import { useAuthConfig } from '../../context/index.js'
+import { AuthLogin } from '../auth-login/index.js'
 
 export const AuthAuthorise = component('auth:authorize', (p: { children: React.ReactNode }): JSX.Element => {
   const config = useAuthConfig()

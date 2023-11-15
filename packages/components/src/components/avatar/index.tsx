@@ -1,4 +1,4 @@
-import cn from 'mcn'
+import { cn } from 'mcn'
 
 const sizes = {
   xs: 'h-4 w-4 text-[6px] text-[50%]',
@@ -7,7 +7,7 @@ const sizes = {
 }
 
 export const Avatar = (p: {
-  displayName?: string | undefined
+  displayName?: string | undefined | null
   photoURL?: string | null | undefined
   size?: keyof typeof sizes
   className?: string

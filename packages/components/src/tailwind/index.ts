@@ -1,6 +1,6 @@
 import typography from '@tailwindcss/typography'
 import type { Config } from 'tailwindcss'
-import plugin from './plugin'
+import plugin from './plugin.js'
 
 export default {
   content: [],

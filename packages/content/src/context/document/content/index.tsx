@@ -1,8 +1,8 @@
 import { useLocation } from 'wouter'
 import React from 'react'
 
-import { DocumentActions, IContentDocument, createDocumentActions } from '../../../schema/document'
-import { useConfig } from '../../config'
+import { DocumentActions, IContentDocument, createDocumentActions } from '../../../schema/document/index.js'
+import { useConfig } from '../../config/index.js'
 
 export type ContentDocumentActions = DocumentActions & { select: () => void; edit: () => void }
 export type ContentDocumentContext = Omit<IContentDocument, 'nodeId' | 'infer'> & {

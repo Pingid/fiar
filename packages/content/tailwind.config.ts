@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss'
-import config from './src/tailwind'
+
+import config from '@fiar/components/tailwind.config'
 
 const _config: Config = {
   ...config,

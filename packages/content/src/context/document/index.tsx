@@ -1,8 +1,8 @@
-import { ContentDocumentContext, ContentDocumentProvider } from './content'
-import { DocumentDataProvider } from './data'
+import { ContentDocumentContext, ContentDocumentProvider } from './content/index.js'
+import { DocumentDataProvider } from './data/index.js'
 
-export { useDocument, useGetDocument } from './content'
-export { useDocumentData } from './data'
+export { useDocument, useGetDocument } from './content/index.js'
+export { useDocumentData } from './data/index.js'
 
 export const DocumentProvider = (p: {
   children: React.ReactNode

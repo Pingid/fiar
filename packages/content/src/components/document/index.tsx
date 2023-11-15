@@ -4,14 +4,14 @@ import { Button } from '@fiar/components'
 import { Link } from 'wouter'
 import { tp } from 'typeofit'
 
-import { ArrowRightIcon, CollectionIcon, ContentIcon, DocumentIcon } from '../icons'
-import { ContentDocumentActionsPublish } from '../document-actions-publish'
-import { ContentDocumentActionsDelete } from '../document-actions-delete'
-import { useDocument, useDocumentData } from '../../context/document'
-import { ContentDocumentActions } from '../document-actions'
-import { ContentFieldProvider } from '../../context/field'
-import { useCollection } from '../../context/collection'
-import { ContentFieldRecord } from '../field-record'
+import { ArrowRightIcon, CollectionIcon, ContentIcon, DocumentIcon } from '../icons/index.js'
+import { ContentDocumentActionsPublish } from '../document-actions-publish/index.js'
+import { ContentDocumentActionsDelete } from '../document-actions-delete/index.js'
+import { useDocument, useDocumentData } from '../../context/document/index.js'
+import { ContentDocumentActions } from '../document-actions/index.js'
+import { ContentFieldProvider } from '../../context/field/index.js'
+import { useCollection } from '../../context/collection/index.js'
+import { ContentFieldRecord } from '../field-record/index.js'
 
 export const ContentDocument = component('content:document', () => {
   const col = useCollection(true)
@@ -38,13 +38,13 @@ export const ContentDocument = component('content:document', () => {
       </div>
     </div>
   )
+  console.log(actions)
 
   return (
     <Page
       breadcrumb={breadcrumbs}
-      actions={actions}
       action={
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-3 sm:flex-row">
           <ContentDocumentActionsPublish />
           <ContentDocumentActionsDelete />
         </div>
@@ -71,23 +71,17 @@ const ContentDocumentMissing = component('content:document:missing', () => {
         <p className="text-front/70 pr-2">It looks like this document no longer exists</p>
         <div>
           {col ? (
-            <Button
-              use="button"
-              variant="link"
-              onClick={() => col.visit()}
-              icon={<ArrowRightIcon className="w-5 rotate-180" />}
-            >
+            <Button use="button" onClick={() => col.visit()} icon={<ArrowRightIcon className="w-5 rotate-180" />}>
               {col.label || col.ref}
             </Button>
           ) : (
             <Button
-              use={Link}
-              to="/content"
-              variant="link"
+              use={Link as any as 'a'}
+              href="/content"
               className="w-min"
               icon={<ArrowRightIcon className="w-5 rotate-180" />}
             >
-              Content
+              <a>Content</a>
             </Button>
           )}
         </div>

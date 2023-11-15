@@ -1,4 +1,4 @@
-import { field, IContentField, ContentFieldOptions } from '../types'
+import { field, IContentField, ContentFieldOptions } from '../types/index.js'
 
 export interface FieldArrayOptions<T extends IContentField<any, any> = IContentField<any, any>>
   extends ContentFieldOptions<T['infer'][]> {

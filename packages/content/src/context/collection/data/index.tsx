@@ -1,9 +1,9 @@
 import _React from 'react'
 
-import { provideStore } from '../../../util/zustand/react'
-import { useGetDocument } from '../../document/content'
-import { createCollectionStore } from '../store'
-import { useCollection } from '../content'
+import { provideStore } from '../../../util/zustand/react.js'
+import { useGetDocument } from '../../document/content/index.js'
+import { createCollectionStore } from '../store/index.js'
+import { useCollection } from '../content/index.js'
 
 export const [_CollectionDocumentProvider, _useCollectionDocuments] = provideStore(() => {
   const col = useCollection()!

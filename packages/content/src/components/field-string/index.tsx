@@ -2,8 +2,8 @@ import { component } from '@fiar/workbench'
 import { Control, TextArea } from '@fiar/components'
 import { useEffect, useState } from 'react'
 
-import { useField } from '../../context/field'
-import { FieldString } from '../../schema'
+import { useField } from '../../context/field/index.js'
+import { FieldString } from '../../schema/index.js'
 
 export const ContentFieldString = component('content:field:string', () => {
   const field = useField<FieldString>()

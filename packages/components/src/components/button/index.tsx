@@ -1,52 +1,47 @@
-import { forwardRef } from 'react'
+import { ElementRef, ForwardedRef } from 'react'
 import { cn } from 'mcn'
 
-const variants = {
-  default: 'bg-front/5 hover:bg-front/10 rounded-sm',
-  link: 'hover border-b border-transparent hover:border-active hover:text-active disabled:border-transparent disabled:text-front',
-  ghost: 'hover:text-active rounded-sm',
-  'ghost:error': 'hover:text-error border border-transparent hover:border-error rounded-sm',
-  'ghost:archived': 'hover:text-archived border border-transparent hover:border-archived rounded-sm',
-  outline: 'border disabled:opacity-70 hover:border-active hover:text-active',
-}
+import { forwardRef } from '../../util/forwardRef.js'
 
-const sizes = {
-  default: 'px-3 py-1',
-  lg: 'px-6 py-3',
-  sm: 'text-sm',
-  none: '',
+const colors = {
+  default: 'border hover:bg-front/5',
+  error: 'hover:border-error bg-error/5 text-error',
+  active: 'hover:border-active bg-active/5 text-active',
+  published: 'hover:border-published bg-published/5 text-published',
 }
+const sizes = { default: 'px-5 py-2.5' }
 
-type SharedProps = {
-  icon?: React.ReactNode
-  variant?: keyof typeof variants
-  size?: keyof typeof sizes
-}
-
-export const Button: {
+export const Button = forwardRef(
   <K extends keyof JSX.IntrinsicElements = 'button'>(
-    p: {
+    {
+      color,
+      size,
+      icon,
+      use,
+      className,
+      children,
+      ...props
+    }: JSX.IntrinsicElements[K] & {
       use?: K
-      children?: React.ReactNode
-    } & SharedProps &
-      JSX.IntrinsicElements[K],
-  ): JSX.Element
-  <P extends any, U extends (props: P) => React.ReactNode>(
-    p: { use: U; icon?: React.ReactNode } & SharedProps & P,
-  ): JSX.Element
-} = forwardRef(({ use = 'button', children, variant, size, icon, className, ...props }: any, ref) => {
-  const Element = use as any
-  const cls = cn(
-    'flex items-center gap-1',
-    variant ? (variants as any)[variant] : variants.default,
-    size ? (sizes as any)[size] : sizes.default,
-    className,
-  )
-
-  return (
-    <Element {...props} ref={ref} className={cls}>
-      {icon && <span>{icon}</span>}
-      {children}
-    </Element>
-  )
-}) as any
+      color?: keyof typeof colors
+      size?: keyof typeof sizes
+      icon?: React.ReactNode
+    },
+    ref?: ForwardedRef<ElementRef<K>>,
+  ) => {
+    const cls = cn('leading-none flex gap-1 disabled:hover:border-front/10 disabled:opacity-50 border cursor-pointer')
+    const Element: any = use ?? 'button'
+    return (
+      <Element
+        ref={ref}
+        {...props}
+        className={cn(colors[color ?? 'default'], sizes[size ?? 'default'], cls, className)}
+      >
+        {icon && (
+          <span className="w-4.5 relative -left-2.5 -top-[3px] h-3 overflow-visible [&>*]:h-5 [&>*]:w-5">{icon}</span>
+        )}
+        {children}
+      </Element>
+    )
+  },
+)

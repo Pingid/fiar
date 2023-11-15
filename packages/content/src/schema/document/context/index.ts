@@ -1,6 +1,6 @@
-import type { ContentContext } from '../../context'
+import type { ContentContext } from '../../context/index.js'
 
-import { IContentDocument } from '../types'
+import { IContentDocument } from '../types/index.js'
 
 export type DocumentContext = ContentContext & {
   field: IContentDocument['field']

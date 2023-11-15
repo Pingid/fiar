@@ -13,7 +13,7 @@ import {
 import { StoreApi, createStore } from 'zustand'
 import { tp } from 'typeofit'
 
-import { narrow, whenSubscribed } from '../../../util/zustand'
+import { narrow, whenSubscribed } from '../../../util/zustand/index.js'
 
 type Props = {
   add: () => Promise<DocumentReference>

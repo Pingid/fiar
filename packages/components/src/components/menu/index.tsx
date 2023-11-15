@@ -1,7 +1,6 @@
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import React, { forwardRef, useEffect, useState } from 'react'
 import { cn } from 'mcn'
-
-import EllipsisVerticalIcon from '@heroicons/react/24/outline/EllipsisVerticalIcon'
 
 const sizes = { md: 'w-36 p-3' }
 

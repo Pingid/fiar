@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-import fireconfig from '../examples/nosense/firebase.json' assert { type: 'json' }
+import fireconfig from '../firebase.json' assert { type: 'json' }
 
 const host = `127.0.0.1`
 process.env.FIRESTORE_EMULATOR_HOST = `${host}:${fireconfig.emulators.firestore.port}`

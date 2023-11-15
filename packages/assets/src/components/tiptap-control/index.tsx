@@ -4,10 +4,10 @@ import useMutation from 'swr/mutation'
 import { Editor } from '@tiptap/react'
 import React from 'react'
 
-import { SelectAssetProvider } from '../../context/select'
-import { useAssetConfig } from '../../context/config'
-import { is_image } from '../../context/assets'
-import { PhotoIcon } from '../icons'
+import { SelectAssetProvider } from '../../context/select.js'
+import { useAssetConfig } from '../../context/config.js'
+import { is_image } from '../../context/assets.js'
+import { PhotoIcon } from '../icons/index.js'
 
 export const TipTapControl = (p: { editor: Editor }): JSX.Element => {
   const config = useAssetConfig()

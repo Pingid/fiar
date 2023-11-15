@@ -1,5 +1,5 @@
-import ChevronLeftIcon from '@heroicons/react/24/outline/ChevronLeftIcon'
-import cn from 'mcn'
+import { ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { cn } from 'mcn'
 
 export const Pagination = (p: {
   page: number

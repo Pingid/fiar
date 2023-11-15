@@ -1,3 +1,3 @@
-import { DocumentContext } from '../../document/context'
+import { DocumentContext } from '../../document/context/index.js'
 
 export type FieldContext = DocumentContext

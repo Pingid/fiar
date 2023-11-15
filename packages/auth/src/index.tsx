@@ -1,13 +1,13 @@
 import { WorkbenchPage, WorkbenchProvider } from '@fiar/workbench/types'
-import UsersIcon from '@heroicons/react/24/outline/UsersIcon'
+import { UsersIcon } from '@heroicons/react/24/outline'
 import { FiarPlugin } from '@fiar/core'
 
-import { AuthAuthorise } from './components/auth-authorize'
-import { AuthConfig, AuthConfigProvider } from './context'
-import { AuthUsers } from './components/auth-users'
+import { AuthAuthorise } from './components/auth-authorize/index.js'
+import { AuthConfig, AuthConfigProvider } from './context/index.js'
+import { AuthUsers } from './components/auth-users/index.js'
 
-export * from './components'
-export * from './context'
+export * from './components/index.js'
+export * from './context/index.js'
 
 export const fiarAuth =
   (config: AuthConfig): FiarPlugin =>

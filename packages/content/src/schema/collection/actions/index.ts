@@ -12,8 +12,8 @@ import {
   QuerySnapshot,
 } from '@firebase/firestore'
 
-import { DocumentVersions } from '../../document'
-import { CollectionContext } from '../context'
+import { DocumentVersions } from '../../document/index.js'
+import { CollectionContext } from '../context/index.js'
 
 export type CollectionActions = ReturnType<typeof createCollectionActions>
 const metaKey = '_meta'

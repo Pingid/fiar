@@ -1,11 +1,11 @@
 import { StoreApi } from 'zustand'
 import React from 'react'
 
-import { ContentDocumentProvider, useDocument } from '../content'
-import { createDocumentStore, DocumentStoreState } from './store'
-import { createHook } from '../../../util/zustand/react'
-import { useContentVersion } from '../../version'
-import { useConfig } from '../../config'
+import { ContentDocumentProvider, useDocument } from '../content/index.js'
+import { createDocumentStore, DocumentStoreState } from './store.js'
+import { createHook } from '../../../util/zustand/react.js'
+import { useContentVersion } from '../../version/index.js'
+import { useConfig } from '../../config/index.js'
 
 const DocumentDataContext = React.createContext<ReturnType<typeof createDocumentStore> | null>(null)
 export const useDocumentDataStore = (): StoreApi<DocumentStoreState> | null => React.useContext(DocumentDataContext)

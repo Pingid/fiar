@@ -1,3 +1,3 @@
-import { ContentConfig } from '../../context/config'
+import { ContentConfig } from '../../context/config/index.js'
 
 export type ContentContext = ContentConfig

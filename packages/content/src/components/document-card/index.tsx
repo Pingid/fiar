@@ -1,8 +1,8 @@
 import { Avatar, InfoCard, LoadingDots } from '@fiar/components'
 import dayjs from 'dayjs'
 
-import { useDocument, useDocumentData } from '../../context/document'
-import { DocumentIcon } from '../icons'
+import { useDocument, useDocumentData } from '../../context/document/index.js'
+import { DocumentIcon } from '../icons/index.js'
 
 export const DocumentCard = (): JSX.Element => {
   const doc = useDocument()

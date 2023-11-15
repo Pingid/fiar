@@ -1,7 +1,7 @@
-import cn from 'mcn'
+import { cn } from 'mcn'
 
-import { Preview } from '../assets-browser/Preview'
-import { useQueryAssets } from '../../context'
+import { Preview } from '../assets-browser/Preview.js'
+import { useQueryAssets } from '../../context/index.js'
 
 export const ContentFieldAssets = (): JSX.Element => {
   const query = useQueryAssets()

@@ -1,10 +1,10 @@
 import { component, RenderComponent } from '@fiar/workbench'
 import { Reorder } from '@fiar/components'
-
-import { ContentFieldProvider, useField } from '../../context/field'
-import { FieldArray } from '../../schema'
-import { PlusIcon } from '../icons'
 import { useEffect } from 'react'
+
+import { ContentFieldProvider, useField } from '../../context/field/index.js'
+import { FieldArray } from '../../schema/index.js'
+import { PlusIcon } from '../icons/index.js'
 
 export const ContentFieldArray = component('content:field:array', () => {
   const ctx = useField<FieldArray>({ equal: (a, b) => JSON.stringify(a) === JSON.stringify(b) })
