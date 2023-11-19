@@ -1,4 +1,4 @@
-import * as s from 'fiar/v2/schema'
+import * as s from 'fiar/schema'
 
 const seoPageMeta = s.struct({
   label: 'SEO page meta',

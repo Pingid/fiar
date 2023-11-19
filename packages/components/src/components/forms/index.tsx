@@ -1,5 +1,4 @@
 export * from './TextArea.js'
-export * from './Control.js'
 export * from './Toggle.js'
 export * from './Select.js'
 export * from './Input.js'

@@ -1,7 +1,0 @@
-export * from './record/index.js'
-export * from './number/index.js'
-export * from './string/index.js'
-export * from './array/index.js'
-export * from './types/index.js'
-export * from './text/index.js'
-export * from './ref/index.js'

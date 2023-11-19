@@ -3,5 +3,5 @@
   "compilerOptions": { "rootDir": "src", "outDir": ".", "tsBuildInfoFile": ".tsbuildinfo" },
   "exclude": ["**/*.js", "**/*.cjs", "**/*.d.ts"],
   "include": ["src/**/*"],
-  "references": [{ "path": "../core" }, { "path": "../components" }]
+  "references": [{ "path": "../components" }]
 }

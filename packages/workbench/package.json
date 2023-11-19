@@ -20,7 +20,6 @@
   "dependencies": {
     "@fiar/components": "workspace:^",
     "swr": "^2.2.4",
-    "@fiar/core": "workspace:^",
     "@heroicons/react": "^2.0.18",
     "mcn": "^0.0.4",
     "react": "^18.2.0",
@@ -49,35 +48,10 @@
       "import": "./components/index.js",
       "require": "./components/index.cjs"
     },
-    "./context": {
-      "types": "./context/index.d.ts",
-      "import": "./context/index.js",
-      "require": "./context/index.cjs"
-    },
-    "./types": {
-      "types": "./types/index.d.ts",
-      "import": "./types/index.js",
-      "require": "./types/index.cjs"
-    },
-    "./v2": {
-      "types": "./v2/index.d.ts",
-      "import": "./v2/index.js",
-      "require": "./v2/index.cjs"
-    },
-    "./components/hooks": {
-      "types": "./components/hooks/index.d.ts",
-      "import": "./components/hooks/index.js",
-      "require": "./components/hooks/index.cjs"
-    },
-    "./components/landing": {
-      "types": "./components/landing/index.d.ts",
-      "import": "./components/landing/index.js",
-      "require": "./components/landing/index.cjs"
-    },
-    "./components/modal": {
-      "types": "./components/modal/index.d.ts",
-      "import": "./components/modal/index.js",
-      "require": "./components/modal/index.cjs"
+    "./lib": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
     },
     "./components/nav": {
       "types": "./components/nav/index.d.ts",
@@ -89,65 +63,40 @@
       "import": "./components/page/index.js",
       "require": "./components/page/index.cjs"
     },
-    "./components/router": {
-      "types": "./components/router/index.d.ts",
-      "import": "./components/router/index.js",
-      "require": "./components/router/index.cjs"
+    "./lib/app": {
+      "types": "./lib/app/index.d.ts",
+      "import": "./lib/app/index.js",
+      "require": "./lib/app/index.cjs"
     },
-    "./v2/app": {
-      "types": "./v2/app/index.d.ts",
-      "import": "./v2/app/index.js",
-      "require": "./v2/app/index.cjs"
+    "./lib/components": {
+      "types": "./lib/components/index.d.ts",
+      "import": "./lib/components/index.js",
+      "require": "./lib/components/index.cjs"
     },
-    "./v2/components": {
-      "types": "./v2/components/index.d.ts",
-      "import": "./v2/components/index.js",
-      "require": "./v2/components/index.cjs"
+    "./lib/modal": {
+      "types": "./lib/modal/index.d.ts",
+      "import": "./lib/modal/index.js",
+      "require": "./lib/modal/index.cjs"
     },
-    "./v2/header": {
-      "types": "./v2/header/index.d.ts",
-      "import": "./v2/header/index.js",
-      "require": "./v2/header/index.cjs"
+    "./lib/router": {
+      "types": "./lib/router/index.d.ts",
+      "import": "./lib/router/index.js",
+      "require": "./lib/router/index.cjs"
     },
-    "./v2/modal": {
-      "types": "./v2/modal/index.d.ts",
-      "import": "./v2/modal/index.js",
-      "require": "./v2/modal/index.cjs"
+    "./components/page/breadcrumb": {
+      "types": "./components/page/breadcrumb/index.d.ts",
+      "import": "./components/page/breadcrumb/index.js",
+      "require": "./components/page/breadcrumb/index.cjs"
     },
-    "./v2/nav": {
-      "types": "./v2/nav/index.d.ts",
-      "import": "./v2/nav/index.js",
-      "require": "./v2/nav/index.cjs"
+    "./components/page/layout": {
+      "types": "./components/page/layout/index.d.ts",
+      "import": "./components/page/layout/index.js",
+      "require": "./components/page/layout/index.cjs"
     },
-    "./v2/page": {
-      "types": "./v2/page/index.d.ts",
-      "import": "./v2/page/index.js",
-      "require": "./v2/page/index.cjs"
-    },
-    "./v2/router": {
-      "types": "./v2/router/index.d.ts",
-      "import": "./v2/router/index.js",
-      "require": "./v2/router/index.cjs"
-    },
-    "./v2/util": {
-      "types": "./v2/util/index.d.ts",
-      "import": "./v2/util/index.js",
-      "require": "./v2/util/index.cjs"
-    },
-    "./v2/page/breadcrumb": {
-      "types": "./v2/page/breadcrumb/index.d.ts",
-      "import": "./v2/page/breadcrumb/index.js",
-      "require": "./v2/page/breadcrumb/index.cjs"
-    },
-    "./v2/page/layout": {
-      "types": "./v2/page/layout/index.d.ts",
-      "import": "./v2/page/layout/index.js",
-      "require": "./v2/page/layout/index.cjs"
-    },
-    "./v2/page/status": {
-      "types": "./v2/page/status/index.d.ts",
-      "import": "./v2/page/status/index.js",
-      "require": "./v2/page/status/index.cjs"
+    "./components/page/status": {
+      "types": "./components/page/status/index.d.ts",
+      "import": "./components/page/status/index.js",
+      "require": "./components/page/status/index.cjs"
     }
   }
 }

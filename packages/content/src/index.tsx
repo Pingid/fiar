@@ -1,57 +1,75 @@
-import { WorkbenchPage, WorkbenchProvider } from '@fiar/workbench/types'
-import StarterKit from '@tiptap/starter-kit'
-import { FiarPlugin } from '@fiar/core'
-import { useLocation } from 'wouter'
+import { CircleStackIcon } from '@heroicons/react/24/outline'
+import { Firestore } from '@firebase/firestore'
+import { useLayoutEffect } from 'react'
+import { Route } from 'wouter'
 
-import { CollectionPageProvider, DocumentPageProvider } from './components/pages/index.js'
-import { ContentConfig, ContentConfigProvider } from './context/config/index.js'
-import { ContentCollection } from './components/collection/index.js'
-import { TipTapConfigProvider } from './context/tiptap/index.js'
-import { ContentDocument } from './components/document/index.js'
-import { ContentIcon } from './components/icons/index.js'
-import { ContentList } from './components/list/index.js'
-import { components } from './components/index.js'
+import { App, RenderComponent } from '@fiar/workbench'
 
-export type { ContentConfig } from './context/config/index.js'
+import { ContentList, useContentItemList } from './components/content/index.js'
+import { DocumentLink, Document, Collection } from './components/index.js'
+import { IContentCollection, IContentDocument } from './schema/index.js'
+import { FirestoreProvider } from './lib/index.js'
+
+import './components/index.js'
+
 export * from './components/index.js'
+export * from './lib/index.js'
 
-export const fiarContent =
-  (config: ContentConfig): FiarPlugin =>
-  (state) => {
-    const page: WorkbenchPage = {
-      title: 'Content',
-      icon: <ContentIcon />,
-      path: 'content',
-      element: <RouteProvider />,
-    }
+export type ContentConfig = {
+  firestore?: Firestore
+  collections?: IContentCollection<any, any>[]
+  documents?: IContentDocument<any, any>[]
+}
 
-    const provider: WorkbenchProvider = (p) => (
-      <ContentConfigProvider value={config}>
-        <TipTapConfigProvider extensions={[StarterKit]}>{p.children}</TipTapConfigProvider>
-      </ContentConfigProvider>
-    )
-
-    state.addComponents({
-      ...components,
-      'workbench:page:content': page,
-      'workbench:provider:content': provider,
-    })
-  }
-
-const RouteProvider = () => {
-  const [loc] = useLocation()
-  const all = loc.split('/').filter(Boolean)
-  if (all.length === 1) return <ContentList />
-  if (all.length % 2 === 0) {
-    return (
-      <DocumentPageProvider>
-        <ContentDocument />
-      </DocumentPageProvider>
-    )
-  }
+export const Content = ({
+  children,
+  ...props
+}: { children?: React.ReactNode } & ContentConfig & { firestore: Firestore }) => {
   return (
-    <CollectionPageProvider>
-      <ContentCollection />
-    </CollectionPageProvider>
+    <FirestoreProvider value={props.firestore}>
+      <App title="Content" icon={<CircleStackIcon />} href="/content">
+        <Route path="/">
+          <ContentList />
+        </Route>
+        {(props.collections ?? []).map((collection) => (
+          <Content.Collection key={collection.path} collection={collection} />
+        ))}
+        {(props.documents ?? []).map((document) => (
+          <Content.Document key={document.path} document={document} />
+        ))}
+        {children}
+      </App>
+    </FirestoreProvider>
   )
+}
+
+Content.Collection = (props: { collection: IContentCollection<any, any>; children?: React.ReactNode }) => {
+  const register = useContentItemList((x) => x.registerItem)
+  useLayoutEffect(() => {
+    return register({
+      label: 'Collections',
+      key: props.collection.path,
+      children: <RenderComponent component="collection:card" props={props} />,
+    })
+  }, [props.collection])
+
+  return <Collection collection={props.collection}>{props.children}</Collection>
+}
+
+Content.Document = (props: { document: IContentDocument<any, any> }) => {
+  const register = useContentItemList((x) => x.registerItem)
+
+  useLayoutEffect(() => {
+    return register({
+      label: 'Documents',
+      key: props.document.path,
+      children: (
+        <DocumentLink document={props.document}>
+          <RenderComponent component="document:card" props={props} />
+        </DocumentLink>
+      ),
+    })
+  }, [props.document])
+
+  return <Document schema={props.document} />
 }

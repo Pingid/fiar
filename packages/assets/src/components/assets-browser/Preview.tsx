@@ -1,10 +1,10 @@
+import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { StorageReference } from '@firebase/storage'
 import { cn } from 'mcn'
 
-import { useAssetUrl, useRemoveAsset } from '../../context/index.js'
+import { useAssetUrl, useRemoveAsset } from '../../hooks/index.js'
 import { useSelectAsset } from '../../context/select.js'
 import { AssetCardAction } from './AssetCardAction.js'
-import { DownloadIcon, RemoveIcon } from '../icons/index.js'
 import { AssetCard } from './AssetCard.js'
 import { Asset } from './Asset.js'
 
@@ -26,10 +26,10 @@ export const Preview = (p: {
       menu={
         <div className="flex items-center justify-center gap-1">
           <a target="__blank" href={data.data} className={cn(AssetCardAction.className, 'p-0.5')}>
-            <DownloadIcon className="h-full w-full" strokeWidth="2px" />
+            <ArrowDownTrayIcon className="h-full w-full" strokeWidth="2px" />
           </a>
           <AssetCardAction onClick={() => remove.trigger()}>
-            <RemoveIcon className="h-full w-full" strokeWidth="2px" />
+            <XMarkIcon className="h-full w-full" strokeWidth="2px" />
           </AssetCardAction>
         </div>
       }

@@ -1,26 +1,11 @@
 import typography from '@tailwindcss/typography'
 import type { Config } from 'tailwindcss'
-import plugin from './plugin.js'
+
+import { tailwindTheme } from '../theme/index.js'
+import baseStyles from './baseStyles.js'
 
 export default {
   content: [],
-  theme: {
-    extend: {
-      typography: (theme: any) => ({
-        DEFAULT: {
-          css: {
-            color: theme('colors.front'),
-            '--tw-prose-bold': theme('colors.front'),
-            '--tw-prose-body': theme('colors.front'),
-            '--tw-prose-headings': theme('colors.front'),
-            a: {
-              color: theme('colors.front'),
-              '&:hover': { color: theme('colors.active') },
-            },
-          },
-        },
-      }),
-    },
-  },
-  plugins: [plugin, typography],
+  theme: { extend: { ...tailwindTheme } },
+  plugins: [baseStyles, typography],
 } satisfies Config

@@ -2,7 +2,7 @@ import { DocumentIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import { useMemo } from 'react'
 import { cn } from 'mcn'
 
-import { is_image, is_pdf, is_video } from '../../context/index.js'
+import { is_image, is_pdf, is_video } from '../../hooks/index.js'
 
 export type AssetPreview = typeof Asset
 export const Asset = (p: { url?: string | undefined; loading?: boolean; name?: string }): JSX.Element => {

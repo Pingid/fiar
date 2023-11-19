@@ -1,5 +1,5 @@
-import * as s from '@fiar/content/v2/schema'
-import { image } from '@fiar/assets/v2/schema'
+import * as s from '@fiar/content/schema'
+import { image } from '@fiar/assets/schema'
 
 const seoPageMeta = s.struct({
   label: 'SEO page meta',
@@ -30,7 +30,7 @@ export const articles = s.defineCollection({
   },
 })
 
-type Articles = typeof articles.infer
+export type Articles = typeof articles.infer
 
 export const landing = s.defineDocument({
   path: 'pages/landing',
@@ -42,7 +42,7 @@ export const landing = s.defineDocument({
   },
 })
 
-type Landing = typeof landing.infer
+export type Landing = typeof landing.infer
 
 export const entities = [articles, landing] as const
 export type Entities = typeof entities

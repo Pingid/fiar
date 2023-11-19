@@ -74,6 +74,11 @@
       "import": "./tailwind/index.js",
       "require": "./tailwind/index.cjs"
     },
+    "./theme": {
+      "types": "./theme/index.d.ts",
+      "import": "./theme/index.js",
+      "require": "./theme/index.cjs"
+    },
     "./components/avatar": {
       "types": "./components/avatar/index.d.ts",
       "import": "./components/avatar/index.js",
@@ -84,16 +89,6 @@
       "import": "./components/button/index.js",
       "require": "./components/button/index.cjs"
     },
-    "./components/doccard": {
-      "types": "./components/doccard/index.d.ts",
-      "import": "./components/doccard/index.js",
-      "require": "./components/doccard/index.cjs"
-    },
-    "./components/done": {
-      "types": "./components/done/index.d.ts",
-      "import": "./components/done/index.js",
-      "require": "./components/done/index.cjs"
-    },
     "./components/error": {
       "types": "./components/error/index.d.ts",
       "import": "./components/error/index.js",
@@ -103,11 +98,6 @@
       "types": "./components/forms/index.d.ts",
       "import": "./components/forms/index.js",
       "require": "./components/forms/index.cjs"
-    },
-    "./components/header": {
-      "types": "./components/header/index.d.ts",
-      "import": "./components/header/index.js",
-      "require": "./components/header/index.cjs"
     },
     "./components/label": {
       "types": "./components/label/index.d.ts",
@@ -128,11 +118,6 @@
       "types": "./components/modal/index.d.ts",
       "import": "./components/modal/index.js",
       "require": "./components/modal/index.cjs"
-    },
-    "./components/paginate": {
-      "types": "./components/paginate/index.d.ts",
-      "import": "./components/paginate/index.js",
-      "require": "./components/paginate/index.cjs"
     },
     "./components/reorder": {
       "types": "./components/reorder/index.d.ts",

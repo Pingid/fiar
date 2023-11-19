@@ -21,7 +21,6 @@
     "@fiar/assets": "workspace:^",
     "@fiar/auth": "workspace:^",
     "@fiar/content": "workspace:^",
-    "@fiar/core": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,20 +1,23 @@
-import { Auth, AuthProvider } from '@firebase/auth'
-import { Functions } from '@firebase/functions'
-import React, { useContext } from 'react'
-
-const AuthConfigContext = React.createContext<AuthConfig | null>(null)
-export const AuthConfigProvider = AuthConfigContext.Provider
+import type { Auth, User, AuthProvider } from '@firebase/auth'
+import { type Functions } from '@firebase/functions'
+import { createContext, useContext } from 'react'
 
 export type AuthConfig = {
   auth: Auth
   providers: AuthProvider[]
+  allowNoAuth?: boolean
   functions?: Functions | undefined
   signin?: 'redirect' | 'popup' | undefined
-  disablePage?: boolean
 }
 
-export const useAuthConfig = () => {
-  const config = useContext(AuthConfigContext)
-  if (!config) throw new Error('Missing Auth config')
-  return config
+const FirebaseAuthContext = createContext<Auth | null>(null)
+export const FirebaseAuthProvider = FirebaseAuthContext.Provider
+export const useFirebaseAuth = () => {
+  const auth = useContext(FirebaseAuthContext)
+  if (!auth) throw new Error(`Missing FirebaseAuthProvider`)
+  return auth
 }
+
+const AuthUserContext = createContext<User | null>(null)
+export const AuthUserProvider = AuthUserContext.Provider
+export const useAuthUser = () => useContext(AuthUserContext)

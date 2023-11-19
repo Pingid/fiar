@@ -18,9 +18,8 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "@fiar/components": "0.0.0-alpha.12",
-    "@fiar/core": "0.0.0-alpha.12",
-    "@fiar/workbench": "0.0.0-alpha.12",
+    "@fiar/components": "workspace:^",
+    "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.0.18",
     "@tiptap/extension-image": "^2.1.12",
     "@tiptap/react": "^2.1.12",
@@ -32,14 +31,14 @@
     "zustand": "^4.4.6"
   },
   "devDependencies": {
-    "@fiar/content": "0.0.0-alpha.12",
+    "@fiar/content": "workspace:^",
     "@firebase/storage": "^0.11.2",
     "@types/react": "^18.2.33",
     "react": "^18.2.0",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@fiar/content": "0.0.0-alpha.12",
+    "@fiar/content": "workspace:^",
     "@firebase/storage": "^0.11.2",
     "react": "^18.2.0"
   },
@@ -60,90 +59,50 @@
       "import": "./context/index.js",
       "require": "./context/index.cjs"
     },
-    "./fields": {
-      "types": "./fields/index.d.ts",
-      "import": "./fields/index.js",
-      "require": "./fields/index.cjs"
+    "./folder": {
+      "types": "./folder/index.d.ts",
+      "import": "./folder/index.js",
+      "require": "./folder/index.cjs"
     },
-    "./v2": {
-      "types": "./v2/index.d.ts",
-      "import": "./v2/index.js",
-      "require": "./v2/index.cjs"
+    "./hooks": {
+      "types": "./hooks/index.d.ts",
+      "import": "./hooks/index.js",
+      "require": "./hooks/index.cjs"
+    },
+    "./preview": {
+      "types": "./preview/index.d.ts",
+      "import": "./preview/index.js",
+      "require": "./preview/index.cjs"
+    },
+    "./schema": {
+      "types": "./schema/index.d.ts",
+      "import": "./schema/index.js",
+      "require": "./schema/index.cjs"
+    },
+    "./upload": {
+      "types": "./upload/index.d.ts",
+      "import": "./upload/index.js",
+      "require": "./upload/index.cjs"
     },
     "./components/assets-browser": {
       "types": "./components/assets-browser/index.d.ts",
       "import": "./components/assets-browser/index.js",
       "require": "./components/assets-browser/index.cjs"
     },
-    "./components/content-field-assets": {
-      "types": "./components/content-field-assets/index.d.ts",
-      "import": "./components/content-field-assets/index.js",
-      "require": "./components/content-field-assets/index.cjs"
-    },
-    "./components/content-field-assets-image": {
-      "types": "./components/content-field-assets-image/index.d.ts",
-      "import": "./components/content-field-assets-image/index.js",
-      "require": "./components/content-field-assets-image/index.cjs"
-    },
     "./components/icons": {
       "types": "./components/icons/index.d.ts",
       "import": "./components/icons/index.js",
       "require": "./components/icons/index.cjs"
     },
-    "./components/tiptap-control": {
-      "types": "./components/tiptap-control/index.d.ts",
-      "import": "./components/tiptap-control/index.js",
-      "require": "./components/tiptap-control/index.cjs"
+    "./folder/drop": {
+      "types": "./folder/drop/index.d.ts",
+      "import": "./folder/drop/index.js",
+      "require": "./folder/drop/index.cjs"
     },
-    "./fields/image": {
-      "types": "./fields/image/index.d.ts",
-      "import": "./fields/image/index.js",
-      "require": "./fields/image/index.cjs"
-    },
-    "./v2/components": {
-      "types": "./v2/components/index.d.ts",
-      "import": "./v2/components/index.js",
-      "require": "./v2/components/index.cjs"
-    },
-    "./v2/context": {
-      "types": "./v2/context/index.d.ts",
-      "import": "./v2/context/index.js",
-      "require": "./v2/context/index.cjs"
-    },
-    "./v2/folder": {
-      "types": "./v2/folder/index.d.ts",
-      "import": "./v2/folder/index.js",
-      "require": "./v2/folder/index.cjs"
-    },
-    "./v2/hooks": {
-      "types": "./v2/hooks/index.d.ts",
-      "import": "./v2/hooks/index.js",
-      "require": "./v2/hooks/index.cjs"
-    },
-    "./v2/preview": {
-      "types": "./v2/preview/index.d.ts",
-      "import": "./v2/preview/index.js",
-      "require": "./v2/preview/index.cjs"
-    },
-    "./v2/schema": {
-      "types": "./v2/schema/index.d.ts",
-      "import": "./v2/schema/index.js",
-      "require": "./v2/schema/index.cjs"
-    },
-    "./v2/upload": {
-      "types": "./v2/upload/index.d.ts",
-      "import": "./v2/upload/index.js",
-      "require": "./v2/upload/index.cjs"
-    },
-    "./v2/folder/drop": {
-      "types": "./v2/folder/drop/index.d.ts",
-      "import": "./v2/folder/drop/index.js",
-      "require": "./v2/folder/drop/index.cjs"
-    },
-    "./v2/folder/empty": {
-      "types": "./v2/folder/empty/index.d.ts",
-      "import": "./v2/folder/empty/index.js",
-      "require": "./v2/folder/empty/index.cjs"
+    "./folder/empty": {
+      "types": "./folder/empty/index.d.ts",
+      "import": "./folder/empty/index.js",
+      "require": "./folder/empty/index.cjs"
     }
   }
 }

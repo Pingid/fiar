@@ -1,0 +1,40 @@
+---
+title: Welcome to Fiar
+description: Get started building your firabase admin dashboard.
+template: splash
+hero:
+  tagline: Your Ultimate Solution for Crafting Powerful Admin Dashboards for Firebase Services
+  actions:
+    - text: Getting started
+      link: /guides/getting-started/
+      icon: right-arrow
+      variant: primary
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components'
+import bannerLight from '../../assets/screenshot-01.png'
+import bannerDark from '../../assets/screenshot-02.png'
+
+## What is fiar
+
+Fiar is a robust library designed to simplify the creation of admin dashboards for Firebase services. It provides essential tools for managing content through Firestore, implementing role-based authentication, and handling asset management via Firebase Storage. Each of these dashboard integrations is highly customizable and extendable to suit your specific needs.
+
+<img {...bannerLight} className="rounded-md border dark:hidden" />
+<img {...bannerDark} className="hidden rounded-md border dark:block" />
+
+Fiar is built with flexibility in mind, allowing you to tailor your admin dashboard according to your project's requirements.
+You can also extend its capabilities as your project evolves.
+
+## Features
+
+<CardGrid>
+  <Card title="Fully typed" icon="approve-check">
+    Define content schemas and get full type inference
+  </Card>
+  <Card title="Composable" icon="puzzle">
+    Use only features that you need
+  </Card>
+  <Card title="Customizable" icon="pencil">
+    Create custom views and fields
+  </Card>
+</CardGrid>

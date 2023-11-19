@@ -1,8 +1,8 @@
 import { EmailAuthProvider, GithubAuthProvider, GoogleAuthProvider } from '@firebase/auth'
-import { Dashboard } from '@fiar/workbench/v2'
-import { Content } from '@fiar/content/v2'
-import { Authorize } from '@fiar/auth/v2'
-import { Assets } from '@fiar/assets/v2'
+import { Dashboard } from '@fiar/workbench'
+import { Content } from '@fiar/content'
+import { Authorize, UsersApp } from '@fiar/auth'
+import { Assets } from '@fiar/assets'
 
 import { firestore, storage, auth } from './admin/firebase'
 import { articles, landing } from './admin/entities'
@@ -23,6 +23,7 @@ export default function ReactApp() {
           <Assets.Folder title="Photos" path="photos" accept={{ ['image/*']: [] }} />
           <Assets.Folder title="Icons" path="icons" />
         </Assets>
+        <UsersApp />
       </Authorize>
     </Dashboard>
   )

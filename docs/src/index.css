@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root[data-theme='light'],
+[data-theme='light'] ::backdrop {
+  --sl-color-accent: rgb(var(--color-active) / 1);
+  --sl-color-text-accent: rgb(var(--color-active) / 1);
+
+  --sl-color-black: rgb(var(--color-back) / 1);
+  --sl-color-gray-5: rgb(var(--color-front) / 0.1);
+  --sl-color-hairline-shade: rgb(var(--color-front) / 0.1);
+
+  --sl-color-bg: rgb(var(--color-back) / 1);
+  --sl-color-bg-nav: rgb(var(--color-back) / 1);
+  --sl-color-bg-sidebar: rgb(var(--color-back) / 1);
+}
+
+:root[data-theme='dark'],
+[data-theme='dark'] ::backdrop {
+  --sl-color-accent: rgb(var(--color-active) / 1);
+  --sl-color-text-accent: rgb(var(--color-active) / 1);
+
+  --sl-color-black: rgb(var(--color-back) / 1);
+  --sl-color-gray-5: rgb(var(--color-front) / 0.1);
+  --sl-color-hairline-shade: rgb(var(--color-front) / 0.1);
+
+  --sl-color-bg: rgb(var(--color-back) / 1);
+  --sl-color-bg-nav: rgb(var(--color-back) / 1);
+  --sl-color-bg-sidebar: rgb(var(--color-back) / 1);
+}

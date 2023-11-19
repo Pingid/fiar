@@ -50,7 +50,6 @@
     { "path": "./packages/auth" },
     { "path": "./packages/components" },
     { "path": "./packages/content" },
-    { "path": "./packages/core" },
     { "path": "./packages/fiar" },
     { "path": "./packages/workbench" }
   ],

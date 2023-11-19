@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, GithubAuthProvider, EmailAuthProvider } from '@firebase/auth'
-import { createFiar } from 'fiar/v2'
+import { createFiar } from 'fiar'
 
 import { storage, auth, functions, firestore } from './firebase'
 import { articles, landing } from './entities'
