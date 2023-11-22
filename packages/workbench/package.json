@@ -43,60 +43,55 @@
       "import": "./index.js",
       "require": "./index.cjs"
     },
+    "./app": {
+      "types": "./app/index.d.ts",
+      "import": "./app/index.js",
+      "require": "./app/index.cjs"
+    },
     "./components": {
       "types": "./components/index.d.ts",
       "import": "./components/index.js",
       "require": "./components/index.cjs"
     },
-    "./lib": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/index.js",
-      "require": "./lib/index.cjs"
+    "./extensions": {
+      "types": "./extensions/index.d.ts",
+      "import": "./extensions/index.js",
+      "require": "./extensions/index.cjs"
     },
-    "./components/nav": {
-      "types": "./components/nav/index.d.ts",
-      "import": "./components/nav/index.js",
-      "require": "./components/nav/index.cjs"
+    "./modal": {
+      "types": "./modal/index.d.ts",
+      "import": "./modal/index.js",
+      "require": "./modal/index.cjs"
     },
-    "./components/page": {
-      "types": "./components/page/index.d.ts",
-      "import": "./components/page/index.js",
-      "require": "./components/page/index.cjs"
+    "./nav": {
+      "types": "./nav/index.d.ts",
+      "import": "./nav/index.js",
+      "require": "./nav/index.cjs"
     },
-    "./lib/app": {
-      "types": "./lib/app/index.d.ts",
-      "import": "./lib/app/index.js",
-      "require": "./lib/app/index.cjs"
+    "./page": {
+      "types": "./page/index.d.ts",
+      "import": "./page/index.js",
+      "require": "./page/index.cjs"
     },
-    "./lib/components": {
-      "types": "./lib/components/index.d.ts",
-      "import": "./lib/components/index.js",
-      "require": "./lib/components/index.cjs"
+    "./router": {
+      "types": "./router/index.d.ts",
+      "import": "./router/index.js",
+      "require": "./router/index.cjs"
     },
-    "./lib/modal": {
-      "types": "./lib/modal/index.d.ts",
-      "import": "./lib/modal/index.js",
-      "require": "./lib/modal/index.cjs"
+    "./page/breadcrumb": {
+      "types": "./page/breadcrumb/index.d.ts",
+      "import": "./page/breadcrumb/index.js",
+      "require": "./page/breadcrumb/index.cjs"
     },
-    "./lib/router": {
-      "types": "./lib/router/index.d.ts",
-      "import": "./lib/router/index.js",
-      "require": "./lib/router/index.cjs"
+    "./page/layout": {
+      "types": "./page/layout/index.d.ts",
+      "import": "./page/layout/index.js",
+      "require": "./page/layout/index.cjs"
     },
-    "./components/page/breadcrumb": {
-      "types": "./components/page/breadcrumb/index.d.ts",
-      "import": "./components/page/breadcrumb/index.js",
-      "require": "./components/page/breadcrumb/index.cjs"
-    },
-    "./components/page/layout": {
-      "types": "./components/page/layout/index.d.ts",
-      "import": "./components/page/layout/index.js",
-      "require": "./components/page/layout/index.cjs"
-    },
-    "./components/page/status": {
-      "types": "./components/page/status/index.d.ts",
-      "import": "./components/page/status/index.js",
-      "require": "./components/page/status/index.cjs"
+    "./page/status": {
+      "types": "./page/status/index.d.ts",
+      "import": "./page/status/index.js",
+      "require": "./page/status/index.cjs"
     }
   }
 }

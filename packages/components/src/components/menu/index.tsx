@@ -45,7 +45,7 @@ export const Menu: {
       <div
         role="menu"
         className={cn(
-          'bg-back absolute -right-[1px] top-full z-30 mt-1 flex-col space-y-2 overflow-hidden rounded-sm border shadow-lg',
+          'bg-back absolute -right-[1px] top-full z-30 mt-1 flex-col space-y-2 overflow-hidden rounded border shadow-lg',
           [open, 'flex', 'hidden'],
           sz,
         )}

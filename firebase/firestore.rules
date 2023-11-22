@@ -10,7 +10,7 @@ service cloud.firestore {
     // }
     match /{document=**} {
       allow read: if true;
-      allow write: if true;
+      allow write: if debug(request.auth.token).email == 'example@example.com';
     }
   }
 }

@@ -1,5 +1,0 @@
-export { ArrowDownTrayIcon as DownloadIcon } from '@heroicons/react/24/outline'
-export { CloudArrowUpIcon as UploadIcon } from '@heroicons/react/24/outline'
-export { CloudIcon as CloudIcon } from '@heroicons/react/24/outline'
-export { XMarkIcon as RemoveIcon } from '@heroicons/react/20/solid'
-export { PhotoIcon as PhotoIcon } from '@heroicons/react/20/solid'

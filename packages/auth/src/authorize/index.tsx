@@ -36,7 +36,7 @@ export const Authorize = (props: { children: React.ReactNode } & AuthConfig) => 
     setLocation(redirect || '/')
   }, [user, match, loading, location])
 
-  if (!user && loading && !props.allowNoAuth) {
+  if (!user && loading) {
     return (
       <FirebaseAuthProvider value={props.auth}>
         <div className="flex h-screen w-full items-center justify-center">

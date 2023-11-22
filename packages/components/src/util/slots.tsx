@@ -45,7 +45,8 @@ export const getSlots = <T extends Record<string, SlotId | readonly [SlotId]>>(
 type SlotStore = {
   items: string[]
   elements: Record<string, HTMLElement | null>
-  ref: (id: string) => <H extends HTMLElement>(elem: H | null) => void
+  props: Record<string, any>
+  ref: (id: string, pass?: any) => <H extends HTMLElement>(elem: H | null) => void
   register: (id: string) => () => void
 }
 
@@ -54,38 +55,52 @@ const createSlotStore = () =>
     return {
       items: [],
       elements: {},
-      ref: (id: string) => (elem) => set((x) => ({ elements: { ...x.elements, [id]: elem } })),
-      register: (id: string) => {
+      props: {},
+      ref: (id, pass) => {
+        if (pass) set((x) => ({ props: { ...x.props, [id]: pass } }))
+        return (elem) => set((x) => ({ elements: { ...x.elements, [id]: elem } }))
+      },
+      register: (id) => {
         set((x) => ({ items: [...x.items, id] }))
         return () => set((x) => ({ items: x.items.filter((y) => y !== id) }))
       },
     }
   })
 
-export const createGlobalSlot = () => {
+export const createGlobalSlot = <T extends Record<string, any> | void = void>() => {
   const Context = createContext(createSlotStore())
   const Provider = (p: { children: React.ReactNode }) => (
     <Context.Provider value={useMemo(() => createSlotStore(), [])}>{p.children}</Context.Provider>
   )
-  const Place = ({ children }: { children: React.ReactNode }) => {
+  const Place = ({ children }: { children: React.ReactNode | ((props: T) => React.ReactNode) }) => {
     const id = useId()
     const store = useContext(Context)
     const node = useStore(store, (x) => x.elements[id])
+    const config = useStore(store, (x) => x.props[id])
     const register = useStore(store, (x) => x.register)
     useEffect(() => register(id), [id])
     if (!node) return null
+    if (typeof children === 'function') return createPortal(children(config ?? {}), node)
     return createPortal(children, node)
   }
 
-  const Locate = <K extends keyof JSX.IntrinsicElements>({ use, ...props }: { use: K } & JSX.IntrinsicElements[K]) => {
+  const Locate = <K extends keyof JSX.IntrinsicElements>(
+    props: { use: K } & JSX.IntrinsicElements[K] & (T extends Record<string, any> ? { pass: T } : { pass?: T }),
+  ) => {
     const store = useContext(Context)
     const items = useStore(
       store,
       useShallow((x) => x.items),
     )
+
+    return items.map((id) => <LocateItem key={id} id={id} {...props} />)
+  }
+  const LocateItem = ({ use, id, pass, ...props }: Record<string, any>) => {
+    const store = useContext(Context)
     const ref = useStore(store, (x) => x.ref)
-    const Element = use as string
-    return items.map((id) => <Element key={id} ref={ref(id)} {...props} />)
+    const Element = use as 'div'
+    useEffect(() => store.setState((x) => ({ props: { ...x.props, [id]: pass } })), [id, pass])
+    return <Element ref={ref(id)} {...props} />
   }
 
   const placer = <T extends (props: any) => any>(Comp: T) =>

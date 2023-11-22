@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { create } from 'zustand'
 
 import { DashboardRouter, type DashboardRouterProps } from '../router/index.js'
-import { ComponentsProvider } from '../components/index.js'
+import { ExtensionsProvider } from '../extensions/index.js'
 import { AppLink } from '../nav/index.js'
 
 type App = { title: string; children: React.ReactNode; icon?: React.ReactNode; href: string | undefined }
@@ -28,7 +28,7 @@ export const App = ({ title, icon, children, href, ...props }: App & DashboardRo
   }
 
   return (
-    <ComponentsProvider>
+    <ExtensionsProvider>
       <AppLink title={title} icon={icon} to={to} />
       <Switch>
         <Route path={to}>
@@ -38,6 +38,6 @@ export const App = ({ title, icon, children, href, ...props }: App & DashboardRo
           <DashboardRouter basename={to}>{children}</DashboardRouter>
         </Route>
       </Switch>
-    </ComponentsProvider>
+    </ExtensionsProvider>
   )
 }

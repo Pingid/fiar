@@ -1,3 +1,4 @@
+import { visualizer } from 'rollup-plugin-visualizer'
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 import path from 'path'
@@ -20,7 +21,7 @@ const local = (root) => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), visualizer({})],
   define: {
     'process.env.FIRE_EMULATE': `'${process.env.FIRE_EMULATE || ''}'`,
     'process.env.FIREBASE_API_KEY': `'${process.env.FIREBASE_API_KEY}'`,

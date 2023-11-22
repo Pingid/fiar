@@ -59,50 +59,50 @@
       "import": "./context/index.js",
       "require": "./context/index.cjs"
     },
-    "./folder": {
-      "types": "./folder/index.d.ts",
-      "import": "./folder/index.js",
-      "require": "./folder/index.cjs"
-    },
     "./hooks": {
       "types": "./hooks/index.d.ts",
       "import": "./hooks/index.js",
       "require": "./hooks/index.cjs"
-    },
-    "./preview": {
-      "types": "./preview/index.d.ts",
-      "import": "./preview/index.js",
-      "require": "./preview/index.cjs"
     },
     "./schema": {
       "types": "./schema/index.d.ts",
       "import": "./schema/index.js",
       "require": "./schema/index.cjs"
     },
-    "./upload": {
-      "types": "./upload/index.d.ts",
-      "import": "./upload/index.js",
-      "require": "./upload/index.cjs"
+    "./components/Asset": {
+      "types": "./components/Asset/index.d.ts",
+      "import": "./components/Asset/index.js",
+      "require": "./components/Asset/index.cjs"
     },
-    "./components/assets-browser": {
-      "types": "./components/assets-browser/index.d.ts",
-      "import": "./components/assets-browser/index.js",
-      "require": "./components/assets-browser/index.cjs"
+    "./components/AssetCard": {
+      "types": "./components/AssetCard/index.d.ts",
+      "import": "./components/AssetCard/index.js",
+      "require": "./components/AssetCard/index.cjs"
     },
-    "./components/icons": {
-      "types": "./components/icons/index.d.ts",
-      "import": "./components/icons/index.js",
-      "require": "./components/icons/index.cjs"
+    "./components/AssetPreviewCard": {
+      "types": "./components/AssetPreviewCard/index.d.ts",
+      "import": "./components/AssetPreviewCard/index.js",
+      "require": "./components/AssetPreviewCard/index.cjs"
     },
-    "./folder/drop": {
-      "types": "./folder/drop/index.d.ts",
-      "import": "./folder/drop/index.js",
-      "require": "./folder/drop/index.cjs"
+    "./components/AssetUploadCard": {
+      "types": "./components/AssetUploadCard/index.d.ts",
+      "import": "./components/AssetUploadCard/index.js",
+      "require": "./components/AssetUploadCard/index.cjs"
     },
-    "./folder/empty": {
-      "types": "./folder/empty/index.d.ts",
-      "import": "./folder/empty/index.js",
-      "require": "./folder/empty/index.cjs"
+    "./components/FieldAsset": {
+      "types": "./components/FieldAsset/index.d.ts",
+      "import": "./components/FieldAsset/index.js",
+      "require": "./components/FieldAsset/index.cjs"
+    },
+    "./components/Folder": {
+      "types": "./components/Folder/index.d.ts",
+      "import": "./components/Folder/index.js",
+      "require": "./components/Folder/index.cjs"
+    },
+    "./components/Folder/DropLayer": {
+      "types": "./components/Folder/DropLayer/index.d.ts",
+      "import": "./components/Folder/DropLayer/index.js",
+      "require": "./components/Folder/DropLayer/index.cjs"
     }
   }
 }

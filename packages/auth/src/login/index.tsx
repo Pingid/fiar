@@ -79,7 +79,7 @@ export const Login = (props: {
               </Field.Control>
             </Field>
             <div className="flex justify-end pt-3">
-              <Button disabled={mutating} className="px-6 py-3">
+              <Button isDisabled={mutating} className="px-6 py-3">
                 Login
               </Button>
             </div>
@@ -93,7 +93,7 @@ export const Login = (props: {
                 key={x.providerId}
                 className="flex w-full items-center justify-center py-3"
                 onClick={() => signinSocial.trigger(x)}
-                disabled={mutating}
+                isDisabled={mutating}
                 icon={selected?.icon}
               >
                 Sign in via {selected?.title || x.providerId}

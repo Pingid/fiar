@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react'
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Link, useRoute } from 'wouter'
 import { cn } from 'mcn'
 
@@ -6,114 +7,93 @@ import { createGlobalSlot } from '@fiar/components'
 
 const NavActionTopSlot = createGlobalSlot()
 const NavActionBottomSlot = createGlobalSlot()
-const NavOpenContext = createContext(false)
+const NavStateContext = createContext([false, (_open: boolean): void => {}] as const)
 
-export const useNavOpen = () => useContext(NavOpenContext)
+export const useNavState = () => useContext(NavStateContext)
 
 export const Nav = ({ children }: { children: React.ReactNode }) => {
-  const [open, setopen] = useState(false)
-
-  const text = cn('truncate transition-all', [open, 'opacity-100 max-w-full', 'opacity-0 max-w-0 pointer-events-none'])
+  const state = useState(false)
+  const [open, setOpen] = state
 
   return (
-    <NavActionTopSlot.Provider>
-      <NavOpenContext.Provider value={open}>
-        {/* Spacer */}
-        <div className={cn('relative -z-10 transition-[width]', [open, 'w-12 sm:w-52', 'w-12 sm:w-16'])} />
-        {/* Nav menu */}
-        <div
+    <NavStateContext.Provider value={state as any}>
+      <div
+        className={cn(
+          'grid h-full w-full transition-[grid] [grid-template:var(--asside-height)_1fr_/_1fr] sm:[grid-template:1fr_/_var(--asside-width)_1fr]',
+          [open, '[--asside-width:12rem]', '[--asside-width:3rem]'],
+        )}
+      >
+        <aside
           className={cn(
-            'bg-back fixed top-0 z-40 flex h-full flex-shrink-0 flex-col justify-between border-r transition-[width]',
-            [open, 'w-40 sm:w-52', 'w-12 sm:w-16'],
+            'bg-back sticky top-0 z-40 w-full sm:h-[--container-height]',
+            'sm:grid sm:[grid-template:max-content_1fr/1fr]',
+            'border-b sm:border-b-0 sm:border-r',
           )}
         >
-          {/* Header */}
-          <div className="flex items-center justify-between p-3 sm:p-5">
-            <Link to="/" onClick={() => setopen(true)}>
-              <a className={cn('text-xl font-medium', text)}>fiar</a>
-            </Link>
-            <button onClick={() => setopen(!open)} tabIndex={0}>
-              <Arrow className={cn('h-6 w-6 transition-transform', [open, 'rotate-180'])} />
+          <div className="flex h-12 w-full min-w-0 flex-row-reverse items-center px-3 [justify-content:start] sm:flex-row sm:justify-between">
+            <h2 className={cn('overflow-clip', [open, 'w-auto', 'sm:w-0'])}>Fiar</h2>
+            <button onClick={() => setOpen(!open)} className="relative shrink-0 pr-3 sm:pr-0 ">
+              <ChevronDownIcon
+                className={cn('sm:rotate-270  h-6 w-6 transition-transform sm:block', [
+                  open,
+                  'rotate-180 sm:rotate-90',
+                ])}
+              />
             </button>
           </div>
-          {/* Page links */}
-
-          <ul className="mt-6 h-full w-full space-y-1 px-1 sm:px-3">
-            <NavActionTopSlot.Locate use="li" className="w-full" />
-          </ul>
-          <ul className="w-full space-y-1 px-1 pb-8 sm:px-3">
-            <NavActionBottomSlot.Locate use="li" className="w-full" />
-          </ul>
-        </div>
-        {/* Children */}
-        <div className={cn('relative min-h-full w-full flex-1', [open, 'blur-sm sm:blur-0', 'blur-0'])}>
-          {/* Mobile overlay */}
           <div
-            onClick={() => setopen(false)}
-            className={cn('bg-front absolute inset-0 transition-opacity sm:hidden', [
+            className={cn('bg-back flex h-max w-full min-w-0 flex-col justify-between py-3 sm:h-full sm:py-6', [
               open,
-              'z-30 opacity-5',
-              'pointer-events-none -z-10 opacity-0',
+              'flex border-b sm:border-b-0',
+              'hidden sm:flex',
             ])}
-          />
-          {children}
-        </div>
-      </NavOpenContext.Provider>
-    </NavActionTopSlot.Provider>
+          >
+            <ul className="w-full space-y-4 p-3">
+              <NavActionTopSlot.Locate use="li" className="w-full" />
+            </ul>
+            <ul className="w-full space-y-4 p-3">
+              <NavActionBottomSlot.Locate use="li" className="w-full" />
+            </ul>
+          </div>
+        </aside>
+
+        <div
+          className={cn('bg-back/90 fixed left-0 top-0 z-30 h-screen w-screen sm:hidden', [open, 'block', 'hidden'])}
+          onClick={() => setOpen(false)}
+        />
+        {children}
+      </div>
+    </NavStateContext.Provider>
   )
 }
 
-export const NavActionTop = (p: { children: React.ReactNode }) => (
+export const NavActionTop = (p: { children: React.ReactElement }) => (
   <NavActionTopSlot.Place>{p.children}</NavActionTopSlot.Place>
 )
-export const NavActionBottom = (p: { children: React.ReactNode }) => (
+export const NavActionBottom = (p: { children: React.ReactElement }) => (
   <NavActionBottomSlot.Place>{p.children}</NavActionBottomSlot.Place>
 )
 
 export const NavButton = (props: { title: React.ReactNode; icon: React.ReactNode; active?: boolean }) => {
-  const open = useNavOpen()
-
-  const text = cn('truncate transition-all', [open, 'opacity-100 max-w-full', 'opacity-0 max-w-0 pointer-events-none'])
-  const btn = cn('w-full flex items-center px-2 gap-4 rounded-sm py-2', [
-    !!props.active,
-    'bg-front/10',
-    'hover:bg-front/5',
-  ])
-
   return (
-    <div className={btn}>
-      <span className="inline-block h-5 w-5 shrink-0 text-2xl uppercase [&>*]:h-full [&>*]:w-full">{props.icon}</span>
-      <p className={cn('flex-1 text-left', text)}>{props.title}</p>
+    <div className={cn('flex w-full leading-none', [props.active, 'text-front', 'text-front/70 hover:text-front/80'])}>
+      <span className="relative -top-1.5 mr-3 inline [&>*]:inline [&>*]:h-6 [&>*]:w-6">{props.icon}</span>
+      <span className="truncate">{props.title}</span>
     </div>
   )
 }
 
 export const AppLink = (props: { to: string; title: React.ReactNode; icon: React.ReactNode }) => {
-  const m1 = useRoute(props.to)[0]
-  const m2 = useRoute(`${props.to}/*`)[0]
-
+  const [_, setOpen] = useNavState()
+  const [m2] = useRoute(`${props.to}/*`)
+  const [m1] = useRoute(props.to)
   return (
     <NavActionTopSlot.Place>
-      <Link to={props.to}>
+      <Link to={props.to} onClick={() => (window.innerWidth < 640 ? setOpen(false) : null)}>
         <a className="w-full">
-          <NavButton {...props} active={m1 && m2} />
+          <NavButton {...props} active={m1 || m2} />
         </a>
       </Link>
     </NavActionTopSlot.Place>
   )
 }
-
-const Arrow = (p: JSX.IntrinsicElements['svg']) => (
-  <svg
-    {...p}
-    stroke="currentColor"
-    fill="currentColor"
-    strokeWidth="0"
-    viewBox="0 0 512 512"
-    height="1.5rem"
-    width="1.5rem"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M294.1 256L167 129c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.3 34 0L345 239c9.1 9.1 9.3 23.7.7 33.1L201.1 417c-4.7 4.7-10.9 7-17 7s-12.3-2.3-17-7c-9.4-9.4-9.4-24.6 0-33.9l127-127.1z"></path>
-  </svg>
-)

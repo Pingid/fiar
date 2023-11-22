@@ -1,6 +1,0 @@
-export * from './array/index.js'
-export * from './boolean/index.js'
-export * from './number/index.js'
-export * from './ref/index.js'
-export * from './string/index.js'
-export * from './struct/index.js'

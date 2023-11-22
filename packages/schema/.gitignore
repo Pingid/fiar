@@ -1,0 +1,10 @@
+/*
+/*/
+!/src/
+!.gitignore
+!package.json
+!tsconfig.json
+!.npmignore
+!README.md
+!tailwind.config.ts
+!firebase.json

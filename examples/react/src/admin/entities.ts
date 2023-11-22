@@ -2,16 +2,18 @@ import * as s from '@fiar/content/schema'
 import { image } from '@fiar/assets/schema'
 
 const seoPageMeta = s.struct({
-  label: 'SEO page meta',
+  label: 'SEO',
+  optional: true,
   fields: {
-    title: s.string({ label: 'Page title' }),
+    title: s.string({
+      label: 'Page title',
+      description:
+        'This should be between 50 and 60 characters. For help in writing quality meta titles, see [best practices](https://developers.google.com/search/docs/appearance/title-link#page-titles)',
+    }),
     description: s.string({
       label: 'Page description',
-      // validate: (value) => ({
-      //   value: value ? value.slice(0, 160) : '',
-      //   reason: 'Description must not excede 160 characters',
-      //   valid: !!value && value.length < 160,
-      // }),
+      description:
+        'This should be between 100 and 150 characters. For help in writing quality meta descriptions, see [best practices](https://developers.google.com/search/docs/appearance/snippet#meta-descriptions)',
     }),
   },
 })
@@ -22,11 +24,36 @@ export const articles = s.defineCollection({
   titleField: 'title',
   fields: {
     title: s.string({ label: 'Title' }),
-    image: image({ label: 'Main image', optional: true }),
-    // body: s.text({ label: 'Content' }),
+    image: image({ label: 'Main image' }),
+    body: s.text({ label: 'Content' }),
     width: s.number({ label: 'Width' }),
     meta: seoPageMeta,
     tags: s.array({ label: 'Tags', of: s.string() }),
+  },
+})
+
+export const test = s.defineCollection({
+  path: 'test',
+  label: 'Test',
+  titleField: 'title',
+  fields: {
+    title: s.string({ label: 'Title', description: 'Document title' }),
+    count: s.number({ label: 'Count', description: 'Document count' }),
+    metadata: s.struct({
+      label: 'Metadata',
+      description: 'Metadata associated with this post used inside the <meta tag of the generated html page',
+      fields: { time: s.string({ label: 'Current time' }), seo: seoPageMeta },
+    }),
+    links: s.array({
+      label: 'Links',
+      description: 'Page links including socials',
+      of: s.struct({
+        label: 'Link',
+        description:
+          'This should be between 50 and 60 characters. For help in writing quality meta titles, see best practices',
+        fields: { label: s.string({ label: 'Link label' }), link: s.string({ label: 'URL links eg (https://...)' }) },
+      }),
+    }),
   },
 })
 
@@ -36,9 +63,9 @@ export const landing = s.defineDocument({
   path: 'pages/landing',
   label: 'Landing page',
   fields: {
-    meta: seoPageMeta,
     highlight: s.ref({ label: 'Main article', to: () => articles }),
     more: s.array({ label: 'Articles', of: s.ref({ to: () => articles }) }),
+    meta: seoPageMeta,
   },
 })
 

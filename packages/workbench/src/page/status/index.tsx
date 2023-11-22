@@ -1,33 +1,36 @@
-import { createContext, useMemo, useContext, useEffect, useCallback } from 'react'
+import { createContext, useMemo, useContext, useEffect, useCallback, useState, useRef } from 'react'
 import { Middleware, BareFetcher, SWRConfig } from 'swr'
+import { useShallow } from 'zustand/react/shallow'
 import { createStore, useStore } from 'zustand'
 import { cn } from 'mcn'
 
 import { ErrorMessage, LoadingDots } from '@fiar/components'
-import { useShallow } from 'zustand/react/shallow'
 
-export const PageStatusBar = (p: { children?: React.ReactNode }) => {
+export const PageStatusBar = () => {
   const store = usePageStatusStore()
   const loading = useStore(store, (x) => x.loading)
   const error = useStore(store, (x) => x.error)
-
+  const loadingLonger = useLastLonger(loading, loading, 500)
   return (
-    <div
-      className={cn(
-        'w-full max-w-full px-4 py-1 transition-[padding,height]',
-
-        'grid items-end [grid-template-columns:min-content_1fr_max-content]',
-      )}
-    >
-      <p className={cn('transition-width overflow-hidden whitespace-nowrap delay-300', [loading, 'w-7', 'w-0'])}>
+    <div className={cn('flex transition-all', [!!(loadingLonger || error), 'px-4 pb-2'])}>
+      <p className={cn('transition-width overflow-hidden whitespace-nowrap', [loadingLonger, 'h-6 w-7', 'h-0 w-0'])}>
         <LoadingDots />
       </p>
-      <div className="text-error grid max-w-full pr-2 text-sm leading-snug">
-        {error && <ErrorMessage>{error as any}</ErrorMessage>}
-      </div>
-      {p.children}
+      {error && <ErrorMessage>{error as any}</ErrorMessage>}
     </div>
   )
+}
+
+const useLastLonger = <T extends any>(x: T, active: boolean, delay: number) => {
+  const [result, setResult] = useState(x)
+  const value = useRef(x)
+  value.current = x
+  useEffect(() => {
+    if (!active) return setResult(value.current)
+    let timeout = setTimeout(() => setResult(value.current), delay)
+    return () => clearTimeout(timeout)
+  }, [active, delay])
+  return result
 }
 
 type StatusState = { loading: boolean; error: Error | null }
