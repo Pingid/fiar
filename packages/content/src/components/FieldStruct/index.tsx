@@ -2,14 +2,13 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import { cn } from 'mcn'
 
-import { UseExtension } from '@fiar/workbench/extensions'
 import { Markdown } from '@fiar/components'
 
 import { IFieldStruct, IFields } from '../../schema/index.js'
 import { type FieldComponent } from '../../fields/index.js'
-import { FieldMissing } from '../FieldMissing/index.js'
+import { RenderField } from '../FieldComponent/index.js'
 
-export const FieldStruct: FieldComponent<IFieldStruct<Record<string, IFields>>> = (props) => {
+export const FieldStruct: FieldComponent<IFieldStruct> = (props) => {
   const [open, setOpen] = useState(true)
   const isListItem = props.parent?.type === 'list'
 
@@ -34,14 +33,7 @@ export const FieldStruct: FieldComponent<IFieldStruct<Record<string, IFields>>> 
         {Object.keys(props.field.fields).map((key) => {
           const field = props.field.fields[key] as IFields
           const name = props.name ? `${props.name}.${key}` : key
-          return (
-            <UseExtension
-              key={name}
-              extension={field.component}
-              props={{ ...props, name, parent: props.field, field: { ...field, label: field.label ?? key } }}
-              fallback={<FieldMissing field={field} />}
-            />
-          )
+          return <RenderField {...props} key={key} name={name} field={{ ...field, label: field.label ?? key }} />
         })}
       </div>
     </div>

@@ -1,0 +1,26 @@
+{
+  "name": "@fiar/rules",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "emulate": "firebase emulators:start --project fiarcms"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@firebase/firestore": "^4.3.2",
+    "@firebase/rules-unit-testing": "^3.0.1",
+    "@fiar/schema": "workspace:^",
+    "firebase": "^10.6.0",
+    "firebase-admin": "^11.11.0",
+    "vitest": "^0.34.6"
+  },
+  "devDependencies": {
+    "jsdom": "^22.1.0",
+    "ts-check-perf": "^0.0.0",
+    "tsx": "^4.6.0"
+  }
+}

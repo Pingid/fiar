@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo } from 'react'
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo } from 'react'
 import { StoreApi, createStore, useStore } from 'zustand'
 
 export interface Extensions extends Record<string, any> {}
@@ -33,7 +33,7 @@ export const useExtension = <K extends keyof Extensions>(key: K) => useStore(use
 
 export const useExtend = (value: Partial<Extensions>) => {
   const store = useExtensionsStore()
-  useEffect(() => store.getState().extend(value), [value])
+  useLayoutEffect(() => store.getState().extend(value), [value])
 }
 
 export const ExtensionsProvider = (props: { value?: Partial<Extensions>; children: React.ReactNode }) => {

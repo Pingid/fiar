@@ -1,7 +1,7 @@
 import { FirebaseStorage } from '@firebase/storage'
 import { create } from 'zustand'
 
-export type AssetFolder = { title: string; path: string; accept?: Record<string, string[]> }
+export type AssetFolder = { title: string; path: `/${string}`; accept?: Record<string, string[]> }
 
 export type AssetConfig = {
   rootPath?: string | null | undefined

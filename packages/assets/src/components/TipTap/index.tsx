@@ -1,9 +1,9 @@
 import { getDownloadURL, ref } from '@firebase/storage'
 import { PhotoIcon } from '@heroicons/react/24/outline'
 import { Image } from '@tiptap/extension-image'
+import { useEffect, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { Editor } from '@tiptap/react'
-import { useEffect, useState } from 'react'
 
 import { TipTapTool, useTipTapExtensions, TipTapToolButton } from '@fiar/content/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
@@ -13,7 +13,13 @@ import { useConfig } from '../../hooks/config.js'
 import { is_image } from '../../hooks/data.js'
 
 export const TipTapImageTool = () => {
-  useEffect(() => useTipTapExtensions.setState((x) => ({ extensions: [...x.extensions, Image as any] })), [])
+  useEffect(
+    () =>
+      useTipTapExtensions.setState((x) => ({
+        extensions: [...x.extensions, Image as any].filter((x) => x.name !== Image.name),
+      })),
+    [],
+  )
   return <TipTapTool>{(props) => <TipTapImageToolControl {...props} />}</TipTapTool>
 }
 

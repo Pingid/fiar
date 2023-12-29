@@ -1,12 +1,12 @@
-import { IFieldString, IFieldStruct, Options, struct, string } from '@fiar/content/schema'
+import { IFieldString, IFieldStruct, struct, string } from '@fiar/content/schema'
 
-export interface IFieldAsset<O extends boolean | undefined = false>
-  extends IFieldStruct<{ fullPath: IFieldString; bucket: IFieldString; name: IFieldString }, O> {
+export interface IFieldAsset extends IFieldStruct {
   label?: string
   optional?: boolean
+  fields: { fullPath: IFieldString; bucket: IFieldString; name: IFieldString }
 }
 
-export const image = <C extends Omit<Options<IFieldAsset>, 'fields'>>(config: C): IFieldAsset<C['optional']> =>
+export const image = <const C extends Omit<IFieldAsset, 'fields' | 'type'>>(config: C) =>
   struct({
     ...config,
     fields: { fullPath: string({}), bucket: string({}), name: string({}) },

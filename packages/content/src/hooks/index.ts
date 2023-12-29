@@ -2,8 +2,6 @@ import {
   CollectionReference,
   DocumentReference,
   Firestore,
-  doc,
-  collection,
   getDoc,
   onSnapshot,
   FirestoreError,
@@ -25,21 +23,6 @@ export const useFirestore = () => {
   if (!firestore) throw new Error(`Missing firestore provider`)
   return firestore
 }
-
-export const getDocumentRef = <D extends { infer: Record<string, any>; path: string }>(
-  firestore: Firestore,
-  document: D,
-) => doc(firestore, document.path) as DocumentReference<D['infer'], D['infer']>
-
-export const getCollectionRef = <D extends { infer: Record<string, any>; path: string }>(
-  firestore: Firestore,
-  document: D,
-) => collection(firestore, document.path) as CollectionReference<D['infer'], D['infer']>
-
-export const useDocumentRef = <D extends { infer: Record<string, any>; path: string }>(doc: D) =>
-  getDocumentRef(useFirestore(), doc)
-export const useCollectionRef = <D extends { infer: Record<string, any>; path: string }>(col: D) =>
-  getCollectionRef(useFirestore(), col)
 
 export const useDocumentData = <T extends Record<string, any>>(
   ref: DocumentReference<T, T>,

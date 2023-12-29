@@ -13,12 +13,13 @@ export default function ReactApp() {
       <Authorize
         auth={auth}
         providers={[new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()]}
+        method="popup"
         allowNoAuth
       >
         <Content firestore={firestore} collections={[test, articles]} documents={[landing]}></Content>
         <Assets storage={storage}>
-          <Assets.Folder title="Photos" path="photos" accept={{ ['image/*']: [] }} />
-          <Assets.Folder title="Icons" path="icons" />
+          <Assets.Folder title="Photos" path="/photos" accept={{ ['image/*']: [] }} />
+          <Assets.Folder title="Icons" path="/icons" />
         </Assets>
       </Authorize>
     </Dashboard>

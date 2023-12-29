@@ -12,7 +12,7 @@ export const PageStatusBar = () => {
   const error = useStore(store, (x) => x.error)
   const loadingLonger = useLastLonger(loading, loading, 500)
   return (
-    <div className={cn('flex transition-all', [!!(loadingLonger || error), 'px-4 pb-2'])}>
+    <div className={cn('flex transition-all', [!!(loadingLonger || error), 'pb-2'])}>
       <p className={cn('transition-width overflow-hidden whitespace-nowrap', [loadingLonger, 'h-6 w-7', 'h-0 w-0'])}>
         <LoadingDots />
       </p>

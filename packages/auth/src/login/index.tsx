@@ -1,5 +1,4 @@
 import {
-  type Auth,
   type AuthProvider,
   FacebookAuthProvider,
   GithubAuthProvider,
@@ -11,19 +10,13 @@ import {
   signInWithRedirect,
 } from '@firebase/auth'
 import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs/index.js'
-import { type Functions } from '@firebase/functions'
 import useMutation from 'swr/mutation'
 import React from 'react'
 
 import { Button, Field, Input, LoadingDots } from '@fiar/components'
+import { type AuthConfig } from '../context/index.js'
 
-export const Login = (props: {
-  onSuccess: (user: UserCredential) => void
-  auth: Auth
-  providers: AuthProvider[]
-  functions?: Functions | undefined
-  signin?: 'redirect' | 'popup' | undefined
-}): JSX.Element => {
+export const Login = (props: { onSuccess: (user: UserCredential) => void } & AuthConfig): JSX.Element => {
   const [password, setPassword] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [error, setError] = React.useState('')
@@ -35,7 +28,7 @@ export const Login = (props: {
     onSuccess: props.onSuccess,
   })
   const signinSocial = useMutation(
-    props.signin ?? 'redirect',
+    props.method ?? 'redirect',
     (type: string, p: { arg: AuthProvider }) => {
       if (type === 'redirect') return signInWithRedirect(props.auth, p.arg)
       return signInWithPopup(props.auth, p.arg)

@@ -3,7 +3,7 @@ service firebase.storage {
   match /b/{bucket}/o {
     match /{allPaths=**} {
       allow read: if true;
-      allow write: if true;
+      allow write: if debug(request);
     }
     // match /uploads/_nosense/{allPaths=**} {
     //   allow read: if true;

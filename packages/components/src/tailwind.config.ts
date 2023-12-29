@@ -25,22 +25,11 @@ const dark = {
 }
 
 const base = {
-  ':root': {
-    ...light,
-    '--border-radius': `2px`,
-    '--font-sans': `'Inter', 'sans-serif'`,
-    '--font-serif': `'Merriweather', 'serif'`,
-    '--font-mono': `'monospace'`,
-  },
-  '@media (prefers-color-scheme: dark)': {
-    ':root': dark,
-  },
+  ':root': { ...light, '--border-radius': `2px`, '--font-sans': `'Inter', system-ui, sans-serif` },
+  '@media (prefers-color-scheme: dark)': { ':root': dark },
   '[data-theme="light"]': light,
   '[data-theme="dark"]': dark,
-  html: {
-    'background-color': `hsl(var(--color-back) / 1)`,
-    color: `hsl(var(--color-front) / 1)`,
-  },
+  html: { 'background-color': `hsl(var(--color-back) / 1)`, color: `hsl(var(--color-front) / 1)` },
 }
 
 const _config = {
@@ -48,11 +37,7 @@ const _config = {
   darkMode: ['class', 'media'],
   theme: {
     extend: {
-      fontFamily: {
-        mono: 'var(--font-mono)',
-        sans: 'var(--font-sans)',
-        serif: 'var(--font-serif)',
-      },
+      fontFamily: { sans: 'var(--font-sans)' },
       borderRadius: { DEFAULT: 'var(--border-radius)' },
       borderColor: { DEFAULT: 'hsl(var(--color-line) / 1)' },
       rotate: { '270': '270deg' },

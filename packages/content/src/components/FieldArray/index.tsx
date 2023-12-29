@@ -4,13 +4,12 @@ import { useEffect, useRef, useState } from 'react'
 import { cn } from 'mcn'
 
 import { Markdown, Sortable, SortableItem } from '@fiar/components'
-import { UseExtension } from '@fiar/workbench/extensions'
 
-import { IFieldArray, IFields } from '../../schema/index.js'
+import { IFieldList, IFields } from '../../schema/index.js'
 import { type FieldComponent } from '../../fields/index.js'
-import { FieldMissing } from '../FieldMissing/index.js'
+import { RenderField } from '../FieldComponent/index.js'
 
-export const FieldArray: FieldComponent<IFieldArray<IFields>> = (props) => {
+export const FieldArray: FieldComponent<IFieldList> = (props) => {
   const [open, setOpen] = useState(true)
   const control = useFieldArray(props)
 
@@ -37,11 +36,7 @@ export const FieldArray: FieldComponent<IFieldArray<IFields>> = (props) => {
               label={`${props.field.label?.replace(/s$/, '') ?? ''} ${i + 1}`}
               onRemove={() => control.remove(i)}
             >
-              <UseExtension
-                extension={props.field.of.component}
-                props={{ ...props, name: `${props.name}.${i}`, parent: props.field, field: props.field.of }}
-                fallback={<FieldMissing field={props.field.of} />}
-              />
+              <RenderField {...props} name={`${props.name}.${i}`} parent={props.field} field={props.field.of} />
             </SortableItem>
           ))}
         </Sortable>
@@ -114,7 +109,7 @@ const move = <A extends ReadonlyArray<any>>(array: A, from: number, to: number):
 const init = (field: IFields) => {
   if (field.type === 'map') return {}
   if (field.type === 'list') return []
-  if (field.type === 'path') return {}
+  if (field.type === 'ref') return {}
   if (field.initialValue) return field.initialValue
   if (field.type === 'string') return ''
   if (field.type === 'number') return 0

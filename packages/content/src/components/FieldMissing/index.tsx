@@ -1,6 +1,6 @@
-import { IField } from '../../schema/index.js'
+import { IFieldBase } from '../../schema/index.js'
 
-export const FieldMissing = (props: { field: IField<any, any> }) => {
+export const FieldMissing = (props: { field: IFieldBase }) => {
   return (
     <p className="text-front/60 text-sm">
       Missing component <span className="text-error">{props.field.component}</span>

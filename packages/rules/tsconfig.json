@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": { "rootDir": "src", "outDir": ".", "tsBuildInfoFile": ".tsbuildinfo" },
+  "exclude": ["**/*.js", "**/*.cjs", "**/*.d.ts", "**/*.test.ts"],
+  "include": ["src/**/*"],
+  "references": [{ "path": "../schema" }]
+}

@@ -7,7 +7,7 @@ export type AuthConfig = {
   providers: AuthProvider[]
   allowNoAuth?: boolean
   functions?: Functions | undefined
-  signin?: 'redirect' | 'popup' | undefined
+  method?: 'redirect' | 'popup' | undefined
 }
 
 const FirebaseAuthContext = createContext<Auth | null>(null)

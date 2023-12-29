@@ -19,7 +19,7 @@ const seoPageMeta = s.struct({
 })
 
 export const articles = s.defineCollection({
-  path: 'articles',
+  path: '/articles/{articleId}',
   label: 'Articles',
   titleField: 'title',
   fields: {
@@ -28,12 +28,12 @@ export const articles = s.defineCollection({
     body: s.text({ label: 'Content' }),
     width: s.number({ label: 'Width' }),
     meta: seoPageMeta,
-    tags: s.array({ label: 'Tags', of: s.string() }),
+    tags: s.list({ label: 'Tags', of: s.string() }),
   },
 })
 
 export const test = s.defineCollection({
-  path: 'test',
+  path: '/test',
   label: 'Test',
   titleField: 'title',
   fields: {
@@ -44,7 +44,7 @@ export const test = s.defineCollection({
       description: 'Metadata associated with this post used inside the <meta tag of the generated html page',
       fields: { time: s.string({ label: 'Current time' }), seo: seoPageMeta },
     }),
-    links: s.array({
+    links: s.list({
       label: 'Links',
       description: 'Page links including socials',
       of: s.struct({
@@ -57,19 +57,19 @@ export const test = s.defineCollection({
   },
 })
 
-export type Articles = typeof articles.infer
+// export type Articles = typeof articles.infer
 
 export const landing = s.defineDocument({
-  path: 'pages/landing',
+  path: '/pages/landing',
   label: 'Landing page',
   fields: {
-    highlight: s.ref({ label: 'Main article', to: () => articles }),
-    more: s.array({ label: 'Articles', of: s.ref({ to: () => articles }) }),
+    highlight: s.ref({ label: 'Main article', of: () => articles }),
+    more: s.list({ label: 'Articles', of: s.ref({ of: () => articles }) }),
     meta: seoPageMeta,
   },
 })
 
-export type Landing = typeof landing.infer
+// export type Landing = typeof landing.infer
 
-export const entities = [articles, landing] as const
+export const entities = [articles, test, landing] as const
 export type Entities = typeof entities

@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fiar/rules": "workspace:^",
+    "@fiar/schema": "workspace:^",
     "@fiar/assets": "workspace:^",
     "@fiar/auth": "workspace:^",
     "@fiar/components": "workspace:^",

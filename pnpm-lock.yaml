@@ -148,6 +148,12 @@ importers:
       '@fiar/content':
         specifier: workspace:^
         version: link:../../packages/content
+      '@fiar/rules':
+        specifier: workspace:^
+        version: link:../../packages/rules
+      '@fiar/schema':
+        specifier: workspace:^
+        version: link:../../packages/schema
       '@fiar/workbench':
         specifier: workspace:^
         version: link:../../packages/workbench
@@ -395,6 +401,9 @@ importers:
       '@fiar/components':
         specifier: workspace:^
         version: link:../components
+      '@fiar/schema':
+        specifier: workspace:^
+        version: link:../schema
       '@fiar/workbench':
         specifier: workspace:^
         version: link:../workbench
@@ -431,6 +440,9 @@ importers:
       react-icons:
         specifier: ^4.11.0
         version: 4.11.0(react@18.2.0)
+      regexparam:
+        specifier: ^2.0.1
+        version: 2.0.1
       swr:
         specifier: ^2.2.4
         version: 2.2.4(react@18.2.0)
@@ -515,8 +527,11 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/schema:
+  packages/rules:
     dependencies:
+      '@fiar/schema':
+        specifier: workspace:^
+        version: link:../schema
       '@firebase/firestore':
         specifier: ^4.3.2
         version: 4.3.2(@firebase/app@0.9.23)
@@ -529,9 +544,6 @@ importers:
       firebase-admin:
         specifier: ^11.11.0
         version: 11.11.0
-      ts-toolbelt:
-        specifier: ^9.6.0
-        version: 9.6.0
       vitest:
         specifier: ^0.34.6
         version: 0.34.6(jsdom@22.1.0)
@@ -539,9 +551,18 @@ importers:
       jsdom:
         specifier: ^22.1.0
         version: 22.1.0
+      ts-check-perf:
+        specifier: ^0.0.0
+        version: 0.0.0(typescript@5.2.2)
       tsx:
         specifier: ^4.6.0
         version: 4.6.0
+
+  packages/schema:
+    dependencies:
+      firebase:
+        specifier: ^10.6.0
+        version: 10.6.0
 
   packages/workbench:
     dependencies:
@@ -11184,16 +11205,20 @@ packages:
       typescript: 5.2.2
     dev: true
 
+  /ts-check-perf@0.0.0(typescript@5.2.2):
+    resolution: {integrity: sha512-rzB1xmi4GMkgsezIFlqt+oOXXoOEjYMTuNculBSq6X6d0fSlB/mHY7vFp/td/p0hXtBYHPjzgQ5Ei/Iuirxfzw==}
+    peerDependencies:
+      typescript: 5.x
+    dependencies:
+      typescript: 5.2.2
+    dev: true
+
   /ts-easing@0.2.0:
     resolution: {integrity: sha512-Z86EW+fFFh/IFB1fqQ3/+7Zpf9t2ebOAxNI/V6Wo7r5gqiqtxmgTlQ1qbqQcjLKYeSHPTsEmvlJUDg/EuL0uHQ==}
     dev: false
 
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
-
-  /ts-toolbelt@9.6.0:
-    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
-    dev: false
 
   /tsconfck@3.0.0(typescript@5.2.2):
     resolution: {integrity: sha512-w3wnsIrJNi7avf4Zb0VjOoodoO0woEqGgZGQm+LHH9przdUI+XDKsWAXwxHA1DaRTjeuZNcregSzr7RaA8zG9A==}

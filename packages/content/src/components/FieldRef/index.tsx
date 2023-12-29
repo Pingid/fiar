@@ -3,21 +3,21 @@ import { DocumentReference } from '@firebase/firestore'
 import { useController } from 'react-hook-form'
 import { useState } from 'react'
 
-import { UseExtension } from '@fiar/workbench/extensions'
 import { WorkbenchPageModal } from '@fiar/workbench'
 import { Button, Field } from '@fiar/components'
 
-import { IContentCollection, defineDocument, type IFieldRef } from '../../schema/index.js'
-import { IntermediateDocumentReference } from '../DocumentPage/hooks/index.js'
+import { IntermediateDocumentReference } from '../DocumentFormHooks/index.js'
+import { IContentCollection, type IFieldRef } from '../../schema/index.js'
 import { fieldError, type FieldComponent } from '../../fields/index.js'
 import { SelectDocumentProvider } from '../../context/select.js'
+import { DocumentCard } from '../DocumentCard/index.js'
 
-export const FieldRef: FieldComponent<IFieldRef<IContentCollection<any, any>>> = (props) => {
+export const FieldRef: FieldComponent<IFieldRef> = (props) => {
   const field = useController(props)
   const error = fieldError(field.fieldState.error)
   const [open, setOpen] = useState(false)
   const isSet = field.field.value?.id && field.field.value?.path
-  const target = props.field.to()
+  const target = props.field.of() as IContentCollection
   const onSelect = (ref: DocumentReference) => {
     field.field.onChange(new IntermediateDocumentReference(ref))
     setOpen(false)
@@ -37,13 +37,7 @@ export const FieldRef: FieldComponent<IFieldRef<IContentCollection<any, any>>> =
 
           {isSet && (
             <button onClick={() => setOpen(true)} className="w-full">
-              <UseExtension
-                extension="document:card"
-                props={{
-                  document: defineDocument({ ...target, label: '', path: `${target.path}/${field.field.value?.id}` }),
-                  titleField: target.titleField as any,
-                }}
-              />
+              <DocumentCard model={target} titleField={target.titleField} />
             </button>
           )}
 

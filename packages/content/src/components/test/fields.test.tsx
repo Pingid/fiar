@@ -5,8 +5,7 @@ import { useForm } from 'react-hook-form'
 import { expect, it, vi } from 'vitest'
 
 import * as s from '../../schema/index.js'
-
-import { FieldStruct } from '../index.js'
+import { FieldStruct } from '../FieldStruct/index.js'
 
 it('Should validate required values', async () => {
   const onSubmit = vi.fn()

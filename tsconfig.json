@@ -51,6 +51,7 @@
     { "path": "./packages/components" },
     { "path": "./packages/content" },
     { "path": "./packages/fiar" },
+    { "path": "./packages/rules" },
     { "path": "./packages/schema" },
     { "path": "./packages/workbench" }
   ],
