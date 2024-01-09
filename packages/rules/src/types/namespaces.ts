@@ -1,4 +1,5 @@
-import {
+import type { Rule } from '../rule'
+import type {
   RulesMap,
   RulesDuration,
   RulesNumber,
@@ -12,12 +13,35 @@ import {
   RulesString,
 } from './interfaces'
 
+export interface NamespaceAuth extends RulesMap<{}> {
+  uid: RulesString
+  token: RulesMap<{
+    /** The email address associated with the account, if present. */
+    email: RulesString
+    /** `true` if the user has verified they have access to the `email` address. */
+    email_verified: RulesString
+    /** The phone number associated with the account, if present. */
+    phone_number: RulesString
+    /** The user's display name, if set. */
+    name: RulesString
+    /** The user's Firebase UID. This is unique within a project. */
+    sub: RulesString
+    firebase: RulesMap<{
+      identities: RulesMap<
+        Record<`email` | `phone` | `google.com` | `facebook.com` | `github.com` | `twitter.com`, RulesString>
+      >
+      sign_in_provider: RulesString<SigninProviders>
+      tenant?: RulesString
+    }>
+  }>
+}
+
 /**
  * The incoming request context.
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Request}
  * */
-export interface NamespaceFirestoreRequest<T extends Record<string, any>> {
+export interface NamespaceFirestoreRequest<T extends RulesMap> extends Rule {
   /**
    * Request authentication context.
    * uid - the UID of the requesting user.
@@ -25,30 +49,11 @@ export interface NamespaceFirestoreRequest<T extends Record<string, any>> {
    *
    * The token map contains the following values:
    */
-  auth: RulesMap<{
-    uid: string
-    token: {
-      /** The email address associated with the account, if present. */
-      email: string
-      /** `true` if the user has verified they have access to the `email` address. */
-      email_verified: string
-      /** The phone number associated with the account, if present. */
-      phone_number: string
-      /** The user's display name, if set. */
-      name: string
-      /** The user's Firebase UID. This is unique within a project. */
-      sub: string
-      firebase: {
-        identities: Record<`email` | `phone` | `google.com` | `facebook.com` | `github.com` | `twitter.com`, string[]>
-        sign_in_provider: SigninProviders
-        tenant?: string
-      }
-    }
-  }>
+  auth: NamespaceAuth
   /** The request method. One of. */
   method: RulesString<'get' | 'list' | 'create' | 'update' | 'delete'>
   /** Path of the affected resource. */
-  query: { limit: RulesInteger; offset: RulesInteger; orderBy: RulesString }
+  query: RulesMap<{ limit: RulesInteger; offset: RulesInteger; orderBy: RulesString }>
   /** The new resource value, present on write requests only. */
   resource: NamespaceFirestoreResource<T>
   /**
@@ -63,11 +68,11 @@ export interface NamespaceFirestoreRequest<T extends Record<string, any>> {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Resource}
  * */
-export interface NamespaceFirestoreResource<T extends Record<string, any>> {
+export interface NamespaceFirestoreResource<T extends RulesMap> extends RulesMap {
   /** The full document name, as a path. */
   __name__: RulesPath
   /** Map of the document data. */
-  data: RulesMap<T>
+  data: T
   /** String of the document's key */
   id: RulesString
 }
@@ -124,7 +129,7 @@ export interface NamespaceDuration {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.firestore}
  */
-export interface NamespaceFirestore<T extends Record<string, any>> {
+export interface NamespaceFirestore<T extends RulesMap> extends Rule {
   /** TThe request context, including authentication information and pending data. */
   request: NamespaceFirestoreRequest<T>
   /** The resource being read or written. */
@@ -219,7 +224,7 @@ type PathParams<T, A extends Record<string, any> = {}> = T extends `${string}{${
   ? PathParams<R, { [K in keyof A | N]: string }>
   : A
 
-export type ContextFirestore<T extends Record<string, any>, P extends string> = NamespaceFirestore<T> &
+export type ContextFirestore<T extends RulesMap, P extends string> = NamespaceFirestore<T> &
   NamespaceDebug &
   PathParams<P> & {
     duration: NamespaceDuration

@@ -1,16 +1,38 @@
 import { type IFieldPrimitive } from '@fiar/schema'
 import { type Rule } from './base.js'
 
-export type InferRules<T> = T extends Array<infer R>
-  ? RulesList<R>
+export type InferRule<T> = T extends Array<any>
+  ? RulesList<InferRule<T[number]>>
   : T extends Record<any, any>
-  ? RulesMap<T>
+  ? RulesMap<{ [K in keyof T]: InferRule<T[K]> }>
   : T extends string
   ? RulesString<T>
   : T extends number
   ? RulesNumber
   : T extends boolean
   ? RulesBoolean
+  : never
+
+export type TypeOfRule<T extends Rule> = T extends RulesBoolean
+  ? boolean
+  : T extends RulesNumber
+  ? number
+  : T extends RulesFloat
+  ? number
+  : T extends RulesInteger
+  ? number
+  : T extends RulesString<infer S>
+  ? S
+  : T extends RulesList<infer R>
+  ? TypeOfRule<R>[]
+  : T extends RulesMap<infer R>
+  ? { [K in keyof R]: TypeOfRule<T[K]> }
+  : T extends RulesMapDiff<infer R>
+  ? { [K in keyof R]: TypeOfRule<T[K]> }
+  : T extends RulesPath<infer R>
+  ? { [K in keyof R]: TypeOfRule<T[K]> }
+  : T extends RulesSet<infer R>
+  ? TypeOfRule<R>
   : never
 
 export interface In {}
@@ -52,7 +74,7 @@ export interface Operators {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Boolean}
  * */
-export interface RulesBoolean extends Rule<boolean> {}
+export interface RulesBoolean extends Rule {}
 export interface Eq {
   /** True if a is equal to b */
   (a: RulesBoolean, b: boolean | RulesBoolean | null): RulesBoolean
@@ -98,7 +120,7 @@ export interface RulesDuration extends Rule {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Float}
  * */
-export interface RulesFloat extends Rule<number> {}
+export interface RulesFloat extends Rule {}
 export interface Eq {
   /** True if a is equal to b */
   (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
@@ -183,21 +205,21 @@ export interface RulesLatLng {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.List}
  */
-export interface RulesList<T> extends Rule<T[]> {
-  [x: number]: InferRules<T>
+export interface RulesList<T extends Rule> extends Rule {
+  [x: number]: T
   [x: `${number}:${number}`]: RulesList<T>
   /** Create a new list by adding the elements of another list to the end of this list. */
-  concat: (list: T[] | RulesList<T>) => RulesList<T>
+  concat: (list: RulesList<T> | TypeOfRule<T>[]) => RulesList<T>
   /** Determine whether the list contains all elements in another list. */
-  hasAll: (list: T[] | RulesList<T>) => RulesBoolean
+  hasAll: (list: RulesList<T> | TypeOfRule<T>[]) => RulesBoolean
   /** Determine whether the list contains any element in another list. */
-  hasAny: (list: T[] | RulesList<T>) => RulesBoolean
+  hasAny: (list: RulesList<T> | TypeOfRule<T>[]) => RulesBoolean
   /** Determine whether all elements in the list are present in another list. */
-  hasOnly: (list: T[] | RulesList<T>) => RulesBoolean
+  hasOnly: (list: RulesList<T> | TypeOfRule<T>[]) => RulesBoolean
   /** Join the elements in the list into a string, with a separator. */
   join: (sep: string | RulesString) => RulesString
   /** Create a new list by removing the elements of another list from this list. */
-  removeAll: (list: T[] | RulesList<T>) => RulesList<T>
+  removeAll: (list: RulesList<T> | TypeOfRule<T>[]) => RulesList<T>
   /** Get the number of values in the list. */
   size: () => RulesInteger
   /**
@@ -208,11 +230,11 @@ export interface RulesList<T> extends Rule<T[]> {
 }
 
 export interface Eq {
-  <T>(list: RulesList<T>, v: T[] | RulesList<T>): RulesBoolean
+  <T extends Rule>(list: RulesList<T>, v: TypeOfRule<T> | RulesList<T>): RulesBoolean
 }
 
 export interface In {
-  <T>(list: RulesList<T>, v: T | InferRules<T>): RulesBoolean
+  <T extends Rule>(list: RulesList<T>, v: TypeOfRule<T> | T): RulesBoolean
 }
 
 /**
@@ -228,9 +250,9 @@ export interface In {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Map}
  */
-export type RulesMap<T extends Record<string, any> = {}> = Rule<T> & {
+export type RulesMap<T extends Record<string, Rule> = {}> = Rule & {
   /** Return a rules.MapDiff representing the result of comparing the current Map to a comparison Map. */
-  diff: (m: Partial<T>) => RulesMapDiff<T>
+  diff: (m: Partial<{ [K in keyof T]: TypeOfRule<T[K]> }> | RulesMap) => RulesMapDiff<T>
   /**
    * Returns the value associated with a given search key string.
    * For nested Maps, involving keys and sub-keys, returns the value associated with a given sub-key string.
@@ -238,23 +260,26 @@ export type RulesMap<T extends Record<string, any> = {}> = Rule<T> & {
    * The function requires a default value to return if no match to the given search key is found.
    */
   get: {
-    <K extends keyof T>(key: K, default_value: T[K] | null): InferRules<T[K]>
+    <K extends keyof T>(key: K, default_value: TypeOfRule<T[K]> | null): T[K]
     // TODO key list
   }
   /** Get the list of keys in the map. */
-  keys: () => RulesList<string>
+  keys: () => RulesList<RulesString>
   /** Get the number of entries in the map. */
   size: () => RulesInteger
   /** Get the list of values in the map. */
   values: () => RulesList<T[keyof T]>
-} & { [K in keyof T]: InferRules<T[K]> }
+} & { [K in keyof T]: T[K] }
 
 export interface Eq {
-  <T extends Record<string, any> = {}>(list: RulesMap<T>, v: T | RulesMap<T>): RulesBoolean
+  <T extends Record<string, Rule>>(
+    list: RulesMap<T>,
+    v: RulesMap<T> | { [K in keyof T]: TypeOfRule<T[K]> },
+  ): RulesBoolean
 }
 
 export interface In {
-  <T extends Record<string, any> = {}>(list: RulesMap<T>, v: string | RulesString): RulesBoolean
+  <T extends Record<string, Rule>>(list: RulesMap<T>, v: string | RulesString): RulesBoolean
 }
 
 /**
@@ -265,18 +290,18 @@ export interface In {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.MapDiff}
  * */
-export type RulesMapDiff<T extends Record<string, any> = {}> = Rule & {
+export type RulesMapDiff<T extends Record<string, Rule> = {}> = Rule & {
   /** Returns a rules.Set, which lists any keys that the Map calling diff() contains that the Map passed to diff() does not. */
-  addedKeys: () => RulesSet<string>
+  addedKeys: () => RulesSet<RulesString>
   /** Returns a rules.Set, which lists any keys that have been added to, removed from or modified from the Map calling diff() compared to the Map passed to diff(). This function returns the set equivalent to the combined results of MapDiff.addedKeys(), MapDiff.removedKeys() and MapDiff.changedKeys(). */
-  affectedKeys: () => RulesSet<string>
+  affectedKeys: () => RulesSet<RulesString>
   /** Returns a rules.Set, which lists any keys that appear in both the Map calling diff() and the Map passed to diff(), but whose values are not equal. */
-  changedKeys: () => RulesSet<string>
+  changedKeys: () => RulesSet<RulesString>
   /** Returns a rules.Set, which lists any keys that the Map calling diff() does not contain compared to the Map passed to diff(). */
-  removedKeys: () => RulesSet<string>
+  removedKeys: () => RulesSet<RulesString>
   /** Returns a rules.Set, which lists any keys that appear in both the Map calling diff() and the Map passed to diff(), and whose values are equal. */
-  unchangedKeys: () => RulesSet<string>
-} & { [K in keyof T]: InferRules<T[K]> }
+  unchangedKeys: () => RulesSet<RulesString>
+} & { [K in keyof T]: T[K] }
 
 /** A value of type Integer or type Float */
 export type RulesNumber = RulesFloat | RulesInteger
@@ -299,12 +324,13 @@ export type RulesNumber = RulesFloat | RulesInteger
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Path}
  */
-export type RulesPath<T extends Record<string, any> = Record<string, any>> = Rule & {
+export type RulesPath<T extends Record<string, Rule> = Record<string, Rule>> = Rule & {
   /** Bind key-value pairs in a map to a path. */
-  bind: <A extends Record<string, any>>(value: A) => RulesMap<T & A>
-} & { [K in keyof T]: InferRules<T[K]> }
+  bind: <A extends Record<string, any>>(value: A) => RulesMap<T & { [K in keyof A]: InferRule<A[K]> }>
+} & { [K in keyof T]: T[K] }
+
 export interface Eq {
-  <T extends Record<string, any> = Record<string, any>>(r: RulesPath<T>, v: string | RulesPath<T>): RulesBoolean
+  <T extends RulesPath>(r: T, v: string | RulesPath): RulesBoolean
 }
 
 /**
@@ -314,39 +340,39 @@ export interface Eq {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Set}
  */
-export interface RulesSet<T> extends Rule {
+export interface RulesSet<T extends Rule = Rule> extends Rule {
   /**
    * Returns a set that is the difference between the set calling difference() and the set passed to difference(). That is, returns a set containing the elements in the comparison set that are not in the specified set.
    * If the sets are identical, returns an empty set (size() == 0).
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#difference}
    */
-  difference: (value: RulesSet<T>) => RulesSet<T>
+  difference: (value: T) => RulesSet<T>
   /**
    * Test whether the set calling hasAll() contains all of the items in the comparison set passed to hasAll().
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#hasAll}
    */
-  hasAll: (list: T[] | RulesList<T> | RulesSet<T>) => RulesBoolean
+  hasAll: (list: TypeOfRule<T>[] | RulesList<T> | RulesSet<T>) => RulesBoolean
   /**
    * Test whether the set calling hasAny() contains any of the items in the set or list passed to hasAny().
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#hasAny}
    */
-  hasAny: (list: T[] | RulesList<T> | RulesSet<T>) => RulesBoolean
+  hasAny: (list: TypeOfRule<T>[] | RulesList<T> | RulesSet<T>) => RulesBoolean
   /**
    * Test whether the set calling hasOnly() contains only the items in the comparison set or list passed to hasOnly().
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#hasOnly}
    */
-  hasOnly: (list: T[] | RulesList<T> | RulesSet<T>) => RulesBoolean
+  hasOnly: (list: TypeOfRule<T>[] | RulesList<T> | RulesSet<T>) => RulesBoolean
   /**
    * Returns a set that is the intersection between the set calling intersection() and the set passed to intersection(). That is, returns a set containing the elements the sets have in common.
    * If the sets have no elements in common, returns an empty set (size() == 0).
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#intersection}
    */
-  intersection: (list: RulesSet<T>) => RulesSet<T>
+  intersection: (list: TypeOfRule<T> | RulesSet<T>) => RulesSet<T>
   /**
    * Returns the size of the set.
    *
@@ -358,16 +384,16 @@ export interface RulesSet<T> extends Rule {
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#union}
    * */
-  union: (list: RulesSet<T>) => RulesSet<T>
+  union: (list: TypeOfRule<T> | RulesSet<T>) => RulesSet<T>
 }
 export interface Eq {
   /** True if a is equal to b */
-  <T>(a: RulesSet<T>, b: T[] | RulesSet<T>): RulesBoolean
+  <T extends Rule>(a: RulesSet<T>, b: TypeOfRule<T>[] | RulesSet<T>): RulesBoolean
 }
 
 export interface In {
   /** True if b is a member of a */
-  <T>(a: RulesSet<T>, b: T | InferRules<T>): RulesBoolean
+  <T extends Rule>(a: RulesSet<T>, b: T | TypeOfRule<T>): RulesBoolean
 }
 
 /**
@@ -405,7 +431,7 @@ export interface RulesString<K extends string = string> extends Rule<K> {
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.String#split}
    */
-  split: (re: string) => RulesList<string>
+  split: (re: string) => RulesList<RulesString>
   /**
    * Returns the UTF-8 byte encoding of a string.
    *

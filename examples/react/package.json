@@ -10,12 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fiar/rules": "workspace:^",
-    "@fiar/schema": "workspace:^",
     "@fiar/assets": "workspace:^",
     "@fiar/auth": "workspace:^",
     "@fiar/components": "workspace:^",
     "@fiar/content": "workspace:^",
+    "@fiar/rules": "workspace:^",
+    "@fiar/schema": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "@firebase/app": "^0.9.22",
     "@firebase/auth": "^1.3.2",
@@ -41,6 +41,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "rollup-plugin-visualizer": "^5.9.3",
+    "tsx": "^4.6.0",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
   }

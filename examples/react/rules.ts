@@ -15,3 +15,5 @@ const rules = createFirestoreRuleset(entities, {
     'allow write': request.auth.token.email.matches('.@example.com$'),
   }),
 })
+
+console.log(rules)

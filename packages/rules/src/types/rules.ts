@@ -4,6 +4,7 @@ import { Rule, RuleGroup, computed } from './base.js'
 import { InferSchemaRules } from '../schema/index.js'
 import { ContextFirestore } from './namespaces.js'
 import { Operators } from './interfaces.js'
+import { strictModel } from './model-rules.js'
 
 const isRule = (x: unknown): x is Rule => !!(x && typeof (x as any)[computed] !== 'undefined')
 
@@ -33,7 +34,8 @@ export const rule = <T>(accessor: string = ''): T => {
 
 export const compute = <R extends Rule>(rule: R | string | RuleGroup, indent = 0) => {
   if (typeof rule === 'string') return rule
-  if (isRule(rule)) return formatGroups(flattenGroup(rule[computed]), indent)
+  console.log(typeof rule === 'string', isRule(rule), flattenGroup(rule as any))
+  if (isRule(rule)) return formatGroups(flattenGroup((rule as any)[computed]), indent)
   return formatGroups(flattenGroup(rule), indent)
 }
 
@@ -47,6 +49,17 @@ const flattenGroup = ([join, data]: RuleGroup): RuleGroup => {
 }
 
 export const formatGroups = ([join, data]: RuleGroup, indent = 1): string => {
+  console.log({
+    join,
+    data,
+    result: data.reduce<string>((a, b) => {
+      const init = a ? `${a} ${join}\n${'\t'.repeat(indent)}` : ''
+      if (typeof b === 'string') return `${init}${b}`
+      if (isRule(b)) return `${init}${compute(b, indent)}`
+      if (b[1].length === 0) return a
+      return `${init}(${formatGroups(b, indent + 1)})`
+    }, ''),
+  })
   return data.reduce<string>((a, b) => {
     const init = a ? `${a} ${join}\n${'\t'.repeat(indent)}` : ''
     if (typeof b === 'string') return `${init}${b}`
@@ -102,5 +115,35 @@ export const createFirestoreRuleset = <
   },
 >(
   models: T,
-  rules: R,
-) => ({ models, rules })
+  ruleset: R,
+) => {
+  Object.keys(ruleset).map((key) => {
+    const model = models.find((x) => x.path === key)
+    const creator = ruleset[key as keyof typeof ruleset] as any
+    const result = creator(op, rule<any>(''))
+    const strict = strictModel(model as any, 'write')
+
+    if (result['allow write']) {
+      result['allow write'] = op.and(strict, result['allow write'])
+    } else {
+      result['allow write'] = strict
+    }
+
+    const fixed: any = Object.fromEntries(
+      Object.keys(result)
+        .map((rule) => {
+          if (rule === 'strict') return null as any
+          const computed = (() => {
+            if (typeof result[rule] === 'boolean') return `${result[rule]}`
+            if (typeof result[rule] === 'string') return result[rule]
+            return compute(result[rule])
+          })()
+          return [rule, computed]
+        })
+        .filter(Boolean),
+    )
+    console.log({ model, fixed })
+  })
+  return { models }
+  // return { models, ruleset }
+}

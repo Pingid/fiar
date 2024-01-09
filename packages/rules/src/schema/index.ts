@@ -21,6 +21,7 @@ import type {
   RulesList,
   RulesPath,
   RulesMap,
+  Rule,
 } from '../types'
 
 type TypeofPrims = {
@@ -53,7 +54,7 @@ export type InferSchemaRules<T extends FireSchemaTypes> = T['type'] extends Type
   : T extends FireSchemaPath
   ? RulesPath
   : T extends FireSchemaList
-  ? RulesList<InferSchemaRules<T['of']>>
+  ? RulesList<InferSchemaRules<T['of']> & Rule<any>>
   : T extends FireSchemaMap
   ? RulesMap<InferMap<T['fields']>>
   : T extends FireSchemaRef<infer R>

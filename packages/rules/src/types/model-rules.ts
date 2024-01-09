@@ -45,14 +45,22 @@ export const createModelRules = <T extends FireModel>(model: T, rules: Partial<R
   return ruleDef
 }
 
-export const strictModel = (model: FireModel, method: Methods) =>
-  compute([
+export const strictModel = (model: FireModel, method: Methods) => {
+  console.log(
+    compute([
+      '&&',
+      Object.keys(model.fields).map((key) =>
+        createFieldRules(`request.resource.data.${key}`, model.fields[key] as FireSchemaTypes, { method }),
+      ),
+    ]),
+  )
+  return compute([
     '&&',
     Object.keys(model.fields).map((key) =>
       createFieldRules(`request.resource.data.${key}`, model.fields[key] as FireSchemaTypes, { method }),
     ),
   ])
-
+}
 export const createFieldRules: RuleCreater = (path, field, ctx) => {
   const creaters = { ...defaultCreaters, ...ctx?.handlers } as Record<string, RuleCreater<any>>
   if (creaters[field.type]) return (creaters[field.type] as any)(path, field, ctx)

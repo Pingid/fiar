@@ -1,17 +1,17 @@
 import { expect, test, describe } from 'vitest'
 
-import { RulesMap } from './interfaces'
+import { InferRule, RulesMap } from './interfaces'
 import { rule, compute, op } from './rules'
 
 describe('security role primitives', () => {
-  type TestDataModel = {
+  type TestDataModel = InferRule<{
     string: string
     bool: boolean
     number: number
     map: { string: string; bool: boolean; number: number }
     listString: string[]
-  }
-  const data = rule<RulesMap<TestDataModel>>('data')
+  }>
+  const data = rule<TestDataModel>('data')
 
   test('boolean', () => {
     expect(compute(op.is(data.bool, 'bool'))).toBe(`data.bool is bool`)
