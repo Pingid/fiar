@@ -18,24 +18,11 @@ import type {
   RulesNumber,
   RulesString,
   RulesTimestamp,
-  RulesList,
   RulesPath,
   RulesMap,
+  RulesList,
   Rule,
-} from '../types'
-
-type TypeofPrims = {
-  bool: RulesBoolean
-  string: RulesString
-  number: RulesNumber
-  float: RulesFloat
-  int: RulesInteger
-  timestamp: RulesTimestamp
-  bytes: RulesBytes
-  latlng: RulesLatLng
-}
-
-type TypeofPrimsKeys = keyof TypeofPrims
+} from '../firestore'
 
 type InferMapOptionalKeys<T> = { [K in keyof T]: T[K] extends { optional: true } ? K : never }[keyof T]
 type InferMapRequiredKeys<T> = { [K in keyof T]: T[K] extends { optional: true } ? never : K }[keyof T]
@@ -47,14 +34,32 @@ type InferMap<T extends Record<string, FireSchemaTypes>> = Evaluate<
   }
 >
 
-export type InferSchemaRules<T extends FireSchemaTypes> = T['type'] extends TypeofPrimsKeys
-  ? TypeofPrims[T['type']]
+export type InferSchemaRules<T extends FireSchemaTypes> = T['type'] extends 'bool'
+  ? RulesBoolean
+  : T['type'] extends 'string'
+  ? RulesString
+  : T['type'] extends 'number'
+  ? RulesNumber
+  : T['type'] extends 'float'
+  ? RulesFloat
+  : T['type'] extends 'int'
+  ? RulesInteger
+  : T['type'] extends 'timestamp'
+  ? RulesTimestamp
+  : T['type'] extends 'bytes'
+  ? RulesBytes
+  : T['type'] extends 'latlng'
+  ? RulesLatLng
   : T extends FireSchemaSet
   ? InferTuple<T['of']>
   : T extends FireSchemaPath
   ? RulesPath
   : T extends FireSchemaList
-  ? RulesList<InferSchemaRules<T['of']> & Rule<any>>
+  ? InferSchemaRules<T['of']> extends infer R
+    ? R extends Rule<any>
+      ? RulesList<R>
+      : never
+    : never
   : T extends FireSchemaMap
   ? RulesMap<InferMap<T['fields']>>
   : T extends FireSchemaRef<infer R>

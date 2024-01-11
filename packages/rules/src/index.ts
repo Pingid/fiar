@@ -1,1 +1,1 @@
-export * from './types/rules.js'
+export * from './generate/index.js'

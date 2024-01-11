@@ -55,8 +55,8 @@ export interface FireSchemaInt extends FireSchemaBase {
 export interface FireSchemaTimestamp extends FireSchemaBase {
   type: 'timestamp'
 
-  after?: Timestamp
-  before?: Timestamp
+  after?: Date | number | string
+  before?: Date | number | string
 }
 
 export interface FireSchemaBytes extends FireSchemaBase {
@@ -71,9 +71,9 @@ export interface FireSchemaLatlng extends FireSchemaBase {
   type: 'latlng'
 }
 
-export interface FireSchemaPath {
+export interface FireSchemaPath extends FireSchemaBase {
   type: 'path'
-  to: FireModel
+  // to: FireModel
 }
 
 export interface FireSchemaList extends FireSchemaBase {
@@ -166,7 +166,7 @@ export type InferSchemaType<T extends FireSchemaTypes> = T['type'] extends Typeo
   : T extends FireSchemaSet
   ? InferTuple<T['of']>
   : T extends FireSchemaPath
-  ? InferMap<T['to']['fields']>
+  ? Record<string, any>
   : T extends FireSchemaList
   ? InferSchemaType<T['of']>[]
   : T extends FireSchemaMap

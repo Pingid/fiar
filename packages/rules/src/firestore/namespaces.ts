@@ -13,7 +13,7 @@ import type {
   RulesString,
 } from './interfaces'
 
-export interface NamespaceAuth extends RulesMap<{}> {
+export interface NamespaceAuth {
   uid: RulesString
   token: RulesMap<{
     /** The email address associated with the account, if present. */
@@ -41,7 +41,7 @@ export interface NamespaceAuth extends RulesMap<{}> {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Request}
  * */
-export interface NamespaceFirestoreRequest<T extends RulesMap> extends Rule {
+export interface NamespaceFirestoreRequest<T> extends Rule {
   /**
    * Request authentication context.
    * uid - the UID of the requesting user.
@@ -68,7 +68,7 @@ export interface NamespaceFirestoreRequest<T extends RulesMap> extends Rule {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Resource}
  * */
-export interface NamespaceFirestoreResource<T extends RulesMap> extends RulesMap {
+export interface NamespaceFirestoreResource<T> {
   /** The full document name, as a path. */
   __name__: RulesPath
   /** Map of the document data. */
@@ -129,7 +129,7 @@ export interface NamespaceDuration {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.firestore}
  */
-export interface NamespaceFirestore<T extends RulesMap> extends Rule {
+export interface NamespaceFirestore<T> extends Rule {
   /** TThe request context, including authentication information and pending data. */
   request: NamespaceFirestoreRequest<T>
   /** The resource being read or written. */
@@ -224,7 +224,7 @@ type PathParams<T, A extends Record<string, any> = {}> = T extends `${string}{${
   ? PathParams<R, { [K in keyof A | N]: string }>
   : A
 
-export type ContextFirestore<T extends RulesMap, P extends string> = NamespaceFirestore<T> &
+export type ContextFirestore<T, P extends string> = NamespaceFirestore<T> &
   NamespaceDebug &
   PathParams<P> & {
     duration: NamespaceDuration

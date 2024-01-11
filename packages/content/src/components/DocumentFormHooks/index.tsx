@@ -21,9 +21,10 @@ export const useCreateForm = (path: string, onSaved: () => void) => {
   const firestore = useFirestore()
   const form = useForm()
 
-  const onPublish = form.handleSubmit((x) =>
-    handle(setDoc(doc(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved()),
-  )
+  const onPublish = form.handleSubmit((x) =>{
+    console.log('CREATE', x);
+    return handle(setDoc(doc(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved())
+  })
 
   return [form, onPublish] as const
 }
@@ -33,9 +34,10 @@ export const useAddForm = (path: string, onSaved: () => void) => {
   const firestore = useFirestore()
   const form = useForm()
 
-  const onAdd = form.handleSubmit((x) =>
-    handle(addDoc(collection(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved()),
-  )
+  const onAdd = form.handleSubmit((x) =>{
+    console.log('ADD', x);
+    return handle(addDoc(collection(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved())
+  })
 
   return [form, onAdd] as const
 }

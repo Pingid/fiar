@@ -1,5 +1,7 @@
 import { type IFieldPrimitive } from '@fiar/schema'
-import { type Rule } from './base.js'
+import { type Timestamp } from 'firebase/firestore'
+
+import { TypeOfRule, type Rule, type RuleGroup } from '../rule/index.js'
 
 export type InferRule<T> = T extends Array<any>
   ? RulesList<InferRule<T[number]>>
@@ -11,28 +13,6 @@ export type InferRule<T> = T extends Array<any>
   ? RulesNumber
   : T extends boolean
   ? RulesBoolean
-  : never
-
-export type TypeOfRule<T extends Rule> = T extends RulesBoolean
-  ? boolean
-  : T extends RulesNumber
-  ? number
-  : T extends RulesFloat
-  ? number
-  : T extends RulesInteger
-  ? number
-  : T extends RulesString<infer S>
-  ? S
-  : T extends RulesList<infer R>
-  ? TypeOfRule<R>[]
-  : T extends RulesMap<infer R>
-  ? { [K in keyof R]: TypeOfRule<T[K]> }
-  : T extends RulesMapDiff<infer R>
-  ? { [K in keyof R]: TypeOfRule<T[K]> }
-  : T extends RulesPath<infer R>
-  ? { [K in keyof R]: TypeOfRule<T[K]> }
-  : T extends RulesSet<infer R>
-  ? TypeOfRule<R>
   : never
 
 export interface In {}
@@ -50,8 +30,8 @@ export interface Mod {}
 export interface Operators {
   /** Check that a value is of some primitive type */
   is: (a: Rule, type: IFieldPrimitive) => RulesBoolean
-  and: (...args: (RulesBoolean | string)[]) => RulesBoolean
-  or: (...args: (RulesBoolean | string)[]) => RulesBoolean
+  and: (...args: (RulesBoolean | string | RuleGroup)[]) => RuleGroup
+  or: (...args: (RulesBoolean | string | RuleGroup)[]) => RuleGroup
   in: In
   eq: Eq
   neq: Neq
@@ -74,7 +54,7 @@ export interface Operators {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Boolean}
  * */
-export interface RulesBoolean extends Rule {}
+export interface RulesBoolean extends Rule<boolean> {}
 export interface Eq {
   /** True if a is equal to b */
   (a: RulesBoolean, b: boolean | RulesBoolean | null): RulesBoolean
@@ -89,7 +69,7 @@ export interface Neq {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Bytes}
  * */
-export interface RulesBytes extends Rule {
+export interface RulesBytes extends Rule<never> {
   /** Returns the number of bytes in a Bytes sequence. */
   size: () => RulesInteger
   /** Returns the Base64-encoded string corresponding to the provided Bytes sequence. */
@@ -104,7 +84,7 @@ export interface RulesBytes extends Rule {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Duration}
  * */
-export interface RulesDuration extends Rule {
+export interface RulesDuration extends Rule<never> {
   /** Get the nanoseconds portion (signed) of the duration from -999,999,999 to +999,999,999 inclusive. */
   nanos: () => RulesInteger
   /** Get the seconds portion (signed) of the duration from -315,576,000,000 to +315,576,000,000 inclusive. */
@@ -120,7 +100,7 @@ export interface RulesDuration extends Rule {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Float}
  * */
-export interface RulesFloat extends Rule {}
+export interface RulesFloat extends Rule<number> {}
 export interface Eq {
   /** True if a is equal to b */
   (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
@@ -205,7 +185,7 @@ export interface RulesLatLng {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.List}
  */
-export interface RulesList<T extends Rule> extends Rule {
+export interface RulesList<T extends Rule> extends Rule<TypeOfRule<T>[]> {
   [x: number]: T
   [x: `${number}:${number}`]: RulesList<T>
   /** Create a new list by adding the elements of another list to the end of this list. */
@@ -230,7 +210,8 @@ export interface RulesList<T extends Rule> extends Rule {
 }
 
 export interface Eq {
-  <T extends Rule>(list: RulesList<T>, v: TypeOfRule<T> | RulesList<T>): RulesBoolean
+  <T extends Rule>(list: RulesList<T>, v: TypeOfRule<T>[] | RulesList<T>): RulesBoolean
+  (list: RulesList<any>, v: any[] | RulesList<any>): RulesBoolean
 }
 
 export interface In {
@@ -250,9 +231,9 @@ export interface In {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Map}
  */
-export type RulesMap<T extends Record<string, Rule> = {}> = Rule & {
+export type RulesMap<T extends Record<string, Rule> = {}> = Rule<{ [K in keyof T]: TypeOfRule<T[K]> }> & {
   /** Return a rules.MapDiff representing the result of comparing the current Map to a comparison Map. */
-  diff: (m: Partial<{ [K in keyof T]: TypeOfRule<T[K]> }> | RulesMap) => RulesMapDiff<T>
+  diff: (m: Record<string, any> | RulesMap) => RulesMapDiff<T>
   /**
    * Returns the value associated with a given search key string.
    * For nested Maps, involving keys and sub-keys, returns the value associated with a given sub-key string.
@@ -264,12 +245,12 @@ export type RulesMap<T extends Record<string, Rule> = {}> = Rule & {
     // TODO key list
   }
   /** Get the list of keys in the map. */
-  keys: () => RulesList<RulesString>
+  keys: () => RulesList<RulesString<keyof T & string>>
   /** Get the number of entries in the map. */
   size: () => RulesInteger
   /** Get the list of values in the map. */
   values: () => RulesList<T[keyof T]>
-} & { [K in keyof T]: T[K] }
+} & T
 
 export interface Eq {
   <T extends Record<string, Rule>>(
@@ -290,7 +271,7 @@ export interface In {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.MapDiff}
  * */
-export type RulesMapDiff<T extends Record<string, Rule> = {}> = Rule & {
+export type RulesMapDiff<T extends Record<string, Rule> = {}> = Rule<{ [K in keyof T]: TypeOfRule<T[K]> }> & {
   /** Returns a rules.Set, which lists any keys that the Map calling diff() contains that the Map passed to diff() does not. */
   addedKeys: () => RulesSet<RulesString>
   /** Returns a rules.Set, which lists any keys that have been added to, removed from or modified from the Map calling diff() compared to the Map passed to diff(). This function returns the set equivalent to the combined results of MapDiff.addedKeys(), MapDiff.removedKeys() and MapDiff.changedKeys(). */
@@ -301,7 +282,7 @@ export type RulesMapDiff<T extends Record<string, Rule> = {}> = Rule & {
   removedKeys: () => RulesSet<RulesString>
   /** Returns a rules.Set, which lists any keys that appear in both the Map calling diff() and the Map passed to diff(), and whose values are equal. */
   unchangedKeys: () => RulesSet<RulesString>
-} & { [K in keyof T]: T[K] }
+} & T
 
 /** A value of type Integer or type Float */
 export type RulesNumber = RulesFloat | RulesInteger
@@ -340,7 +321,7 @@ export interface Eq {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Set}
  */
-export interface RulesSet<T extends Rule = Rule> extends Rule {
+export interface RulesSet<T extends Rule = Rule> extends Rule<TypeOfRule<T>[]> {
   /**
    * Returns a set that is the difference between the set calling difference() and the set passed to difference(). That is, returns a set containing the elements in the comparison set that are not in the specified set.
    * If the sets are identical, returns an empty set (size() == 0).
@@ -413,7 +394,7 @@ export interface RulesString<K extends string = string> extends Rule<K> {
    *
    * {@link https://firebase.google.com/docs/reference/rules/rules.String#matches}
    */
-  matches: (re: string) => RulesString
+  matches: (re: string) => RulesBoolean
   /**
    * Replaces all occurrences of substrings matching a regular expression with a user-supplied string.
    *
@@ -481,7 +462,7 @@ export interface Lte {
  *
  * {@link https://firebase.google.com/docs/reference/rules/rules.Timestamp}
  */
-export interface RulesTimestamp extends Rule {
+export interface RulesTimestamp extends Rule<Timestamp> {
   /**
    * Timestamp value containing year, month, and day only.
    *
