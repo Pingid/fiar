@@ -1,37 +1,45 @@
-import { Formatter, format, isRule, isGroup, RuleGroup, Rule } from '.'
+import { Formatter, format, isRule, isGroup, RuleGroup, Rule } from './rule.js'
 
-type FormatProps = { indent?: number | undefined; start?: number | undefined }
+type FormatProps = { indent?: number; start?: number; del?: string }
 
 export const defaultFormatter = (props?: FormatProps): Formatter => {
-  const start = props?.start || 6
-  return (value) => {
-    if (typeof value === 'undefined') return ''
-    if (typeof value === 'string') return `'${value}'`
-    if (typeof value === 'number') return `${value}`
-    if (typeof value === 'boolean') return `${value}`
-    if (value === null) return `null`
+  const indent = props?.indent || 1
+  const start = props?.start || 2
+  const del = props?.del || '\t'
 
-    const next = defaultFormatter({
-      ...props,
-      start: props?.indent ? start + props?.indent : undefined,
-    })
+  const pad = (n: number) => del.repeat(n)
 
-    if (isRule(value)) return format(value, next)
+  const formatter =
+    (props: Required<FormatProps> & { nested: boolean }): Formatter =>
+    (value) => {
+      if (typeof value === 'undefined') return ''
+      if (typeof value === 'string') return `'${value}'`
+      if (typeof value === 'number') return `${value}`
+      if (typeof value === 'boolean') return `${value}`
+      if (value === null) return `null`
 
-    if (isGroup(value)) {
-      const flattend = flattenGroup(value)
-      const indent = props?.indent ? `\n${' '.repeat(start)}` : ''
-      const prepend = props?.indent ? ` `.repeat(props?.indent) : ''
-      const joined = flattend
-        .map((x) => next(x))
-        .filter(Boolean)
-        .join(` ${value.join}${indent || ' '}`)
-      return `${prepend}(${joined})`
+      const next = formatter({
+        ...props,
+        nested: true,
+        start: props.start + props?.indent,
+      })
+
+      if (isRule(value)) return format(value, formatter(props))
+
+      if (isGroup(value)) {
+        const flattend = flattenGroup(value)
+        const indent = props?.indent ? `\n${pad(props.start)}` : ''
+        const resolved = flattend.map((x) => next(x)).filter(Boolean)
+        const joined = resolved.join(` ${value.join}${indent || ' '}`)
+        if (props.nested) return `(${joined})`
+        return joined
+      }
+
+      if (Array.isArray(value)) return `[${value.map(next).join(`, `)}]`
+      return JSON.stringify(value)
     }
 
-    if (Array.isArray(value)) return `[${value.map(next).join(`, `)}]`
-    return JSON.stringify(value)
-  }
+  return formatter({ start, del, indent, ...props, nested: false })
 }
 
 const flattenGroup = (group: RuleGroup): Rule[] =>

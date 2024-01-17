@@ -17,13 +17,14 @@ type Allow =
   | 'allow delete'
   | 'allow create'
 
-export interface RuleSet {
+export interface RuleSet<Funcs extends Operators = Operators> {
   toString: () => string
   writeFile: (path: string) => void
+  addFunction<N extends string>(name: N): RuleSet
   addSchema: <F extends FireModel>(
     schema: F,
     cb: (
-      operators: Operators,
+      operators: Funcs,
       context: ContextFirestore<
         InferSchemaRules<{ type: 'map'; fields: F['fields'] } extends infer R ? R : never>,
         F['path']
@@ -34,8 +35,10 @@ export interface RuleSet {
 
 export const createRuleSet = () => {
   //   const formatter = defaultFormatter({ indent: 2 })
+  const functions: (readonly [string, Rule | RuleGroup])[] = []
   const rules: Record<string, Record<string, Rule | RuleGroup>> = {}
   const set: RuleSet = {
+    addFunction: () => set,
     toString: () => JSON.stringify(rules, null, 2),
     writeFile: (path) => {
       const wrap = (x: string) => `
@@ -46,114 +49,81 @@ service cloud.firestore {
 ${x}
   }
 }`
-      const space = (n: number) => ' '.repeat(n)
+      const pad = (n: number) => '\t'.repeat(n)
+      const indent1 = pad(1)
+      const indent2 = pad(2)
+
+      const funcs = functions
+        .map(
+          (x) =>
+            `${indent1}function ${x[0]}(data) {\n${indent2}return ${format(
+              x[1],
+              defaultFormatter(),
+            ).trim()}\n${indent1}}\n`,
+        )
+        .join('\n')
 
       const inner = Object.keys(rules)
         .map((pth) => {
           const inner = Object.keys(rules[pth]!).map(
-            (key) =>
-              `${space(6)}${key}: if ${format(rules[pth]![key]!, defaultFormatter({ indent: 2, start: 10 }))?.trim()}`,
+            (key) => `${indent2}${key}: if ${format(rules[pth]![key]!, defaultFormatter({ start: 3 }))?.trim()}`,
           )
-          return `${space(4)}match ${pth} {\n${inner.join('\n')}\n${space(4)}}`
+          return `${indent1}match ${pth} {\n${inner.join('\n')}\n${indent1}}`
         })
         .join('\n\n')
-
-      fs.writeFileSync(path, wrap(inner).trim())
+      fs.writeFileSync(path, wrap(`${funcs}\n${inner}`).trim())
     },
     addSchema(schema, cb) {
-      const result = cb(
-        op,
-        rule(() => ''),
-      )
+      const name =
+        'validate' +
+        schema.path
+          .replace(/\{[^\}]+\}$/g, '')
+          .split('/')
+          .filter(Boolean)
+          .map((x) => x[0]?.toUpperCase() + x.slice(1))
+          .join('')
+
+      const path = getSchemaPathMatch(schema)
+
       const strict = transformRule(
-        rule(() => 'request.resource.data'),
+        rule(() => 'data'),
         { type: 'map', fields: schema.fields },
       )
 
-      rules[schema.path] = {
-        'allow update': strict,
-        'allow create': strict,
+      functions.push([name, strict])
+
+      const assert = rule(() => `${name}(request.resource.data)`)
+
+      rules[path] = {
+        'allow update': assert,
+        'allow create': assert,
       }
 
+      const result = cb(op, rule())
       for (const key in result) {
-        rules[schema.path]![key] = result[key as Allow] as Rule
+        rules[path]![key] = result[key as Allow] as Rule
       }
 
-      const write = rules[schema.path]?.['allow write']
-      const update = rules[schema.path]?.['allow update']
+      const write = rules[path]?.['allow write']
+      const update = rules[path]?.['allow update']
 
-      rules[schema.path]!['allow update'] = write || update ? op.and((write || update) as any, strict) : strict
-      rules[schema.path]!['allow create'] = write || update ? op.and((write || update) as any, strict) : strict
+      rules[path]!['allow update'] = write || update ? op.and((write || update) as any, assert) : assert
+      rules[path]!['allow create'] = write || update ? op.and((write || update) as any, assert) : assert
 
       return set
     },
   }
   return set
 }
+
+const getSchemaPathMatch = (schema: FireModel) => {
+  if (schema.type === 'document') return schema.path
+  if (/\{[^\}]+\}$/g.test(schema.path)) return schema.path
+  return `${schema.path}/{id}`
+}
+
+// const formater = () => {}
 // export const context = {
+
 //     firestore: <T extends Record<string, any>, P extends `/${string}`>() => rule<ContextFirestore<InferRule<T>, P>>(''),
-//   }
-
-//   // type CastModel<T> = T extends FireModel ? { [K in keyof T['fields']]: InferSchemaRules<T['fields'][K]> } : never
-//   // type CastMap<T> = T extends Record<string, Rule> ? RulesMap<T> : never
-//   // type InferModel<F extends FireModel> = {
-//   //   0: InferSchemaRules<{ type: 'map'; fields: F['fields'] }>
-//   //   1: never
-//   // }[F['fields'] extends Record<string, Rule> ? 0 : 1]
-
-//   type ExtractModel<T extends ReadonlyArray<FireModel>, K extends string> = InferSchemaRules<{
-//     type: 'map'
-//     fields: Extract<T[number], { path: K }>['fields']
-//   }>
-
-//   export const createEntityRules = <F extends FireModel>(
-//     entity: F,
-//     cb: (
-//       operators: Operators,
-//       context: InferSchemaRules<{ type: 'map'; fields: F['fields'] } extends infer R ? R : never>,
-//     ) => Partial<Record<Allow, Rule | boolean | string>> & { strict?: boolean },
-//   ) => {
-//     return { entity, cb }
-//   }
-//   export const createFirestoreRuleset = <
-//     T extends ReadonlyArray<FireModel>,
-//     R extends {
-//       [K in T[number]['path']]: (
-//         operators: Operators,
-//         context: ContextFirestore<ExtractModel<T, K>, K>,
-//       ) => Partial<Record<Allow, Rule | boolean | string>> & { strict?: boolean }
-//     },
-//   >(
-//     models: T,
-//     ruleset: R,
-//   ) => {
-//     Object.keys(ruleset).map((key) => {
-//       const model = models.find((x) => x.path === key)
-//       const creator = ruleset[key as keyof typeof ruleset] as any
-//       const result = creator(op, rule<any>(''))
-//       const strict = strictSchema(model?.fields as any)
-
-//       if (result['allow write']) {
-//         result['allow write'] = op.and(strict, result['allow write'])
-//       } else {
-//         result['allow write'] = strict
-//       }
-
-//       const fixed: any = Object.fromEntries(
-//         Object.keys(result)
-//           .map((rule) => {
-//             if (rule === 'strict') return null as any
-//             const computed = (() => {
-//               if (typeof result[rule] === 'boolean') return `${result[rule]}`
-//               if (typeof result[rule] === 'string') return result[rule]
-//               return compute(result[rule])
-//             })()
-//             return [rule, computed]
-//           })
-//           .filter(Boolean),
-//       )
-//       console.log({ model, fixed })
-//     })
-//     return { models }
-//     // return { models, ruleset }
 //   }

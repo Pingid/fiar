@@ -33,19 +33,22 @@ export const join = <K extends RuleGroup['join']>(j: K, items: RuleGroup['items'
 })
 
 export const rule = <T extends any = any>(handler?: (param: Formatter) => string): T => {
-  const cb = handler || (() => '')
-  return new Proxy(cb as any, {
-    apply: (_a, _b, c) => rule((a) => `${cb(a)}(${c.map(a).join(', ')})`),
+  function RULE(param: Formatter) {
+    return handler ? handler(param) : ''
+  }
+
+  return new Proxy(RULE as any, {
+    apply: (_a, _b, c) => rule((a) => `${RULE(a)}(${c.map(a).join(', ')})`),
     get: (_t, k) => {
       if (k === TYPE) return TYPE as any
-      if (k === FORMAT) return (arg: any) => cb(arg as Formatter)
+      if (k === FORMAT) return (arg: any) => RULE(arg as Formatter)
       if (k === JOIN) return undefined
 
       if (typeof k !== 'string') throw new Error(`Unknown type accessor`)
-      if (/^\d{1,}:\d{1,}$/.test(k)) return rule((a) => `${cb(a)}[${k}]`)
-      if (/^\d{1,}$/.test(k)) return rule((a) => `${cb(a)}[${k}]`)
+      if (/^\d{1,}:\d{1,}$/.test(k)) return rule((a) => `${RULE(a)}[${k}]`)
+      if (/^\d{1,}$/.test(k)) return rule((a) => `${RULE(a)}[${k}]`)
       return rule((a) => {
-        const previous = cb(a)
+        const previous = RULE(a)
         return `${previous}${previous ? '.' : ''}${k}`
       })
     },

@@ -2,101 +2,78 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    match /articles/{articleId} {
-      allow update: if (request.auth.token.email.matches('.+@example.com$') &&
-          request.resource.data is map &&
-          request.resource.data.keys().hasOnly(['title', 'image', 'body', 'width', 'meta', 'tags']) &&
-          request.resource.data.title is string &&
-          request.resource.data.image is map &&
-          request.resource.data.image.keys().hasOnly(['fullPath', 'bucket', 'name']) &&
-          request.resource.data.image.fullPath is string &&
-          request.resource.data.image.bucket is string &&
-          request.resource.data.image.name is string &&
-          request.resource.data.body is string &&
-          request.resource.data.width is number &&
-            (request.resource.data.meta == null ||
-              (request.resource.data.meta is map &&
-              request.resource.data.meta.keys().hasOnly(['title', 'description']) &&
-              request.resource.data.meta.title is string &&
-              request.resource.data.meta.description is string)) &&
-          request.resource.data.tags is list)
-      allow create: if (request.auth.token.email.matches('.+@example.com$') &&
-          request.resource.data is map &&
-          request.resource.data.keys().hasOnly(['title', 'image', 'body', 'width', 'meta', 'tags']) &&
-          request.resource.data.title is string &&
-          request.resource.data.image is map &&
-          request.resource.data.image.keys().hasOnly(['fullPath', 'bucket', 'name']) &&
-          request.resource.data.image.fullPath is string &&
-          request.resource.data.image.bucket is string &&
-          request.resource.data.image.name is string &&
-          request.resource.data.body is string &&
-          request.resource.data.width is number &&
-            (request.resource.data.meta == null ||
-              (request.resource.data.meta is map &&
-              request.resource.data.meta.keys().hasOnly(['title', 'description']) &&
-              request.resource.data.meta.title is string &&
-              request.resource.data.meta.description is string)) &&
-          request.resource.data.tags is list)
-      allow read: if true
-      allow write: if request.auth.token.email.matches('.+@example.com$')
-    }
+	function validateArticles(data) {
+		return data is map &&
+		data.keys().hasOnly(['title', 'image', 'body', 'width', 'meta', 'tags']) &&
+		data.title is string &&
+		data.image is map &&
+		data.image.keys().hasOnly(['fullPath', 'bucket', 'name']) &&
+		data.image.fullPath is string &&
+		data.image.bucket is string &&
+		data.image.name is string &&
+		data.body is string &&
+		data.width is number &&
+		(data.meta == null ||
+			(data.meta is map &&
+				data.meta.keys().hasOnly(['title', 'description']) &&
+				data.meta.title is string &&
+				data.meta.description is string)) &&
+		data.tags is list
+	}
 
-    match /test {
-      allow update: if (request.auth.token.email.matches('.@example.com$') &&
-          request.resource.data is map &&
-          request.resource.data.keys().hasOnly(['title', 'count', 'metadata', 'links']) &&
-          request.resource.data.title is string &&
-          request.resource.data.count is number &&
-          request.resource.data.metadata is map &&
-          request.resource.data.metadata.keys().hasOnly(['time', 'seo']) &&
-          request.resource.data.metadata.time is string &&
-            (request.resource.data.metadata.seo == null ||
-              (request.resource.data.metadata.seo is map &&
-              request.resource.data.metadata.seo.keys().hasOnly(['title', 'description']) &&
-              request.resource.data.metadata.seo.title is string &&
-              request.resource.data.metadata.seo.description is string)) &&
-          request.resource.data.links is list)
-      allow create: if (request.auth.token.email.matches('.@example.com$') &&
-          request.resource.data is map &&
-          request.resource.data.keys().hasOnly(['title', 'count', 'metadata', 'links']) &&
-          request.resource.data.title is string &&
-          request.resource.data.count is number &&
-          request.resource.data.metadata is map &&
-          request.resource.data.metadata.keys().hasOnly(['time', 'seo']) &&
-          request.resource.data.metadata.time is string &&
-            (request.resource.data.metadata.seo == null ||
-              (request.resource.data.metadata.seo is map &&
-              request.resource.data.metadata.seo.keys().hasOnly(['title', 'description']) &&
-              request.resource.data.metadata.seo.title is string &&
-              request.resource.data.metadata.seo.description is string)) &&
-          request.resource.data.links is list)
-      allow read: if true
-      allow write: if request.auth.token.email.matches('.@example.com$')
-    }
+	function validateTest(data) {
+		return data is map &&
+		data.keys().hasOnly(['title', 'count', 'metadata', 'links']) &&
+		data.title is string &&
+		data.count is number &&
+		data.metadata is map &&
+		data.metadata.keys().hasOnly(['time', 'seo']) &&
+		data.metadata.time is string &&
+		(data.metadata.seo == null ||
+			(data.metadata.seo is map &&
+				data.metadata.seo.keys().hasOnly(['title', 'description']) &&
+				data.metadata.seo.title is string &&
+				data.metadata.seo.description is string)) &&
+		data.links is list
+	}
 
-    match /pages/landing {
-      allow update: if (request.auth.token.email.matches('.@example.com$') &&
-          request.resource.data is map &&
-          request.resource.data.keys().hasOnly(['highlight', 'more', 'meta']) &&
-          request.resource.data.highlight is path &&
-          request.resource.data.more is list &&
-            (request.resource.data.meta == null ||
-              (request.resource.data.meta is map &&
-              request.resource.data.meta.keys().hasOnly(['title', 'description']) &&
-              request.resource.data.meta.title is string &&
-              request.resource.data.meta.description is string)))
-      allow create: if (request.auth.token.email.matches('.@example.com$') &&
-          request.resource.data is map &&
-          request.resource.data.keys().hasOnly(['highlight', 'more', 'meta']) &&
-          request.resource.data.highlight is path &&
-          request.resource.data.more is list &&
-            (request.resource.data.meta == null ||
-              (request.resource.data.meta is map &&
-              request.resource.data.meta.keys().hasOnly(['title', 'description']) &&
-              request.resource.data.meta.title is string &&
-              request.resource.data.meta.description is string)))
-      allow read: if true
-      allow write: if request.auth.token.email.matches('.@example.com$')
-    }
+	function validatePagesLanding(data) {
+		return data is map &&
+		data.keys().hasOnly(['highlight', 'more', 'meta']) &&
+		data.highlight is path &&
+		data.more is list &&
+		(data.meta == null ||
+			(data.meta is map &&
+				data.meta.keys().hasOnly(['title', 'description']) &&
+				data.meta.title is string &&
+				data.meta.description is string))
+	}
+
+	match /articles/{articleId} {
+		allow update: if request.auth.token.email.matches('.+@example.com$') &&
+			validateArticles(request.resource.data)
+		allow create: if request.auth.token.email.matches('.+@example.com$') &&
+			validateArticles(request.resource.data)
+		allow read: if true
+		allow write: if request.auth.token.email.matches('.+@example.com$')
+	}
+
+	match /test/{id} {
+		allow update: if request.auth.token.email.matches('.+@example.com$') &&
+			validateTest(request.resource.data)
+		allow create: if request.auth.token.email.matches('.+@example.com$') &&
+			validateTest(request.resource.data)
+		allow read: if true
+		allow write: if request.auth.token.email.matches('.+@example.com$')
+	}
+
+	match /pages/landing {
+		allow update: if request.auth.token.email.matches('.+@example.com$') &&
+			validatePagesLanding(request.resource.data)
+		allow create: if request.auth.token.email.matches('.+@example.com$') &&
+			validatePagesLanding(request.resource.data)
+		allow read: if true
+		allow write: if request.auth.token.email.matches('.+@example.com$')
+	}
   }
 }

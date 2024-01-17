@@ -53,7 +53,8 @@
     { "path": "./packages/fiar" },
     { "path": "./packages/rules" },
     { "path": "./packages/schema" },
-    { "path": "./packages/workbench" }
+    { "path": "./packages/workbench" },
+    { "path": "./packages/prettier-plugin-firestore-rules" }
   ],
   "include": ["firebase.json"]
 }

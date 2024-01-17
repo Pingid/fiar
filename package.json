@@ -34,8 +34,9 @@
     "fast-glob": "^3.3.1",
     "node-pty": "^1.0.0",
     "postcss": "^8.4.31",
-    "prettier": "^3.0.3",
+    "prettier": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.4.1",
+    "@fiar/prettier-plugin-firestore-rules": "workspace:^",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2"
   },
@@ -45,7 +46,8 @@
     "printWidth": 120,
     "trailingComma": "all",
     "plugins": [
-      "prettier-plugin-tailwindcss"
+      "prettier-plugin-tailwindcss",
+      "@fiar/prettier-plugin-firestore-rules"
     ]
   }
 }

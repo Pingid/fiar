@@ -9,7 +9,7 @@ import {
 } from '@dnd-kit/core'
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
-export { SortableItem } from './SortableItem/index.js'
+export { SortableItem } from './item/index.js'
 
 export const Sortable = <T extends { id: number }>(props: {
   onSort: (from: number, to: number) => void

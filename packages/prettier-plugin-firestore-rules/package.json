@@ -1,0 +1,21 @@
+{
+  "name": "@fiar/prettier-plugin-firestore-rules",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^10.6.0",
+    "prettier": "^3.2.2",
+    "typescript-parsec": "^0.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "vitest": "^0.34.6"
+  }
+}
