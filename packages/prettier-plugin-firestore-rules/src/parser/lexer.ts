@@ -10,9 +10,12 @@ export enum Tok {
   Coma = 'Coma',
   Colon = 'Colon',
   Semi = 'Semi',
+  Pound = 'Pound',
   Eq = 'Eq',
 
   Op = 'Op',
+
+  Unary = 'Unary',
 
   LCurly = 'LCurly',
   RCurly = 'RCurly',
@@ -20,6 +23,9 @@ export enum Tok {
   RBrack = 'RBrack',
   LSquare = 'LSquare',
   RSquare = 'RSquare',
+
+  Comment = 'Comment',
+  Empty = 'Empty',
 
   Ident = 'Ident',
   Space = 'Space',
@@ -39,10 +45,16 @@ export const lexer = buildLexer<Tok>([
   [true, /^\,/g, Tok.Coma],
   [true, /^\:/g, Tok.Colon],
   [true, /^\;/g, Tok.Semi],
+  [true, /^\$/g, Tok.Pound],
   [true, /^\=/g, Tok.Eq],
+
+  [true, /^\/\/.*/g, Tok.Comment],
+  [true, /^\/\*[\s\S]*?\*\//g, Tok.Comment],
 
   ...reserved.map((x) => [true, new RegExp(`^${x}`, 'g'), Tok.Op] as [boolean, RegExp, Tok]),
   ...logical.map((x) => [true, new RegExp(`^\\${x.split('').join('\\')}`, 'g'), Tok.Op] as [boolean, RegExp, Tok]),
+
+  [true, /^\!/g, Tok.Unary],
 
   [true, /^\{/g, Tok.LCurly],
   [true, /^\}/g, Tok.RCurly],

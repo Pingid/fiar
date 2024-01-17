@@ -13,7 +13,7 @@ const helper =
 export interface RulesDeclartion extends AstNode {
   kind: 'RulesDeclartion'
   version?: Literal | undefined
-  statements: (RulesServiceDeclartion | FunctionDeclaration)[]
+  statements: (RulesServiceDeclartion | FunctionDeclaration | Comment | Empty)[]
 }
 
 export const rules = helper('RulesDeclartion', ['version', 'statements'])
@@ -21,7 +21,7 @@ export const rules = helper('RulesDeclartion', ['version', 'statements'])
 export interface RulesServiceDeclartion extends AstNode {
   kind: 'RulesServiceDeclartion'
   service: string
-  statements: (MatchDeclaration | FunctionDeclaration)[]
+  statements: (MatchDeclaration | FunctionDeclaration | Comment | Empty)[]
 }
 
 export const service = helper('RulesServiceDeclartion', ['service', 'statements'])
@@ -29,20 +29,27 @@ export const service = helper('RulesServiceDeclartion', ['service', 'statements'
 export interface MatchDeclaration extends AstNode {
   kind: 'MatchDeclaration'
   path: PathDeclaration
-  statements: (AllowDeclaration | FunctionDeclaration | MatchDeclaration)[]
+  statements: (AllowDeclaration | FunctionDeclaration | MatchDeclaration | Comment | Empty)[]
 }
 export const match = helper('MatchDeclaration', ['path', 'statements'])
 
 export interface PathDeclaration extends AstNode {
   kind: 'PathDeclaration'
-  path: string
+  segments: Segment[]
 }
-export const path = helper('PathDeclaration', ['path'])
+export const path = helper('PathDeclaration', ['segments'])
+
+export interface Segment extends AstNode {
+  kind: 'Segment'
+  value: MemberExpression | Ident | CallExpression
+  expression: boolean
+}
+export const segment = helper('Segment', ['expression', 'value'])
 
 export interface AllowDeclaration extends AstNode {
   kind: 'AllowDeclaration'
-  type: Ident
-  statement: Ast
+  type: Ident[]
+  statement?: Ast
 }
 export const allow = helper('AllowDeclaration', ['type', 'statement'])
 
@@ -50,7 +57,7 @@ export interface FunctionDeclaration extends AstNode {
   kind: 'FunctionDeclaration'
   name: Ident
   params: Ident[]
-  variables: LetDeclaration[]
+  variables: (LetDeclaration | Comment | Empty)[]
   out: Value
 }
 export const func = helper('FunctionDeclaration', ['name', 'params', 'variables', 'out'])
@@ -83,9 +90,10 @@ export const expression = helper('Expression', ['param', 'left', 'operator', 'ri
 
 export interface MemberExpression extends AstNode {
   kind: 'MemberExpression'
-  object: Ident | MemberExpression | CallExpression
-  property: Ident | Literal
+  object: Ident | Literal | MemberExpression | CallExpression | ObjectExpression | ArrayExpression
+  property: Ident | Literal | MemberExpression | CallExpression
 }
+
 export const member = helper('MemberExpression', ['object', 'property'])
 
 export interface CallExpression extends AstNode {
@@ -103,7 +111,7 @@ export const object = helper('ObjectExpression', ['properties'])
 
 export interface Property extends AstNode {
   kind: 'Property'
-  key: Ident
+  key: Literal
   value: Value
 }
 
@@ -114,6 +122,12 @@ export interface ArrayExpression extends AstNode {
   elements: Value[]
 }
 export const array = helper('ArrayExpression', ['elements'])
+
+export interface UnaryExpression extends AstNode {
+  kind: 'UnaryExpression'
+  argument: Value
+}
+export const unary = helper('UnaryExpression', ['argument'])
 
 export interface Literal extends AstNode {
   kind: 'Literal'
@@ -127,12 +141,25 @@ export interface Ident extends AstNode {
 }
 export const ident = helper('Ident', ['name'])
 
+export interface Comment extends AstNode {
+  kind: 'Comment'
+  value: string
+}
+export const comment = helper('Comment', ['value'])
+
+export interface Empty extends AstNode {
+  kind: 'Empty'
+}
+export const empty = helper('Empty', [])
+
 export type Value =
+  | PathDeclaration
   | Expression
   | MemberExpression
   | CallExpression
   | ObjectExpression
   | ArrayExpression
+  | UnaryExpression
   | Literal
   | Ident
 
@@ -141,6 +168,7 @@ export type Ast =
   | RulesServiceDeclartion
   | MatchDeclaration
   | PathDeclaration
+  | Segment
   | AllowDeclaration
   | FunctionDeclaration
   | LetDeclaration
@@ -151,5 +179,8 @@ export type Ast =
   | ObjectExpression
   | Property
   | ArrayExpression
+  | UnaryExpression
   | Literal
+  | Comment
+  | Empty
   | Ident

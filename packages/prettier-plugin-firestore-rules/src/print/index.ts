@@ -10,6 +10,8 @@ const is = <K extends Ast['kind']>(path: AstPath<Ast>, kind: K): path is AstPath
   path.node.kind === kind
 
 export const print: RulesPrinter['print'] = (path, _options, print) => {
+  const semi = _options.semi ? ';' : ''
+
   if (is(path, 'RulesDeclartion')) {
     const results = []
     if (path.node.version) results.push(`rules_version = ${path.call(print as any, 'version')}`, b.hardline)
@@ -26,35 +28,64 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
   }
 
   if (is(path, 'MatchDeclaration')) {
+    const line_after = path.next ? b.hardline : ''
     return [
-      `match ${path.node.path.path} {`,
+      `match `,
+      path.call(print, 'path'),
+      ' {',
       b.indent([b.hardline, b.join([b.hardline], path.map(print, 'statements'))]),
       b.hardline,
       '}',
+      line_after,
     ]
   }
 
   if (is(path, 'AllowDeclaration')) {
-    return [`allow `, path.call(print, 'type'), ': if ', b.indent(path.call(print, 'statement'))]
-  }
-
-  if (is(path, 'FunctionDeclaration')) {
+    if (!path.node.statement) return [`allow `, b.join([', '], path.map(print, 'type')), semi]
     return [
-      `function ${path.node.name.name}`,
-      '(',
-      b.join([',', b.line], path.map(print, 'params')),
-      ') {',
-      b.indent([b.hardline, `return`, ' ', b.indent(path.call(print, 'out'))]),
-      b.hardline,
-      '}',
+      `allow `,
+      b.join([', '], path.map(print, 'type')),
+      ': if ',
+      b.indent(path.call(print as any, 'statement')),
+      semi,
     ]
   }
 
+  if (is(path, 'FunctionDeclaration')) {
+    const line_before = !['FunctionDeclaration', 'Comment'].includes(path.previous?.kind || '') ? b.hardline : ''
+    const line_after = path.next ? b.hardline : ''
+    return [
+      line_before,
+      `function ${path.node.name.name}`,
+      '(',
+      b.join([', '], path.map(print, 'params')),
+      ') ',
+      b.indent([
+        '{',
+        b.hardline,
+        path.map(print, 'variables').map((x) => [x, b.hardline]),
+        `return `,
+        b.indent(path.call(print, 'out')),
+        ';',
+      ]),
+      b.hardline,
+      '}',
+      line_after,
+    ]
+  }
+
+  if (is(path, 'LetDeclaration')) {
+    return ['let ', path.call(print, 'key'), ' = ', path.call(print, 'value'), ';']
+  }
+
   if (is(path, 'CallExpression')) {
-    return [path.call(print, 'callee'), '(', b.join([',', b.line], path.map(print, 'args')), ')']
+    return [path.call(print, 'callee'), '(', b.join([', '], path.map(print, 'args')), ')']
   }
 
   if (is(path, 'MemberExpression')) {
+    if (path.node.property.kind === 'Literal') {
+      return [path.call(print, 'object'), '[', path.call(print, 'property'), ']']
+    }
     return [path.call(print, 'object'), '.', path.call(print, 'property')]
   }
 
@@ -68,21 +99,7 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
 
   if (is(path, 'Expression')) {
     const n = ['&&', '||'].includes(path.node.operator) ? b.line : ' '
-
     if (path.node.param) {
-      console.log({
-        op: path.node.operator,
-        left: [
-          (path.node.left as any)?.operator,
-          (path.node.left as any)?.left?.kind,
-          ((path.node.left as any)?.right as any)?.kind,
-        ],
-        right: [
-          (path.node.right as any)?.operator,
-          (path.node.right as any)?.left?.kind,
-          ((path.node.right as any)?.right as any)?.kind,
-        ],
-      })
       return b.indent(
         b.group(['(', path.call(print, 'left'), ' ', path.node.operator, n, path.call(print, 'right'), ')']),
       )
@@ -94,5 +111,28 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
     return b.group(['[', b.join([', '], path.map(print, 'elements')), ']'])
   }
 
-  return `${path.node.kind}`
+  if (is(path, 'PathDeclaration')) {
+    return ['/', b.join(['/'], path.map(print, 'segments'))]
+  }
+  if (is(path, 'Segment')) {
+    if (path.node.expression) return ['$(', path.call(print, 'value'), ')']
+    return path.call(print, 'value')
+  }
+  if (is(path, 'Comment')) {
+    return b.join(
+      [b.hardline],
+      path.node.value.split(/\n/).map((x) => x.trim()),
+    )
+  }
+  if (is(path, 'UnaryExpression')) {
+    return ['!', path.call(print, 'argument')]
+  }
+  if (is(path, 'ObjectExpression')) {
+    return b.group(['{', b.indent([b.line, b.join([',', b.line], path.map(print, 'properties'))]), b.line, '}'])
+  }
+  if (is(path, 'Property')) {
+    return [path.call(print, 'key'), ': ', path.call(print, 'value')]
+  }
+  throw new Error(`Missing ${path.node.kind}`)
+  // return `${path.node.kind}`
 }

@@ -11,7 +11,7 @@ const expast = (x: p.Parser<Tok, any>, text: string) =>
   expect(p.expectEOF(p.expectSingleResult(x.parse(lexer.parse(text)))))
 
 const test_parser = <T extends any>(parser: p.Parser<Tok, T>, text: string, x: T) =>
-  test(`parse ${text}`, () => expast(parser, text).toEqual(x))
+  test(`parse ${text.replace(/\n/g, '\\n')}`, () => expast(parser, text).toEqual(x))
 
 /* ------------------------------ Test Literal ------------------------------ */
 describe('literal', () => {
@@ -35,23 +35,28 @@ describe('structured', () => {
     ast.array([[ast.literal(['10']), ast.array([[ast.literal(['"foo"']), ast.literal(['false'])]])]]),
   )
 
-  test_parser(parse.object, '{ foo: 2 }', ast.object([[ast.property([ast.ident(['foo']), ast.literal(['2'])])]]))
+  test_parser(parse.object, `{ 'foo': 2 }`, ast.object([[ast.property([ast.literal([`'foo'`]), ast.literal(['2'])])]]))
   test_parser(
     parse.object,
-    '{ foo: { bar: "2" } }',
+    `{ 'foo': { "bar": "2" } }`,
     ast.object([
-      [ast.property([ast.ident(['foo']), ast.object([[ast.property([ast.ident(['bar']), ast.literal(['"2"'])])]])])],
+      [
+        ast.property([
+          ast.literal([`'foo'`]),
+          ast.object([[ast.property([ast.literal([`"bar"`]), ast.literal(['"2"'])])]]),
+        ]),
+      ],
     ]),
   )
 
   test_parser(
     parse.object,
-    '{ foo: [{ bar: "2" }] }',
+    `{ 'foo': [{ 'bar': "2" }] }`,
     ast.object([
       [
         ast.property([
-          ast.ident(['foo']),
-          ast.array([[ast.object([[ast.property([ast.ident(['bar']), ast.literal(['"2"'])])]])]]),
+          ast.literal([`'foo'`]),
+          ast.array([[ast.object([[ast.property([ast.literal([`'bar'`]), ast.literal(['"2"'])])]])]]),
         ]),
       ],
     ]),
@@ -74,13 +79,31 @@ describe('member', () => {
     ast.member([ast.call([ast.ident(['one']), [ast.literal(['10'])]]), ast.ident(['two'])]),
   )
   test_parser(parse.member, 'one.two()', ast.call([ast.member([ast.ident(['one']), ast.ident(['two'])]), []]))
+  test_parser(parse.member, 'one["two"]', ast.member([ast.ident(['one']), ast.literal(['"two"'])]))
+  test_parser(parse.member, 'one[two]', ast.member([ast.ident(['one']), ast.ident(['two'])]))
+  test_parser(
+    parse.member,
+    'one[one.two]',
+    ast.member([ast.ident(['one']), ast.member([ast.ident(['one']), ast.ident(['two'])])]),
+  )
+})
+
+/* ------------------------------- Test unary ------------------------------- */
+describe('unary', async () => {
+  test_parser(parse.unary, '!10', ast.unary([ast.literal(['10'])]))
+})
+
+/* ------------------------------ Test Comment ------------------------------ */
+describe('comment', async () => {
+  test_parser(parse.comment, '// foo', ast.comment(['// foo']))
+  test_parser(parse.comment, '/* foo */', ast.comment(['/* foo */']))
+  test_parser(parse.comment, `/*\n * foo\n * foo */`, ast.comment([`/*\n * foo\n * foo */`]))
+  test_parser(parse.comment, `/*\n foo\n foo */`, ast.comment([`/*\n foo\n foo */`]))
 })
 
 /* ----------------------------- Test Expression ---------------------------- */
 describe('expression', () => {
-  test('', async () => {
-    console.log(await debug(parse.expression.parse(lexer.parse(`a && b && c || (c && d)`))))
-  })
+  debug(parse.expression, `a && (b && c && (c && d)) && b`)
 
   test_parser(parse.expression, `a && b`, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]))
   test_parser(
@@ -88,6 +111,9 @@ describe('expression', () => {
     `a && b && c`,
     ast.expression([false, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
   )
+
+  test_parser(parse.expression, `a && (b)`, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]))
+
   test_parser(
     parse.expression,
     `(a && b && c)`,
@@ -135,12 +161,20 @@ describe('expression', () => {
 })
 
 /* ------------------------------- Test Paths ------------------------------- */
+const seg = (str: string) => ast.segment([false, ast.ident([str])])
+
 describe('paths', () => {
-  test_parser(parse.path, '/one', ast.path(['/one']))
-  test_parser(parse.path, '/{one}', ast.path(['/{one}']))
-  test_parser(parse.path, '/{one}/two', ast.path(['/{one}/two']))
-  test_parser(parse.path, '/one/two', ast.path(['/one/two']))
-  test_parser(parse.path, '/one/{two}/four', ast.path(['/one/{two}/four']))
+  test_parser(parse.path, '/one', ast.path([[seg('one')]]))
+  test_parser(parse.path, '/{one}', ast.path([[seg('{one}')]]))
+  test_parser(parse.path, '/(one)', ast.path([[seg('(one)')]]))
+  test_parser(parse.path, '/{one=**}', ast.path([[seg('{one=**}')]]))
+  test_parser(parse.path, '/{one}/two', ast.path([[seg('{one}'), seg('two')]]))
+  test_parser(parse.path, '/one/{two}/three', ast.path([[seg('one'), seg('{two}'), seg('three')]]))
+  test_parser(
+    parse.path,
+    '/one/{two}/three/{four=**}',
+    ast.path([[seg('one'), seg('{two}'), seg('three'), seg('{four=**}')]]),
+  )
 })
 
 /* ----------------------------- Test Functions ----------------------------- */
@@ -159,21 +193,31 @@ describe('functions', () => {
 })
 /* ------------------------------- Test Allow ------------------------------- */
 describe('allow', () => {
-  test_parser(parse.allow, 'allow update: if true', ast.allow([ast.ident(['update']), ast.literal(['true'])]))
+  // allow read, write;
+  test_parser(parse.allow, 'allow read', ast.allow([[ast.ident(['read'])], undefined]))
+  test_parser(parse.allow, 'allow read;', ast.allow([[ast.ident(['read'])], undefined]))
+  test_parser(parse.allow, 'allow read, write;', ast.allow([[ast.ident(['read']), ast.ident(['write'])], undefined]))
+  test_parser(parse.allow, 'allow update: if true', ast.allow([[ast.ident(['update'])], ast.literal(['true'])]))
+  test_parser(
+    parse.allow,
+    'allow delete, update: if true',
+    ast.allow([[ast.ident(['delete']), ast.ident(['update'])], ast.literal(['true'])]),
+  )
 })
 
 /* ------------------------------- Test Match ------------------------------- */
 describe('match', () => {
-  test_parser(parse.match, 'match /something/{id} {}', ast.match([ast.path(['/something/{id}']), []]))
+  const path = ast.path([[seg('something'), seg('{id}')]])
+  test_parser(parse.match, 'match /something/{id} {}', ast.match([path, []]))
   test_parser(
     parse.match,
     'match /something/{id} { allow update: if true; }',
-    ast.match([ast.path(['/something/{id}']), [ast.allow([ast.ident(['update']), ast.literal(['true'])])]]),
+    ast.match([path, [ast.allow([[ast.ident(['update'])], ast.literal(['true'])])]]),
   )
   test_parser(
     parse.match,
     'match /something/{id} { function one() { return true } }',
-    ast.match([ast.path(['/something/{id}']), [ast.func([ast.ident(['one']), [], [], ast.literal(['true'])])]]),
+    ast.match([path, [ast.func([ast.ident(['one']), [], [], ast.literal(['true'])])]]),
   )
 })
 /* ------------------------------ Test Service ------------------------------ */
@@ -182,7 +226,7 @@ describe('service', () => {
   test_parser(
     parse.service,
     `service cloud.firestore { match /something/{id} {} }`,
-    ast.service(['cloud.firestore', [ast.match([ast.path(['/something/{id}']), []])]]),
+    ast.service(['cloud.firestore', [ast.match([ast.path([[seg('something'), seg('{id}')]]), []])]]),
   )
 })
 
@@ -208,14 +252,14 @@ test('rules', () => {
         'cloud.firestore',
         [
           ast.match([
-            ast.path(['/databases/{database}/documents']),
+            ast.path([[seg('databases'), seg('{database}'), seg('documents')]]),
             [
               ast.match([
-                ast.path(['/something/{id}']),
+                ast.path([[seg('something'), seg('{id}')]]),
                 [
-                  ast.allow([ast.ident(['read']), ast.literal(['true'])]),
+                  ast.allow([[ast.ident(['read'])], ast.literal(['true'])]),
                   ast.allow([
-                    ast.ident(['write']),
+                    [ast.ident(['write'])],
                     ast.expression([
                       false,
                       ast.member([ast.ident(['request']), ast.ident(['auth'])]),
@@ -235,7 +279,9 @@ test('rules', () => {
   expect(result).toEqual(example_ast)
 })
 
-const debug = (o: p.ParserOutput<any, any>) => {
+export const debug = (parser: p.Parser<any, any>, text: string) =>
+  test('', async () => console.log(await debug_print(parser.parse(lexer.parse(text)))))
+const debug_print = (o: p.ParserOutput<any, any>) => {
   let out: any = {}
   if (o.successful) out.result = o.candidates.map((x) => x.result)
   if (o.error) out.error = o.error
