@@ -77,8 +77,9 @@ export interface Expression extends AstNode {
   operator: string
   left: Value
   right: Value
+  param: boolean
 }
-export const expression = helper('Expression', ['left', 'operator', 'right'])
+export const expression = helper('Expression', ['param', 'left', 'operator', 'right'])
 
 export interface MemberExpression extends AstNode {
   kind: 'MemberExpression'

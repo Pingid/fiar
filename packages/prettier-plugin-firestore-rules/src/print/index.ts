@@ -39,7 +39,6 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
   }
 
   if (is(path, 'FunctionDeclaration')) {
-    // return 'function cool() { return null }'
     return [
       `function ${path.node.name.name}`,
       '(',
@@ -70,25 +69,23 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
   if (is(path, 'Expression')) {
     const n = ['&&', '||'].includes(path.node.operator) ? b.line : ' '
 
-    if (
-      path.node.left.kind === 'Expression' &&
-      path.node.right.kind === 'Expression' &&
-      path.node.right.left.kind === 'Expression'
-    ) {
-      // console.log({
-      //   op: path.node.operator,
-      //   left: [path.node.left.operator, path.node.left.left.kind, (path.node.left.right as any).name],
-      //   right: [path.node.right.operator, path.node.right.left.kind, (path.node.right.right as any).name],
-      // })
-      return b.group([
-        path.call(print, 'left'),
-        ' ',
-        path.node.operator,
-        n,
-        '(',
-        b.indent(path.call(print, 'right')),
-        ')',
-      ])
+    if (path.node.param) {
+      console.log({
+        op: path.node.operator,
+        left: [
+          (path.node.left as any)?.operator,
+          (path.node.left as any)?.left?.kind,
+          ((path.node.left as any)?.right as any)?.kind,
+        ],
+        right: [
+          (path.node.right as any)?.operator,
+          (path.node.right as any)?.left?.kind,
+          ((path.node.right as any)?.right as any)?.kind,
+        ],
+      })
+      return b.indent(
+        b.group(['(', path.call(print, 'left'), ' ', path.node.operator, n, path.call(print, 'right'), ')']),
+      )
     }
     return b.group([path.call(print, 'left'), ' ', path.node.operator, n, path.call(print, 'right')])
   }

@@ -1,7 +1,7 @@
 import { cn } from 'mcn'
 
 import { forwardRefElem, forwardRefElement } from '../../util/forwardRef.js'
-import { Markdown } from '../markdow/index.js'
+import { Markdown } from '../markdown/index.js'
 
 type FieldProps = {
   error?: string | null | Error | undefined

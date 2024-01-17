@@ -63,26 +63,27 @@ member.setPattern(
 )
 
 /* ----------------------------- Logical Parser ----------------------------- */
-const logical_side = p.alt_sc(member, literal)
-const logical_divide = p.apply(p.tok(Tok.Op), (x) => x.text)
-const logical_1: P<ast.Expression> = p.apply(p.seq(logical_side, logical_divide, logical_side), ast.expression)
-const logical_chain: P<ast.Expression> = p.lrec_sc(logical_1, p.seq(logical_divide, logical_side), (a, b) =>
-  ast.expression([a as any, ...b]),
+const exists = (parser: P<any>) => p.apply(parser, (x) => (x ? true : false))
+const exp_side = p.alt_sc(member, literal)
+const exp_op = p.apply(p.tok(Tok.Op), (x) => x.text)
+const exp_chain: P<ast.Expression> = p.lrec_sc(
+  p.apply(p.seq(exists(p.nil()), exp_side, exp_op, exp_side), ast.expression),
+  p.seq(exp_op, exp_side),
+  (a, b) => ast.expression([false, a, ...b]),
 )
 
 expression.setPattern(
   p.alt_sc(
-    p.apply(
-      p.seq(
-        p.alt_sc(p.kmid(p.tok(Tok.LBrack), logical_chain, p.tok(Tok.RBrack)), logical_chain),
-        p.opt_sc(p.seq(logical_divide, p.alt_sc(expression, logical_side))),
-      ),
-      ([a, b]) => (b ? ast.expression([a, b[0], b[1]]) : a),
+    p.apply(p.seq(exp_side, exp_op, p.kmid(exists(str('(')), expression, str(')'))), ([left, op, right]) =>
+      ast.expression([false, left, op, { ...right, param: true }]),
     ),
-    p.apply(p.seq(ident, logical_divide, p.kmid(p.tok(Tok.LBrack), expression, p.tok(Tok.RBrack))), ast.expression),
     p.apply(
-      p.seq(p.kmid(p.tok(Tok.LBrack), expression, p.tok(Tok.RBrack)), p.opt_sc(p.seq(logical_divide, expression))),
-      ([a, b]) => (b ? ast.expression([a, b[0], b[1]]) : a),
+      p.seq(p.kmid(exists(str('(')), expression, str(')')), p.opt_sc(p.seq(exp_op, p.alt_sc(expression, exp_side)))),
+      ([left, next]) =>
+        next ? ast.expression([false, { ...left, param: true }, next[0], next[1]]) : { ...left, param: true },
+    ),
+    p.apply(p.seq(exp_chain, p.opt_sc(p.seq(exp_op, p.alt_sc(expression, exp_side)))), ([left, next]) =>
+      next ? ast.expression([false, left, next[0], next[1]]) : left,
     ),
   ),
 )
