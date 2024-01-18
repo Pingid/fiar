@@ -60,20 +60,15 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
       '(',
       b.join([', '], path.map(print, 'params')),
       ') ',
-      b.indent([
-        '{',
-        b.hardline,
-        path.map(print, 'variables').map((x) => [x, b.hardline]),
-        `return `,
-        b.indent(path.call(print, 'out')),
-        ';',
-      ]),
+      b.indent(['{', b.hardline, b.join([b.hardline], path.map(print, 'body'))]),
       b.hardline,
       '}',
       line_after,
     ]
   }
-
+  if (is(path, 'ReturnDecleration')) {
+    return ['return ', b.indent(path.call(print, 'value')), ';']
+  }
   if (is(path, 'LetDeclaration')) {
     return ['let ', path.call(print, 'key'), ' = ', path.call(print, 'value'), ';']
   }

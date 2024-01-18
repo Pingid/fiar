@@ -65,7 +65,6 @@ describe('structured', () => {
 
 /* ------------------------------- Test Member ------------------------------ */
 describe('member', () => {
-  test_parser(parse.member, 'one', ast.ident(['one']))
   test_parser(parse.member, 'one.two', ast.member([ast.ident(['one']), ast.ident(['two'])]))
   test_parser(parse.member, 'one(10)', ast.call([ast.ident(['one']), [ast.literal(['10'])]]))
   test_parser(
@@ -103,8 +102,6 @@ describe('comment', async () => {
 
 /* ----------------------------- Test Expression ---------------------------- */
 describe('expression', () => {
-  debug(parse.expression, `a && (b && c && (c && d)) && b`)
-
   test_parser(parse.expression, `a && b`, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]))
   test_parser(
     parse.expression,
@@ -145,17 +142,36 @@ describe('expression', () => {
       ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])]),
     ]),
   )
-  // test_parser(
-  //   parse.expression,
-  //   `a && b && c || (c && d)`,
-  //   ast.expression([
-  //     false,
-  //     ast.expression()
-  //     ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]),
-  //     '||',
-  //     ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])]),
-  //   ]),
-  // )
+  test_parser(
+    parse.expression,
+    `a && (b && (c && d))`,
+    ast.expression([
+      false,
+      ast.ident(['a']),
+      '&&',
+      ast.expression([true, ast.ident(['b']), '&&', ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])])]),
+    ]),
+  )
+  test_parser(
+    parse.expression,
+    `a && (b && (c && d)) && e`,
+    ast.expression([
+      false,
+      ast.expression([
+        false,
+        ast.ident(['a']),
+        '&&',
+        ast.expression([
+          true,
+          ast.ident(['b']),
+          '&&',
+          ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])]),
+        ]),
+      ]),
+      '&&',
+      ast.ident(['e']),
+    ]),
+  )
   // Symbols
   test_parser(parse.expression, `data is map`, ast.expression([false, ast.ident(['data']), 'is', ast.ident(['map'])]))
 })
@@ -179,15 +195,21 @@ describe('paths', () => {
 
 /* ----------------------------- Test Functions ----------------------------- */
 describe('functions', () => {
-  test_parser(parse.func, 'function one(){ return 10 }', ast.func([ast.ident(['one']), [], [], ast.literal(['10'])]))
+  test_parser(
+    parse.func,
+    'function one(){ return 10 }',
+    ast.func([ast.ident(['one']), [], [ast.func_return([ast.literal(['10'])])]]),
+  )
   test_parser(
     parse.func,
     'function one(data){ let m = [10]; return m == data }',
     ast.func([
       ast.ident(['one']),
       [ast.ident(['data'])],
-      [ast.letd([ast.ident(['m']), ast.array([[ast.literal(['10'])]])])],
-      ast.expression([false, ast.ident(['m']), '==', ast.ident(['data'])]),
+      [
+        ast.func_let([ast.ident(['m']), ast.array([[ast.literal(['10'])]])]),
+        ast.func_return([ast.expression([false, ast.ident(['m']), '==', ast.ident(['data'])])]),
+      ],
     ]),
   )
 })
@@ -217,7 +239,7 @@ describe('match', () => {
   test_parser(
     parse.match,
     'match /something/{id} { function one() { return true } }',
-    ast.match([path, [ast.func([ast.ident(['one']), [], [], ast.literal(['true'])])]]),
+    ast.match([path, [ast.func([ast.ident(['one']), [], [ast.func_return([ast.literal(['true'])])]])]]),
   )
 })
 /* ------------------------------ Test Service ------------------------------ */
@@ -281,6 +303,7 @@ test('rules', () => {
 
 export const debug = (parser: p.Parser<any, any>, text: string) =>
   test('', async () => console.log(await debug_print(parser.parse(lexer.parse(text)))))
+
 const debug_print = (o: p.ParserOutput<any, any>) => {
   let out: any = {}
   if (o.successful) out.result = o.candidates.map((x) => x.result)

@@ -6,6 +6,8 @@ import * as ast from './ast.js'
 type P<T> = p.Parser<Tok, T>
 const arr = <T>(prsr: P<T[] | undefined>) => p.apply(prsr, (x) => x || [])
 const str = (x: string): p.Parser<Tok, string> => p.apply(p.str(x), (x) => x.text)
+const succ = <T>(x: T): p.Parser<Tok, T> => p.succ(x)
+const brack = <T>(x: p.Parser<Tok, T>) => p.kmid(p.tok(Tok.LBrack), x, p.tok(Tok.RBrack))
 const wrap =
   <A, R>(cb: (args: [A]) => R) =>
   (arg: A) =>
@@ -22,7 +24,7 @@ export const array = p.rule<Tok, ast.ArrayExpression>()
 export const letd = p.rule<Tok, ast.LetDeclaration>()
 export const object = p.rule<Tok, ast.ObjectExpression>()
 export const property = p.rule<Tok, ast.Property>()
-export const member = p.rule<Tok, ast.MemberExpression | ast.Ident | ast.CallExpression>()
+export const member = p.rule<Tok, ast.MemberExpression | ast.CallExpression>()
 export const path = p.rule<Tok, ast.PathDeclaration>()
 export const segment = p.rule<Tok, ast.Segment>()
 export const func = p.rule<Tok, ast.FunctionDeclaration>()
@@ -67,47 +69,40 @@ const member_first = p.apply(p.seq(member_object, member_right), ast.member)
 const call_first = p.apply(p.seq(ident, call), ast.call)
 
 member.setPattern(
-  p.alt_sc(
-    p.lrec_sc(p.alt_sc(member_first, call_first), p.alt_sc(member_right, call), (a, b) =>
-      Array.isArray(b) ? ast.call([a, b]) : ast.member([a, b]),
-    ),
-    ident,
+  p.lrec_sc(p.alt_sc(member_first, call_first), p.alt_sc(member_right, call), (a, b) =>
+    Array.isArray(b) ? ast.call([a, b]) : ast.member([a, b]),
   ),
 )
 
 /* ----------------------------- Logical Parser ----------------------------- */
-// const exp_side = p.alt_sc(member, literal, object, array, unary)
-const brack = <T>(x: P<T>) => p.kmid(str('('), x, str(')'))
+export const brack_exp = <A>(x: p.Parser<Tok, A>, cb?: (x: A) => A): p.Rule<Tok, A> => {
+  const unwrap = p.rule<Tok, A>()
+  const inner = cb ? p.apply(brack(unwrap), cb) : brack(unwrap)
+  unwrap.setPattern(p.alt_sc(x, inner))
+  return unwrap
+}
+
+const exp_apply_rec = (a: ast.Expression['left'], b: [string, ast.Expression['right']]) =>
+  ast.expression([false, a as any, ...b])
+
 const exp_side = p.alt_sc(
-  p.alt_sc(member, literal, object, array, unary, path),
-  brack(p.alt_sc(member, literal, object, array, unary, path)),
+  p.alt_sc(member, object, array, unary, path, literal, ident),
+  brack(p.alt_sc(member, object, array, unary, path, literal, ident)),
 )
-
 const exp_op = p.apply(p.tok(Tok.Op), (x) => x.text)
-export const exp_chain: P<ast.Expression> = p.lrec_sc(
-  p.apply(p.seq(p.succ(false), exp_side, exp_op, exp_side), ast.expression),
-  p.seq(exp_op, exp_side),
-  (a, b) => ast.expression([false, a, ...b]),
-)
-
-expression.setPattern(
+const exp_single = p.apply(p.seq(succ(false), exp_side, exp_op, exp_side), ast.expression)
+const exp_chain = p.lrec_sc(exp_single, p.seq(exp_op, exp_side), exp_apply_rec)
+const exp_nested = p.rule<Tok, ast.Expression>()
+const exp_scoped = p.apply(brack(exp_nested), (x) => ({ ...x, param: true }))
+exp_nested.setPattern(
   p.alt_sc(
-    p.apply(
-      p.seq(brack(p.alt_sc(exp_chain, expression)), p.opt_sc(p.seq(exp_op, p.alt_sc(expression, exp_chain, exp_side)))),
-      ([left, next]) => {
-        if (!next) return { ...left, param: true }
-        return ast.expression([false, { ...left, param: true }, next[0], next[1]])
-      },
-    ),
-    p.apply(p.seq(exp_chain, p.opt_sc(p.seq(exp_op, expression))), ([left, next]) => {
-      if (!next) return left
-      return ast.expression([false, left, next[0], next[1]])
-    }),
-    p.apply(brack(p.seq(p.succ(true), exp_side, exp_op, expression)), ast.expression),
-    p.apply(p.seq(p.succ(false), exp_side, exp_op, expression), ast.expression),
-    p.apply(p.str('ffasdfasdf'), (x) => x as any),
+    exp_scoped,
+    p.apply(p.seq(succ(false), p.alt_sc(exp_chain, exp_side), exp_op, p.alt_sc(exp_scoped, exp_side)), ast.expression),
+    exp_chain,
   ),
 )
+
+expression.setPattern(p.lrec_sc(exp_nested, p.seq(exp_op, p.alt_sc(expression, exp_side)), exp_apply_rec))
 
 /* ------------------------------- Path Parser ------------------------------ */
 const apply_seg = (all: (string | ast.Ident)[]) => {
@@ -134,14 +129,20 @@ segment.setPattern(
 path.setPattern(p.apply(p.seq(segment, p.rep_sc(segment)), (x) => ast.path([x.flat()])))
 
 /* ----------------------------- Function Parser ---------------------------- */
-const func_let = p.apply(p.seq(p.kright(str('let'), ident), p.kleft(p.kright(str('='), value), p.str(';'))), ast.letd)
+const func_let = p.apply(
+  p.seq(p.kright(str('let'), ident), p.kleft(p.kright(str('='), value), p.str(';'))),
+  ast.func_let,
+)
+const func_return = p.apply(p.kright(str('return'), p.kleft(p.alt_sc(expression, value), p.opt_sc(str(';')))), (x) =>
+  ast.func_return([x]),
+)
+
 func.setPattern(
   p.apply(
     p.seq(
       p.kright(str('function'), ident),
       p.kmid(str('('), arr(p.opt_sc(p.list(ident, str(',')))), str(')')),
-      p.kright(str('{'), arr(p.opt_sc(p.rep_sc(p.alt_sc(func_let, comment))))),
-      p.kleft(p.kright(str('return'), p.kleft(value, p.opt_sc(str(';')))), str('}')),
+      p.kmid(str('{'), arr(p.opt_sc(p.rep_sc(p.alt_sc(func_let, comment, func_return)))), str('}')),
     ),
     ast.func,
   ),

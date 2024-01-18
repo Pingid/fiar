@@ -57,18 +57,22 @@ export interface FunctionDeclaration extends AstNode {
   kind: 'FunctionDeclaration'
   name: Ident
   params: Ident[]
-  variables: (LetDeclaration | Comment | Empty)[]
-  out: Value
+  body: (LetDeclaration | Comment | Empty | ReturnDecleration)[]
 }
-export const func = helper('FunctionDeclaration', ['name', 'params', 'variables', 'out'])
+export const func = helper('FunctionDeclaration', ['name', 'params', 'body'])
 
 export interface LetDeclaration extends AstNode {
   kind: 'LetDeclaration'
   key: Ident
   value: Value
 }
+export const func_let = helper('LetDeclaration', ['key', 'value'])
 
-export const letd = helper('LetDeclaration', ['key', 'value'])
+export interface ReturnDecleration extends AstNode {
+  kind: 'ReturnDecleration'
+  value: Value
+}
+export const func_return = helper('ReturnDecleration', ['value'])
 
 // Values
 export interface LogicalExpression extends AstNode {
@@ -172,6 +176,7 @@ export type Ast =
   | AllowDeclaration
   | FunctionDeclaration
   | LetDeclaration
+  | ReturnDecleration
   | LogicalExpression
   | Expression
   | MemberExpression
