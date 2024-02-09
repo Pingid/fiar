@@ -1,5 +1,5 @@
 {
-  "name": "@fiar/prettier-plugin-firestore-rules",
+  "name": "@fiar/prettier-plugin",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

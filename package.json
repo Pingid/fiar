@@ -29,7 +29,7 @@
     "deploy": "./scripts/env.js 'firebase deploy --project $FIREBASE_PROJECT_ID'"
   },
   "devDependencies": {
-    "@fiar/prettier-plugin-firestore-rules": "workspace:^",
+    "@fiar/prettier-plugin": "workspace:^",
     "autoprefixer": "^10.4.16",
     "esbuild": "^0.18.20",
     "fast-glob": "^3.3.1",
@@ -48,7 +48,7 @@
     "trailingComma": "all",
     "plugins": [
       "prettier-plugin-tailwindcss",
-      "@fiar/prettier-plugin-firestore-rules"
+      "@fiar/prettier-plugin"
     ]
   }
 }

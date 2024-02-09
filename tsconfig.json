@@ -54,7 +54,7 @@
     { "path": "./packages/rules" },
     { "path": "./packages/schema" },
     { "path": "./packages/workbench" },
-    { "path": "./packages/prettier-plugin-firestore-rules" }
+    { "path": "./packages/prettier-plugin" }
   ],
   "include": ["firebase.json"]
 }

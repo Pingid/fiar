@@ -8,9 +8,9 @@ importers:
 
   .:
     devDependencies:
-      '@fiar/prettier-plugin-firestore-rules':
+      '@fiar/prettier-plugin':
         specifier: workspace:^
-        version: link:packages/prettier-plugin-firestore-rules
+        version: link:packages/prettier-plugin
       autoprefixer:
         specifier: ^10.4.16
         version: 10.4.16(postcss@8.4.31)
@@ -539,7 +539,7 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
-  packages/prettier-plugin-firestore-rules:
+  packages/prettier-plugin:
     dependencies:
       '@fiar/rules':
         specifier: workspace:^
