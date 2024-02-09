@@ -1,4 +1,4 @@
-export interface AstNode {}
+export interface RulesAstNode {}
 type Prop<T, K> = K extends keyof T ? T[K] : never
 
 const helper =
@@ -6,19 +6,23 @@ const helper =
     kind: K,
     keys: P,
   ) =>
-  (props: { -readonly [KN in keyof P]: Prop<T, P[KN]> }) => {
-    return keys.reduce((a, b, i) => ({ ...a, [b]: props[i] }), { kind }) as T
-  }
+  (props: { -readonly [KN in keyof P]: Prop<T, P[KN]> }) =>
+    keys.reduce((a, b, i) => ({ ...a, [b]: props[i] }), { kind }) as T
 
-export interface RulesDeclartion extends AstNode {
+export interface RulesDeclartion extends RulesAstNode {
   kind: 'RulesDeclartion'
-  version?: Literal | undefined
-  statements: (RulesServiceDeclartion | FunctionDeclaration | Comment | Empty)[]
+  statements: (RulesVersion | RulesServiceDeclartion | FunctionDeclaration | Comment | Empty)[]
 }
 
-export const rules = helper('RulesDeclartion', ['version', 'statements'])
+export const rules = helper('RulesDeclartion', ['statements'])
 
-export interface RulesServiceDeclartion extends AstNode {
+export interface RulesVersion extends RulesAstNode {
+  kind: 'RulesVersion'
+  value: Literal
+}
+export const version = helper('RulesVersion', ['value'])
+
+export interface RulesServiceDeclartion extends RulesAstNode {
   kind: 'RulesServiceDeclartion'
   service: string
   statements: (MatchDeclaration | FunctionDeclaration | Comment | Empty)[]
@@ -26,34 +30,34 @@ export interface RulesServiceDeclartion extends AstNode {
 
 export const service = helper('RulesServiceDeclartion', ['service', 'statements'])
 
-export interface MatchDeclaration extends AstNode {
+export interface MatchDeclaration extends RulesAstNode {
   kind: 'MatchDeclaration'
   path: PathDeclaration
   statements: (AllowDeclaration | FunctionDeclaration | MatchDeclaration | Comment | Empty)[]
 }
 export const match = helper('MatchDeclaration', ['path', 'statements'])
 
-export interface PathDeclaration extends AstNode {
+export interface PathDeclaration extends RulesAstNode {
   kind: 'PathDeclaration'
   segments: Segment[]
 }
 export const path = helper('PathDeclaration', ['segments'])
 
-export interface Segment extends AstNode {
+export interface Segment extends RulesAstNode {
   kind: 'Segment'
-  value: MemberExpression | Ident | CallExpression
+  value: Value
   expression: boolean
 }
 export const segment = helper('Segment', ['expression', 'value'])
 
-export interface AllowDeclaration extends AstNode {
+export interface AllowDeclaration extends RulesAstNode {
   kind: 'AllowDeclaration'
   type: Ident[]
   statement?: Ast
 }
 export const allow = helper('AllowDeclaration', ['type', 'statement'])
 
-export interface FunctionDeclaration extends AstNode {
+export interface FunctionDeclaration extends RulesAstNode {
   kind: 'FunctionDeclaration'
   name: Ident
   params: Ident[]
@@ -61,21 +65,21 @@ export interface FunctionDeclaration extends AstNode {
 }
 export const func = helper('FunctionDeclaration', ['name', 'params', 'body'])
 
-export interface LetDeclaration extends AstNode {
+export interface LetDeclaration extends RulesAstNode {
   kind: 'LetDeclaration'
   key: Ident
   value: Value
 }
 export const func_let = helper('LetDeclaration', ['key', 'value'])
 
-export interface ReturnDecleration extends AstNode {
+export interface ReturnDecleration extends RulesAstNode {
   kind: 'ReturnDecleration'
   value: Value
 }
 export const func_return = helper('ReturnDecleration', ['value'])
 
 // Values
-export interface LogicalExpression extends AstNode {
+export interface LogicalExpression extends RulesAstNode {
   kind: 'LogicalExpression'
   operator: '||' | '&&'
   left: Value
@@ -83,7 +87,7 @@ export interface LogicalExpression extends AstNode {
 }
 export const logical = helper('LogicalExpression', ['left', 'operator', 'right'])
 
-export interface Expression extends AstNode {
+export interface Expression extends RulesAstNode {
   kind: 'Expression'
   operator: string
   left: Value
@@ -92,28 +96,29 @@ export interface Expression extends AstNode {
 }
 export const expression = helper('Expression', ['param', 'left', 'operator', 'right'])
 
-export interface MemberExpression extends AstNode {
+export interface MemberExpression extends RulesAstNode {
   kind: 'MemberExpression'
   object: Ident | Literal | MemberExpression | CallExpression | ObjectExpression | ArrayExpression
-  property: Ident | Literal | MemberExpression | CallExpression
+  property: Value
+  computed: boolean
 }
 
-export const member = helper('MemberExpression', ['object', 'property'])
+export const member = helper('MemberExpression', ['object', 'computed', 'property'])
 
-export interface CallExpression extends AstNode {
+export interface CallExpression extends RulesAstNode {
   kind: 'CallExpression'
   args: Value[]
   callee: Ident | MemberExpression | CallExpression
 }
 export const call = helper('CallExpression', ['callee', 'args'])
 
-export interface ObjectExpression extends AstNode {
+export interface ObjectExpression extends RulesAstNode {
   kind: 'ObjectExpression'
   properties: Property[]
 }
 export const object = helper('ObjectExpression', ['properties'])
 
-export interface Property extends AstNode {
+export interface Property extends RulesAstNode {
   kind: 'Property'
   key: Literal
   value: Value
@@ -121,37 +126,37 @@ export interface Property extends AstNode {
 
 export const property = helper('Property', ['key', 'value'])
 
-export interface ArrayExpression extends AstNode {
+export interface ArrayExpression extends RulesAstNode {
   kind: 'ArrayExpression'
   elements: Value[]
 }
 export const array = helper('ArrayExpression', ['elements'])
 
-export interface UnaryExpression extends AstNode {
+export interface UnaryExpression extends RulesAstNode {
   kind: 'UnaryExpression'
   argument: Value
 }
 export const unary = helper('UnaryExpression', ['argument'])
 
-export interface Literal extends AstNode {
+export interface Literal extends RulesAstNode {
   kind: 'Literal'
   value: string
 }
 export const literal = helper('Literal', ['value'])
 
-export interface Ident extends AstNode {
+export interface Ident extends RulesAstNode {
   kind: 'Ident'
   name: string
 }
 export const ident = helper('Ident', ['name'])
 
-export interface Comment extends AstNode {
+export interface Comment extends RulesAstNode {
   kind: 'Comment'
   value: string
 }
 export const comment = helper('Comment', ['value'])
 
-export interface Empty extends AstNode {
+export interface Empty extends RulesAstNode {
   kind: 'Empty'
 }
 export const empty = helper('Empty', [])
@@ -169,6 +174,7 @@ export type Value =
 
 export type Ast =
   | RulesDeclartion
+  | RulesVersion
   | RulesServiceDeclartion
   | MatchDeclaration
   | PathDeclaration

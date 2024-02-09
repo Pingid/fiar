@@ -3,8 +3,8 @@ import * as p from 'typescript-parsec'
 import prettier from 'prettier'
 
 import { Tok, lexer } from './lexer.js'
-import * as parse from './parser.js'
-import * as ast from './ast.js'
+import * as ast from '../ast/index.js'
+import * as parse from './parsers.js'
 
 // UTILITIES
 const expast = (x: p.Parser<Tok, any>, text: string) =>
@@ -65,7 +65,7 @@ describe('structured', () => {
 
 /* ------------------------------- Test Member ------------------------------ */
 describe('member', () => {
-  test_parser(parse.member, 'one.two', ast.member([ast.ident(['one']), ast.ident(['two'])]))
+  test_parser(parse.member, 'one.two', ast.member([ast.ident(['one']), false, ast.ident(['two'])]))
   test_parser(parse.member, 'one(10)', ast.call([ast.ident(['one']), [ast.literal(['10'])]]))
   test_parser(
     parse.member,
@@ -75,15 +75,15 @@ describe('member', () => {
   test_parser(
     parse.member,
     'one(10).two',
-    ast.member([ast.call([ast.ident(['one']), [ast.literal(['10'])]]), ast.ident(['two'])]),
+    ast.member([ast.call([ast.ident(['one']), [ast.literal(['10'])]]), false, ast.ident(['two'])]),
   )
-  test_parser(parse.member, 'one.two()', ast.call([ast.member([ast.ident(['one']), ast.ident(['two'])]), []]))
-  test_parser(parse.member, 'one["two"]', ast.member([ast.ident(['one']), ast.literal(['"two"'])]))
-  test_parser(parse.member, 'one[two]', ast.member([ast.ident(['one']), ast.ident(['two'])]))
+  test_parser(parse.member, 'one.two()', ast.call([ast.member([ast.ident(['one']), false, ast.ident(['two'])]), []]))
+  test_parser(parse.member, 'one["two"]', ast.member([ast.ident(['one']), true, ast.literal(['"two"'])]))
+  test_parser(parse.member, 'one[two]', ast.member([ast.ident(['one']), true, ast.ident(['two'])]))
   test_parser(
     parse.member,
     'one[one.two]',
-    ast.member([ast.ident(['one']), ast.member([ast.ident(['one']), ast.ident(['two'])])]),
+    ast.member([ast.ident(['one']), true, ast.member([ast.ident(['one']), false, ast.ident(['two'])])]),
   )
 })
 
@@ -101,11 +101,16 @@ describe('comment', async () => {
 })
 
 /* ----------------------------- Test Expression ---------------------------- */
-describe('expression', () => {
+describe('expression', async () => {
   test_parser(parse.expression, `a && b`, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]))
   test_parser(
     parse.expression,
     `a && b && c`,
+    ast.expression([false, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
+  )
+  test_parser(
+    parse.expression,
+    `a && \nb &&\n c`,
     ast.expression([false, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
   )
 
@@ -172,6 +177,23 @@ describe('expression', () => {
       ast.ident(['e']),
     ]),
   )
+
+  test_parser(
+    parse.expression,
+    `a && ((a && b) && (a && b))`,
+    ast.expression([
+      false,
+      ast.ident(['a']),
+      '&&',
+      ast.expression([
+        true,
+        ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]),
+        '&&',
+        ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]),
+      ]),
+    ]),
+  )
+
   // Symbols
   test_parser(parse.expression, `data is map`, ast.expression([false, ast.ident(['data']), 'is', ast.ident(['map'])]))
 })
@@ -192,6 +214,11 @@ describe('paths', () => {
     ast.path([[seg('one'), seg('{two}'), seg('three'), seg('{four=**}')]]),
   )
 })
+
+/* ------------------------------- Test Value ------------------------------- */
+// describe.only('values', () => {
+//   debug(parse.value, `request.auth != null`)
+// })
 
 /* ----------------------------- Test Functions ----------------------------- */
 describe('functions', () => {
@@ -264,12 +291,12 @@ test('rules', () => {
       }
     }
   }
-  `
+  `.trim()
   const result = p.expectSingleResult(p.expectEOF(parse.rules.parse(lexer.parse(example))))
 
   const example_ast = ast.rules([
-    ast.literal(["'2'"]),
     [
+      ast.version([ast.literal(["'2'"])]),
       ast.service([
         'cloud.firestore',
         [
@@ -284,7 +311,7 @@ test('rules', () => {
                     [ast.ident(['write'])],
                     ast.expression([
                       false,
-                      ast.member([ast.ident(['request']), ast.ident(['auth'])]),
+                      ast.member([ast.ident(['request']), false, ast.ident(['auth'])]),
                       '!=',
                       ast.literal(['null']),
                     ]),

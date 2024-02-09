@@ -29,6 +29,7 @@ export enum Tok {
 
   Ident = 'Ident',
   Space = 'Space',
+  Line = 'Line',
 }
 
 const logical = ['&&', '||', '==', '!=', '>', '>=', '<', '<=', '+', '-', '*', '/', '%']
@@ -39,7 +40,9 @@ export const lexer = buildLexer<Tok>([
   [true, /^null/g, Tok.Null],
   [true, /^(true|false)/g, Tok.Bool],
   [true, /^-?\d+(\.\d+)?/g, Tok.Num],
-  [true, /^('|")[^'"]*('|")/g, Tok.Str],
+
+  [true, /^"(?:[^"\\]|\\.)*"/g, Tok.Str],
+  [true, /^'(?:[^'\\]|\\.)*'/g, Tok.Str],
 
   [true, /^\./g, Tok.Dot],
   [true, /^\,/g, Tok.Coma],
@@ -65,6 +68,6 @@ export const lexer = buildLexer<Tok>([
 
   [true, /^[a-zA-Z_][a-zA-Z0-9_]*/g, Tok.Ident],
 
+  [true, /^\n/g, Tok.Line],
   [false, /^\s/g, Tok.Space],
-  [false, /^\n/g, Tok.Space],
 ])
