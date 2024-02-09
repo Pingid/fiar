@@ -14,6 +14,8 @@ export interface RulesDeclartion extends RulesAstNode {
   statements: (RulesVersion | RulesServiceDeclartion | FunctionDeclaration | Comment | Empty)[]
 }
 
+export const node = <T extends Ast>(x: T) => x
+
 export const rules = helper('RulesDeclartion', ['statements'])
 
 export interface RulesVersion extends RulesAstNode {
@@ -93,8 +95,9 @@ export interface Expression extends RulesAstNode {
   left: Value
   right: Value
   param: boolean
+  comment?: Comment | undefined
 }
-export const expression = helper('Expression', ['param', 'left', 'operator', 'right'])
+export const expression = helper('Expression', ['param', 'left', 'comment', 'operator', 'right'])
 
 export interface MemberExpression extends RulesAstNode {
   kind: 'MemberExpression'

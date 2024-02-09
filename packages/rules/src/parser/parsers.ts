@@ -12,10 +12,12 @@ const wrap =
   (arg: A) =>
     cb([arg])
 
+const tok = <T extends Tok>(x: T) => p.apply(p.tok(x), (x) => x.text)
+
 const defined = <T>(x: T): x is Exclude<T, null | undefined> => x !== null && typeof x !== 'undefined'
 
-// const line = p.apply(p.tok(Tok.Line), () => ast.empty([]))
-const line = p.apply(p.tok(Tok.Line), () => null)
+const skipL = p.apply(p.tok(Tok.Line), () => null)
+
 const empty = p.apply(p.seq(p.tok(Tok.Line), p.tok(Tok.Line), p.opt_sc(p.rep(p.tok(Tok.Line)))), () => ast.empty([]))
 
 const padL = <T>(x: P<T>) => p.kmid(p.opt_sc(p.rep_sc(p.tok(Tok.Line))), x, p.opt_sc(p.rep_sc(p.tok(Tok.Line))))
@@ -34,17 +36,21 @@ export const literal = p.apply(p.alt_sc(p.tok(Tok.Bool), p.tok(Tok.Num), p.tok(T
 export const unary = p.apply(p.kright(str('!'), value), (x) => ast.unary([x]))
 
 /* ----------------------------- Comment Parser ----------------------------- */
-export const comment = p.apply(p.tok(Tok.Comment), (x) => ast.comment([x.text]))
+const gap = p.apply(p.rep_sc(p.tok(Tok.Line)), (x) => (x.length > 1 ? '\n\n' : x.length === 1 ? '\n' : ''))
+export const comment = p.apply(
+  p.seq(tok(Tok.Comment), arr(p.opt_sc(p.rep_sc(p.seq(gap, tok(Tok.Comment)))))),
+  ([first, rest]) => ast.comment([rest.flat().reduce<string>((a, b) => a + (b || ''), first)]),
+)
 
 /* ------------------------ Structured Value Parsers ------------------------ */
 export const array = p.apply(
-  p.kmid(str('['), arr(p.opt_sc(p.list_sc(value, str(',')))), p.seq(p.opt_sc(str(',')), str(']'))),
+  p.kmid(str('['), arr(p.opt_sc(p.list_sc(padL(value), str(',')))), p.seq(padL(p.opt_sc(str(','))), str(']'))),
   wrap(ast.array),
 )
 
-const property = p.apply(p.seq(literal, p.kright(str(':'), value)), ast.property)
+const property = p.apply(p.seq(literal, p.kright(str(':'), padL(value))), ast.property)
 export const object = p.apply(
-  p.kmid(str('{'), arr(p.opt_sc(p.list_sc(property, str(',')))), str('}')),
+  p.kmid(str('{'), arr(p.opt_sc(p.list_sc(padL(property), str(',')))), str('}')),
   wrap(ast.object),
 )
 
@@ -92,16 +98,25 @@ export const path = p.apply(p.seq(segment, p.rep_sc(segment)), (x) => ast.path([
 
 /* ----------------------------- Logical Parser ----------------------------- */
 const operator = p.apply(p.tok(Tok.Op), (x) => x.text)
-const exp_right = p.seq(padL(operator), padL(value))
+const exp_right = p.apply(
+  p.seq(p.opt_sc(padL(comment)), padL(operator), p.opt_sc(padL(comment)), padL(value)),
+  ([com1, operator, com2, right]) => ({ comment: com1 || com2, operator, right }),
+)
 
 export const expression = p.alt_sc(
-  p.apply(p.seq(p.alt_sc(member, object, array, unary, path, literal, ident), exp_right), ([left, [op, right]]) => {
-    if (right.kind !== 'Expression' || right.param) return ast.expression([false, left, op, right])
-    return { ...right, left: ast.expression([false, left, op, right.left]) }
+  p.apply(p.seq(p.alt_sc(member, object, array, unary, path, literal, ident), exp_right), ([left, next]) => {
+    if (next.right.kind !== 'Expression' || next.right.param) {
+      return ast.node({ kind: 'Expression', left, param: false, ...next })
+    }
+    return ast.node({
+      ...next.right,
+      left: ast.expression([false, left, next.comment, next.operator, next.right.left]),
+    })
   }),
-  p.apply(p.seq(p.kmid(str('('), value, str(')')), p.opt_sc(exp_right)), ([x, y]) => {
-    const value = x.kind === 'Expression' ? { ...x, param: true } : x
-    return y ? ast.expression([false, value, ...y]) : value
+  p.apply(p.seq(p.kmid(str('('), value, str(')')), p.opt_sc(exp_right)), ([x, next]) => {
+    const left = x.kind === 'Expression' ? { ...x, param: true } : x
+    if (next) return ast.node({ kind: 'Expression', param: false, left: left, ...next })
+    return left
   }),
 )
 
@@ -121,7 +136,7 @@ export const func = p.apply(
   p.seq(
     p.kright(str('function'), ident),
     padL(p.kmid(str('('), arr(p.opt_sc(p.list(ident, str(',')))), str(')'))),
-    p.kmid(str('{'), arr(p.opt_sc(p.rep_sc(p.alt_sc(func_let, comment, func_return, empty, line)))), str('}')),
+    p.kmid(str('{'), arr(p.opt_sc(p.rep_sc(p.alt_sc(func_let, comment, func_return, empty, skipL)))), str('}')),
   ),
   ([a, b, c]) => ast.func([a, b, c.filter(defined)]),
 )
@@ -141,7 +156,7 @@ match.setPattern(
   p.apply(
     p.seq(
       p.kright(str('match'), path),
-      p.kmid(str('{'), arr(p.rep_sc(p.alt_sc(allow, match, func, comment, empty, line))), str('}')),
+      p.kmid(str('{'), arr(p.rep_sc(p.alt_sc(allow, match, func, comment, empty, skipL))), str('}')),
     ),
     ([a, b]) => ast.match([a, b.filter(defined)]),
   ),
@@ -154,7 +169,7 @@ export const service = p.apply(
       str('service'),
       p.apply(p.seq(ident, str('.'), ident), ([a, _, b]) => `${a.name}.${b.name}`),
     ),
-    p.kmid(str('{'), p.rep_sc(p.alt_sc(func, match, comment, empty, line)), str('}')),
+    p.kmid(str('{'), p.rep_sc(p.alt_sc(func, match, comment, empty, skipL)), str('}')),
   ),
   ([a, b]) => ast.service([a, b.filter(defined)]),
 )
@@ -165,6 +180,6 @@ export const version = p.apply(
   (x) => ast.version([x]),
 )
 
-export const rules = p.apply(p.rep_sc(p.alt_sc(version, func, service, comment, empty, line)), (x) =>
+export const rules = p.apply(p.rep_sc(p.alt_sc(version, func, service, comment, empty, skipL)), (x) =>
   ast.rules([x.filter(defined)]),
 )

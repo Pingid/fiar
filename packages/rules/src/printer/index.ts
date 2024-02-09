@@ -1,4 +1,4 @@
-import { AstPath, Printer, doc } from 'prettier'
+import { AstPath, Doc, Printer, doc } from 'prettier'
 
 import { Ast } from '../ast/index.js'
 
@@ -48,9 +48,11 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
   }
 
   if (is(path, 'Expression')) {
+    const comment: Doc[] = path.node.comment ? [path.call(print as any, 'comment'), b.hardline] : []
+
     const operator = ['&&', '||'].includes(path.node.operator)
-      ? [b.line, path.node.operator, ' ']
-      : [' ', path.node.operator, ' ']
+      ? [b.line, comment, path.node.operator, ' ']
+      : [' ', comment, path.node.operator, ' ']
 
     if (path.node.param) {
       return b.indent(b.group(['(', path.call(print, 'left'), operator, path.call(print, 'right'), ')']))
@@ -65,10 +67,8 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
     return path.call(print, 'value')
   }
   if (is(path, 'Comment')) {
-    return b.join(
-      [b.hardline],
-      path.node.value.split(/\n/).map((x) => x.trim()),
-    )
+    const flatten = path.node.value.split(/\n/).map((x) => x.trim())
+    return b.join([b.hardline], flatten)
   }
   if (is(path, 'ObjectExpression')) {
     return b.group(['{', b.indent([b.line, b.join([',', b.line], path.map(print, 'properties'))]), b.line, '}'])

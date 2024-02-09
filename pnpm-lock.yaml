@@ -541,15 +541,9 @@ importers:
 
   packages/prettier-plugin-firestore-rules:
     dependencies:
-      firebase:
-        specifier: ^10.6.0
-        version: 10.6.0
-      prettier:
-        specifier: ^3.2.2
-        version: 3.2.2
-      typescript-parsec:
-        specifier: ^0.3.4
-        version: 0.3.4
+      '@fiar/rules':
+        specifier: workspace:^
+        version: link:../rules
     devDependencies:
       '@types/node':
         specifier: ^20.11.0
@@ -578,6 +572,9 @@ importers:
       prettier:
         specifier: ^3.2.2
         version: 3.2.2
+      typescript-parsec:
+        specifier: ^0.3.4
+        version: 0.3.4
       vitest:
         specifier: ^0.34.6
         version: 0.34.6(jsdom@22.1.0)

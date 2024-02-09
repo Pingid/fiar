@@ -24,6 +24,8 @@ describe('literal', () => {
 /* ----------------------------- Test Structured ---------------------------- */
 describe('structured', () => {
   test_parser(parse.array, '[]', ast.array([[]]))
+  test_parser(parse.array, '[10, "foo",]', ast.array([[ast.literal(['10']), ast.literal(['"foo"'])]]))
+  test_parser(parse.array, '[10,\n "foo",\n]', ast.array([[ast.literal(['10']), ast.literal(['"foo"'])]]))
   test_parser(
     parse.array,
     '[10, "foo", false]',
@@ -39,6 +41,18 @@ describe('structured', () => {
   test_parser(
     parse.object,
     `{ 'foo': { "bar": "2" } }`,
+    ast.object([
+      [
+        ast.property([
+          ast.literal([`'foo'`]),
+          ast.object([[ast.property([ast.literal([`"bar"`]), ast.literal(['"2"'])])]]),
+        ]),
+      ],
+    ]),
+  )
+  test_parser(
+    parse.object,
+    `{ \n'foo': { \n"bar": "2" \n} \n}`,
     ast.object([
       [
         ast.property([
@@ -98,53 +112,95 @@ describe('comment', async () => {
   test_parser(parse.comment, '/* foo */', ast.comment(['/* foo */']))
   test_parser(parse.comment, `/*\n * foo\n * foo */`, ast.comment([`/*\n * foo\n * foo */`]))
   test_parser(parse.comment, `/*\n foo\n foo */`, ast.comment([`/*\n foo\n foo */`]))
+  test_parser(parse.comment, `// foo\n\n// bar`, ast.comment([`// foo\n\n// bar`]))
 })
 
 /* ----------------------------- Test Expression ---------------------------- */
 describe('expression', async () => {
-  test_parser(parse.expression, `a && b`, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]))
+  test_parser(parse.expression, `a && b`, ast.expression([false, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]))
   test_parser(
     parse.expression,
     `a && b && c`,
-    ast.expression([false, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
+    ast.expression([
+      false,
+      ast.expression([false, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+      undefined,
+      '&&',
+      ast.ident(['c']),
+    ]),
   )
   test_parser(
     parse.expression,
     `a && \nb &&\n c`,
-    ast.expression([false, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
+    ast.expression([
+      false,
+      ast.expression([false, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+      undefined,
+      '&&',
+      ast.ident(['c']),
+    ]),
   )
 
-  test_parser(parse.expression, `a && (b)`, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]))
+  test_parser(
+    parse.expression,
+    `a && (b)`,
+    ast.expression([false, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+  )
 
   test_parser(
     parse.expression,
     `(a && b && c)`,
-    ast.expression([true, ast.expression([false, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
+    ast.expression([
+      true,
+      ast.expression([false, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+      undefined,
+      '&&',
+      ast.ident(['c']),
+    ]),
   )
 
   test_parser(
     parse.expression,
     `a && (b && c)`,
-    ast.expression([false, ast.ident(['a']), '&&', ast.expression([true, ast.ident(['b']), '&&', ast.ident(['c'])])]),
+    ast.expression([
+      false,
+      ast.ident(['a']),
+      undefined,
+      '&&',
+      ast.expression([true, ast.ident(['b']), undefined, '&&', ast.ident(['c'])]),
+    ]),
   )
   test_parser(
     parse.expression,
     `(a && (b && c))`,
-    ast.expression([true, ast.ident(['a']), '&&', ast.expression([true, ast.ident(['b']), '&&', ast.ident(['c'])])]),
+    ast.expression([
+      true,
+      ast.ident(['a']),
+      undefined,
+      '&&',
+      ast.expression([true, ast.ident(['b']), undefined, '&&', ast.ident(['c'])]),
+    ]),
   )
   test_parser(
     parse.expression,
     `(a && b) && c`,
-    ast.expression([false, ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]), '&&', ast.ident(['c'])]),
+    ast.expression([
+      false,
+      ast.expression([true, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+      undefined,
+      '&&',
+      ast.ident(['c']),
+    ]),
   )
   test_parser(
     parse.expression,
     `(a && b) || (c && d)`,
     ast.expression([
       false,
-      ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]),
+      ast.expression([true, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+      undefined,
       '||',
-      ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])]),
+      ast.expression([true, ast.ident(['c']), undefined, '&&', ast.ident(['d'])]),
     ]),
   )
   test_parser(
@@ -153,8 +209,15 @@ describe('expression', async () => {
     ast.expression([
       false,
       ast.ident(['a']),
+      undefined,
       '&&',
-      ast.expression([true, ast.ident(['b']), '&&', ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])])]),
+      ast.expression([
+        true,
+        ast.ident(['b']),
+        undefined,
+        '&&',
+        ast.expression([true, ast.ident(['c']), undefined, '&&', ast.ident(['d'])]),
+      ]),
     ]),
   )
   test_parser(
@@ -165,14 +228,17 @@ describe('expression', async () => {
       ast.expression([
         false,
         ast.ident(['a']),
+        undefined,
         '&&',
         ast.expression([
           true,
           ast.ident(['b']),
+          undefined,
           '&&',
-          ast.expression([true, ast.ident(['c']), '&&', ast.ident(['d'])]),
+          ast.expression([true, ast.ident(['c']), undefined, '&&', ast.ident(['d'])]),
         ]),
       ]),
+      undefined,
       '&&',
       ast.ident(['e']),
     ]),
@@ -184,18 +250,37 @@ describe('expression', async () => {
     ast.expression([
       false,
       ast.ident(['a']),
+      undefined,
       '&&',
       ast.expression([
         true,
-        ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]),
+        ast.expression([true, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
+        undefined,
         '&&',
-        ast.expression([true, ast.ident(['a']), '&&', ast.ident(['b'])]),
+        ast.expression([true, ast.ident(['a']), undefined, '&&', ast.ident(['b'])]),
       ]),
     ]),
   )
 
   // Symbols
-  test_parser(parse.expression, `data is map`, ast.expression([false, ast.ident(['data']), 'is', ast.ident(['map'])]))
+  test_parser(
+    parse.expression,
+    `data is map`,
+    ast.expression([false, ast.ident(['data']), undefined, 'is', ast.ident(['map'])]),
+  )
+
+  // Comments
+  test_parser(
+    parse.expression,
+    `data \n// cool\n && map`,
+    ast.expression([false, ast.ident(['data']), ast.comment(['// cool']), '&&', ast.ident(['map'])]),
+  )
+  // Comments
+  test_parser(
+    parse.expression,
+    `data && \n// cool\n map`,
+    ast.expression([false, ast.ident(['data']), ast.comment(['// cool']), '&&', ast.ident(['map'])]),
+  )
 })
 
 /* ------------------------------- Test Paths ------------------------------- */
@@ -235,7 +320,7 @@ describe('functions', () => {
       [ast.ident(['data'])],
       [
         ast.func_let([ast.ident(['m']), ast.array([[ast.literal(['10'])]])]),
-        ast.func_return([ast.expression([false, ast.ident(['m']), '==', ast.ident(['data'])])]),
+        ast.func_return([ast.expression([false, ast.ident(['m']), undefined, '==', ast.ident(['data'])])]),
       ],
     ]),
   )
@@ -312,6 +397,7 @@ test('rules', () => {
                     ast.expression([
                       false,
                       ast.member([ast.ident(['request']), false, ast.ident(['auth'])]),
+                      undefined,
                       '!=',
                       ast.literal(['null']),
                     ]),

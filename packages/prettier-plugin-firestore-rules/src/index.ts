@@ -1,1 +1,1 @@
-export * from './prettier/index.js'
+export * from '@fiar/rules/plugin'

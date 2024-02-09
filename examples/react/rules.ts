@@ -1,5 +1,4 @@
 import { createRuleSet } from '@fiar/rules'
-import path from 'node:path'
 
 import { articles, test, landing } from './src/admin/entities'
 
@@ -17,4 +16,4 @@ const rules = createRuleSet()
     'allow write': request.auth.token.email.matches('.+@example.com$'),
   }))
 
-rules.writeFile(path.resolve('../../firebase/firestore.rules'))
+rules.writeFile(import.meta.resolve('../../firebase/firestore.rules').slice(7))
