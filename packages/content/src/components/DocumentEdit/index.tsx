@@ -12,7 +12,7 @@ import { useUpdateForm } from '../DocumentFormHooks/index.js'
 import { IContentModel } from '../../schema/index.js'
 
 export const DocumentEdit = (props: IContentModel) => {
-  const [form, onSave, onDelete] = useUpdateForm(props.path)
+  const [form, onSave, onDelete, exists] = useUpdateForm(props.path)
   const [_, nav] = useLocation()
 
   return (
@@ -29,7 +29,7 @@ export const DocumentEdit = (props: IContentModel) => {
           }
         >
           <div className="flex w-full justify-end gap-2">
-            <Button color="error" onClick={() => onDelete().then(() => nav('/'))}>
+            <Button color="error" disabled={!exists} onClick={() => onDelete().then(() => nav('/'))}>
               Delete
             </Button>
             <DocumentFormSave icon={<ArrowUpTrayIcon />} onClick={onSave} title="Save" />

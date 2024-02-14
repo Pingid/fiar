@@ -21,8 +21,8 @@ export const useCreateForm = (path: string, onSaved: () => void) => {
   const firestore = useFirestore()
   const form = useForm()
 
-  const onPublish = form.handleSubmit((x) =>{
-    console.log('CREATE', x);
+  const onPublish = form.handleSubmit((x) => {
+    console.log('CREATE', x)
     return handle(setDoc(doc(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved())
   })
 
@@ -34,8 +34,8 @@ export const useAddForm = (path: string, onSaved: () => void) => {
   const firestore = useFirestore()
   const form = useForm()
 
-  const onAdd = form.handleSubmit((x) =>{
-    console.log('ADD', x);
+  const onAdd = form.handleSubmit((x) => {
+    console.log('ADD', x)
     return handle(addDoc(collection(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved())
   })
 
@@ -63,7 +63,7 @@ export const useUpdateForm = (path: string, onDone?: () => void) => {
     form.reset(handleRecieveValues(data.data.data()), { keepDirty: true, keepDirtyValues: true })
   }, [data.data])
 
-  return [form, onUpdate, onDelete] as const
+  return [form, onUpdate, onDelete, !!data.data?.exists()] as const
 }
 
 const handleUpdateValues = (firestore: Firestore, x: any): any => {

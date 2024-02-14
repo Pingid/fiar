@@ -11,6 +11,7 @@ import { IContentCollection, type IFieldRef } from '../../schema/index.js'
 import { fieldError, type FieldComponent } from '../../fields/index.js'
 import { SelectDocumentProvider } from '../../context/select.js'
 import { DocumentCard } from '../DocumentCard/index.js'
+import { trailing } from '../../util/index.js'
 
 export const FieldRef: FieldComponent<IFieldRef> = (props) => {
   const field = useController(props)
@@ -37,12 +38,16 @@ export const FieldRef: FieldComponent<IFieldRef> = (props) => {
 
           {isSet && (
             <button onClick={() => setOpen(true)} className="w-full">
-              <DocumentCard model={target} titleField={target.titleField} />
+              <DocumentCard model={{ ...target, path: field.field.value.path }} titleField={target.titleField} />
             </button>
           )}
-
           <SelectDocumentProvider value={onSelect}>
-            <WorkbenchPageModal open={open} close={() => setOpen(false)} app="/content" initialPath={target.path} />
+            <WorkbenchPageModal
+              open={open}
+              close={() => setOpen(false)}
+              app="/content"
+              initialPath={trailing(target.path)}
+            />
           </SelectDocumentProvider>
         </div>
       </Field.Control>

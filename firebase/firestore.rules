@@ -40,26 +40,23 @@ service cloud.firestore {
     }
 
     match /articles/{articleId} {
-      allow update: if request.auth.token.email.matches('.+@example.com$') && validateArticles(request.resource.data)
-      allow create: if request.auth.token.email.matches('.+@example.com$') && validateArticles(request.resource.data)
+      allow update: if validateArticles(request.resource.data)
+      allow create: if validateArticles(request.resource.data)
       allow read: if true
-      allow write: if request.auth.token.email.matches('.+@example.com$')
     }
 
     match /test/{id} {
-      allow update: if request.auth.token.email.matches('.+@example.com$') && validateTest(request.resource.data)
-      allow create: if request.auth.token.email.matches('.+@example.com$') && validateTest(request.resource.data)
+      allow update: if validateTest(request.resource.data)
+      allow create: if validateTest(request.resource.data)
       allow read: if true
-      allow write: if request.auth.token.email.matches('.+@example.com$')
     }
 
     match /pages/landing {
-      allow update: if request.auth.token.email.matches('.+@example.com$') &&
+      allow update: if
         validatePagesLanding(request.resource.data)
-      allow create: if request.auth.token.email.matches('.+@example.com$') &&
+      allow create: if
         validatePagesLanding(request.resource.data)
       allow read: if true
-      allow write: if request.auth.token.email.matches('.+@example.com$')
     }
   }
 }
