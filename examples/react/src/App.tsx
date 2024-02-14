@@ -17,10 +17,13 @@ export default function ReactApp() {
         allowNoAuth
       >
         <Content firestore={firestore} collections={[test, articles]} documents={[landing]}></Content>
-        <Assets storage={storage}>
-          <Assets.Folder title="Photos" path="/photos" accept={{ ['image/*']: [] }} />
-          <Assets.Folder title="Icons" path="/icons" />
-        </Assets>
+        <Assets
+          storage={storage}
+          folders={[
+            { title: 'Photos', path: '/photos', accept: { ['image/*']: [] } },
+            { title: 'Icons', path: '/icons' },
+          ]}
+        />
       </Authorize>
     </Dashboard>
   )

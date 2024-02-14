@@ -1,14 +1,13 @@
 import { CloudIcon } from '@heroicons/react/24/outline'
-import { Route, Switch, useLocation } from 'wouter'
-import { useEffect } from 'react'
+import { Route, Switch } from 'wouter'
 
 import { Extensions, useExtend } from '@fiar/workbench/extensions'
 import { type FieldComponent } from '@fiar/content/fields'
-import { getSlots, setSlot } from '@fiar/components'
-import { App, Page } from '@fiar/workbench'
+import { App } from '@fiar/workbench'
 
-import { useConfig, AssetConfig, AssetFolder } from './hooks/index.js'
 import { FieldAsset } from './components/FieldAsset/index.js'
+import { FolderList } from './components/FolderList/index.js'
+import { useConfig, AssetConfig } from './hooks/index.js'
 import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
 import { IFieldAsset } from './schema/index.js'
@@ -25,14 +24,12 @@ declare module '@fiar/workbench/extensions' {
 const extensions = { 'field:asset': FieldAsset } satisfies Extensions
 
 export const Assets = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
-  const slot = getSlots(children, { folders: [Assets.Folder] })
   const state = useConfig.getState()
-  const first = [...(config.folders ?? []), ...slot.folders.map((x) => x.props)][0]
 
   useExtend(extensions)
 
   if (!state.storage && config.storage) {
-    useConfig.setState({ ...config, folders: [...(config.folders ?? []), ...slot.folders.map((x) => x.props)] })
+    useConfig.setState({ ...config, folders: config.folders ?? [] })
   }
 
   return (
@@ -40,35 +37,20 @@ export const Assets = ({ children, ...config }: { children?: React.ReactNode } &
       <TipTapImageTool />
       <App title="Assets" icon={<CloudIcon />} href="/assets">
         <div className="h-full w-full">
-          <Page>
-            <Switch>
-              {(config.folders ?? []).map((x) => (
-                <Route key={x.path} path={`/${x.path.replace(/^\//, '')}`}>
-                  <Folder {...x} />
-                </Route>
-              ))}
-              {slot.folders.map((x) => (
-                <Route key={x.props.path} path={`/${x.props.path.replace(/^\//, '')}`}>
-                  {x}
-                </Route>
-              ))}
-              {first && (
-                <Route path="">
-                  <Redirect to={`/${first.path.replace(/^\//, '')}`} />
-                </Route>
-              )}
-            </Switch>
-          </Page>
+          <Switch>
+            {config.folders?.map((x) => (
+              <Route key={x.path} path={`/${x.path.replace(/^\//, '')}`}>
+                <Folder {...x} />
+              </Route>
+            ))}
+            <Route path="">
+              <FolderList />
+            </Route>
+          </Switch>
         </div>
       </App>
     </>
   )
-}
-
-const Redirect = (props: { to: string }) => {
-  const [_loc, set] = useLocation()
-  useEffect(() => set(props.to, { replace: true }), [props.to])
-  return null
 }
 
 // const AssetsPage = (props: { children: React.ReactNode }) => {
@@ -110,5 +92,3 @@ const Redirect = (props: { to: string }) => {
 //     </Link>
 //   )
 // }
-
-Assets.Folder = setSlot('Assets.Folder', (props: AssetFolder) => <Folder {...props} />)

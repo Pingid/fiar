@@ -9,7 +9,7 @@ export const ContentList = (props: { collections: IContentCollection[]; document
   return (
     <Page>
       <Page.Header subtitle="/" breadcrumbs={[{ children: 'Content', href: '/' }]}></Page.Header>
-      <div className="mb-3 w-full border-t" />
+      <div className="mb-3" />
 
       <div className="space-y-1 px-2">
         <h4 className="text-front/50 text-sm font-semibold uppercase">collections</h4>

@@ -1,10 +1,12 @@
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline'
 import { deleteObject, ref } from '@firebase/storage'
 import { useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useMedia } from 'react-use'
 import { cn } from 'mcn'
 
-import { useSetPageStatus } from '@fiar/workbench'
+import { Page, useSetPageStatus } from '@fiar/workbench'
+import { Button } from '@fiar/components'
 
 import { AssetFolder, useConfig, useQueryAssets } from '../../hooks/index.js'
 import { isUploadAsset, useUploads } from '../../hooks/uploads.js'
@@ -12,7 +14,6 @@ import { AssetPreviewCard } from '../AssetPreviewCard/index.js'
 import { AssetUploadCard } from '../AssetUploadCard/index.js'
 
 import { DropLayer } from './DropLayer/index.js'
-import { AssetsHeader } from '../Header/index.js'
 
 export const Folder = (props: AssetFolder): JSX.Element => {
   const storage = useConfig((x) => x.storage!)
@@ -54,8 +55,27 @@ export const Folder = (props: AssetFolder): JSX.Element => {
   useEffect(() => refresh(assets.data?.items ?? []), [assets.data])
 
   return (
-    <>
-      <AssetsHeader zone={zone} {...props} />
+    <Page>
+      <Page.Header
+        breadcrumbs={[
+          { children: 'Assets', href: '/' },
+          { children: props.title, href: props.path },
+        ]}
+      >
+        <div className="flex w-full items-end justify-between">
+          <div />
+          <Button
+            icon={<CloudArrowUpIcon className="mr-1 h-5 w-5" />}
+            elementType="label"
+            htmlFor="upload"
+            color="active"
+            className="flex-0"
+          >
+            Upload
+          </Button>
+          <input id="upload" {...zone.getInputProps()} className="hover:bg-highlight rounded text-lg font-medium" />
+        </div>
+      </Page.Header>
 
       <div
         {...zone.getRootProps()}
@@ -74,7 +94,7 @@ export const Folder = (props: AssetFolder): JSX.Element => {
         {empty && <EmptyState />}
         <DropLayer isDragActive={zone.isDragActive} isDragAccept={zone.isDragAccept} isDragReject={zone.isDragReject} />
       </div>
-    </>
+    </Page>
   )
 }
 

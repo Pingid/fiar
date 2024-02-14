@@ -12,7 +12,7 @@ export const AssetCard = (p: {
 }): JSX.Element => {
   return (
     <div
-      className={cn('bg-frame relative grid w-full rounded border [grid-template-rows:max-content_1fr]', [
+      className={cn('bg-frame frame relative grid w-full border [grid-template-rows:max-content_1fr]', [
         !!p.onClick,
         'hover:border-active',
       ])}
