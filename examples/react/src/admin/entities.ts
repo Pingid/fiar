@@ -59,6 +59,15 @@ export const test = s.defineCollection({
 
 // export type Articles = typeof articles.infer
 
+export const tags = s.defineCollection({
+  path: '/tags/{tagId}',
+  label: 'Tags',
+  titleField: 'name',
+  fields: {
+    name: s.string({ label: 'Name' }),
+  },
+})
+
 export const landing = s.defineDocument({
   path: '/pages/landing',
   label: 'Landing page',
@@ -71,5 +80,5 @@ export const landing = s.defineDocument({
 
 // export type Landing = typeof landing.infer
 
-export const entities = [articles, test, landing] as const
+export const entities = [tags, articles, test, landing] as const
 export type Entities = typeof entities

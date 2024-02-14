@@ -50,6 +50,7 @@ export const useCollectionData = <T extends Record<string, any>>(
 ) => {
   const qry = query(ref, ...(config?.constraints ?? []))
   const swr = useSWRConfig()
+
   const data = useSWR<QuerySnapshot<T, T>, FirestoreError>(
     queryCacheKey(qry),
     () =>
@@ -74,6 +75,10 @@ const queryCacheKey = (query: Query<any, any>) => {
   if (!query) return undefined
   const colRef = (query as any)['_query']['path']['segments'].join('')
   if (query?.type === 'collection') return `${colRef}`
+
+  const startAt = ((query as any)?.['_query']?.['startAt']?.position || [])?.map((x: any) => x.referenceValue).join('')
+  const limit = (query as any)?.['_query']?.['limit']
+
   const filtesr = (query as any)['_query']['filters']
     .map((x: any) => {
       return `${x.field.segments.join('.')}${x.op}${x.value.stringValue}`
@@ -84,5 +89,5 @@ const queryCacheKey = (query: Query<any, any>) => {
       return `${x.field.segments.join('.')}${x.dir}`
     })
     .join('&')
-  return `${colRef}${filtesr ? `-${filtesr}` : ''}${orders ? `-${orders}` : ''}`
+  return `${colRef}${limit || ''}${startAt || ''}${filtesr ? `-${filtesr}` : ''}${orders ? `-${orders}` : ''}`
 }

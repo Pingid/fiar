@@ -4,8 +4,8 @@ import { Content } from '@fiar/content'
 import { Authorize } from '@fiar/auth'
 import { Assets } from '@fiar/assets'
 
+import { articles, landing, test, tags } from './admin/entities'
 import { firestore, storage, auth } from './admin/firebase'
-import { articles, landing, test } from './admin/entities'
 
 export default function ReactApp() {
   return (
@@ -16,7 +16,7 @@ export default function ReactApp() {
         method="popup"
         allowNoAuth
       >
-        <Content firestore={firestore} collections={[test, articles]} documents={[landing]}></Content>
+        <Content firestore={firestore} collections={[test, articles, tags]} documents={[landing]}></Content>
         <Assets
           storage={storage}
           folders={[

@@ -1,6 +1,6 @@
 import useQuery from 'swr'
 
-import { StorageReference, getDownloadURL, listAll, ref } from '@firebase/storage'
+import { StorageReference, getDownloadURL, ref, list, ListOptions } from '@firebase/storage'
 import { useConfig } from './config.js'
 
 export const is_image = /\.(apng|avif|gif|jpg|jpeg|jfif|pjpeg|pjp|png|svg|webp)$/i
@@ -9,9 +9,11 @@ export const is_pdf = /\.(pdf)$/i
 
 const useStorage = () => useConfig((x) => x.storage!)
 
-export const useQueryAssets = (path: string) => {
+export const useAssetList = (path: string, options?: ListOptions) => {
   const storage = useStorage()
-  return useQuery(path, () => listAll(ref(storage, path)))
+  return useQuery(`${path}${options?.pageToken || ''}-${options?.maxResults || 0}`, () =>
+    list(ref(storage, path), options),
+  )
 }
 
 export const useAssetUrl = (image: Pick<StorageReference, 'bucket' | 'fullPath'>) => {

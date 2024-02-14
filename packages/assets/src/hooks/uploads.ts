@@ -33,7 +33,7 @@ export const useUploads = create<UploadState>((set, get) => ({
   refresh: (items) => {
     const existing = items.map((x) => x.fullPath)
     const uploads = get().uploads.filter((x) => !existing.includes(x.fullPath))
-    set({ uploads })
+    if (get().uploads.length !== uploads.length) set({ uploads })
   },
   populate: (path, items) => {
     const existing = items.map((x) => x.fullPath)

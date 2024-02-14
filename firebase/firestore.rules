@@ -51,6 +51,12 @@ service cloud.firestore {
       allow read: if true
     }
 
+    match /tags/{id} {
+      allow read: if true
+      allow write: if true
+    }
+
+
     match /pages/landing {
       allow update: if
         validatePagesLanding(request.resource.data)
