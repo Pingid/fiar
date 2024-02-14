@@ -55,7 +55,7 @@ export const segment = helper('Segment', ['expression', 'value'])
 export interface AllowDeclaration extends RulesAstNode {
   kind: 'AllowDeclaration'
   type: Ident[]
-  statement?: Ast
+  statement?: Value | undefined
 }
 export const allow = helper('AllowDeclaration', ['type', 'statement'])
 

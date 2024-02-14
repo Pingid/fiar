@@ -13,7 +13,7 @@ import type {
   RulesString,
 } from './interfaces'
 
-export interface NamespaceAuth {
+export type NamespaceAuth = RulesMap<{
   uid: RulesString
   token: RulesMap<{
     /** The email address associated with the account, if present. */
@@ -34,7 +34,7 @@ export interface NamespaceAuth {
       tenant?: RulesString
     }>
   }>
-}
+}>
 
 /**
  * The incoming request context.
@@ -220,13 +220,12 @@ type SigninProviders =
   | `github.com`
   | `twitter.com`
 
-type PathParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
-  ? PathParams<R, { [K in keyof A | N]: string }>
+export type PathParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
+  ? PathParams<R, { [K in keyof A | N]: RulesString }>
   : A
 
-export type ContextFirestore<T, P extends string> = NamespaceFirestore<T> &
-  NamespaceDebug &
-  PathParams<P> & {
+export type ContextFirestore<T> = NamespaceFirestore<T> &
+  NamespaceDebug & {
     duration: NamespaceDuration
     hashing: NamespaceHashing
     latlng: NamespaceLatlng

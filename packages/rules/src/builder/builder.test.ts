@@ -1,12 +1,17 @@
 import { expect, test, describe } from 'vitest'
-import { builder, resultAst } from './index.js'
 
-test('cool', () => {
+import { InferRule } from '../firestore/interfaces.js'
+import { builder, op } from './index.js'
+import { output } from '../rule/index.js'
+
+test('cool', async () => {
   type Test = {
     one: (a: number, b: number) => { one: string }
     two: { three: 10 }
     four: 'haha'
+    a: boolean
+    b: boolean
   }
-  const b = builder<Test>()
-  console.log(resultAst(b.two.three, { kind: 'Ident', name: 'data' }))
+  // const b = builder<InferRule<Test>>()
+  // console.log(output({ kind: 'Ident', name: 'data' }, op.eq(b.a, b.b)))
 })

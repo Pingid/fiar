@@ -1,19 +1,20 @@
 import { type IFieldPrimitive } from '@fiar/schema'
 import { type Timestamp } from 'firebase/firestore'
 
-import { TypeOfRule, type Rule, type RuleGroup } from '../rule/index.js'
+import { TypeOfRule, type Rule } from '../rule/index.js'
 
-export type InferRule<T> = T extends Array<any>
-  ? RulesList<InferRule<T[number]>>
-  : T extends Record<any, any>
-  ? RulesMap<{ [K in keyof T]: InferRule<T[K]> }>
-  : T extends string
-  ? RulesString<T>
-  : T extends number
-  ? RulesNumber
-  : T extends boolean
-  ? RulesBoolean
-  : never
+export type InferRule<T> =
+  T extends Array<any>
+    ? RulesList<InferRule<T[number]>>
+    : T extends Record<any, any>
+      ? RulesMap<{ [K in keyof T]: InferRule<T[K]> }>
+      : T extends string
+        ? RulesString<T>
+        : T extends number
+          ? RulesNumber
+          : T extends boolean
+            ? RulesBoolean
+            : never
 
 export interface In {}
 export interface Eq {}
@@ -27,11 +28,14 @@ export interface Sub {}
 export interface Div {}
 export interface Mult {}
 export interface Mod {}
+
+type TwoOrMore<T> = [T, T, ...T[]]
+
 export interface Operators {
   /** Check that a value is of some primitive type */
   is: (a: Rule, type: IFieldPrimitive) => RulesBoolean
-  and: (...args: (RulesBoolean | string | RuleGroup)[]) => RuleGroup
-  or: (...args: (RulesBoolean | string | RuleGroup)[]) => RuleGroup
+  and: (...args: TwoOrMore<RulesBoolean>) => Rule<boolean>
+  or: (...args: TwoOrMore<RulesBoolean>) => Rule<boolean>
   in: In
   eq: Eq
   neq: Neq

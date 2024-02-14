@@ -82,3 +82,5 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
   throw new Error(`Missing ${path.node.kind}`)
   // return `${path.node.kind}`
 }
+
+// export const format = (ast: Ast.)
