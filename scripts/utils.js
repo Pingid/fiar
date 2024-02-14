@@ -275,3 +275,20 @@ exports.format = async (src, opts) => {
   const rootPkg = JSON.parse(fs.readFileSync(path.join(root_dir, 'package.json'), 'utf-8'))
   return prettier.format(src, { ...rootPkg.prettier, ...opts })
 }
+
+/**
+ * @param {import('node:child_process').ChildProcessWithoutNullStreams} child
+ * @returns
+ */
+exports.show = async (child, prefix = '') => {
+  const format = (x) =>
+    x
+      .toString('utf-8')
+      .replace(/\x1Bc/, '')
+      .replace(/\n{2,}/, '\n')
+      .replace(/\n/gim, `\n${prefix}`)
+
+  child.stderr.on('data', (x) => process.stderr.write(format(x)))
+  child.stdout.on('data', (x) => process.stdout.write(format(x)))
+  process.stdin.pipe(child.stdin)
+}
