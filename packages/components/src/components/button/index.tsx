@@ -1,4 +1,4 @@
-import { type ElementRef, type ForwardedRef, type ElementType } from 'react'
+import { type ElementRef, type ForwardedRef, type ElementType, type ComponentProps } from 'react'
 import { type AriaButtonOptions } from 'react-aria'
 import { cn } from 'mcn'
 
@@ -13,6 +13,7 @@ const colors = {
 }
 const sizes = { default: 'px-5 py-2.5' }
 
+// type LL = ElementRef<'button'>
 export const button = (props: {
   color?: keyof typeof colors | undefined
   size?: keyof typeof sizes | undefined
@@ -28,7 +29,7 @@ export const button = (props: {
 export const buttonIcon = (hasChildren?: any) =>
   cn('w-4.5 relative -top-[3px] h-3 overflow-visible [&>*]:h-5 [&>*]:w-5', [!!hasChildren, '-left-2.5'])
 
-export const Button = forwardRef(
+export const Button: {
   <E extends ElementType = 'button'>(
     {
       color,
@@ -39,18 +40,15 @@ export const Button = forwardRef(
       elementType,
       ...props
     }: AriaButtonOptions<E> &
-      JSX.IntrinsicElements[E & keyof JSX.IntrinsicElements] & {
-        children?: React.ReactNode
-        icon?: React.ReactNode
-      } & Parameters<typeof button>[0],
+      ComponentProps<E> & { children?: React.ReactNode; icon?: React.ReactNode } & Parameters<typeof button>[0],
     ref?: ForwardedRef<ElementRef<E>>,
-  ) => {
-    const Element: any = elementType ?? 'button'
-    return (
-      <Element ref={ref} {...props} role="button" className={button({ size, color, className })}>
-        {icon && <span className={buttonIcon(children)}>{icon}</span>}
-        {children}
-      </Element>
-    )
-  },
-)
+  ): JSX.Element
+} = forwardRef(({ color, size, icon, className, children, elementType, ...props }, ref) => {
+  const Element: any = elementType ?? 'button'
+  return (
+    <Element ref={ref} {...props} role="button" className={button({ size, color, className })}>
+      {icon && <span className={buttonIcon(children)}>{icon}</span>}
+      {children}
+    </Element>
+  )
+})

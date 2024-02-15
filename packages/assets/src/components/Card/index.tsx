@@ -1,4 +1,4 @@
-import { StorageReference, getDownloadURL, getMetadata } from '@firebase/storage'
+import { StorageReference, getDownloadURL, getMetadata, ref } from '@firebase/storage'
 import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import calender from 'dayjs/plugin/calendar.js'
 import dayjs from 'dayjs'
@@ -7,12 +7,17 @@ import { cn } from 'mcn'
 dayjs.extend(calender)
 
 import { useSelectAsset } from '../../hooks/select.js'
+import { useStorage } from '../../hooks/config.js'
 import { Thumbnail } from '../Thumb/index.js'
 
-export const Card = (props: { asset: StorageReference; onDelete: () => void }) => {
+export const Card = (props: {
+  asset: Pick<StorageReference, 'name' | 'bucket' | 'fullPath'>
+  onDelete: () => void
+}) => {
   const onSelect = useSelectAsset()
-  const meta = useSWR([props.asset.fullPath, 'meta'], () => getMetadata(props.asset))
-  const url = useSWR([props.asset.fullPath, 'url'], () => getDownloadURL(props.asset))
+  const storage = useStorage()
+  const meta = useSWR([props.asset.fullPath, 'meta'], () => getMetadata(ref(storage, props.asset.fullPath)))
+  const url = useSWR([props.asset.fullPath, 'url'], () => getDownloadURL(ref(storage, props.asset.fullPath)))
 
   return (
     <div

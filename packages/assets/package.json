@@ -21,6 +21,8 @@
     "@fiar/components": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.0.18",
+    "@react-three/drei": "^9.97.5",
+    "@react-three/fiber": "^8.15.16",
     "@tiptap/extension-image": "^2.1.12",
     "@tiptap/react": "^2.1.12",
     "dayjs": "^1.11.10",
@@ -28,6 +30,7 @@
     "react-dropzone": "^14.2.3",
     "react-use": "^17.4.0",
     "swr": "^2.2.4",
+    "three": "^0.161.0",
     "wouter": "^2.12.1",
     "zustand": "^4.4.6"
   },
@@ -35,6 +38,7 @@
     "@fiar/content": "workspace:^",
     "@firebase/storage": "^0.11.2",
     "@types/react": "^18.2.33",
+    "@types/three": "^0.161.2",
     "react": "^18.2.0",
     "typescript": "^5.2.2"
   },
