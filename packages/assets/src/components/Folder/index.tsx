@@ -1,43 +1,51 @@
+import { StorageReference, deleteObject, listAll, ref } from '@firebase/storage'
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline'
 import { useDropzone } from 'react-dropzone'
-import { useMedia } from 'react-use'
 import { useCallback } from 'react'
-import { cn } from 'mcn'
+import useSWR from 'swr'
+
+import calender from 'dayjs/plugin/calendar.js'
+import dayjs from 'dayjs'
+dayjs.extend(calender)
 
 import { Page, useSetPageStatus } from '@fiar/workbench'
-import { Button, Pagination } from '@fiar/components'
+import { Button } from '@fiar/components'
 
-import { isUploadAsset, useUploads } from '../../hooks/uploads.js'
-import { AssetPreviewCard } from '../AssetPreviewCard/index.js'
-import { AssetUploadCard } from '../AssetUploadCard/index.js'
 import { AssetFolder, useConfig } from '../../hooks/index.js'
-
+import { useUploads } from '../../hooks/uploads.js'
 import { DropLayer } from './DropLayer/index.js'
-import { useAssets } from '../../hooks/assets.js'
+import { AssetGrid } from '../Grid/index.js'
+import { Upload } from '../Upload/index.js'
+import { Card } from '../Card/index.js'
 
 export const Folder = (props: AssetFolder): JSX.Element => {
   const storage = useConfig((x) => x.storage!)
 
-  const path = props.path
-  const assets = useAssets(props)
-
-  const columns = useMedia('(min-width: 500px)') ? 40 : 20
+  const assets = useSWR(props.path, () => listAll(ref(storage, props.path)))
 
   const loading = useUploads((x) => x.uploads.length > 0)
+  const uploads = useUploads((x) => x.uploads.filter((x) => x.folder === props.path))
   const addFiles = useUploads((x) => x.add)
   const error = useUploads((x) => x.error)
 
-  useSetPageStatus(`uploads/${path}`, { loading, error })
+  useSetPageStatus(`uploads/${props.path}`, { loading, error })
 
-  const onDrop = useCallback((x: File[]) => addFiles(storage, path, x), [])
+  const onDrop = useCallback(
+    (x: File[]) => addFiles(storage, props.path, x, () => assets.mutate((x) => x, { revalidate: true })),
+    [],
+  )
+  const zone = useDropzone({ onDrop, noClick: false, accept: props.accept as any })
 
-  const zone = useDropzone({
-    onDrop,
-    noClick: false,
-    accept: props.accept as any,
-  })
+  const empty = !assets.isLoading && !assets.error && assets.data?.items.length === 0
 
-  const empty = !assets.isLoading && !assets.error && assets.items.length === 0
+  const onDelete = (x: StorageReference) =>
+    assets.mutate(
+      (y) =>
+        deleteObject(x).then(() =>
+          y ? { ...y, items: y?.items.filter((z) => z.fullPath !== x.fullPath) } : undefined,
+        ),
+      { revalidate: true },
+    )
 
   return (
     <Page>
@@ -48,7 +56,8 @@ export const Folder = (props: AssetFolder): JSX.Element => {
         ]}
       >
         <div className="flex w-full items-center justify-between">
-          <Pagination pages={0} onPage={() => {}} end />
+          {/* <Pagination pages={0} onPage={() => {}} end /> */}
+          <div />
           <Button
             icon={<CloudArrowUpIcon className="mr-1 h-5 w-5" />}
             elementType="label"
@@ -62,23 +71,20 @@ export const Folder = (props: AssetFolder): JSX.Element => {
         </div>
       </Page.Header>
 
-      <div
-        {...zone.getRootProps()}
-        onClick={undefined}
-        className={cn('grid w-full gap-4 px-3 pb-24 pt-3')}
-        style={{ gridTemplateColumns: `repeat(${Math.floor(columns / 20) + 1}, minmax(0, 1fr))` }}
-      >
-        {assets.items.map((x) =>
-          isUploadAsset(x) ? (
-            <AssetUploadCard key={x.fullPath} asset={x} onDone={() => 'assets.mutate()'} />
-          ) : (
-            <AssetPreviewCard key={x.fullPath} asset={x} remove={() => assets.onRemove(x.fullPath)} />
-          ),
-        )}
+      {uploads.length > 0 && (
+        <div className="flex w-full gap-2 overflow-x-auto border-b p-2">
+          {uploads.map((x) => (
+            <Upload key={x.fullPath} {...x} />
+          ))}
+        </div>
+      )}
+
+      <AssetGrid {...zone.getRootProps()} onClick={() => {}}>
+        {assets.data?.items?.map((x) => <Card key={x.fullPath} asset={x} onDelete={() => onDelete(x)} />)}
 
         {empty && <EmptyState />}
         <DropLayer isDragActive={zone.isDragActive} isDragAccept={zone.isDragAccept} isDragReject={zone.isDragReject} />
-      </div>
+      </AssetGrid>
     </Page>
   )
 }

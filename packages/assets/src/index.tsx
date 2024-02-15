@@ -5,9 +5,9 @@ import { Extensions, useExtend } from '@fiar/workbench/extensions'
 import { type FieldComponent } from '@fiar/content/fields'
 import { App } from '@fiar/workbench'
 
-import { FieldAsset } from './components/FieldAsset/index.js'
-import { FolderList } from './components/FolderList/index.js'
 import { useConfig, AssetConfig } from './hooks/index.js'
+import { FieldAsset } from './components/Field/index.js'
+import { FolderList } from './components/List/index.js'
 import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
 import { IFieldAsset } from './schema/index.js'
@@ -36,7 +36,7 @@ export const Assets = ({ children, ...config }: { children?: React.ReactNode } &
     <>
       <TipTapImageTool />
       <App title="Assets" icon={<CloudIcon />} href="/assets">
-        <div className="h-full w-full">
+        <div className="h-full min-h-0 w-full min-w-0">
           <Switch>
             {config.folders?.map((x) => (
               <Route key={x.path} path={`/${x.path.replace(/^\//, '')}`}>
@@ -52,43 +52,3 @@ export const Assets = ({ children, ...config }: { children?: React.ReactNode } &
     </>
   )
 }
-
-// const AssetsPage = (props: { children: React.ReactNode }) => {
-//   const folders = useConfig((x) => x.folders ?? [])
-
-//   return (
-//     <Page>
-//       <Page.Breadcrumb title="Assets" icon={<CloudIcon />} href="" />
-//       <Page.Head>
-//         <div
-//           className="flex border-t px-2 text-sm leading-none [&>*:last-child]:border-none"
-//           aria-label="Storage folders"
-//           role="tablist"
-//           aria-orientation="horizontal"
-//         >
-//           {folders.map((folder) => (
-//             <Fragment key={folder.path}>
-//               <FolderButton key={folder.path} {...folder} />
-//             </Fragment>
-//           ))}
-//         </div>
-//       </Page.Head>
-//       {props.children}
-//     </Page>
-//   )
-// }
-
-// const FolderButton = (folder: AssetFolder) => {
-//   const path = `/${folder.path.replace(/^\//, '')}`
-//   const [match] = useRoute(path)
-
-//   return (
-//     <Link
-//       href={path}
-//       className={cn('border-active/10 flex items-center gap-1.5 px-2 py-2', [match, 'text-active', ''])}
-//     >
-//       <FolderIcon className="relative -top-[1px] h-4 w-4" />
-//       {folder.title}
-//     </Link>
-//   )
-// }

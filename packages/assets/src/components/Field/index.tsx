@@ -5,10 +5,9 @@ import { type FieldComponent, Controller, useFormState, fieldError, get } from '
 import { WorkbenchPageModal } from '@fiar/workbench'
 import { Button, Field } from '@fiar/components'
 
-import { AssetPreviewCard } from '../AssetPreviewCard/index.js'
 import { SelectAssetProvider } from '../../hooks/select.js'
 import { IFieldAsset } from '../../schema/index.js'
-import { is_image } from '../../hooks/index.js'
+import { Card } from '../Card/index.js'
 
 export const FieldAsset: FieldComponent<IFieldAsset> = (props) => {
   const [open, setOpen] = useState(false)
@@ -43,16 +42,11 @@ export const FieldAsset: FieldComponent<IFieldAsset> = (props) => {
                   </Button>
                 </div>
               )}
-              {form.field.value && (
-                <AssetPreviewCard asset={form.field.value} remove={() => form.field.onChange(null)} />
-              )}
+              {form.field.value && <Card asset={form.field.value} onDelete={() => form.field.onChange(null)} />}
               <SelectAssetProvider
-                value={{
-                  filter: (x) => is_image.test(x),
-                  select: ({ fullPath, name, bucket }) => {
-                    form.field.onChange({ fullPath, name, bucket })
-                    setOpen(false)
-                  },
+                value={({ fullPath, name, bucket }) => {
+                  form.field.onChange({ fullPath, name, bucket })
+                  setOpen(false)
                 }}
               >
                 <WorkbenchPageModal open={open} close={() => setOpen(false)} app="/assets" />

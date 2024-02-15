@@ -23,6 +23,7 @@
     "@heroicons/react": "^2.0.18",
     "@tiptap/extension-image": "^2.1.12",
     "@tiptap/react": "^2.1.12",
+    "dayjs": "^1.11.10",
     "mcn": "^0.0.4",
     "react-dropzone": "^14.2.3",
     "react-use": "^17.4.0",

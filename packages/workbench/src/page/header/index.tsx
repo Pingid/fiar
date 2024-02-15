@@ -10,7 +10,7 @@ export const Header = (props: {
 }) => {
   return (
     <>
-      <div className="space-y-2 p-3 pb-6">
+      <div className="relative z-20 space-y-2 p-3 pb-6">
         <Breadcrumbs>{props.breadcrumbs?.map((p, i) => <Breadcrumb key={i} {...p} />)}</Breadcrumbs>
         {props.subtitle && <p className="text-front/60 text-xs leading-none">{props.subtitle}</p>}
         <PageStatusBar />

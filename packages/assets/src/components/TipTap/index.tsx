@@ -10,7 +10,6 @@ import { WorkbenchPageModal } from '@fiar/workbench'
 
 import { SelectAssetProvider } from '../../hooks/select.js'
 import { useConfig } from '../../hooks/config.js'
-import { is_image } from '../../hooks/data.js'
 
 export const TipTapImageTool = () => {
   useEffect(
@@ -27,19 +26,18 @@ const TipTapImageToolControl = (p: { editor: Editor }): JSX.Element => {
   const storage = useConfig((x) => x.storage!)
   const [open, setOpen] = useState(false)
   const url = useSWRMutation({}, (_, a: { arg: string }) =>
-    getDownloadURL(ref(storage, a.arg)).then((url) => p.editor.chain().focus().setImage({ src: url }).run()),
+    getDownloadURL(ref(storage, a.arg)).then((url) => {
+      p.editor.chain().focus().setImage({ src: url }).run()
+    }),
   )
 
   return (
     <TipTapToolButton onClick={() => setOpen(true)} disabled={url.isMutating}>
       <PhotoIcon className="h-4 w-4" />
       <SelectAssetProvider
-        value={{
-          filter: (x) => is_image.test(x),
-          select: ({ fullPath }) => {
-            url.trigger(fullPath)
-            setOpen(false)
-          },
+        value={({ fullPath }) => {
+          url.trigger(fullPath)
+          setOpen(false)
         }}
       >
         <WorkbenchPageModal open={open} close={() => setOpen(false)} app="/assets" />
