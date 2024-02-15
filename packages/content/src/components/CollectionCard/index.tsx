@@ -3,11 +3,9 @@ import { collection, getCountFromServer } from '@firebase/firestore'
 import { Link } from 'wouter'
 import useSWR from 'swr'
 
+import { parameterize, trailing } from '../../util/index.js'
 import { IContentCollection } from '../../schema/index.js'
 import { useFirestore } from '../../hooks/index.js'
-
-const parameterize = (path: string) => trailing(path).replace(/\{([^\}]+)\}/g, ':$1')
-const trailing = (path: string) => path.replace(/\/\{[^\}]+\}$/, '')
 
 export const CollectionCard = (props: IContentCollection) => {
   const path = trailing(props.path)
@@ -17,13 +15,16 @@ export const CollectionCard = (props: IContentCollection) => {
 
   return (
     <Link to={parameterized}>
-      <a className="hover:border-active hover:text-active bg-frame inline-block w-full rounded border-b p-2">
-        <h3 className="flex gap-2 leading-none">
-          <DocumentDuplicateIcon className="w-4" />
+      <a className="frame hover:border-active hover:text-active block w-full border p-2">
+        <p className="flex items-start gap-1 py-0.5 text-lg leading-none">
+          <DocumentDuplicateIcon className="relative bottom-[1px] h-[1.15rem] w-[1.15rem]" />
           {props.label ?? path}
-        </h3>
-        <div className="text-front/60 flex w-full justify-end gap-3 pt-1 text-sm leading-none">
-          <span>{draft.data?.data().count ?? '-'} Items</span>
+        </p>
+        <div className="flex justify-between">
+          <p className="pt-1 text-sm opacity-60">{path}</p>
+          <div className="flex w-full justify-end gap-3 pt-1 text-sm leading-none opacity-60">
+            <span>{draft.data?.data().count ?? '-'} Published</span>
+          </div>
         </div>
       </a>
     </Link>

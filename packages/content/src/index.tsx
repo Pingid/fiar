@@ -23,7 +23,7 @@ export const Content = ({
   return (
     <FirestoreProvider value={props.firestore}>
       <App title="Content" icon={<CircleStackIcon />} href="/content">
-        <div className="h-full w-full">
+        <div className="h-full min-h-0 w-full min-w-0">
           <ContentRouter collections={props.collections ?? []} documents={props.documents ?? []} />
           {children}
         </div>

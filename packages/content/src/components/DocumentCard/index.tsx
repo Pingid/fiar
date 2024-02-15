@@ -18,6 +18,24 @@ export const DocumentCard = (props: { model: IContentModel; titleField?: string 
   const title = props.titleField ? docData?.[props.titleField] || props.model.label : props.model.label
 
   return (
+    <div className="frame hover:border-active hover:text-active block w-full border p-2">
+      <div className="flex justify-between gap-3 leading-none">
+        <p className="flex items-start gap-1 py-0.5 text-lg leading-none">
+          <DocumentIcon className="relative bottom-[1px] h-[1.15rem] w-[1.15rem]" />
+          {title}
+        </p>
+        <span className="text-sm opacity-60">{createTime && date(createTime).format('YY/MM/DD')}</span>
+      </div>
+      <div className="flex justify-between">
+        <p className="pt-1 text-sm opacity-60"></p>
+        <div className="flex w-full justify-end gap-3 pt-1 text-sm leading-none opacity-60">
+          {data.data?.exists() ? <span>{updateTime && date(updateTime).calendar()}</span> : <span>Missing</span>}
+        </div>
+      </div>
+    </div>
+  )
+
+  return (
     <div
       className={cn('hover:border-active hover:text-active bg-frame inline-block w-full border-b p-2', [
         missing,
