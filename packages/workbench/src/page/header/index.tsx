@@ -45,8 +45,11 @@ const Breadcrumb = (props: { children: React.ReactNode; href?: string }) => {
     `after:absolute after:ml-2.5 after:mr-1.5 after:![content:'/'] after:hover:text-front after:text-front/50 after:text-2xl after:mt-[2px]`,
   )
   return (
-    <Link href={props.href}>
-      <a className={cn('ml-6 inline whitespace-pre-wrap pl-1 [overflow-wrap:anywhere]', divider)}>{props.children}</a>
+    <Link
+      href={props.href as string}
+      className={cn('ml-6 inline whitespace-pre-wrap pl-1 [overflow-wrap:anywhere]', divider)}
+    >
+      {props.children}
     </Link>
   )
 }

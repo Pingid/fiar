@@ -28,7 +28,7 @@ export const CollectionList = (props: IContentCollection) => {
         <div className="flex w-full justify-between">
           <CollectionListPagination path={props.path} />
         </div>
-        <Link href={`/add${props.path}`}>
+        <Link href={`/add${props.path}`} asChild>
           <Button icon={<DocumentPlusIcon />} elementType="a" color="active">
             New
           </Button>
@@ -42,9 +42,7 @@ export const CollectionList = (props: IContentCollection) => {
           return (
             <li key={x.id}>
               <Link href={path} onClick={() => (select ? select(doc(firestore, path)) : undefined)}>
-                <a>
-                  <DocumentCard model={model} titleField={props.titleField} />
-                </a>
+                <DocumentCard model={model} titleField={props.titleField} />
               </Link>
             </li>
           )

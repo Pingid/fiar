@@ -1,73 +1,52 @@
-import { createContext, useCallback, useContext, useMemo } from 'react'
-import { useLocationProperty, navigate } from 'wouter/use-location'
-import { Router, BaseLocationHook, useRouter } from 'wouter'
-import makeCachedMatcher from 'wouter/matcher'
-import { parse } from 'regexparam'
-
-import { MemoryRouter } from './memory.js'
-
-const relativePath = (base = '', path = location.hash.replace(/^#/, '') || '/') =>
-  !path.toLowerCase().indexOf(base.toLowerCase()) ? path.slice(base.length) || '/' : '~' + path
-
-const hashNavigate = (to: string) => navigate('#/' + to.replace(/^\//, ''))
-const hashLocation = () => window.location.hash.replace(/^#/, '') || '/'
-const useHashLocation: BaseLocationHook = (opts: any = {}) => [
-  relativePath(opts.base, useLocationProperty(hashLocation)),
-  useCallback(
-    (to: string) => hashNavigate([...(opts.base ?? '').split('/'), ...to.split('/')].filter(Boolean).join('/')),
-    [opts.base],
-  ),
-]
-
-const matcher = makeCachedMatcher((path: string) => {
-  const { keys, pattern } = parse(path)
-  return { keys: keys.map((name) => ({ name })), regexp: pattern }
-})
+import { useBrowserLocation } from 'wouter/use-browser-location'
+import { useHashLocation } from 'wouter/use-hash-location'
+import { createContext, useContext, useMemo } from 'react'
+import { memoryLocation } from 'wouter/memory-location'
+import { Router } from 'wouter'
 
 export type DashboardRouterProps = {
   children?: React.ReactNode
-  routing?: 'hash' | 'memory' | 'browser' | undefined
-  basename?: string | undefined
-  initialPath?: string
+  router?:
+    | { type: 'memory'; base?: string; path?: string; static?: boolean }
+    | { type: 'browser'; base?: string }
+    | { type: 'hash'; base?: string }
+    | undefined
 }
 
-const DashboardRouterContext = createContext<DashboardRouterProps>({})
+const DashboardContext = createContext(false)
+export const useIsDashboard = () => useContext(DashboardContext)
 
 export const DashboardRouter = (props: DashboardRouterProps) => {
-  const router = useRouter()
-  const parent = useContext(DashboardRouterContext)
-  const p = useMemo(() => ({ ...parent, ...props }), [])
-
-  if (p.routing === 'hash') {
+  const router = props.router
+  if (router?.type === 'memory') return <MemoryRouter {...router}>{props.children}</MemoryRouter>
+  if (router?.type === 'hash') {
     return (
-      <DashboardRouterContext.Provider value={p}>
-        <Router parent={router} hook={useHashLocation} base={p.basename as string} matcher={matcher}>
-          {p.children}
+      <DashboardContext.Provider value={true}>
+        <Router hook={useHashLocation} base={router?.base as string}>
+          {props.children}
         </Router>
-      </DashboardRouterContext.Provider>
+      </DashboardContext.Provider>
     )
   }
-
-  if (p.routing === 'memory') {
-    return (
-      <DashboardRouterContext.Provider value={p}>
-        <MemoryRouter
-          parent={router}
-          initialPath={p.initialPath as string}
-          base={p.basename as string}
-          matcher={matcher}
-        >
-          {p.children}
-        </MemoryRouter>
-      </DashboardRouterContext.Provider>
-    )
-  }
-
   return (
-    <DashboardRouterContext.Provider value={p}>
-      <Router parent={router} base={p.basename as string} matcher={matcher}>
-        {p.children}
+    <DashboardContext.Provider value={true}>
+      <Router hook={useBrowserLocation} base={router?.base as string}>
+        {props.children}
       </Router>
-    </DashboardRouterContext.Provider>
+    </DashboardContext.Provider>
+  )
+}
+
+const MemoryRouter = (
+  props: Partial<Exclude<Parameters<typeof memoryLocation>[0], undefined>> & {
+    base?: string
+    children: React.ReactNode
+  },
+) => {
+  const memory = useMemo(() => memoryLocation(props as any), [props.path, props.static, props.record])
+  return (
+    <Router hook={memory.hook} base={props.base as string}>
+      {props.children}
+    </Router>
   )
 }

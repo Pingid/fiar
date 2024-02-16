@@ -40,7 +40,7 @@ const TipTapImageToolControl = (p: { editor: Editor }): JSX.Element => {
           setOpen(false)
         }}
       >
-        <WorkbenchPageModal open={open} close={() => setOpen(false)} app="/assets" />
+        <WorkbenchPageModal open={open} close={() => setOpen(false)} path="/assets" />
       </SelectAssetProvider>
     </TipTapToolButton>
   )

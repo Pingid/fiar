@@ -20,10 +20,8 @@ export const ContentList = (props: { collections: IContentCollection[]; document
           ))}
           {props.documents.map((x) => (
             <li key={x.path}>
-              <Link href={x.path}>
-                <a className="w-full">
-                  <DocumentCard key={x.path} model={x} />
-                </a>
+              <Link href={x.path} className="w-full">
+                <DocumentCard key={x.path} model={x} />
               </Link>
             </li>
           ))}

@@ -59,24 +59,16 @@ export const FieldRef: FieldComponent<IFieldRef> = (props) => {
           </button>
         )}
         <SelectDocumentProvider value={onSelect}>
-          <WorkbenchPageModal
-            open={select}
-            close={() => setSelect(false)}
-            app="/content"
-            initialPath={trailing(target.path)}
-            onNav={() => null}
-          />
+          <WorkbenchPageModal open={select} close={() => setSelect(false)} path={`/content${trailing(target.path)}`} />
         </SelectDocumentProvider>
         {field.field.value && (
           <WorkbenchPageModal
             open={edit}
             close={() => setEdit(false)}
-            app="/content"
-            initialPath={`/${trailing(field.field.value.path)}`}
-            onNav={() => null}
+            path={`/content${trailing(field.field.value.path)}`}
+            static
           />
         )}
-        {/* </Field.Control> */}
       </Field.Control>
     </Field>
   )

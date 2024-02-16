@@ -47,7 +47,7 @@ export const FieldAsset: FieldComponent<IFieldAsset> = (props) => {
           setOpen(false)
         }}
       >
-        <WorkbenchPageModal open={open} close={() => setOpen(false)} app="/assets" />
+        <WorkbenchPageModal open={open} close={() => setOpen(false)} path="/assets" />
       </SelectAssetProvider>
     </Field>
   )

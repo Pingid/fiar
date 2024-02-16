@@ -1,4 +1,4 @@
-import { Route } from 'wouter'
+import { Route,  } from 'wouter'
 import { inject } from 'regexparam'
 
 import { IContentCollection, IContentDocument } from '../../schema/index.js'

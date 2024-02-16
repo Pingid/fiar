@@ -22,15 +22,13 @@ export const FolderList = () => {
       )}
       <div className="space-y-2 p-2">
         {config.folders?.map((x) => (
-          <Link key={x.path} href={x.path}>
-            <a className="frame hover:border-active group block w-full border p-2">
-              <p className="flex items-start gap-2 py-0.5 text-lg leading-none">
-                <FolderIcon className="relative bottom-[1px] h-[1.15rem] w-[1.15rem] group-hover:hidden" />
-                <FolderOpenIcon className="relative bottom-[1px] hidden h-[1.15rem] w-[1.15rem] group-hover:block" />
-                {x.title}
-              </p>
-              <p className="text-front/60 pt-1 text-sm">{x.path}</p>
-            </a>
+          <Link key={x.path} href={x.path} className="frame hover:border-active group block w-full border p-2">
+            <p className="flex items-start gap-2 py-0.5 text-lg leading-none">
+              <FolderIcon className="relative bottom-[1px] h-[1.15rem] w-[1.15rem] group-hover:hidden" />
+              <FolderOpenIcon className="relative bottom-[1px] hidden h-[1.15rem] w-[1.15rem] group-hover:block" />
+              {x.title}
+            </p>
+            <p className="text-front/60 pt-1 text-sm">{x.path}</p>
           </Link>
         ))}
       </div>

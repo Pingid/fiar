@@ -31,10 +31,8 @@ export const UserAuthState = () => {
           </button>
         )}
         {!user && !match && (
-          <Link onClick={() => signOut(auth)} href={`/login?redirect=${location}`}>
-            <a className="w-full">
+          <Link onClick={() => signOut(auth)} href={`/login?redirect=${location}`} className="w-full">
               <NavButton icon={<ArrowRightOnRectangleIcon />} title="Login" />
-            </a>
           </Link>
         )}
       </>

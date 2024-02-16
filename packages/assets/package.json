@@ -31,7 +31,7 @@
     "react-use": "^17.5.0",
     "swr": "^2.2.5",
     "three": "^0.161.0",
-    "wouter": "^2.12.1",
+    "wouter": "^3.0.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {

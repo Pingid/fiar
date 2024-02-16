@@ -5,7 +5,6 @@ import { Route, Switch } from 'wouter'
 
 import { Modal } from '@fiar/components'
 
-import { MemoryNavigationProvider } from '../router/memory.js'
 import { DashboardRouter } from '../router/index.js'
 import { useApps } from '../app/index.js'
 
@@ -47,36 +46,30 @@ export const WorkbenchPageModal = (p: {
   open: boolean
   close: () => void
   children?: React.ReactNode
-  app: string
-  initialPath?: string
-  onNav?: (to: string) => string | null
+  path?: string
+  static?: boolean
 }): JSX.Element => {
   const pages = useApps((x) => x.pages)
+
   return (
-    <MemoryNavigationProvider value={p.onNav}>
-      <WorkbenchModal open={p.open} close={p.close}>
-        <DashboardRouter routing="memory" initialPath={p.app}>
-          <Switch>
-            {pages.map((app) => {
-              const to = app.href ?? `/${app.title.toLowerCase().replace(/(\s|\t|\n)+/gim, '-')}`
-              return (
-                <Fragment key={to}>
-                  <Route path={to}>
-                    <DashboardRouter routing="memory" basename={p.app} initialPath={p.initialPath as any}>
-                      {app.children}
-                    </DashboardRouter>
-                  </Route>
-                  <Route path={`${to}/*`}>
-                    <DashboardRouter routing="memory" basename={p.app} initialPath={p.initialPath as any}>
-                      {app.children}
-                    </DashboardRouter>
-                  </Route>
-                </Fragment>
-              )
-            })}
-          </Switch>
-        </DashboardRouter>
-      </WorkbenchModal>
-    </MemoryNavigationProvider>
+    <WorkbenchModal open={p.open} close={p.close}>
+      <DashboardRouter router={{ ...p, type: 'memory' }}>
+        <Switch>
+          {pages.map((app) => {
+            const to = app.href ?? `/${app.title.toLowerCase().replace(/(\s|\t|\n)+/gim, '-')}`
+            return (
+              <Fragment key={to}>
+                <Route path={to} nest>
+                  {app.children}
+                </Route>
+                <Route path={`${to}/*`} nest>
+                  {app.children}
+                </Route>
+              </Fragment>
+            )
+          })}
+        </Switch>
+      </DashboardRouter>
+    </WorkbenchModal>
   )
 }

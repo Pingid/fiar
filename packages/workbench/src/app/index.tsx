@@ -1,8 +1,8 @@
-import { Route, Switch, useRouter } from 'wouter'
+import { Route, Switch } from 'wouter'
 import { useEffect } from 'react'
 import { create } from 'zustand'
 
-import { DashboardRouter, type DashboardRouterProps } from '../router/index.js'
+import { DashboardRouter, useIsDashboard, type DashboardRouterProps } from '../router/index.js'
 import { ExtensionsProvider } from '../extensions/index.js'
 import { StatusProvider } from '../page/status/index.js'
 import { AppLink } from '../nav/index.js'
@@ -19,25 +19,23 @@ export const useApps = create<{ pages: App[]; register: (app: App) => () => void
 
 export const App = ({ title, icon, children, href, ...props }: App & DashboardRouterProps) => {
   const to = href ?? `/${title.toLowerCase().replace(/(\s|\t|\n)+/gim, '-')}`
-  const router = useRouter()
+  const dash = useIsDashboard()
   const registerApp = useApps((x) => x.register)
 
   useEffect(() => registerApp({ title, icon, children, href }), [title, icon, href, children])
 
-  if (!router.parent) {
-    return <DashboardRouter {...props}>{children}</DashboardRouter>
-  }
+  if (!dash) return <DashboardRouter {...props}>{children}</DashboardRouter>
 
   return (
     <ExtensionsProvider>
       <StatusProvider>
         <AppLink title={title} icon={icon} to={to} />
         <Switch>
-          <Route path={to}>
-            <DashboardRouter basename={to}>{children}</DashboardRouter>
+          <Route path={to} nest>
+            {children}
           </Route>
-          <Route path={`${to}/(.*)`}>
-            <DashboardRouter basename={to}>{children}</DashboardRouter>
+          <Route path={`${to}/(.*)`} nest>
+            {children}
           </Route>
         </Switch>
       </StatusProvider>

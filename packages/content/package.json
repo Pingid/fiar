@@ -23,7 +23,6 @@
     "@fiar/schema": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.1.1",
-    "@tanstack/react-table": "^8.11.0",
     "@tiptap/pm": "^2.2.3",
     "@tiptap/react": "^2.2.3",
     "@tiptap/starter-kit": "^2.2.3",
@@ -35,7 +34,7 @@
     "regexparam": "^2.0.1",
     "swr": "^2.2.5",
     "typeofit": "^0.0.5",
-    "wouter": "^2.12.1",
+    "wouter": "^3.0.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {

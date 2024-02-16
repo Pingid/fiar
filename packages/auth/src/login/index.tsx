@@ -9,7 +9,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
 } from '@firebase/auth'
-import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs/index.js'
+import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
 import useMutation from 'swr/mutation'
 import React from 'react'
 

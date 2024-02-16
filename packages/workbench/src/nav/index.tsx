@@ -89,10 +89,8 @@ export const AppLink = (props: { to: string; title: React.ReactNode; icon: React
   const [m1] = useRoute(props.to)
   return (
     <NavActionTopSlot.Place>
-      <Link to={props.to} onClick={() => (window.innerWidth < 640 ? setOpen(false) : null)}>
-        <a className="w-full">
-          <NavButton {...props} active={m1 || m2} />
-        </a>
+      <Link to={props.to} onClick={() => (window.innerWidth < 640 ? setOpen(false) : null)} className="w-full">
+        <NavButton {...props} active={m1 || m2} />
       </Link>
     </NavActionTopSlot.Place>
   )
