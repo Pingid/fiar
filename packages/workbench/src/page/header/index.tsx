@@ -1,7 +1,8 @@
 import { Link } from 'wouter'
 import { cn } from 'mcn'
 
-import { PageStatusBar } from '../status/index.js'
+import { ErrorMessage, LoadingDots } from '@fiar/components'
+import { useStatus } from '../index.js'
 
 export const Header = (props: {
   subtitle?: string
@@ -10,22 +11,28 @@ export const Header = (props: {
 }) => {
   return (
     <>
-      <div className="relative z-20 space-y-2 p-3 pb-6">
-        <Breadcrumbs>{props.breadcrumbs?.map((p, i) => <Breadcrumb key={i} {...p} />)}</Breadcrumbs>
+      <div className={cn('relative z-20 space-y-2 p-3 pb-6', [!props.children, 'border-b'])}>
+        <div className="grid [grid-template-columns:1fr_max-content]">
+          <Breadcrumbs>{props.breadcrumbs?.map((p, i) => <Breadcrumb key={i} {...p} />)}</Breadcrumbs>
+          <ShowLoading />
+        </div>
         {props.subtitle && <p className="text-front/60 text-xs leading-none">{props.subtitle}</p>}
-        <PageStatusBar />
+        <ShowError />
       </div>
-      {props.children ? (
+      {props.children && (
         <div className="bg-back sticky top-[calc(var(--asside-height)-1px)] z-20 flex justify-between border-b border-t px-3 py-2">
           {props.children}
         </div>
-      ) : (
-        <div className="w-full border-t" />
       )}
     </>
   )
 }
 
+const ShowError = () => <ErrorMessage>{useStatus((x) => x.error)}</ErrorMessage>
+const ShowLoading = () => {
+  const loading = useStatus((x) => x.loading)
+  return <div className="px-6 py-1">{loading && <LoadingDots />}</div>
+}
 const Breadcrumbs = (props: { children: React.ReactNode }) => {
   const nav = cn(
     '[&>*]:text-front/50 [&>*:hover]:text-front [&>*:last-child]:text-front [&>*:last-child]:after:hidden [&>*:first-child]:ml-0 [&>*:first-child]:pl-0',

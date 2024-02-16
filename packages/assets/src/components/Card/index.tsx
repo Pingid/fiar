@@ -25,9 +25,7 @@ export const Card = (props: {
       className={cn('flex flex-col justify-between border', [!!onSelect, 'hover:border-active'])}
       onClick={(e) => (e.stopPropagation(), onSelect ? onSelect(props.asset) : undefined)}
     >
-      <div className="bg-front/5 flex aspect-square items-center justify-center">
-        <Thumbnail url={url.data} contentType={meta.data?.contentType} />
-      </div>
+      <Thumbnail className="bg-frame aspect-square" url={url.data} contentType={meta.data?.contentType} />
       <div className="p-2">
         <div className="space-y-1 pt-2">
           <div className="grid gap-2" style={{ gridTemplateColumns: 'minmax(0, 1fr) max-content' }}>

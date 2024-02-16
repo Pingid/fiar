@@ -12,51 +12,55 @@ import {
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 
-import { usePageStatusAsyncHandler } from '@fiar/workbench'
+import { useStatus } from '@fiar/workbench'
 
 import { useDocumentData, useFirestore } from '../../hooks/index.js'
 
 export const useCreateForm = (path: string, onSaved: () => void) => {
-  const handle = usePageStatusAsyncHandler(`${path}-create-form`)
+  const handle = useStatus((x) => x.promise)
   const firestore = useFirestore()
   const form = useForm()
 
   const onPublish = form.handleSubmit((x) => {
-    console.log('CREATE', x)
-    return handle(setDoc(doc(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved())
+    return handle(`${path}-create-form`, setDoc(doc(firestore, path), handleCreateValues(firestore, x))).then(() =>
+      onSaved(),
+    )
   })
 
   return [form, onPublish] as const
 }
 
 export const useAddForm = (path: string, onSaved: () => void) => {
-  const handle = usePageStatusAsyncHandler(`${path}-add-form`)
+  const handle = useStatus((x) => x.promise)
   const firestore = useFirestore()
   const form = useForm()
 
   const onAdd = form.handleSubmit((x) => {
     console.log('ADD', x)
-    return handle(addDoc(collection(firestore, path), handleCreateValues(firestore, x))).then(() => onSaved())
+    return handle(`${path}-add-form`, addDoc(collection(firestore, path), handleCreateValues(firestore, x))).then(() =>
+      onSaved(),
+    )
   })
 
   return [form, onAdd] as const
 }
 
 export const useUpdateForm = (path: string, onDone?: () => void) => {
+  const handle = useStatus((x) => x.promise)
   const firestore = useFirestore()
   const ref = doc(firestore, path)
-  const handle = usePageStatusAsyncHandler(`${path}-update-form`)
+
   const data = useDocumentData(ref, { once: true })
 
   const form = useForm({ criteriaMode: 'firstError', defaultValues: handleRecieveValues(data.data?.data()) })
 
   const onUpdate = form.handleSubmit((x) => {
-    return handle(updateDoc(ref, handleUpdateValues(firestore, x)))
+    return handle(`${path}-update-form`, updateDoc(ref, handleUpdateValues(firestore, x)))
       .then(() => form.reset(handleRecieveValues(x)))
       .then(onDone)
   })
 
-  const onDelete = () => handle(deleteDoc(ref))
+  const onDelete = () => handle(`${path}-delete-form`, deleteDoc(ref))
 
   useEffect(() => {
     if (!data.data) return

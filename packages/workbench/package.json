@@ -19,14 +19,15 @@
   },
   "dependencies": {
     "@fiar/components": "workspace:^",
-    "swr": "^2.2.4",
     "@heroicons/react": "^2.0.18",
     "mcn": "^0.0.4",
     "react": "^18.2.0",
     "react-class-transition": "^0.0.2",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
+    "react-transition-group": "^4.4.5",
     "regexparam": "^2.0.1",
+    "swr": "^2.2.4",
     "typeofit": "^0.0.5",
     "wouter": "^2.12.1",
     "zustand": "^4.4.6"

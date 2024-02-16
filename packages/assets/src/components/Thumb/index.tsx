@@ -1,7 +1,20 @@
 import { DocumentIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
 import { Thumb3D } from './3D/index.js'
+import { cn } from 'mcn'
 
-export const Thumbnail = (props: { url?: string | undefined; contentType?: string | undefined }) => {
+export const Thumbnail = (props: {
+  url?: string | undefined
+  contentType?: string | undefined
+  className?: string
+}) => {
+  return (
+    <div className={cn('flex items-center justify-center', props.className)}>
+      <ThumbMedia {...props} />
+    </div>
+  )
+}
+
+const ThumbMedia = (props: { url?: string | undefined; contentType?: string | undefined }) => {
   if (!props.url) return null
 
   if (new URL(props.url).pathname.endsWith('.glb') || new URL(props.url).pathname.endsWith('.gltf')) {

@@ -54,7 +54,7 @@ Field.Control = forwardRefElem<'div', { error?: any }>(({ error, className, ...p
     {...props}
     ref={ref}
     className={cn(
-      'bg-frame w-full rounded border',
+      'bg-frame focus-within:bg-back w-full rounded border',
       [!!error, 'border-error', ' focus-within:border-line-focus'],
       className,
     )}

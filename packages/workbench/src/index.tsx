@@ -4,10 +4,11 @@ import { DashboardRouter, DashboardRouterProps } from './router/index.js'
 import { ExtensionsProvider } from './extensions/index.js'
 import { Nav } from './nav/index.js'
 
-export { Page, usePageStatus, useSetPageStatus, usePageStatusAsyncHandler } from './page/index.js'
 export { NavButton, useNavState, NavActionTop, NavActionBottom } from './nav/index.js'
 export { WorkbenchModal, WorkbenchPageModal } from './modal/index.js'
 export { type DashboardRouterProps } from './router/index.js'
+export { Page, useStatus } from './page/index.js'
+export { Header } from './page/header/index.js'
 export { App } from './app/index.js'
 
 export const Dashboard = ({ children, ...props }: DashboardRouterProps) => {

@@ -1,20 +1,20 @@
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
-import { Page } from '@fiar/workbench'
+import { Header } from '@fiar/workbench'
 import { Link } from 'wouter'
 
-import { useUploads } from '../../hooks/uploads.js'
+import { useUploadStatus, useUploads } from '../../hooks/uploads.js'
 import { useConfig } from '../../hooks/config.js'
 import { Upload } from '../index.js'
 
 export const FolderList = () => {
   const config = useConfig()
   const uploads = useUploads((x) => x.uploads)
-
+  useUploadStatus()
   return (
-    <Page>
-      <Page.Header breadcrumbs={[{ children: 'Assets', href: '/' }]}></Page.Header>
+    <>
+      <Header breadcrumbs={[{ children: 'Assets', href: '/' }]}></Header>
       {uploads.length > 0 && (
-        <div className="flex w-full gap-2 overflow-x-auto border-b p-2">
+        <div className="relative z-10 flex w-full gap-2 overflow-x-auto border-b p-2">
           {uploads.map((x) => (
             <Upload key={x.fullPath} {...x} />
           ))}
@@ -34,6 +34,6 @@ export const FolderList = () => {
           </Link>
         ))}
       </div>
-    </Page>
+    </>
   )
 }

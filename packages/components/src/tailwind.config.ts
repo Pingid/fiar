@@ -17,7 +17,7 @@ const light = {
 
 const dark = {
   '--color-back': `0deg 0% 8%`,
-  '--color-frame': `0deg 0% 13%`,
+  '--color-frame': `0deg 0% 12%`,
   '--color-front': `0deg 0% 101%`,
   '--color-line': `0deg 0% 23%`,
 

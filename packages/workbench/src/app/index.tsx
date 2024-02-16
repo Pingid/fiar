@@ -4,6 +4,7 @@ import { create } from 'zustand'
 
 import { DashboardRouter, type DashboardRouterProps } from '../router/index.js'
 import { ExtensionsProvider } from '../extensions/index.js'
+import { StatusProvider } from '../page/status/index.js'
 import { AppLink } from '../nav/index.js'
 
 type App = { title: string; children: React.ReactNode; icon?: React.ReactNode; href: string | undefined }
@@ -29,15 +30,17 @@ export const App = ({ title, icon, children, href, ...props }: App & DashboardRo
 
   return (
     <ExtensionsProvider>
-      <AppLink title={title} icon={icon} to={to} />
-      <Switch>
-        <Route path={to}>
-          <DashboardRouter basename={to}>{children}</DashboardRouter>
-        </Route>
-        <Route path={`${to}/(.*)`}>
-          <DashboardRouter basename={to}>{children}</DashboardRouter>
-        </Route>
-      </Switch>
+      <StatusProvider>
+        <AppLink title={title} icon={icon} to={to} />
+        <Switch>
+          <Route path={to}>
+            <DashboardRouter basename={to}>{children}</DashboardRouter>
+          </Route>
+          <Route path={`${to}/(.*)`}>
+            <DashboardRouter basename={to}>{children}</DashboardRouter>
+          </Route>
+        </Switch>
+      </StatusProvider>
     </ExtensionsProvider>
   )
 }

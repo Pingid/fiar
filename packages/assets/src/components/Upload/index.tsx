@@ -14,9 +14,8 @@ import { Thumbnail } from '../Thumb/index.js'
 export const Upload = (props: { task: UploadTask; file: File }) => {
   return (
     <div className="relative flex items-end gap-1 border">
-      <div className="bg-front/5 flex h-[3rem] w-[3rem] items-center justify-center">
-        <Thumbnail url={URL.createObjectURL(props.file)} contentType={props.file.type} />
-      </div>
+      <Thumbnail className={'h-[3rem] w-max'} url={URL.createObjectURL(props.file)} contentType={props.file.type} />
+
       <div className="p-1">
         <div className="bg-frame w-full min-w-[5rem] rounded-md">
           <Progress task={props.task} />
