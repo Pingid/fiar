@@ -6,7 +6,7 @@ import { Extensions, ExtensionsProvider } from '@fiar/workbench/extensions'
 import { Dashboard, DashboardRouterProps } from '@fiar/workbench'
 import { Content, ContentConfig } from '@fiar/content'
 import { Assets, AssetConfig } from '@fiar/assets'
-import { AuthConfig, Authorize } from '@fiar/auth'
+import { Auth, AuthConfig } from '@fiar/auth'
 
 export const createFiar = (config: {
   components?: Extensions
@@ -16,17 +16,17 @@ export const createFiar = (config: {
   auth?: AuthConfig
   node: HTMLElement
 }) => {
-  const Auth = (props: { children: React.ReactNode }) =>
-    config.auth ? <Authorize {...config.auth}>{props.children}</Authorize> : props.children
+  const AuthC = (props: { children: React.ReactNode }) =>
+    config.auth ? <Auth {...config.auth}>{props.children}</Auth> : props.children
   const components = { ...config.components }
 
   createRoot(config.node).render(
     <ExtensionsProvider value={components}>
       <Dashboard {...config.dashboard}>
-        <Auth>
+        <AuthC>
           {config.content && <Content {...config.content} />}
           {config.assets && <Assets {...config.assets} />}
-        </Auth>
+        </AuthC>
       </Dashboard>
     </ExtensionsProvider>,
   )

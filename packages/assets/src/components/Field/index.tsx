@@ -5,7 +5,7 @@ import { type FieldComponent, useFormState, fieldError, get, useController } fro
 import { WorkbenchPageModal } from '@fiar/workbench'
 import { Button, Field } from '@fiar/components'
 
-import { SelectAssetProvider } from '../../hooks/select.js'
+import { SelectAssetProvider } from '../../context/select.js'
 import { IFieldAsset } from '../../schema/index.js'
 import { Card } from '../Card/index.js'
 

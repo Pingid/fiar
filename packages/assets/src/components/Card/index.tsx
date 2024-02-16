@@ -6,8 +6,8 @@ import useSWR from 'swr'
 import { cn } from 'mcn'
 dayjs.extend(calender)
 
-import { useSelectAsset } from '../../hooks/select.js'
-import { useStorage } from '../../hooks/config.js'
+import { useSelectAsset } from '../../context/select.js'
+import { useFirebaseStorage } from '../../context/config.js'
 import { Thumbnail } from '../Thumb/index.js'
 
 export const Card = (props: {
@@ -15,7 +15,7 @@ export const Card = (props: {
   onDelete: () => void
 }) => {
   const onSelect = useSelectAsset()
-  const storage = useStorage()
+  const storage = useFirebaseStorage()
   const meta = useSWR([props.asset.fullPath, 'meta'], () => getMetadata(ref(storage, props.asset.fullPath)))
   const url = useSWR([props.asset.fullPath, 'url'], () => getDownloadURL(ref(storage, props.asset.fullPath)))
 

@@ -11,15 +11,15 @@ dayjs.extend(calender)
 import { Header, useStatus } from '@fiar/workbench'
 import { Button } from '@fiar/components'
 
-import { useUploadStatus, useUploads } from '../../hooks/uploads.js'
-import { AssetFolder, useConfig } from '../../hooks/index.js'
+import { useUploadStatus, useUploads } from '../../context/uploads.js'
+import { AssetFolder, useFirebaseStorage } from '../../context/index.js'
 import { DropLayer } from './DropLayer/index.js'
 import { AssetGrid } from '../Grid/index.js'
 import { Upload } from '../Upload/index.js'
 import { Card } from '../Card/index.js'
 
 export const Folder = (props: AssetFolder): JSX.Element => {
-  const storage = useConfig((x) => x.storage!)
+  const storage = useFirebaseStorage()
 
   const assets = useSWR(props.path, () => listAll(ref(storage, props.path)))
 

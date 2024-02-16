@@ -14,26 +14,27 @@ import useMutation from 'swr/mutation'
 import React from 'react'
 
 import { Button, Field, Input, LoadingDots } from '@fiar/components'
-import { type AuthConfig } from '../context/index.js'
+import { useFirebaseAuth, useAuthConfig } from '../context/index.js'
 
-export const Login = (
-  props: { onSuccess: (user: UserCredential) => void; ready?: boolean } & AuthConfig,
-): JSX.Element => {
+export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?: boolean }): JSX.Element => {
+  const auth = useFirebaseAuth()
+  const config = useAuthConfig()
+
   const [password, setPassword] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [error, setError] = React.useState('')
 
-  const emailPassword = props.providers.find((x) => x.providerId === 'password')
-  const social = props.providers.filter((x) => x.providerId !== 'password')
-  const signinEmail = useMutation('auth', () => signInWithEmailAndPassword(props.auth, email, password), {
+  const emailPassword = config.providers.find((x) => x.providerId === 'password')
+  const social = config.providers.filter((x) => x.providerId !== 'password')
+  const signinEmail = useMutation('auth', () => signInWithEmailAndPassword(auth, email, password), {
     onError: (e) => setError(e.message),
     onSuccess: props.onSuccess,
   })
   const signinSocial = useMutation(
-    props.method ?? 'redirect',
+    config.method ?? 'redirect',
     (type: string, p: { arg: AuthProvider }) => {
-      if (type === 'redirect') return signInWithRedirect(props.auth, p.arg)
-      return signInWithPopup(props.auth, p.arg)
+      if (type === 'redirect') return signInWithRedirect(auth, p.arg)
+      return signInWithPopup(auth, p.arg)
     },
     { onError: (e) => setError(e.message), onSuccess: props.onSuccess },
   )

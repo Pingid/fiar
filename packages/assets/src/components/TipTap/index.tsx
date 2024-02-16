@@ -8,8 +8,8 @@ import { Editor } from '@tiptap/react'
 import { TipTapTool, useTipTapExtensions, TipTapToolButton } from '@fiar/content/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
-import { SelectAssetProvider } from '../../hooks/select.js'
-import { useConfig } from '../../hooks/config.js'
+import { SelectAssetProvider } from '../../context/select.js'
+import { useFirebaseStorage } from '../../context/config.js'
 
 export const TipTapImageTool = () => {
   useEffect(
@@ -23,7 +23,7 @@ export const TipTapImageTool = () => {
 }
 
 const TipTapImageToolControl = (p: { editor: Editor }): JSX.Element => {
-  const storage = useConfig((x) => x.storage!)
+  const storage = useFirebaseStorage()
   const [open, setOpen] = useState(false)
   const url = useSWRMutation({}, (_, a: { arg: string }) =>
     getDownloadURL(ref(storage, a.arg)).then((url) => {

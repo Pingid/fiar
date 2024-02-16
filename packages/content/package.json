@@ -38,6 +38,8 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@firebase/auth": "^1.6.0",
+    "@firebase/app": "^0.9.27",
     "@firebase/firestore": "^4.4.2",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
@@ -49,6 +51,8 @@
     "vitest": "^1.2.2"
   },
   "peerDependencies": {
+    "@firebase/auth": "^1.6.0",
+    "@firebase/app": "^0.9.27",
     "@firebase/firestore": "^4.3.2",
     "react": "^18"
   },

@@ -1,18 +1,19 @@
 import { CloudIcon } from '@heroicons/react/24/outline'
+import { useLayoutEffect } from 'react'
 import { Route, Switch } from 'wouter'
 
 import { Extensions, useExtend } from '@fiar/workbench/extensions'
 import { type FieldComponent } from '@fiar/content/fields'
 import { App } from '@fiar/workbench'
 
-import { useConfig, AssetConfig } from './hooks/index.js'
+import { useAssetConfig, AssetConfig } from './context/index.js'
 import { FieldAsset } from './components/Field/index.js'
 import { FolderList } from './components/List/index.js'
 import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
 import { IFieldAsset } from './schema/index.js'
 
-export type { AssetConfig } from './hooks/index.js'
+export type { AssetConfig } from './context/index.js'
 export { image } from './schema/index.js'
 
 declare module '@fiar/workbench/extensions' {
@@ -24,13 +25,10 @@ declare module '@fiar/workbench/extensions' {
 const extensions = { 'field:asset': FieldAsset } satisfies Extensions
 
 export const Assets = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
-  const state = useConfig.getState()
+  useLayoutEffect(() => useAssetConfig.setState(config), [config])
+  if (!useAssetConfig.getState().firebase) useAssetConfig.setState(config)
 
   useExtend(extensions)
-
-  if (!state.storage && config.storage) {
-    useConfig.setState({ ...config, folders: config.folders ?? [] })
-  }
 
   return (
     <>

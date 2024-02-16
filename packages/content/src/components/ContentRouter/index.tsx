@@ -1,8 +1,8 @@
-import { Route,  } from 'wouter'
+import { Route } from 'wouter'
 import { inject } from 'regexparam'
 
-import { IContentCollection, IContentDocument } from '../../schema/index.js'
 import { CollectionList } from '../CollectionList/index.js'
+import { useContentConfig } from '../../context/config.js'
 import { DocumentEdit } from '../DocumentEdit/index.js'
 import { DocumentAdd } from '../DocumentAdd/index.js'
 import { ContentList } from '../ContentList/index.js'
@@ -10,8 +10,9 @@ import { ContentList } from '../ContentList/index.js'
 const parameterize = (path: string) => trailing(path).replace(/\{([^\}]+)\}/g, ':$1')
 const trailing = (path: string) => path.replace(/\/\{[^\}]+\}$/, '')
 
-export const ContentRouter = (props: { collections: IContentCollection[]; documents: IContentDocument[] }) => {
-  const collections = props.collections
+export const ContentRouter = () => {
+  const config = useContentConfig()
+  const collections = (config.collections ?? [])
     .map((x) => {
       const collection = parameterize(trailing(x.path)) as `/${string}`
       const document = `${collection}/:__docId__` as `/${string}`
@@ -24,7 +25,7 @@ export const ContentRouter = (props: { collections: IContentCollection[]; docume
     })
     .flat()
 
-  const documents = props.documents.map((x) => {
+  const documents = (config.documents ?? []).map((x) => {
     const path = parameterize(trailing(x.path)) as `/${string}`
     return <ContentRoute key={x.path} component={DocumentEdit} {...x} path={path} />
   })
@@ -33,7 +34,7 @@ export const ContentRouter = (props: { collections: IContentCollection[]; docume
     ...collections,
     ...documents,
     <Route path="/" key="/">
-      <ContentList collections={props.collections ?? []} documents={props.documents ?? []} />
+      <ContentList collections={config.collections ?? []} documents={config.documents ?? []} />
     </Route>,
   ]
 }

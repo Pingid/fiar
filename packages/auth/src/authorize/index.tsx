@@ -5,10 +5,13 @@ import { cn } from 'mcn'
 
 import { useAuth } from '@fiar/workbench'
 
-import { AuthConfig } from '../context/index.js'
+import { useAuthConfig, useFirebaseAuth } from '../context/index.js'
 import { Login } from '../login/index.js'
 
-export const Authorize = (props: AuthConfig) => {
+export const Authorize = () => {
+  const auth = useFirebaseAuth()
+  const config = useAuthConfig()
+
   const [ready, setReady] = useState(false)
   const status = useAuth((x) => x.status)
   const match = useRoute('/login')[0]
@@ -21,13 +24,13 @@ export const Authorize = (props: AuthConfig) => {
   }
 
   useEffect(() => {
-    props.auth.authStateReady().then(() => (updateUser(props.auth.currentUser), setReady(true)))
-    return props.auth.onAuthStateChanged({
+    auth.authStateReady().then(() => (updateUser(auth.currentUser), setReady(true)))
+    return auth.onAuthStateChanged({
       next: (x) => updateUser(x),
       error: () => console.log('error:'),
       complete: () => console.log('complete:'),
     })
-  }, [props.auth])
+  }, [auth])
 
   useEffect(() => {
     if (status !== 'signed-in' || !match) return
@@ -39,16 +42,16 @@ export const Authorize = (props: AuthConfig) => {
     useAuth.setState({
       status: 'signed-out',
       signin: () => nav(`/login?redirect=${location}`),
-      signout: () => signOut(props.auth),
+      signout: () => signOut(auth),
     })
-  }, [])
+  }, [auth])
 
   return (
     <>
-      {status !== 'signed-in' && !props.allowNoAuth && <Redirect to="/login" />}
+      {status !== 'signed-in' && !config.allowNoAuth && <Redirect to="/login" />}
       <Route path="/login">
-        <div className={cn('bg-back', [props.allowNoAuth, 'h-full w-full', 'fixed inset-0 z-40'])}>
-          <Login {...props} ready={ready} onSuccess={(x) => updateUser(x.user)} />
+        <div className={cn('bg-back', [config.allowNoAuth, 'h-full w-full', 'fixed inset-0 z-40'])}>
+          <Login {...config} ready={ready} onSuccess={(x) => updateUser(x.user)} />
         </div>
       </Route>
     </>

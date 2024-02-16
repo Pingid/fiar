@@ -279,6 +279,9 @@ importers:
       '@fiar/content':
         specifier: workspace:^
         version: link:../content
+      '@firebase/app':
+        specifier: ^0.9.27
+        version: 0.9.27
       '@firebase/storage':
         specifier: ^0.12.1
         version: 0.12.1(@firebase/app@0.9.27)
@@ -321,10 +324,16 @@ importers:
       wouter:
         specifier: ^3.0.0
         version: 3.0.0(react@18.2.0)
+      zustand:
+        specifier: ^4.5.0
+        version: 4.5.0(@types/react@18.2.55)(react@18.2.0)
     devDependencies:
       '@fiar/content':
         specifier: workspace:^
         version: link:../content
+      '@firebase/app':
+        specifier: ^0.9.27
+        version: 0.9.27
       '@firebase/auth':
         specifier: ^1.6.0
         version: 1.6.0(@firebase/app@0.9.27)
@@ -450,6 +459,12 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0(@types/react@18.2.55)(react@18.2.0)
     devDependencies:
+      '@firebase/app':
+        specifier: ^0.9.27
+        version: 0.9.27
+      '@firebase/auth':
+        specifier: ^1.6.0
+        version: 1.6.0(@firebase/app@0.9.27)
       '@firebase/firestore':
         specifier: ^4.4.2
         version: 4.4.2(@firebase/app@0.9.27)
@@ -594,9 +609,6 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
-      react-class-transition:
-        specifier: ^0.0.2
-        version: 0.0.2(react@18.2.0)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -1340,7 +1352,7 @@ packages:
       react: '>=16.8.0'
     dependencies:
       react: 18.2.0
-      tslib: 2.6.0
+      tslib: 2.6.2
     dev: false
 
   /@dnd-kit/core@6.1.0(react-dom@18.2.0)(react@18.2.0):
@@ -5470,7 +5482,7 @@ packages:
     resolution: {integrity: sha512-QlZ5yJC0VxHxQQsQhXvBaC7VRJ2uaxTf+Tfpu4Z/OcVQJVpZO+DGU0rkoVW5ce2SccxugvpBJoMvUs59iILYdw==}
     engines: {node: '>= 12'}
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.2
     dev: false
 
   /fill-range@7.0.1:
@@ -8744,14 +8756,6 @@ packages:
       strip-json-comments: 2.0.1
     dev: false
     optional: true
-
-  /react-class-transition@0.0.2(react@18.2.0):
-    resolution: {integrity: sha512-l0tpkCw1+FmMCXIMXxV2g73LLLzO5TI3DoXdgV3J1Z2woeu7N1DkDWYA8g5daqVChCHdoZOpANxWQXKtpRrDBg==}
-    peerDependencies:
-      react: '>=18.0.0'
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /react-composer@5.0.3(react@18.2.0):
     resolution: {integrity: sha512-1uWd07EME6XZvMfapwZmc7NgCZqDemcvicRi3wMJzXsQLvZ3L7fTHVyPy1bZdnWXM4iPjYuNE+uJ41MLKeTtnA==}

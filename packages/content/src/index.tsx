@@ -1,30 +1,26 @@
 import { CircleStackIcon } from '@heroicons/react/24/outline'
-import { Firestore } from '@firebase/firestore'
+import { getFirestore } from '@firebase/firestore'
+import { useLayoutEffect } from 'react'
 
 import { useExtend } from '@fiar/workbench/extensions'
 import { App } from '@fiar/workbench'
 
-import { IContentCollection, IContentDocument } from './schema/index.js'
+import { ContentConfig, useContentConfig } from './context/config.js'
 import { ContentRouter } from './components/ContentRouter/index.js'
 import { FirestoreProvider } from './hooks/index.js'
 import { extensions } from './context/extensions.js'
 
-export type ContentConfig = {
-  firestore?: Firestore
-  collections?: IContentCollection[]
-  documents?: IContentDocument[]
-}
-
-export const Content = ({
-  children,
-  ...props
-}: { children?: React.ReactNode } & ContentConfig & { firestore: Firestore }) => {
+export const Content = ({ children, ...props }: { children?: React.ReactNode } & ContentConfig) => {
+  if (!useContentConfig.getState().firebase) useContentConfig.setState(props)
+  useLayoutEffect(() => useContentConfig.setState(props), [props])
+  const firebase = useContentConfig((x) => (x.firebase ? getFirestore(x.firebase) : null))
   useExtend(extensions)
+
   return (
-    <FirestoreProvider value={props.firestore}>
+    <FirestoreProvider value={firebase}>
       <App title="Content" icon={<CircleStackIcon />} href="/content">
         <div className="h-full min-h-0 w-full min-w-0">
-          <ContentRouter collections={props.collections ?? []} documents={props.documents ?? []} />
+          <ContentRouter />
           {children}
         </div>
       </App>

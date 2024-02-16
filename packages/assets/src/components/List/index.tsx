@@ -2,12 +2,12 @@ import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import { Header } from '@fiar/workbench'
 import { Link } from 'wouter'
 
-import { useUploadStatus, useUploads } from '../../hooks/uploads.js'
-import { useConfig } from '../../hooks/config.js'
+import { useUploadStatus, useUploads } from '../../context/uploads.js'
+import { useAssetConfig } from '../../context/config.js'
 import { Upload } from '../index.js'
 
 export const FolderList = () => {
-  const config = useConfig()
+  const config = useAssetConfig()
   const uploads = useUploads((x) => x.uploads)
   useUploadStatus()
   return (
