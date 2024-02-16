@@ -44,15 +44,16 @@ export const useDocumentData = <T extends Record<string, any>>(
 export const useCollectionData = <T extends Record<string, any>>(
   ref: CollectionReference<T, T>,
   config?: SWRConfiguration<QuerySnapshot<T, T>, FirestoreError> & {
-    once?: boolean
+    subscribe?: boolean
     constraints?: QueryConstraint[]
   },
 ) => {
   const qry = query(ref, ...(config?.constraints ?? []))
+  const key = queryCacheKey(qry)
   const swr = useSWRConfig()
 
   const data = useSWR<QuerySnapshot<T, T>, FirestoreError>(
-    queryCacheKey(qry),
+    key,
     () =>
       getDocs(qry).then((x) => {
         x.docs.forEach((y) => swr.mutate(y.ref.path, y, { revalidate: false, populateCache: true }))
@@ -62,11 +63,11 @@ export const useCollectionData = <T extends Record<string, any>>(
   )
 
   useEffect(() => {
-    if (config?.once) return
-    return onSnapshot(ref, {
+    if (config?.subscribe === false) return
+    return onSnapshot(qry, {
       next: (snap) => data.mutate(snap, { revalidate: false, populateCache: true }),
     })
-  }, [ref.path, config?.once])
+  }, [ref.path, config?.subscribe, key])
 
   return data
 }

@@ -11,7 +11,6 @@ export const useCollectionListData = (path: string) => {
 
   return useCollectionData(collection(firestore, path), {
     constraints: [limit(size), ...(pages.slice(-1)[0] ? [startAfter(pages.slice(-1)[0])] : [])],
-    // once: pages.length > 0,
   })
 }
 
