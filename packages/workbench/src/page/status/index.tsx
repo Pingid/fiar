@@ -6,7 +6,7 @@ import { createStore, useStore } from 'zustand'
 type StatusState = { loading: boolean; error: Error | string | null }
 type StatusStore = StatusState & {
   online: boolean
-  promise: <T>(key: string, prms: Promise<T>) => Promise<T>
+  promise: <T extends Promise<any>>(key: string, prms: T) => T
   update: (key: string, status: StatusState) => void
 }
 const createStatusStore = () =>
@@ -43,7 +43,7 @@ const createStatusStore = () =>
           .catch((error) => {
             update(key, { loading: false, error })
             return Promise.reject(error)
-          })
+          }) as typeof prms
       },
     }
   })

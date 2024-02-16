@@ -9,24 +9,21 @@ export const ContentList = (props: { collections: IContentCollection[]; document
   return (
     <Page>
       <Page.Header breadcrumbs={[{ children: 'Content', href: '/' }]}></Page.Header>
-      <div className="mb-3" />
 
-      <div className="space-y-1 px-2">
-        <ul className="w-full space-y-2">
-          {props.collections.map((x) => (
-            <li key={x.path}>
-              <CollectionCard key={x.path} {...x} />
-            </li>
-          ))}
-          {props.documents.map((x) => (
-            <li key={x.path}>
-              <Link href={x.path} className="w-full">
-                <DocumentCard key={x.path} model={x} />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ul className="space-y-2 p-2">
+        {props.collections.map((x) => (
+          <li key={x.path}>
+            <CollectionCard key={x.path} {...x} />
+          </li>
+        ))}
+        {props.documents.map((x) => (
+          <li key={x.path}>
+            <Link href={x.path} className="w-full">
+              <DocumentCard key={x.path} model={x} />
+            </Link>
+          </li>
+        ))}
+      </ul>
     </Page>
   )
 }
