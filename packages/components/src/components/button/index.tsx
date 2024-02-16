@@ -46,7 +46,7 @@ export const Button: {
 } = forwardRef(({ color, size, icon, className, children, elementType, ...props }, ref) => {
   const Element: any = elementType ?? 'button'
   return (
-    <Element ref={ref} {...props} role="button" className={button({ size, color, className })}>
+    <Element ref={ref} type="button" {...props} role="button" className={button({ size, color, className })}>
       {icon && <span className={buttonIcon(children)}>{icon}</span>}
       {children}
     </Element>
