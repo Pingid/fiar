@@ -1,12 +1,16 @@
 import React, { createContext, useContext, useState } from 'react'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowLeftStartOnRectangleIcon,
+  ArrowRightEndOnRectangleIcon,
+  ChevronDownIcon,
+} from '@heroicons/react/24/outline'
+import { createGlobalSlot } from '@fiar/components'
 import { Link, useRoute } from 'wouter'
 import { cn } from 'mcn'
 
-import { createGlobalSlot } from '@fiar/components'
+import { useAuth } from '../auth/index.js'
 
 const NavActionTopSlot = createGlobalSlot()
-const NavActionBottomSlot = createGlobalSlot()
 const NavStateContext = createContext([false, (_open: boolean): void => {}] as const)
 
 export const useNavState = () => useContext(NavStateContext)
@@ -52,7 +56,7 @@ export const Nav = ({ children }: { children: React.ReactNode }) => {
               <NavActionTopSlot.Locate use="li" className="w-full" />
             </ul>
             <ul className="w-full space-y-4 p-3">
-              <NavActionBottomSlot.Locate use="li" className="w-full" />
+              <AuthButton />
             </ul>
           </div>
         </aside>
@@ -69,9 +73,6 @@ export const Nav = ({ children }: { children: React.ReactNode }) => {
 
 export const NavActionTop = (p: { children: React.ReactElement }) => (
   <NavActionTopSlot.Place>{p.children}</NavActionTopSlot.Place>
-)
-export const NavActionBottom = (p: { children: React.ReactElement }) => (
-  <NavActionBottomSlot.Place>{p.children}</NavActionBottomSlot.Place>
 )
 
 export const NavButton = (props: { title: React.ReactNode; icon: React.ReactNode; active?: boolean }) => {
@@ -93,5 +94,34 @@ export const AppLink = (props: { to: string; title: React.ReactNode; icon: React
         <NavButton {...props} active={m1 || m2} />
       </Link>
     </NavActionTopSlot.Place>
+  )
+}
+
+const AuthButton = () => {
+  const auth = useAuth()
+  if (auth.status === 'disabled') return null
+
+  return (
+    <>
+      <p
+        className={cn('truncate pb-3 text-sm font-medium leading-none transition-opacity', [
+          !open,
+          'opacity-0',
+          'opacity-100',
+        ])}
+      >
+        {auth.status === 'signed-in' && auth.user?.name}
+      </p>
+      {auth.status === 'signed-in' && (
+        <button className="w-full" onClick={() => auth.signout()}>
+          <NavButton icon={<ArrowLeftStartOnRectangleIcon />} title="Sign out" />
+        </button>
+      )}
+      {auth.status === 'signed-out' && (
+        <button className="w-full" onClick={() => auth.signin()}>
+          <NavButton icon={<ArrowRightEndOnRectangleIcon />} title="Sign in" />
+        </button>
+      )}
+    </>
   )
 }

@@ -38,7 +38,9 @@ export const Button: {
       children,
       elementType,
       ...props
-    }: ComponentProps<E> & { children?: React.ReactNode; icon?: React.ReactNode } & Parameters<typeof button>[0],
+    }: ComponentProps<E> & { children?: React.ReactNode; icon?: React.ReactNode; elementType?: E } & Parameters<
+        typeof button
+      >[0],
     ref?: ForwardedRef<ElementRef<E>>,
   ): JSX.Element
 } = forwardRef(({ color, size, icon, className, children, elementType, ...props }, ref) => {

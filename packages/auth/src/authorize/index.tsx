@@ -1,57 +1,56 @@
+import { Redirect, Route, useLocation, useRoute, useSearch } from 'wouter'
+import { type User, signOut } from '@firebase/auth'
 import { useEffect, useState } from 'react'
-import { type User } from '@firebase/auth'
-import { useLocation } from 'wouter'
+import { cn } from 'mcn'
 
-import { LoadingDots } from '@fiar/components'
+import { useAuth } from '@fiar/workbench'
 
-import { FirebaseAuthProvider, AuthUserProvider, AuthConfig } from '../context/index.js'
-import { UserAuthState } from '../button/index.js'
+import { AuthConfig } from '../context/index.js'
 import { Login } from '../login/index.js'
 
-export const Authorize = (props: { children: React.ReactNode } & AuthConfig) => {
-  const [location, setLocation] = useLocation()
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<User>()
-  const match = /^\/login/.test(location)
+export const Authorize = (props: AuthConfig) => {
+  const [ready, setReady] = useState(false)
+  const status = useAuth((x) => x.status)
+  const match = useRoute('/login')[0]
+  const [_, nav] = useLocation()
+  const search = useSearch()
 
-  const updateUser = () => props.auth.currentUser && setUser(props.auth.currentUser)
+  const updateUser = (current: User | null) => {
+    const user = current?.displayName && current.uid ? { name: current.displayName, id: current.uid } : null
+    useAuth.setState(user ? { status: 'signed-in', user: user } : { status: 'signed-out', user: null })
+  }
 
   useEffect(() => {
-    props.auth.authStateReady().then(() => (updateUser(), setLoading(false)))
+    props.auth.authStateReady().then(() => (updateUser(props.auth.currentUser), setReady(true)))
     return props.auth.onAuthStateChanged({
-      next: (x) => setUser(x ?? undefined),
+      next: (x) => updateUser(x),
       error: () => console.log('error:'),
       complete: () => console.log('complete:'),
     })
   }, [props.auth])
 
   useEffect(() => {
-    if (match || props.allowNoAuth || user || loading) return
-    setLocation(`/login?redirect=${location}`, { replace: true })
-  }, [match, location, props.allowNoAuth, user, loading])
+    if (status !== 'signed-in' || !match) return
+    const redirect = new URLSearchParams(search).get('redirect') || '/'
+    nav(redirect || '/')
+  }, [match, status, search])
 
   useEffect(() => {
-    if (!user || loading || !match) return
-    const redirect = new URLSearchParams(window.location.search).get('redirect')
-    setLocation(redirect || '/')
-  }, [user, match, loading, location])
-
-  if (!user && loading) {
-    return (
-      <FirebaseAuthProvider value={props.auth}>
-        <div className="flex h-screen w-full items-center justify-center">
-          <LoadingDots />
-        </div>
-      </FirebaseAuthProvider>
-    )
-  }
+    useAuth.setState({
+      status: 'signed-out',
+      signin: () => nav(`/login?redirect=${location}`),
+      signout: () => signOut(props.auth),
+    })
+  }, [])
 
   return (
-    <FirebaseAuthProvider value={props.auth}>
-      <AuthUserProvider value={user ?? null}>
-        <UserAuthState />
-        {match ? <Login {...props} onSuccess={(x) => setUser(x.user)} /> : props.children}
-      </AuthUserProvider>
-    </FirebaseAuthProvider>
+    <>
+      {status !== 'signed-in' && !props.allowNoAuth && <Redirect to="/login" />}
+      <Route path="/login">
+        <div className={cn('bg-back', [props.allowNoAuth, 'h-full w-full', 'fixed inset-0 z-40'])}>
+          <Login {...props} ready={ready} onSuccess={(x) => updateUser(x.user)} />
+        </div>
+      </Route>
+    </>
   )
 }

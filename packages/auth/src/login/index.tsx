@@ -16,7 +16,9 @@ import React from 'react'
 import { Button, Field, Input, LoadingDots } from '@fiar/components'
 import { type AuthConfig } from '../context/index.js'
 
-export const Login = (props: { onSuccess: (user: UserCredential) => void } & AuthConfig): JSX.Element => {
+export const Login = (
+  props: { onSuccess: (user: UserCredential) => void; ready?: boolean } & AuthConfig,
+): JSX.Element => {
   const [password, setPassword] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [error, setError] = React.useState('')
@@ -38,7 +40,7 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void } & Aut
 
   const mutating = signinEmail.isMutating || signinSocial.isMutating
 
-  if (mutating) {
+  if (mutating || !props.ready) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <LoadingDots />
@@ -72,7 +74,7 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void } & Aut
               </Field.Control>
             </Field>
             <div className="flex justify-end pt-3">
-              <Button isDisabled={mutating} className="px-6 py-3">
+              <Button disabled={mutating} className="px-6 py-3">
                 Login
               </Button>
             </div>
@@ -86,7 +88,7 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void } & Aut
                 key={x.providerId}
                 className="flex w-full items-center justify-center py-3"
                 onClick={() => signinSocial.trigger(x)}
-                isDisabled={mutating}
+                disabled={mutating}
                 icon={selected?.icon}
               >
                 Sign in via {selected?.title || x.providerId}

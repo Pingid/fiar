@@ -15,16 +15,15 @@ export default function ReactApp() {
         providers={[new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()]}
         method="popup"
         allowNoAuth
-      >
-        <Content firestore={firestore} collections={[test, articles, tags]} documents={[landing]}></Content>
-        <Assets
-          storage={storage}
-          folders={[
-            { title: 'Photos', path: '/photos', accept: { ['image/*']: [] } },
-            { title: 'Icons', path: '/icons' },
-          ]}
-        />
-      </Authorize>
+      />
+      <Content firestore={firestore} collections={[test, articles, tags]} documents={[landing]}></Content>
+      <Assets
+        storage={storage}
+        folders={[
+          { title: 'Photos', path: '/photos', accept: { ['image/*']: [] } },
+          { title: 'Icons', path: '/icons' },
+        ]}
+      />
     </Dashboard>
   )
 }

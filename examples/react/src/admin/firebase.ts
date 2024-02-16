@@ -1,4 +1,4 @@
-import { getFirestore, connectFirestoreEmulator, Firestore } from '@firebase/firestore'
+import { connectFirestoreEmulator, Firestore, initializeFirestore } from '@firebase/firestore'
 import { getFunctions, connectFunctionsEmulator, Functions } from '@firebase/functions'
 import { getStorage, connectStorageEmulator, FirebaseStorage } from '@firebase/storage'
 import { getAuth, connectAuthEmulator, Auth } from '@firebase/auth'
@@ -15,7 +15,7 @@ export const app = initializeApp({
 })
 
 export const functions: Functions = getFunctions(app)
-export const firestore: Firestore = getFirestore(app)
+export const firestore: Firestore = initializeFirestore(app, {})
 export const storage: FirebaseStorage = getStorage(app)
 export const auth: Auth = getAuth(app)
 
