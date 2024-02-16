@@ -20,27 +20,27 @@
   "dependencies": {
     "@fiar/components": "workspace:^",
     "@fiar/workbench": "workspace:^",
-    "@heroicons/react": "^2.0.18",
-    "@react-three/drei": "^9.97.5",
+    "@heroicons/react": "^2.1.1",
+    "@react-three/drei": "^9.97.6",
     "@react-three/fiber": "^8.15.16",
-    "@tiptap/extension-image": "^2.1.12",
-    "@tiptap/react": "^2.1.12",
+    "@tiptap/extension-image": "^2.2.3",
+    "@tiptap/react": "^2.2.3",
     "dayjs": "^1.11.10",
     "mcn": "^0.0.4",
     "react-dropzone": "^14.2.3",
-    "react-use": "^17.4.0",
-    "swr": "^2.2.4",
+    "react-use": "^17.5.0",
+    "swr": "^2.2.5",
     "three": "^0.161.0",
     "wouter": "^2.12.1",
-    "zustand": "^4.4.6"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@fiar/content": "workspace:^",
-    "@firebase/storage": "^0.11.2",
-    "@types/react": "^18.2.33",
+    "@firebase/storage": "^0.12.1",
+    "@types/react": "^18.2.55",
     "@types/three": "^0.161.2",
     "react": "^18.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "@fiar/content": "workspace:^",

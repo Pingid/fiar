@@ -19,23 +19,23 @@
   },
   "dependencies": {
     "@fiar/components": "workspace:^",
-    "@heroicons/react": "^2.0.18",
+    "@heroicons/react": "^2.1.1",
     "mcn": "^0.0.4",
     "react": "^18.2.0",
     "react-class-transition": "^0.0.2",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.11.0",
+    "react-icons": "^5.0.1",
     "react-transition-group": "^4.4.5",
     "regexparam": "^2.0.1",
-    "swr": "^2.2.4",
+    "swr": "^2.2.5",
     "typeofit": "^0.0.5",
     "wouter": "^2.12.1",
-    "zustand": "^4.4.6"
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.33",
-    "@types/react-dom": "^18.2.14",
-    "typescript": "^5.2.2"
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.3.3"
   },
   "exports": {
     "./package.json": "./package.json",

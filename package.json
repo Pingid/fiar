@@ -26,18 +26,18 @@
     "deploy": "./scripts/env.js 'firebase deploy --project $FIREBASE_PROJECT_ID'"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
     "@fiar/prettier-plugin": "workspace:^",
-    "autoprefixer": "^10.4.16",
-    "esbuild": "^0.18.20",
-    "fast-glob": "^3.3.1",
+    "@types/node": "^20.11.0",
+    "autoprefixer": "^10.4.17",
+    "esbuild": "^0.20.0",
+    "fast-glob": "^3.3.2",
     "node-pty": "^1.0.0",
-    "postcss": "^8.4.31",
-    "prettier": "^3.2.2",
-    "prettier-plugin-tailwindcss": "^0.4.1",
-    "tailwindcss": "^3.3.5",
-    "tsx": "^4.6.0",
-    "typescript": "^5.2.2"
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.11",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
   },
   "prettier": {
     "semi": false,
