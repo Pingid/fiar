@@ -1,5 +1,4 @@
 import { type ElementRef, type ForwardedRef, type ElementType, type ComponentProps } from 'react'
-import { type AriaButtonOptions } from 'react-aria'
 import { cn } from 'mcn'
 
 import { forwardRef } from '../../util/forwardRef.js'
@@ -39,8 +38,7 @@ export const Button: {
       children,
       elementType,
       ...props
-    }: AriaButtonOptions<E> &
-      ComponentProps<E> & { children?: React.ReactNode; icon?: React.ReactNode } & Parameters<typeof button>[0],
+    }: ComponentProps<E> & { children?: React.ReactNode; icon?: React.ReactNode } & Parameters<typeof button>[0],
     ref?: ForwardedRef<ElementRef<E>>,
   ): JSX.Element
 } = forwardRef(({ color, size, icon, className, children, elementType, ...props }, ref) => {

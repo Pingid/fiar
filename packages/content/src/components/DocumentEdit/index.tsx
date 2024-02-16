@@ -11,7 +11,7 @@ import { handleRecieveValues, handleUpdateValues } from '../../util/firebase.js'
 import { useDocumentData, useFirestore } from '../../hooks/index.js'
 import { DocumentFormFields } from '../DocumentFormFields/index.js'
 import { DocumentFormTitle } from '../DocumentFormTitle/index.js'
-import { DocumentFormSave } from '../DocumentFormSave/index.js'
+import { DocumentPublish } from '../DocumentFormSave/index.js'
 import { IContentModel } from '../../schema/index.js'
 
 export const DocumentEdit = (props: IContentModel) => {
@@ -25,7 +25,7 @@ export const DocumentEdit = (props: IContentModel) => {
 
   const form = useForm({ criteriaMode: 'firstError', defaultValues: handleRecieveValues(data.data?.data()) })
 
-  const onSave = form.handleSubmit((x) =>
+  const onSubmit = form.handleSubmit((x) =>
     handle(props.path, updateDoc(ref, handleUpdateValues(firestore, x))).then(() => form.reset(handleRecieveValues(x))),
   )
 
@@ -46,24 +46,28 @@ export const DocumentEdit = (props: IContentModel) => {
   return (
     <Page>
       <FormProvider {...form}>
-        <Page.Header
-          subtitle={props.path}
-          breadcrumbs={
-            [
-              { children: 'Content', href: '/' },
-              props.type === 'collection' ? { children: props.label, href: props.path.replace(/\/[^\/]+$/, '') } : null,
-              { children: <DocumentFormTitle {...props} />, href: props.path },
-            ].filter(Boolean) as any[]
-          }
-        >
-          <div className="flex w-full justify-end gap-2">
-            <Button color="error" disabled={!exists} onClick={() => onDelete().then(() => nav('/'))}>
-              Delete
-            </Button>
-            <DocumentFormSave icon={<ArrowUpTrayIcon />} onClick={onSave} title="Save" />
-          </div>
-        </Page.Header>
-        <DocumentFormFields control={form.control} register={form.register} schema={props} />
+        <form onSubmit={onSubmit}>
+          <Page.Header
+            subtitle={props.path}
+            breadcrumbs={
+              [
+                { children: 'Content', href: '/' },
+                props.type === 'collection'
+                  ? { children: props.label, href: props.path.replace(/\/[^\/]+$/, '') }
+                  : null,
+                { children: <DocumentFormTitle {...props} />, href: props.path },
+              ].filter(Boolean) as any[]
+            }
+          >
+            <div className="flex w-full justify-end gap-2">
+              <Button type="button" color="error" disabled={!exists} onClick={() => onDelete().then(() => nav('/'))}>
+                Delete
+              </Button>
+              <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+            </div>
+          </Page.Header>
+          <DocumentFormFields control={form.control} register={form.register} schema={props} />
+        </form>
       </FormProvider>
     </Page>
   )
