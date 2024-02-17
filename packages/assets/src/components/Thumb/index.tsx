@@ -1,6 +1,7 @@
 import { DocumentIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
-import { Thumb3D } from './3D/index.js'
 import { cn } from 'mcn'
+
+import { Thumb3D } from './3D/index.js'
 
 export const Thumbnail = (props: {
   url?: string | undefined
@@ -30,7 +31,7 @@ const ThumbMedia = (props: { url?: string | undefined; contentType?: string | un
     )
   }
   if (props.contentType?.startsWith('image')) {
-    return <img src={props.url} className="h-full w-full object-contain object-center" />
+    return <img loading="lazy" src={props.url} className="h-full w-full object-contain object-center" />
   }
 
   if (props.contentType?.startsWith('text') || props.contentType?.startsWith('application/pdf')) {

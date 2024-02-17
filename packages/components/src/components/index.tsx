@@ -1,5 +1,6 @@
 export * from './loading/index.js'
 export * from './button/index.js'
+export * from './card/index.js'
 export * from './avatar/index.js'
 export * from './forms/index.js'
 export * from './modal/index.js'
