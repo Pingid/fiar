@@ -1,74 +1,43 @@
-import { CSSTransition, Transition } from 'react-transition-group'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useEffect, useRef } from 'react'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Transition } from 'react-transition-group'
 import { Route, Switch } from 'wouter'
 import { cn } from 'mcn'
 
 import { Modal } from '@fiar/components'
 
+import { InterceptProvider, Interceptor } from '../interceptor/index.js'
 import { DashboardRouter } from '../router/index.js'
 import { useApps } from '../app/index.js'
 
 export const WorkbenchModal = (p: { open: boolean; close: () => void; children: React.ReactNode }): JSX.Element => {
-  const container = useRef<HTMLDivElement>(null)
-  const wrapper = useRef<HTMLDivElement>(null)
-
   useLockBodyScroll(p.open)
 
   return (
     <Modal>
-      <CSSTransition
-        in={p.open}
-        nodeRef={wrapper}
-        classNames={{
-          appear: 'bg-black/0',
-          enter: 'bg-black/60',
-          enterDone: 'bg-black/60',
-          exit: 'bg-black/0 delay-75',
-        }}
-        unmountOnExit
-        addEndListener={(done) => {
-          if (!wrapper.current) done()
-          else wrapper.current.addEventListener('transitionend', done, false)
-        }}
-      >
-        {(parent) => (
+      <Animate open={p.open}>
+        {(bg, container) => (
           <div
-            className="fixed flex h-full w-full pt-24 transition-all sm:items-center sm:justify-center sm:p-12"
+            className={cn('fixed flex h-full w-full pt-24 sm:items-center sm:justify-center sm:p-12', bg.className)}
             onClick={() => p.close()}
-            ref={wrapper}
+            ref={bg.ref}
           >
-            <Transition
-              in={!p.open ? false : parent !== 'exited'}
-              nodeRef={container}
-              addEndListener={(done) => {
-                if (!container.current) done()
-                else container.current.addEventListener('transitionend', done, false)
-              }}
-            >
-              {(child) => (
-                <div
-                  className={cn(
-                    'bg-back relative grid max-h-full min-h-[70vh] w-full max-w-3xl rounded border transition-all [grid-template:1fr/1fr]',
-                    {
-                      'translate-y-5 opacity-0 delay-75': child === 'exited',
-                      'translate-y-0 opacity-100 delay-75': child === 'entering' || child === 'entered',
-                      'translate-y-5 opacity-0': child === 'exiting',
-                    },
-                  )}
-                  onClick={(e) => e.stopPropagation()}
-                  ref={container}
-                >
-                  <button className="hover:text-active absolute right-3 top-3 z-40" onClick={() => p.close()}>
-                    <XMarkIcon className="h-5 w-5" />
-                  </button>
-                  <div className="relative h-full w-full overflow-y-auto pb-3">{p.children}</div>
-                </div>
+            <div
+              className={cn(
+                'bg-back relative grid max-h-full min-h-[70vh] w-full max-w-3xl rounded border [grid-template:1fr/1fr]',
+                container.className,
               )}
-            </Transition>
+              onClick={(e) => e.stopPropagation()}
+              ref={container.ref}
+            >
+              <button className="hover:text-active absolute right-3 top-3 z-40" onClick={() => p.close()}>
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+              <div className="relative h-full w-full overflow-y-auto pb-3">{p.children}</div>
+            </div>
           </div>
         )}
-      </CSSTransition>
+      </Animate>
     </Modal>
   )
 }
@@ -81,26 +50,29 @@ export const WorkbenchPageModal = (p: {
   static?: boolean
 }): JSX.Element => {
   const pages = useApps((x) => x.pages)
+  const interceptor = useRef<Interceptor>((cb) => cb())
 
   return (
-    <WorkbenchModal open={p.open} close={p.close}>
-      <DashboardRouter router={{ ...p, type: 'memory' }}>
-        <Switch>
-          {pages.map((app) => {
-            const to = app.href ?? `/${app.title.toLowerCase().replace(/(\s|\t|\n)+/gim, '-')}`
-            return (
-              <Fragment key={to}>
-                <Route path={to} nest>
-                  {app.children}
-                </Route>
-                <Route path={`${to}/*`} nest>
-                  {app.children}
-                </Route>
-              </Fragment>
-            )
-          })}
-        </Switch>
-      </DashboardRouter>
+    <WorkbenchModal open={p.open} close={() => interceptor.current(() => p.close())}>
+      <InterceptProvider value={interceptor}>
+        <DashboardRouter router={{ ...p, type: 'memory' }}>
+          <Switch>
+            {pages.map((app) => {
+              const to = app.href ?? `/${app.title.toLowerCase().replace(/(\s|\t|\n)+/gim, '-')}`
+              return (
+                <Fragment key={to}>
+                  <Route path={to} nest>
+                    {app.children}
+                  </Route>
+                  <Route path={`${to}/*`} nest>
+                    {app.children}
+                  </Route>
+                </Fragment>
+              )
+            })}
+          </Switch>
+        </DashboardRouter>
+      </InterceptProvider>
     </WorkbenchModal>
   )
 }
@@ -112,4 +84,63 @@ const useLockBodyScroll = (active: boolean) => {
     else document.body.style.overflow = originalOverflowStyle
     return () => void (document.body.style.overflow = originalOverflowStyle)
   }, [active])
+}
+
+const Animate = (p: {
+  open: boolean
+  children: (
+    container: { ref: React.RefObject<HTMLDivElement>; className: string },
+    wrapper: { ref: React.RefObject<HTMLDivElement>; className: string },
+  ) => React.ReactNode
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const transition = cn('transition-[transform,background,opacity] ease-in-out')
+  const delay = cn('delay-100')
+
+  return (
+    <Transition
+      in={p.open}
+      nodeRef={wrapperRef}
+      unmountOnExit
+      addEndListener={(done) => {
+        if (!wrapperRef.current) done()
+        else wrapperRef.current.addEventListener('transitionend', done, false)
+      }}
+    >
+      {(wrapper) => (
+        <Transition
+          in={!p.open ? false : wrapper !== 'exited'}
+          nodeRef={containerRef}
+          addEndListener={(done) => {
+            if (!containerRef.current) done()
+            else containerRef.current.addEventListener('transitionend', done, false)
+          }}
+        >
+          {(container) =>
+            p.children(
+              {
+                ref: wrapperRef,
+                className: cn(
+                  transition,
+                  [wrapper === 'exited', 'bg-black/0'],
+                  [wrapper.startsWith('enter'), 'bg-black/60'],
+                  [wrapper === 'exiting', cn('bg-black/0', delay)],
+                ),
+              },
+              {
+                ref: containerRef,
+                className: cn(
+                  transition,
+                  [container === 'exited', cn('translate-y-5 opacity-0', delay)],
+                  [container.startsWith('enter'), cn('translate-y-0 opacity-100', delay)],
+                  [container === 'exiting', 'translate-y-5 opacity-0'],
+                ),
+              },
+            )
+          }
+        </Transition>
+      )}
+    </Transition>
+  )
 }

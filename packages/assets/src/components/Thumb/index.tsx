@@ -23,14 +23,14 @@ const ThumbMedia = (props: { url?: string | undefined; contentType?: string | un
 
   if (props.contentType?.startsWith('video')) {
     return (
-      <video controls className="h-full w-full object-scale-down object-center">
+      <video controls className="h-full w-full object-contain object-center">
         <source src={props.url} />
         Download <a href={props.url} download target="__blank" />
       </video>
     )
   }
   if (props.contentType?.startsWith('image')) {
-    return <img src={props.url} className="h-full w-full object-scale-down object-center" />
+    return <img src={props.url} className="h-full w-full object-contain object-center" />
   }
 
   if (props.contentType?.startsWith('text') || props.contentType?.startsWith('application/pdf')) {

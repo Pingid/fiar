@@ -31,7 +31,8 @@ export const FieldText: FieldComponent<IFieldString> = (props) => {
     content: control.field.value,
     editorProps: {
       attributes: {
-        class: 'px-3 py-4 prose prose-sm sm:prose focus:outline-none min-h-[10rem] bg-back w-full sm:p-2 !max-w-full',
+        class:
+          'prose prose-sm sm:prose focus:outline-none min-h-[10rem] bg-back w-full sm:px-8 sm:py-12 py-6 px-5 !max-w-full',
       },
     },
     onUpdate: (x) => control.field.onChange(x.editor.getHTML()),

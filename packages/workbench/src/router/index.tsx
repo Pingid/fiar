@@ -1,12 +1,10 @@
+import { createContext, useCallback, useContext, useMemo } from 'react'
 import { useBrowserLocation } from 'wouter/use-browser-location'
+import { BaseLocationHook, Router, useRouter } from 'wouter'
 import { useHashLocation } from 'wouter/use-hash-location'
-import { createContext, useContext, useMemo } from 'react'
 import { memoryLocation } from 'wouter/memory-location'
-import { Router } from 'wouter'
 
-import { InterceptProvider } from './intercept.js'
-
-export { useIntercept } from './intercept.js'
+import { useInterceptor } from '../interceptor/index.js'
 
 export type DashboardRouterProps = {
   children?: React.ReactNode
@@ -25,7 +23,7 @@ export const DashboardRouter = (props: DashboardRouterProps) => {
 
   const children = (
     <DashboardContext.Provider value={true}>
-      <InterceptProvider>{props.children}</InterceptProvider>
+      <NavigationInterceptor>{props.children}</NavigationInterceptor>
     </DashboardContext.Provider>
   )
 
@@ -57,3 +55,23 @@ const MemoryRouter = (
     {props.children}
   </Router>
 )
+
+const NavigationInterceptor = (props: { children: React.ReactNode }) => {
+  const interceptor = useInterceptor()
+
+  const router = useRouter()
+  const hook = useCallback<BaseLocationHook>(
+    (arg: any) => {
+      const [location, navigate] = router.hook(arg)
+      const shadowed = (path: string, ...args: any[]) => interceptor.current(() => navigate(path, ...args))
+      return [location, shadowed]
+    },
+    [router.hook],
+  )
+
+  return (
+    <Router base={router.base} hook={hook}>
+      {props.children}
+    </Router>
+  )
+}
