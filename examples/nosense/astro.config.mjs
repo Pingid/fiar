@@ -1,3 +1,4 @@
+import spotlightjs from '@spotlightjs/astro'
 import { defineConfig } from 'astro/config'
 import tailwind from '@astrojs/tailwind'
 import react from '@astrojs/react'
@@ -30,7 +31,6 @@ process.env.PUBLIC_FIREBASE_MEASUREMENT_ID = process.env.FIREBASE_MEASUREMENT_ID
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), react()],
-  server: { port: 3001 },
+  integrations: [tailwind(), react(), spotlightjs()],
   vite: { resolve: { alias: [...local('packages')] } },
 })

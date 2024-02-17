@@ -1,5 +1,5 @@
+import config from '@fiar/components/tailwind.config.js'
 import type { Config } from 'tailwindcss'
-import config from '@fiar/components/tailwind.config'
 import path from 'path'
 import fs from 'fs'
 

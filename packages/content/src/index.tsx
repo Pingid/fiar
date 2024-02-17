@@ -10,6 +10,8 @@ import { ContentRouter } from './components/ContentRouter/index.js'
 import { FirestoreProvider } from './hooks/index.js'
 import { extensions } from './context/extensions.js'
 
+export type { ContentConfig } from './context/config.js'
+
 export const Content = ({ children, ...props }: { children?: React.ReactNode } & ContentConfig) => {
   if (!useContentConfig.getState().firebase) useContentConfig.setState(props)
   useLayoutEffect(() => useContentConfig.setState(props), [props])

@@ -16,7 +16,7 @@ const seoPageMeta = s.struct({
 })
 
 export const articles = s.defineCollection({
-  path: 'articles',
+  path: '/articles/{articleId}',
   label: 'Articles',
   titleField: 'title',
   fields: {
@@ -29,12 +29,12 @@ export const articles = s.defineCollection({
 })
 
 export const landing = s.defineDocument({
-  path: 'pages/landing',
+  path: '/pages/landing',
   label: 'Landing page',
   fields: {
     meta: seoPageMeta,
     // highlight: s.ref({ label: 'Main article', to: () => articles }),
-    more: s.array({ label: 'Articles', of: s.ref({ to: () => articles }) }),
+    more: s.list({ label: 'Articles', of: s.ref({ of: () => articles }) }),
   },
 })
 

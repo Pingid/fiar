@@ -27,16 +27,13 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@fiar/components": "workspace:^",
-    "@firebase/firestore": "^4.4.2",
-    "@firebase/storage": "^0.12.1",
+    "@firebase/app": "^0.9.27",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@firebase/firestore": "^4.3.2",
-    "@firebase/storage": "^0.11.2"
+    "@firebase/app": "^0.9.27"
   },
   "exports": {
     "./package.json": "./package.json",
