@@ -12,7 +12,6 @@ export const createFiar = (
     AssetConfig &
     AuthConfig,
 ) => {
-  console.log(config)
   createRoot(config.node).render(
     <ExtensionsProvider value={config.components || {}}>
       <Dashboard {...config}>

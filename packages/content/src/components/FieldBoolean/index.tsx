@@ -11,7 +11,11 @@ export const FieldBoolean: FieldComponent<IFieldBoolean> = (props) => {
   return (
     <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
       <Field.Control>
-        <Input id={props.name} type="checkbox" {...props.register(props.name, { required: !props.field.optional })} />
+        <Input
+          id={props.name}
+          type="checkbox"
+          {...props.control.register(props.name, { required: !props.field.optional })}
+        />
       </Field.Control>
     </Field>
   )

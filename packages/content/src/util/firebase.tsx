@@ -1,36 +1,30 @@
-import { DocumentReference, Firestore, deleteField, doc } from '@firebase/firestore'
+import { DocumentReference, FieldValue, Firestore, Timestamp, deleteField, doc } from '@firebase/firestore'
 
-export const handleUpdateValues = (firestore: Firestore, x: any): any => {
+export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boolean): any => {
   if (x instanceof IntermediateDocumentReference) return x.ref(firestore)
-  if (typeof x === 'undefined') return deleteField()
-  if (Array.isArray(x)) return x.map((x) => handleUpdateValues(firestore, x))
-  if (typeof x === null || typeof x === 'function') return x
-  if (typeof x === 'object') {
-    return Object.fromEntries(Object.entries(x).map((y) => [y[0], handleUpdateValues(firestore, y[1])]))
-  }
-  return x
-}
-
-export const handleCreateValues = (firestore: Firestore, x: any): any => {
-  if (x instanceof IntermediateDocumentReference) return x.ref(firestore)
-  if (Array.isArray(x)) return x.map((x) => handleCreateValues(firestore, x))
+  if (x instanceof Timestamp) return x
+  if (x instanceof FieldValue) return x
+  if (typeof x === 'undefined' && deleteUndefined) return deleteField()
+  if (Array.isArray(x)) return x.map((x) => toFirestore(firestore, x, deleteUndefined))
   if (typeof x === null || typeof x === 'function') return x
   if (typeof x === 'object') {
     return Object.fromEntries(
       Object.entries(x)
-        .filter((x) => typeof x[1] !== 'undefined')
-        .map((y) => [y[0], handleCreateValues(firestore, y[1])]),
+        .filter(([_key, value]) => !(deleteUndefined && typeof value === 'undefined'))
+        .map(([key, value]) => [key, toFirestore(firestore, value, deleteUndefined)]),
     )
   }
   return x
 }
 
-export const handleRecieveValues = (x: any): any => {
+export const fromFirestore = (x: any): any => {
   if (x instanceof DocumentReference) return new IntermediateDocumentReference(x)
-  if (Array.isArray(x)) return x.map((x) => handleRecieveValues(x))
+  if (x instanceof Timestamp) return x
+  if (x instanceof FieldValue) return x
+  if (Array.isArray(x)) return x.map((x) => fromFirestore(x))
   if (typeof x === null || typeof x === 'function') return x
   if (typeof x === 'object') {
-    return Object.fromEntries(Object.entries(x).map((y) => [y[0], handleRecieveValues(y[1])]))
+    return Object.fromEntries(Object.entries(x).map((y) => [y[0], fromFirestore(y[1])]))
   }
   return x
 }

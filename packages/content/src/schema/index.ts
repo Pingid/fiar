@@ -6,7 +6,9 @@ import {
   FireSchemaMap,
   FireSchemaRef,
   FireModel,
+  FireSchemaTimestamp,
 } from '@fiar/schema'
+import { Timestamp } from '@firebase/firestore'
 
 export interface IFieldBase {
   label?: string
@@ -27,6 +29,11 @@ export interface IFieldNumber extends IFieldBase, FireSchemaNumber {
   initialValue?: number
 }
 
+export interface IFieldTimestamp extends IFieldBase, FireSchemaTimestamp {
+  at?: 'updated' | 'created'
+  initialValue?: Timestamp
+}
+
 export interface IFieldStruct extends IFieldBase, FireSchemaMap {
   fields: Record<string, IFields>
 }
@@ -37,17 +44,26 @@ export interface IFieldList extends IFieldBase, FireSchemaList {
 
 export interface IFieldRef extends IFieldBase, FireSchemaRef {}
 
-export type IFields = IFieldBoolean | IFieldString | IFieldNumber | IFieldStruct | IFieldList | IFieldRef
+export type IFields =
+  | IFieldBoolean
+  | IFieldString
+  | IFieldNumber
+  | IFieldStruct
+  | IFieldList
+  | IFieldRef
+  | IFieldTimestamp
 
 export interface IContentDocument extends FireModel {
   type: 'document'
   label: string
+  fields: Record<string, IFields>
 }
 
 export interface IContentCollection extends FireModel {
   type: 'collection'
   label?: string
   titleField: keyof this['fields']
+  fields: Record<string, IFields>
 }
 
 export type IContentModel = IContentDocument | IContentCollection
@@ -58,6 +74,9 @@ export const string = <const T extends Omit<IFieldString, 'type'> = {}>(x?: T) =
   ({ type: 'string' as const, ...x }) as T & { readonly type: 'string' }
 export const text = <const T extends Omit<IFieldString, 'type'> = {}>(x?: T) =>
   ({ type: 'string' as const, component: 'field:text', ...x }) as T & { readonly type: 'string' }
+
+export const timestamp = <const T extends Omit<IFieldTimestamp, 'type'> = {}>(x?: T) =>
+  ({ type: 'timestamp' as const, ...x }) as T & { readonly type: 'timestamp' }
 
 export const number = <const T extends Omit<IFieldNumber, 'type'>>(x?: T) =>
   ({ type: 'number', ...x }) satisfies IFieldNumber

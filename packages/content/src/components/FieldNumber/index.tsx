@@ -15,7 +15,7 @@ export const FieldNumber: FieldComponent<IFieldNumber> = (props) => {
           id={props.name}
           type="number"
           step="any"
-          {...props.register(props.name, { required: !props.field.optional, valueAsNumber: true })}
+          {...props.control.register(props.name, { required: !props.field.optional, valueAsNumber: true })}
         />
       </Field.Control>
     </Field>

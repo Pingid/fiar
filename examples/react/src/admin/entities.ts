@@ -65,6 +65,8 @@ export const tags = s.defineCollection({
   titleField: 'name',
   fields: {
     name: s.string({ label: 'Name' }),
+    createdAt: s.timestamp({ at: 'createdAt' }),
+    updatedAt: s.timestamp({ at: 'updatedAt' }),
   },
 })
 

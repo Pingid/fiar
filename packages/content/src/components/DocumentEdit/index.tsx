@@ -1,13 +1,18 @@
 import { deleteDoc, doc, updateDoc } from '@firebase/firestore'
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
-import { FormProvider, useForm } from 'react-hook-form'
 import { useLocation } from 'wouter'
 import { useEffect } from 'react'
 
 import { Page, useIntercept, useStatus } from '@fiar/workbench'
 import { Button } from '@fiar/components'
 
-import { handleRecieveValues, handleUpdateValues } from '../../util/firebase.js'
+import {
+  DocumentFormProvider,
+  DocumentHooksProvider,
+  useDocumentForm,
+  useDocumentHooks,
+} from '../../context/document.js'
+import { fromFirestore, toFirestore } from '../../util/firebase.js'
 import { useDocumentData, useFirestore } from '../../hooks/index.js'
 import { DocumentFormFields } from '../DocumentFormFields/index.js'
 import { DocumentFormTitle } from '../DocumentFormTitle/index.js'
@@ -20,20 +25,32 @@ export const DocumentEdit = (props: IContentModel) => {
   const handle = useStatus((x) => x.promise)
   const firestore = useFirestore()
   const ref = doc(firestore, props.path)
+  const hooks = useDocumentHooks()
 
   const data = useDocumentData(ref, { once: true })
 
-  const form = useForm({ criteriaMode: 'firstError', defaultValues: handleRecieveValues(data.data?.data()) })
+  const form = useDocumentForm({
+    criteriaMode: 'firstError',
+    defaultValues: fromFirestore(data.data?.data()),
+    context: { model: props, status: 'update' },
+  })
 
-  const onSubmit = form.handleSubmit((x) =>
-    handle(props.path, updateDoc(ref, handleUpdateValues(firestore, x))).then(() => form.reset(handleRecieveValues(x))),
-  )
+  const onSubmit = form.handleSubmit((value) => {
+    const transformed = toFirestore(firestore, value, true)
+    return data.mutate(
+      (x) =>
+        hooks.current
+          .reduce((next, hook) => next.then((y) => hook(y, 'update')), Promise.resolve(transformed))
+          .then((values) => handle(props.path, updateDoc(ref, values)).then(() => x)),
+      { revalidate: true },
+    )
+  })
 
   const onDelete = () => handle(props.path, deleteDoc(ref))
 
   useEffect(() => {
     if (!data.data) return
-    form.reset(handleRecieveValues(data.data.data()), { keepDirty: true, keepDirtyValues: true })
+    form.reset(fromFirestore(data.data.data()), { keepDirty: true, keepDirtyValues: true })
   }, [data.data])
 
   const exists = !!data.data?.exists()
@@ -45,30 +62,37 @@ export const DocumentEdit = (props: IContentModel) => {
 
   return (
     <Page>
-      <FormProvider {...form}>
-        <form onSubmit={onSubmit}>
-          <Page.Header
-            subtitle={props.path}
-            breadcrumbs={
-              [
-                { children: 'Content', href: '/' },
-                props.type === 'collection'
-                  ? { children: props.label, href: props.path.replace(/\/[^\/]+$/, '') }
-                  : null,
-                { children: <DocumentFormTitle {...props} />, href: props.path },
-              ].filter(Boolean) as any[]
-            }
-          >
-            <div className="flex w-full justify-end gap-2">
-              <Button type="button" color="error" disabled={!exists} onClick={() => onDelete().then(() => nav('/'))}>
-                Delete
-              </Button>
-              <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
-            </div>
-          </Page.Header>
-          <DocumentFormFields control={form.control} register={form.register} schema={props} />
-        </form>
-      </FormProvider>
+      <DocumentHooksProvider value={hooks}>
+        <DocumentFormProvider {...form}>
+          <form onSubmit={onSubmit}>
+            <Page.Header
+              subtitle={props.path}
+              breadcrumbs={
+                [
+                  { children: 'Content', href: '/' },
+                  props.type === 'collection'
+                    ? { children: props.label, href: props.path.replace(/\/[^\/]+$/, '') }
+                    : null,
+                  { children: <DocumentFormTitle {...props} />, href: props.path },
+                ].filter(Boolean) as any[]
+              }
+            >
+              <div className="flex w-full justify-end gap-2">
+                <Button
+                  type="button"
+                  color="error"
+                  disabled={!exists}
+                  onClick={() => onDelete().then(() => nav(props.path))}
+                >
+                  Delete
+                </Button>
+                <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+              </div>
+            </Page.Header>
+            <DocumentFormFields control={form.control} register={form.register} schema={props} />
+          </form>
+        </DocumentFormProvider>
+      </DocumentHooksProvider>
     </Page>
   )
 }

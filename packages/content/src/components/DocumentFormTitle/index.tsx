@@ -1,8 +1,10 @@
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
+
+import { useDocumentFormContext } from '../../context/document.js'
 import { IContentModel } from '../../schema/index.js'
 
 export const DocumentFormTitle = (props: IContentModel & { default?: string }) => {
-  const form = useFormContext()
+  const form = useDocumentFormContext()
 
   const watched = useWatch({
     control: form.control,

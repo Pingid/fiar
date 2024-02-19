@@ -1,6 +1,6 @@
 import { QueryDocumentSnapshot } from '@firebase/firestore'
 
-import { useCollectionListData } from '../CollectionListPagination/index.js'
+import { useCollectionListData } from '../CollectionList/index.js'
 import { IContentCollection } from '../../schema/index.js'
 import { date } from '../../util/index.js'
 

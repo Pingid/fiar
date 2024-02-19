@@ -31,11 +31,7 @@ export const useDocumentData = <T extends Record<string, any>>(
   const data = useSWR<DocumentSnapshot<T, T>, FirestoreError>(ref.path, () => getDoc(ref), config)
   useEffect(() => {
     if (config?.once) return
-    return onSnapshot(ref, {
-      next: (snap) => {
-        data.mutate(snap, { revalidate: false, populateCache: true })
-      },
-    })
+    return onSnapshot(ref, { next: (snap) => data.mutate(snap, { revalidate: false, populateCache: true }) })
   }, [ref.path, config?.once])
 
   return data
