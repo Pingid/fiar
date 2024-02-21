@@ -9,8 +9,9 @@ import {
   useFormContext,
 } from 'react-hook-form'
 import { createContext, useContext, useEffect, useRef } from 'react'
-import { IContentModel, IFields } from '../schema/index.js'
 import { InferSchemaType } from '@fiar/schema'
+
+import { IContentModel, IFields } from '../schema/index.js'
 
 export interface DocumentFormContext {
   model: IContentModel

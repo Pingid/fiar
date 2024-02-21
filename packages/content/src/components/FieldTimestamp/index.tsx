@@ -6,8 +6,8 @@ import { IFieldTimestamp } from '../../schema/index.js'
 
 export const FieldTimestamp: FieldComponent<IFieldTimestamp> = (props) => {
   useDocumentHook((x, type) => {
-    if (props.field.at === 'created' && type !== 'update') set(x, props.name, serverTimestamp())
-    if (props.field.at === 'updated') set(x, props.name, serverTimestamp())
+    if (props.field.computed === 'on-create' && type !== 'update') set(x, props.name, serverTimestamp())
+    if (props.field.computed === 'on-update') set(x, props.name, serverTimestamp())
     return x
   })
 

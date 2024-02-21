@@ -30,7 +30,7 @@ export interface IFieldNumber extends IFieldBase, FireSchemaNumber {
 }
 
 export interface IFieldTimestamp extends IFieldBase, FireSchemaTimestamp {
-  at?: 'updated' | 'created'
+  computed?: 'on-update' | 'on-create'
   initialValue?: Timestamp
 }
 
@@ -64,6 +64,8 @@ export interface IContentCollection extends FireModel {
   label?: string
   titleField: keyof this['fields']
   fields: Record<string, IFields>
+  columns: (keyof this['fields'])[]
+  sort: [keyof this['fields'], 'asc' | 'desc']
 }
 
 export type IContentModel = IContentDocument | IContentCollection

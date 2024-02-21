@@ -22,6 +22,8 @@ export const articles = s.defineCollection({
   path: '/articles/{articleId}',
   label: 'Articles',
   titleField: 'title',
+  columns: ['title', 'body', 'image'],
+  sort: ['title', 'asc'],
   fields: {
     title: s.string({ label: 'Title' }),
     image: image({ label: 'Main image' }),
@@ -36,6 +38,8 @@ export const test = s.defineCollection({
   path: '/test',
   label: 'Test',
   titleField: 'title',
+  columns: ['title', 'count', 'metadata'],
+  sort: ['title', 'asc'],
   fields: {
     title: s.string({ label: 'Title', description: 'Document title' }),
     count: s.number({ label: 'Count', description: 'Document count' }),
@@ -63,10 +67,12 @@ export const tags = s.defineCollection({
   path: '/tags/{tagId}',
   label: 'Tags',
   titleField: 'name',
+  sort: ['updatedAt', 'asc'],
+  columns: ['name', 'createdAt', 'updatedAt'],
   fields: {
     name: s.string({ label: 'Name' }),
-    createdAt: s.timestamp({ at: 'createdAt' }),
-    updatedAt: s.timestamp({ at: 'updatedAt' }),
+    createdAt: s.timestamp({ computed: 'on-create' }),
+    updatedAt: s.timestamp({ computed: 'on-update' }),
   },
 })
 

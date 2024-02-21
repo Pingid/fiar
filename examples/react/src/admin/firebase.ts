@@ -23,12 +23,6 @@ import config from '../../../../firebase.json'
 
 // let saved: any = null
 if (process.env.FIRE_EMULATE) {
-  // console.log(require('../../../../firebase.json'))
-  // const config = import('../../../../firebase.json').then((x) => x.default)
-  // config.then((x) => {
-  //   saved = x
-  //   connect(x)
-  // })
   const connect = (cnf: Awaited<typeof config>) => {
     connectFunctionsEmulator(functions, `localhost`, cnf.emulators.functions.port)
     connectFirestoreEmulator(firestore, `localhost`, cnf.emulators.firestore.port)

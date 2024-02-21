@@ -31,7 +31,6 @@ export const DocumentEdit = (props: IContentModel) => {
 
   const form = useDocumentForm({
     criteriaMode: 'firstError',
-    defaultValues: fromFirestore(data.data?.data()),
     context: { model: props, status: 'update' },
   })
 
@@ -41,12 +40,18 @@ export const DocumentEdit = (props: IContentModel) => {
       (x) =>
         hooks.current
           .reduce((next, hook) => next.then((y) => hook(y, 'update')), Promise.resolve(transformed))
-          .then((values) => handle(props.path, updateDoc(ref, values)).then(() => x)),
+          .then((values) =>
+            handle(props.path, updateDoc(ref, values)).then(() => {
+              const next = fromFirestore(values)
+              form.reset(next)
+              return x ? Object.assign(x, { data: () => next }) : undefined
+            }),
+          ),
       { revalidate: true },
     )
   })
 
-  const onDelete = () => handle(props.path, deleteDoc(ref))
+  const onDelete = () => (deleteDoc(ref), nav(props.type === 'collection' ? props.path.replace(/\/[^\/]+$/g, '') : '/'))
 
   useEffect(() => {
     if (!data.data) return
@@ -77,13 +82,8 @@ export const DocumentEdit = (props: IContentModel) => {
                 ].filter(Boolean) as any[]
               }
             >
-              <div className="flex w-full justify-end gap-2">
-                <Button
-                  type="button"
-                  color="error"
-                  disabled={!exists}
-                  onClick={() => onDelete().then(() => nav(props.path))}
-                >
+              <div className="flex w-full justify-end gap-2 px-3 py-2">
+                <Button type="button" color="error" size="sm" disabled={!exists} onClick={() => onDelete()}>
                   Delete
                 </Button>
                 <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
