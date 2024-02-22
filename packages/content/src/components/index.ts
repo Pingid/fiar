@@ -1,1 +1,1 @@
-export * from './FieldText/index.js'
+export * from '../fields/text/index.js'

@@ -1,14 +1,14 @@
-import { ChevronDownIcon, DocumentIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { deleteDoc, orderBy } from '@firebase/firestore'
+import { useEffect, useState } from 'react'
 import { Button } from '@fiar/components'
 import { useLocation } from 'wouter'
-import { useEffect, useState } from 'react'
 import { cn } from 'mcn'
 
-import { IContentCollection, IFields } from '../../../schema/index.js'
 import { useCollectionListData, useCollectionQuery, useOrderBy } from '../hooks/index.js'
 import { useSelectDocument } from '../../../context/select.js'
-import { date } from '../../../util/index.js'
-import { orderBy } from '@firebase/firestore'
+import { IContentCollection } from '../../../schema/index.js'
+import { PreviewField } from '../../../fields/index.js'
 
 export const Table = (props: IContentCollection) => {
   const [columns] = useState(props.columns)
@@ -22,12 +22,12 @@ export const Table = (props: IContentCollection) => {
 
   return (
     <div
-      style={{ gridTemplateColumns: `max-content repeat(${columns.length}, minmax(50px,1fr)) 6rem` }}
-      className="grid w-full gap-x-2 p-2 [grid-auto-rows:auto] sm:p-0"
+      style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(50px,1fr)) 6rem` }}
+      className="grid w-full p-2 [grid-auto-rows:auto] sm:p-0"
     >
       <div className="bg-front/5 col-span-full hidden w-full grid-cols-subgrid px-3 py-1 pt-2 sm:grid">
         {columns.map((key: string, i) => (
-          <div key={key} className={cn('text-front/60 flex gap-2 text-sm font-medium', [i === 0, 'col-span-2'])}>
+          <div key={key} className={cn('text-front/60 flex gap-2 text-sm font-medium', [i === 0, 'col-span-1'])}>
             <span>{props.fields[key]?.label || key}</span>
             <Order value={key} />
           </div>
@@ -40,18 +40,23 @@ export const Table = (props: IContentCollection) => {
           onClick={() => (select ? select(x.ref) : nav(`${props.path}/${x.id}`))}
           className="hover:text-active active hover:border-active group col-span-full mb-2 grid border p-3 sm:grid-cols-subgrid sm:border-x-0 sm:border-b-0"
         >
-          <div>
+          {/* <div className="hidden sm:block">
             <DocumentIcon className="group-hover:text-active h-5 w-5" />
-          </div>
+          </div> */}
           {columns.map((key: string) => (
-            <div key={key} className="mb-2 flex w-full min-w-0 flex-col  sm:mb-0">
-              <p className="text-front/60 text-xs leading-none sm:hidden">{props.fields[key]?.label || key}</p>
-              <FieldPreview field={props.fields[key] as any} data={x.data()[key]} />
+            <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
+              <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{props.fields[key]?.label || key}</p>
+              <PreviewField name={key} field={props.fields[key] as any} value={x.data()[key]} />
             </div>
           ))}
           <div className="flex w-full items-start justify-end">
             <div className="hidden gap-1 sm:flex">
-              <Button icon={<TrashIcon />} size="sm" color="error"></Button>
+              <Button
+                icon={<TrashIcon />}
+                size="sm"
+                color="error"
+                onClick={(e) => (e.stopPropagation(), deleteDoc(x.ref))}
+              ></Button>
             </div>
           </div>
         </div>
@@ -70,15 +75,4 @@ const Order = (props: { value: string }) => {
       <ChevronDownIcon className={cn('h-4 w-4', [dir === 'asc' && active, 'rotate-180'])} />
     </button>
   )
-}
-
-const FieldPreview = (props: { field: IFields; data: any }) => {
-  if (props.field.component === 'field:text') {
-    return <div dangerouslySetInnerHTML={{ __html: props.data }} className="line-clamp-3 text-sm" />
-  }
-  if (props.field.type === 'bool') return props.data
-  if (props.field.type === 'number') return props.data
-  if (props.field.type === 'string') return props.data
-  if (props.field.type === 'timestamp') return date(props.data.toDate()).calendar()
-  return <div className="truncate">{JSON.stringify(props.data)}</div>
 }

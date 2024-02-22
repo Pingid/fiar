@@ -6,7 +6,7 @@ import { useExtend } from '@fiar/workbench/extensions'
 import { App } from '@fiar/workbench'
 
 import { ContentConfig, useContentConfig } from './context/config.js'
-import { ContentRouter } from './components/ContentRouter/index.js'
+import { ContentRouter } from './components/content/index.js'
 import { FirestoreProvider } from './hooks/index.js'
 import { extensions } from './context/extensions.js'
 

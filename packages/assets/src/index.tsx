@@ -3,11 +3,11 @@ import { useLayoutEffect } from 'react'
 import { Route, Switch } from 'wouter'
 
 import { Extensions, useExtend } from '@fiar/workbench/extensions'
-import { type FieldComponent } from '@fiar/content/fields'
+import { FieldPreview, type FieldForm } from '@fiar/content/fields'
 import { App } from '@fiar/workbench'
 
 import { useAssetConfig, AssetConfig } from './context/index.js'
-import { FieldAsset } from './components/Field/index.js'
+import { FormFieldAsset, PreviewFieldAsset } from './components/Field/index.js'
 import { FolderList } from './components/List/index.js'
 import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
@@ -18,11 +18,12 @@ export { image } from './schema/index.js'
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
-    'field:asset': FieldComponent<IFieldAsset>
+    'field:form:asset': FieldForm<IFieldAsset>
+    'field:preview:asset': FieldPreview<IFieldAsset>
   }
 }
 
-const extensions = { 'field:asset': FieldAsset } satisfies Extensions
+const extensions = { 'field:form:asset': FormFieldAsset, 'field:preview:asset': PreviewFieldAsset } satisfies Extensions
 
 export const Assets = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
   useLayoutEffect(() => useAssetConfig.setState(config), [config])

@@ -1,7 +1,7 @@
 import * as s from '@fiar/content/schema'
 import { image } from '@fiar/assets/schema'
 
-const seoPageMeta = s.struct({
+const seoPageMeta = s.map({
   label: 'SEO',
   optional: true,
   fields: {
@@ -22,7 +22,7 @@ export const articles = s.defineCollection({
   path: '/articles/{articleId}',
   label: 'Articles',
   titleField: 'title',
-  columns: ['title', 'body', 'image'],
+  columns: ['title', 'image', 'body'],
   sort: ['title', 'asc'],
   fields: {
     title: s.string({ label: 'Title' }),
@@ -43,7 +43,7 @@ export const test = s.defineCollection({
   fields: {
     title: s.string({ label: 'Title', description: 'Document title' }),
     count: s.number({ label: 'Count', description: 'Document count' }),
-    metadata: s.struct({
+    metadata: s.map({
       label: 'Metadata',
       description: 'Metadata associated with this post used inside the <meta tag of the generated html page',
       fields: { time: s.string({ label: 'Current time' }), seo: seoPageMeta },
@@ -51,7 +51,7 @@ export const test = s.defineCollection({
     links: s.list({
       label: 'Links',
       description: 'Page links including socials',
-      of: s.struct({
+      of: s.map({
         label: 'Link',
         description:
           'This should be between 50 and 60 characters. For help in writing quality meta titles, see best practices',
