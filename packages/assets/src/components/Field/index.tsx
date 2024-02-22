@@ -12,7 +12,16 @@ import { Thumbnail } from '../index.js'
 
 export const PreviewFieldAsset: FieldPreview<IFieldAsset> = (props) => {
   const asset = useImageMeta(props.value?.fullPath)
-  return <Thumbnail className="max-h-20 w-max" url={asset.data?.url} contentType={asset.data?.contentType} />
+  console.log(asset.data)
+  return (
+    <div className="flex aspect-square h-28 w-28">
+      <Thumbnail
+        className="object-contain object-left-top"
+        url={asset.data?.url}
+        contentType={asset.data?.contentType}
+      />
+    </div>
+  )
 }
 
 export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
@@ -51,7 +60,13 @@ export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
           </div>
         )}
         {form.field.value && (
-          <Thumbnail className="bg-frame aspect-square" url={asset.data?.url} contentType={asset.data?.contentType} />
+          <div className="bg-frame aspect-square">
+            <Thumbnail
+              className="h-full w-full object-contain object-center"
+              url={asset.data?.url}
+              contentType={asset.data?.contentType}
+            />
+          </div>
         )}
         {!form.field.value && (
           <div className="flex w-full items-center justify-center">

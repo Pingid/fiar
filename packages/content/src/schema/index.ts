@@ -14,7 +14,7 @@ export interface IFieldBase {
   label?: string
   description?: string
   optional?: boolean
-  components?: string
+  component?: string
 }
 
 export interface IFieldBoolean extends IFieldBase, FireSchemaBool {

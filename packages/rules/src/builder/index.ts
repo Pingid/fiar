@@ -43,16 +43,14 @@ interface Match<P extends string, C> {
 }
 
 type Arg<T = any> = { name: string; type: T }
-// const arg = <K extends string, T extends any>(name: K) => ({ name, type: {} as T })
+// const arg = <T extends any, K extends string = string>(name: K) => ({ name, type: {} as T })
 
 // const r = {} as Rules<{}>
-// r.service(
-//   'cloud.firestore',
-//   (x) =>
-//     x
-//       .function('isAuthed', [arg('data')], (c) => op.eq(c.request.auth.token.email, 'foo@bar.com'))
-//       .match('/users/{userId}', (x) => x.allow(['read', 'write'], (y) => y.isAuthed(''))),
-//   // .match('/cool', (x) => x.allow('write', (c) => op.neq(c.request.auth, {}))),
+// r.service('cloud.firestore', (x) =>
+//   x
+//     .function('isAuthed', [arg('data')], (c) => op.eq(c.request.auth.token.email, 'foo@bar.com'))
+//     .match('/users/{userId}', (x) => x.allow(['read', 'write'], (y) => y.isAuthed('')))
+//     .match('/cool', (x) => x.allow('write', (c) => op.neq(c.request.auth, {}))),
 // )
 
 type Member = ast.MemberExpression | ast.CallExpression

@@ -76,7 +76,7 @@ export const FormFieldRef: FieldForm<IFieldRef> = (props) => {
 }
 
 export const PreviewFieldRef: FieldPreview<IFieldRef> = (props) => {
-  return JSON.stringify(props.value)
+  return props.value.path
 }
 
 const DocCard = (props: {
@@ -89,10 +89,10 @@ const DocCard = (props: {
   const data = useDocumentData(doc(firestore, props.model.path))
 
   return (
-    <div className="grid p-2">
+    <div className="grid gap-1 p-2 sm:grid-flow-col-dense sm:gap-3">
       {props.columns.map((key: string) => (
-        <div key={key} className="mb-2 flex w-full min-w-0 flex-col">
-          <p className="text-front/60 pb-0.5 text-xs leading-none">{props.model.fields[key]?.label || key}</p>
+        <div key={key} className="mb-2 flex w-full min-w-0 flex-col leading-none">
+          <p className="text-front/60 pb-2 text-xs leading-none">{props.model.fields[key]?.label || key}</p>
           <PreviewField name={key} field={props.model.fields[key] as any} value={data.data?.data()?.[key]} />
         </div>
       ))}

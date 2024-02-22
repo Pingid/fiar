@@ -13,5 +13,4 @@ createFiar({
   folders: [{ path: '/fiar', title: 'Photos' }],
   providers: [new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()],
   method: 'popup',
-  allowNoAuth: true,
 })

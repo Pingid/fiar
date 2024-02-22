@@ -1,6 +1,6 @@
 import * as s from 'fiar/schema'
 
-const seoPageMeta = s.struct({
+const seoPageMeta = s.map({
   label: 'SEO page meta',
   fields: {
     title: s.string({ label: 'Page title' }),
@@ -19,6 +19,8 @@ export const articles = s.defineCollection({
   path: '/articles/{articleId}',
   label: 'Articles',
   titleField: 'title',
+  columns: ['title', 'image'],
+  sort: ['title', 'asc'],
   fields: {
     title: s.string({ label: 'Title' }),
     image: s.image({ label: 'Main image' }),
