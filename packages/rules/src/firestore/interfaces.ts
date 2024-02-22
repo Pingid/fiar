@@ -17,7 +17,9 @@ export type InferRule<T> =
             : never
 
 export interface In {}
-export interface Eq {}
+export interface Eq {
+  (a: any, b: any): RulesBoolean
+}
 export interface Neq {}
 export interface Gt {}
 export interface Lt {}

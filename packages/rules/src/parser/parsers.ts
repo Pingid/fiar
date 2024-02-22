@@ -26,7 +26,7 @@ export const value = p.rule<Tok, ast.Value>()
 export const ident = p.apply(p.seq(p.tok(Tok.Ident), p.nil()), (x) => ast.node({ kind: 'Ident', name: x[0].text }))
 
 /* ----------------------------- Literal Parser ----------------------------- */
-export const literal = p.apply(p.alt_sc(p.tok(Tok.Bool), p.tok(Tok.Num), p.tok(Tok.Str), p.tok(Tok.Null)), (x) =>
+export const literal = p.apply(p.alt(p.tok(Tok.Bool), p.tok(Tok.Num), p.tok(Tok.Str), p.tok(Tok.Null)), (x) =>
   ast.node({ kind: 'Literal', value: x.text }),
 )
 

@@ -76,7 +76,7 @@ export const FormFieldRef: FieldForm<IFieldRef> = (props) => {
 }
 
 export const PreviewFieldRef: FieldPreview<IFieldRef> = (props) => {
-  return props.value.path
+  return <>{(props as any).value.path}</>
 }
 
 const DocCard = (props: {

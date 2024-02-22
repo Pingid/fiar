@@ -164,22 +164,22 @@ type TypeofPrimsKeys = keyof TypeofPrims
 export type InferSchemaType<T extends FireSchemaTypes> = T['type'] extends TypeofPrimsKeys
   ? TypeofPrims[T['type']]
   : T extends FireSchemaSet
-  ? InferTuple<T['of']>
-  : T extends FireSchemaPath
-  ? Record<string, any>
-  : T extends FireSchemaList
-  ? InferSchemaType<T['of']>[]
-  : T extends FireSchemaMap
-  ? InferMap<T['fields']>
-  : T extends FireSchemaRef<infer R>
-  ? T['target'] extends 'document'
-    ? DocumentReference<InferMap<R>, InferMap<R>>
-    : CollectionReference<InferMap<R>, InferMap<R>>
-  : T extends FireSchemaUnion
-  ? InferSchemaType<T['of'][number]>
-  : T extends FireSchemaLiteral
-  ? T['value']
-  : never
+    ? InferTuple<T['of']>
+    : T extends FireSchemaPath
+      ? Record<string, any>
+      : T extends FireSchemaList
+        ? InferSchemaType<T['of']>[]
+        : T extends FireSchemaMap
+          ? InferMap<T['fields']>
+          : T extends FireSchemaRef<infer R>
+            ? T['target'] extends 'document'
+              ? DocumentReference<InferMap<R>, InferMap<R>>
+              : CollectionReference<InferMap<R>, InferMap<R>>
+            : T extends FireSchemaUnion
+              ? InferSchemaType<T['of'][number]>
+              : T extends FireSchemaLiteral
+                ? T['value']
+                : never
 
 export type InferModelType<T extends FireModel> = InferSchemaType<{ type: 'map'; fields: T['fields'] }>
 

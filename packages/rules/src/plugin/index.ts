@@ -25,6 +25,7 @@ export const parsers = {
     parse: (text, options) => {
       const parse_result = expectEOF(parse.parse(lexer.parse(text)))
 
+      // console.log(literal.parse(lexer.parse(text)))
       if (parse_result.successful) {
         const ast = parse_result.candidates[0]?.result
         if (ast && parse_result.error && parse_result.error.message === 'Unable to consume token: <END-OF-FILE>')

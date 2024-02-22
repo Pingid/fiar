@@ -13,72 +13,75 @@ import {
 } from '@fiar/schema'
 
 import { RulesBoolean, RulesList, RulesMap, RulesNumber, RulesString, RulesTimestamp } from '../firestore/interfaces.js'
-import { Rule } from '../rule/index.js'
 import { op } from '../builder/index.js'
+import { Rule } from '../rule/index.js'
 
-export const transformRule = (rule: Rule, type: FireSchemaTypes): RulesBoolean => {
+export const transformRule = (left: Rule, type: FireSchemaTypes): RulesBoolean => {
   const transformer = defaultTransformers[type.type] as FieldTranformer<Rule, FireSchemaTypes>
-  if (type.optional) return op.or(op.eq(rule as any, null), transformer(rule, type as any))
-  return transformer(rule, type as any)
+  if (type.optional) return op.or(op.eq(left as any, null), transformer(left, type as any))
+  return transformer(left, type as any)
 }
 
 type FieldTranformer<R extends Rule, T extends FireSchemaTypes> = (rule: R, type: T) => RulesBoolean
 
-const transformString: FieldTranformer<RulesString, FireSchemaString> = (base, field) => {
-  // const rules: RulesBoolean[] = [op.is(base, field.type)]
-  // if (field.match instanceof RegExp) rules.push(base.matches(field.match.source))
-  // if (typeof field.match === 'string') rules.push(base.matches(field.match))
-  // if (typeof field.min === 'number') rules.push(op.gte(base.size(), field.min))
-  // if (typeof field.max === 'number') rules.push(op.lte(base.size(), field.max))
-  // if (typeof field.size === 'number') rules.push(op.eq(base.size(), field.size))
-  // return op.and(...(rules as [any, any]))
-  return op.is(base, field.type)
+const transformString: FieldTranformer<RulesString, FireSchemaString> = (left, field) => {
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
+  if (field.match instanceof RegExp) rules.push(left.matches(`/${field.match.source}/${field.match.flags}`))
+  if (typeof field.match === 'string') rules.push(left.matches(`'${field.match}'`))
+  if (typeof field.min === 'number') rules.push(op.gte(left.size(), field.min))
+  if (typeof field.max === 'number') rules.push(op.lte(left.size(), field.max))
+  if (typeof field.size === 'number') rules.push(op.eq(left.size(), field.size))
+  return op.and(...rules)
+  // return op.is(base, field.type)
 }
 
-const transformNumber: FieldTranformer<RulesNumber, FireSchemaNumber> = (base, field) => {
-  const rules: RulesBoolean[] = [op.is(base, field.type)]
-  if (typeof field.min === 'number') rules.push(op.gte(base, field.min))
-  if (typeof field.max === 'number') rules.push(op.lte(base, field.max))
-  return op.and(...(rules as [any, any]))
+const transformNumber: FieldTranformer<RulesNumber, FireSchemaNumber> = (left, field) => {
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
+  if (typeof field.min === 'number') rules.push(op.gte(left, field.min))
+  if (typeof field.max === 'number') rules.push(op.lte(left, field.max))
+  return op.and(...rules)
 }
 
-const transformTimestamp: FieldTranformer<RulesTimestamp, FireSchemaTimestamp> = (base, field) => {
-  const rules: RulesBoolean[] = [op.is(base, field.type)]
-  if (field.after) rules.push(op.gt(base.toMillis(), new Date(field.after).getTime()))
-  if (field.before) rules.push(op.lt(base.toMillis(), new Date(field.before).getTime()))
-  return op.and(...(rules as [any, any]))
+const transformTimestamp: FieldTranformer<RulesTimestamp, FireSchemaTimestamp> = (left, field) => {
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
+  if (field.after) rules.push(op.gt(left.toMillis(), new Date(field.after).getTime()))
+  if (field.before) rules.push(op.lt(left.toMillis(), new Date(field.before).getTime()))
+  return op.and(...rules)
 }
 
-const transformMap: FieldTranformer<RulesMap<Record<string, any>>, FireSchemaMap> = (base, field) => {
-  const rules: RulesBoolean[] = [op.is(base, 'map')]
-  if (!field.loose) rules.push(base.keys().hasOnly(Object.keys(field.fields)))
-  rules.push(...Object.keys(field.fields).map((key) => transformRule((base as any)[key], field.fields[key] as any)))
-  return op.and(...(rules as [any, any]))
+const transformMap: FieldTranformer<RulesMap<Record<string, any>>, FireSchemaMap> = (left, field) => {
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, 'map')]
+  if (!field.loose) rules.push(left.keys().hasOnly(Object.keys(field.fields).map((x) => `'${x}'`)))
+  rules.push(...Object.keys(field.fields).map((key) => transformRule((left as any)[key], field.fields[key] as any)))
+  return op.and(...rules)
 }
 
-const transformList: FieldTranformer<RulesList<any>, FireSchemaList> = (base, field) => {
-  const rules: RulesBoolean[] = [op.is(base, field.type)]
-  if (typeof field.min === 'number') rules.push(op.gte(base.size(), field.min))
-  if (typeof field.max === 'number') rules.push(op.lte(base.size(), field.max))
-  if (typeof field.size === 'number') rules.push(op.eq(base.size(), field.size))
-  return op.and(...(rules as [any, any]))
+const transformList: FieldTranformer<RulesList<any>, FireSchemaList> = (left, field) => {
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
+  if (typeof field.min === 'number') rules.push(op.gte(left.size(), field.min))
+  if (typeof field.max === 'number') rules.push(op.lte(left.size(), field.max))
+  if (typeof field.size === 'number') rules.push(op.eq(left.size(), field.size))
+  return op.and(...rules)
 }
 
-const transformSet: FieldTranformer<RulesList<any>, FireSchemaSet> = (base, field) => {
-  const rules: RulesBoolean[] = [op.is(base as any, 'list'), ...field.of.map((x, i) => transformRule(base[i], x))]
-  return op.and(...(rules as [any, any]))
+const transformSet: FieldTranformer<RulesList<any>, FireSchemaSet> = (left, field) => {
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [
+    op.is(left as any, 'list'),
+    ...field.of.map((x, i) => transformRule(left[i], x)),
+  ]
+  return op.and(...rules)
 }
 
-const transformUnion: FieldTranformer<Rule, FireSchemaUnion> = (base, field) => {
-  return op.or(...(field.of.map((x) => transformRule(base, x)) as [any, any]))
+const transformUnion: FieldTranformer<Rule, FireSchemaUnion> = (left, field) => {
+  return op.or(...(field.of.map((x) => transformRule(left, x)) as [RulesBoolean]))
 }
 
-const transformLiteral: FieldTranformer<Rule, FireSchemaLiteral> = (base, field) => op.eq(base as any, field.value)
+const transformLiteral: FieldTranformer<Rule, FireSchemaLiteral> = (left, field) => op.eq(left as any, field.value)
 
 const assertType =
   <T extends FireSchemaTypes>(type?: string): FieldTranformer<Rule, T> =>
-  (base, field) =>
-    op.is(base as any, type || (field.type as any))
+  (left, field) =>
+    op.is(left as any, type || (field.type as any))
 
 export const defaultTransformers = {
   string: transformString,
