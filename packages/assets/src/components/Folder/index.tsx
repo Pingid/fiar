@@ -56,7 +56,7 @@ export const Folder = (props: AssetFolder): JSX.Element => {
           { children: props.title, href: props.path },
         ]}
       >
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between p-2">
           {/* <Pagination pages={0} onPage={() => {}} end /> */}
           <div />
           <Button
@@ -64,6 +64,7 @@ export const Folder = (props: AssetFolder): JSX.Element => {
             elementType="label"
             htmlFor="upload"
             color="active"
+            size="sm"
             className="flex-0"
           >
             Upload

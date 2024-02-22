@@ -35,7 +35,7 @@ export const Authorize = () => {
 
   useEffect(() => {
     if (status !== 'signed-in' || !match) return
-    navigate(history.state.redirect || '/')
+    navigate(history?.state?.redirect || '/')
   }, [match, status, search])
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const Authorize = () => {
 
   return (
     <>
-      {status !== 'signed-in' && !config.allowNoAuth && <Redirect to="/login" />}
+      {status !== 'signed-in' && !config.allowNoAuth && <Redirect to="/login" state={{ redirect: location }} />}
       {match && (
         <div className={cn('bg-back', [config.allowNoAuth, 'h-full w-full', 'fixed inset-0 z-40'])}>
           <Login {...config} ready={ready} onSuccess={(x) => updateUser(x.user)} />

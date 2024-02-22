@@ -1,24 +1,23 @@
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { deleteDoc, orderBy } from '@firebase/firestore'
+import { QueryDocumentSnapshot, deleteDoc, orderBy } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Button } from '@fiar/components'
 import { useLocation } from 'wouter'
 import { cn } from 'mcn'
 
-import { useCollectionListData, useCollectionQuery, useOrderBy } from '../hooks/index.js'
+import { useCollectionQuery, useOrderBy } from '../hooks/index.js'
 import { useSelectDocument } from '../../../context/select.js'
 import { IContentCollection } from '../../../schema/index.js'
 import { PreviewField } from '../../../fields/index.js'
 
-export const Table = (props: IContentCollection) => {
+export const Table = (props: IContentCollection & { docs: QueryDocumentSnapshot[] }) => {
   const [columns] = useState(props.columns)
-  const data = useCollectionListData(props.path)
   const select = useSelectDocument()
   const [_, nav] = useLocation()
 
   useEffect(() => {
-    if (columns[0]) useCollectionQuery.getState().update('orderBy', orderBy(columns[0], 'desc'))
-  }, [])
+    if (props.sort) useCollectionQuery.getState().update('orderBy', orderBy(props.sort[0], props.sort[1]))
+  }, [props.sort])
 
   return (
     <div
@@ -33,16 +32,13 @@ export const Table = (props: IContentCollection) => {
           </div>
         ))}
       </div>
-      {data.data?.docs.map((x) => (
+      {props.docs.map((x) => (
         <div
           key={x.id}
           role="button"
           onClick={() => (select ? select(x.ref) : nav(`${props.path}/${x.id}`))}
           className="hover:text-active active hover:border-active group col-span-full mb-2 grid border p-3 sm:grid-cols-subgrid sm:border-x-0 sm:border-b-0"
         >
-          {/* <div className="hidden sm:block">
-            <DocumentIcon className="group-hover:text-active h-5 w-5" />
-          </div> */}
           {columns.map((key: string) => (
             <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
               <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{props.fields[key]?.label || key}</p>

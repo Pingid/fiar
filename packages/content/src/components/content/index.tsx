@@ -2,7 +2,7 @@ import { Route } from 'wouter'
 import { inject } from 'regexparam'
 
 import { DocumentEdit, DocumentAdd } from '../document/index.js'
-import { CollectionList } from '../collection/list/index.js'
+import { CollectionPage } from '../collection/page/index.js'
 import { useContentConfig } from '../../context/config.js'
 import { ContentList } from './list/index.js'
 
@@ -17,7 +17,7 @@ export const ContentRouter = () => {
       const document = `${collection}/:__docId__` as `/${string}`
       const add = `/add${collection}` as `/${string}`
       return [
-        <ContentRoute key={collection} {...x} path={collection} component={CollectionList} />,
+        <ContentRoute key={collection} {...x} path={collection} component={CollectionPage} />,
         <ContentRoute key={document} {...x} path={document} component={DocumentEdit} />,
         <ContentRoute key={add} link={add} {...x} path={collection} component={DocumentAdd} />,
       ]
