@@ -199,7 +199,7 @@ export const service = p.apply(
 
 /* ------------------------------ Rules Parser ------------------------------ */
 export const version = p.apply(
-  p.kright(p.str('rules_version'), p.kright(p.str('='), p.kleft(literal, p.opt_sc(str(';'))))),
+  p.kright(str('rules_version'), p.kright(p.str('='), p.kleft(literal, p.opt_sc(str(';'))))),
   (value) => ast.node({ kind: 'RulesVersion', value }),
 )
 

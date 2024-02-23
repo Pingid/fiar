@@ -1,4 +1,3 @@
-import { type IFieldPrimitive } from '@fiar/schema'
 import { type Timestamp } from 'firebase/firestore'
 
 import { TypeOfRule, type Rule } from '../rule/index.js'
@@ -16,42 +15,6 @@ export type InferRule<T> =
             ? RulesBoolean
             : never
 
-export interface In {}
-export interface Eq {
-  (a: any, b: any): RulesBoolean
-}
-export interface Neq {}
-export interface Gt {}
-export interface Lt {}
-export interface Gte {}
-export interface Lte {}
-export interface Add {}
-export interface Sub {}
-export interface Div {}
-export interface Mult {}
-export interface Mod {}
-
-type TwoOrMore<T> = [T, T, ...T[]]
-
-export interface Operators {
-  /** Check that a value is of some primitive type */
-  is: (a: Rule, type: IFieldPrimitive) => RulesBoolean
-  and: (...args: TwoOrMore<RulesBoolean>) => Rule<boolean>
-  or: (...args: TwoOrMore<RulesBoolean>) => Rule<boolean>
-  in: In
-  eq: Eq
-  neq: Neq
-  gt: Gt
-  lt: Lt
-  gte: Gte
-  lte: Lte
-  add: Add
-  sub: Sub
-  div: Div
-  mult: Mult
-  mod: Mod
-}
-
 // Interfaces
 // ----------------------------------------------------------------------
 /**
@@ -61,14 +24,7 @@ export interface Operators {
  * {@link https://firebase.google.com/docs/reference/rules/rules.Boolean}
  * */
 export interface RulesBoolean extends Rule<boolean> {}
-export interface Eq {
-  /** True if a is equal to b */
-  (a: RulesBoolean, b: boolean | RulesBoolean | null): RulesBoolean
-}
-export interface Neq {
-  /** True if a is not equal to b */
-  (a: RulesBoolean, b: boolean | RulesBoolean | null): RulesBoolean
-}
+
 /**
  * Primitive type representing a boolean value, true or false.
  * Boolean values can be compared using the == and != operators.
@@ -107,50 +63,6 @@ export interface RulesDuration extends Rule<never> {
  * {@link https://firebase.google.com/docs/reference/rules/rules.Float}
  * */
 export interface RulesFloat extends Rule<number> {}
-export interface Eq {
-  /** True if a is equal to b */
-  (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
-}
-export interface Neq {
-  /** True if a is not equal to b */
-  (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
-}
-export interface Gt {
-  /** True if a is greater than b */
-  (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
-}
-export interface Lt {
-  /** True if a is less than b */
-  (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
-}
-export interface Gte {
-  /** True if a is greater than or equal to b */
-  (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
-}
-export interface Lte {
-  /** True if a is less than or equal to b */
-  (a: RulesNumber, b: number | RulesNumber | null): RulesBoolean
-}
-export interface Add {
-  /** Add b to a */
-  (a: RulesFloat, b: number | RulesNumber | null): RulesFloat
-}
-export interface Sub {
-  /** Subtract b from a */
-  (a: RulesFloat, b: number | RulesNumber | null): RulesFloat
-}
-export interface Div {
-  /** Divide a by b */
-  (a: RulesFloat, b: number | RulesNumber | null): RulesFloat
-}
-export interface Mult {
-  /** Multiply a by b */
-  (a: RulesFloat, b: number | RulesNumber | null): RulesFloat
-}
-export interface Mod {
-  /** Modulas a by b */
-  (a: RulesFloat, b: number | RulesNumber | null): RulesFloat
-}
 
 /**
  * Primitive type representing a signed 64-bit integer value.
@@ -215,16 +127,6 @@ export interface RulesList<T extends Rule> extends Rule<TypeOfRule<T>[]> {
   toSet: () => RulesSet<T>
 }
 
-export interface Eq {
-  <T extends Rule>(list: RulesList<T>, v: TypeOfRule<T>[] | RulesList<T>): RulesBoolean
-  (list: RulesList<any>, v: any[] | RulesList<any>): RulesBoolean
-}
-
-export interface In {
-  <T extends Rule>(v: TypeOfRule<T> | T, list: RulesList<T>): RulesBoolean
-  <T extends Rule>(v: TypeOfRule<T> | T, list: Array<T>): RulesBoolean
-}
-
 /**
  * Map type, used for simple key-value mappings.
  * Keys must be of type rules.String.
@@ -258,17 +160,6 @@ export type RulesMap<T extends Record<string, Rule> = {}> = Rule<{ [K in keyof T
   /** Get the list of values in the map. */
   values: () => RulesList<T[keyof T]>
 } & T
-
-export interface Eq {
-  <T extends Record<string, Rule>>(
-    list: RulesMap<T>,
-    v: RulesMap<T> | { [K in keyof T]: TypeOfRule<T[K]> },
-  ): RulesBoolean
-}
-
-export interface In {
-  <T extends Record<string, Rule>>(v: string | RulesString, list: RulesMap<T>): RulesBoolean
-}
 
 /**
  * MapDiff type.
@@ -316,10 +207,6 @@ export type RulesPath<T extends Record<string, Rule> = Record<string, Rule>> = R
   /** Bind key-value pairs in a map to a path. */
   bind: <A extends Record<string, any>>(value: A) => RulesMap<T & { [K in keyof A]: InferRule<A[K]> }>
 } & { [K in keyof T]: T[K] }
-
-export interface Eq {
-  <T extends RulesPath>(r: T, v: string | RulesPath): RulesBoolean
-}
 
 /**
  * A set is an unordered collection. A set cannot contain duplicate items.
@@ -373,15 +260,6 @@ export interface RulesSet<T extends Rule = Rule> extends Rule<TypeOfRule<T>[]> {
    * {@link https://firebase.google.com/docs/reference/rules/rules.Set#union}
    * */
   union: (list: TypeOfRule<T> | RulesSet<T>) => RulesSet<T>
-}
-export interface Eq {
-  /** True if a is equal to b */
-  <T extends Rule>(a: RulesSet<T>, b: TypeOfRule<T>[] | RulesSet<T>): RulesBoolean
-}
-
-export interface In {
-  /** True if b is a member of a */
-  <T extends Rule>(b: T | TypeOfRule<T>, a: RulesSet<T>): RulesBoolean
 }
 
 /**
@@ -438,30 +316,6 @@ export interface RulesString<K extends string = string> extends Rule<K> {
    * {@link https://firebase.google.com/docs/reference/rules/rules.String#upper}
    */
   upper: () => RulesString
-}
-export interface Eq {
-  /** True if a is equal to b */
-  (a: RulesString, b: string | RulesString | null): RulesBoolean
-}
-export interface Neq {
-  /** True if a is not equal to b */
-  (a: RulesString, b: string | RulesString | null): RulesBoolean
-}
-export interface Gt {
-  /** True if a is greater than b */
-  (a: RulesString, b: string | RulesString | null): RulesBoolean
-}
-export interface Lt {
-  /** True if a is less than b */
-  (a: RulesString, b: string | RulesString | null): RulesBoolean
-}
-export interface Gte {
-  /** True if a is greater than or equal to b */
-  (a: RulesString, b: string | RulesString | null): RulesBoolean
-}
-export interface Lte {
-  /** True if a is less than or equal to b */
-  (a: RulesString, b: string | RulesString | null): RulesBoolean
 }
 
 /**

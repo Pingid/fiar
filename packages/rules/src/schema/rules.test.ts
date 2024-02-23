@@ -1,14 +1,10 @@
 import { FireSchemaTypes, s } from '@fiar/schema'
 import { it, describe, expect } from 'vitest'
-import { format } from 'prettier'
-
-import { builder } from '../builder/index.js'
-import { transformRule } from './rules.js'
-import { output } from '../rule/index.js'
-import plugin from '../plugin/index.js'
-import { print } from '../printer'
 
 import { formatAst } from '../_test/index.test.js'
+import { expression } from '../builder/index.js'
+import { transformRule } from './rules.js'
+import { output } from '../rule/index.js'
 
 describe('string', () => {
   it('assert', () => match(s.string()).toBe('data is string'))
@@ -85,12 +81,12 @@ describe('set', () => {
 const match = (schema: FireSchemaTypes) => {
   return expect(
     formatAst({
-      ...output(
+      ...(output(
         transformRule(
-          builder(() => ({ kind: 'Ident', name: 'data' })),
+          expression(() => ({ kind: 'Ident', name: 'data' })),
           schema,
         ),
-      ),
+      ) as any),
       param: false,
     }),
   ).resolves
