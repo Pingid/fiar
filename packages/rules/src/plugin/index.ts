@@ -3,7 +3,7 @@ import type { Plugin } from 'prettier'
 
 import { print } from '../printer/index.js'
 import { lexer } from '../parser/lexer.js'
-import { parse } from '../parser/index.js'
+import { parser } from '../parser/index.js'
 import { Ast } from '../ast/index.js'
 
 export type RulesPlugin = Plugin<Ast>
@@ -23,7 +23,7 @@ export const parsers = {
     locStart: () => 0,
     locEnd: () => 0,
     parse: (text, options) => {
-      const parse_result = expectEOF(parse.parse(lexer.parse(text)))
+      const parse_result = expectEOF(parser.parse(lexer.parse(text)))
 
       // console.log(literal.parse(lexer.parse(text)))
       if (parse_result.successful) {

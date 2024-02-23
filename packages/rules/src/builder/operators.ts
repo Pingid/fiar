@@ -26,6 +26,8 @@ export interface Operators {
 }
 
 const handleValue = (x: any): ast.Value => {
+  if (x === null) return { kind: 'Ident', name: `null` }
+  if (typeof x === 'object' && x['kind']) return x
   if (typeof x === 'string') return { kind: 'Literal', value: `'${x}'` }
   if (typeof x === 'number') return { kind: 'Literal', value: `${x}` }
   if (typeof x === 'boolean') return { kind: 'Literal', value: `${x}` }
@@ -49,7 +51,7 @@ const handleArg = (x: any) => {
 }
 
 export const compare = (div: string) => (a: Rule<any> | any, b: Rule<any> | any) =>
-  rule((x) => ast.expression([false, output(x, handleArg(a)) as any, undefined, div, output(x, handleArg(b)) as any]))
+  rule((x) => ast.expression([false, output(handleArg(a), x) as any, undefined, div, output(handleArg(b), x) as any]))
 
 export const join =
   (sep: string): Operators['and'] | Operators['or'] =>
@@ -57,8 +59,8 @@ export const join =
     if (!right) return left
     return rule((x) => ({
       ...rest.reduce(
-        (a, b) => ast.expression([false, a, undefined, sep, output(x, b) as ast.Value]),
-        ast.expression([false, output(x, left) as ast.Value, undefined, sep, output(x, right) as ast.Value]),
+        (a, b) => ast.expression([false, a, undefined, sep, output(b, x) as ast.Value]),
+        ast.expression([false, output(left, x) as ast.Value, undefined, sep, output(right, x) as ast.Value]),
       ),
       param: true,
     }))
@@ -72,10 +74,10 @@ export const op: Operators = {
     rule((x) =>
       ast.expression([
         false,
-        output(x, handleArg(a)) as any,
+        output(handleArg(a), x) as any,
         undefined,
         'is',
-        output(x, typeof b === 'string' ? rule(() => ast.ident([b])) : handleArg(b)) as any,
+        output(typeof b === 'string' ? rule(() => ast.ident([b])) : handleArg(b), x) as any,
       ]),
     ),
   eq: compare('=='),

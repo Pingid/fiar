@@ -26,13 +26,12 @@ type FieldTranformer<R extends Rule, T extends FireSchemaTypes> = (rule: R, type
 
 const transformString: FieldTranformer<RulesString, FireSchemaString> = (left, field) => {
   const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
-  if (field.match instanceof RegExp) rules.push(left.matches(`/${field.match.source}/${field.match.flags}`))
-  if (typeof field.match === 'string') rules.push(left.matches(`'${field.match}'`))
+  if (field.match instanceof RegExp) rules.push(left.matches(field.match.source))
+  if (typeof field.match === 'string') rules.push(left.matches(field.match))
   if (typeof field.min === 'number') rules.push(op.gte(left.size(), field.min))
   if (typeof field.max === 'number') rules.push(op.lte(left.size(), field.max))
   if (typeof field.size === 'number') rules.push(op.eq(left.size(), field.size))
   return op.and(...rules)
-  // return op.is(base, field.type)
 }
 
 const transformNumber: FieldTranformer<RulesNumber, FireSchemaNumber> = (left, field) => {
@@ -51,7 +50,7 @@ const transformTimestamp: FieldTranformer<RulesTimestamp, FireSchemaTimestamp> =
 
 const transformMap: FieldTranformer<RulesMap<Record<string, any>>, FireSchemaMap> = (left, field) => {
   const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, 'map')]
-  if (!field.loose) rules.push(left.keys().hasOnly(Object.keys(field.fields).map((x) => `'${x}'`)))
+  if (!field.loose) rules.push(left.keys().hasOnly(Object.keys(field.fields)))
   rules.push(...Object.keys(field.fields).map((key) => transformRule((left as any)[key], field.fields[key] as any)))
   return op.and(...rules)
 }

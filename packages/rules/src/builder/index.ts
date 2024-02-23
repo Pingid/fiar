@@ -2,7 +2,7 @@ import * as rules from '../firestore/interfaces.js'
 import * as ast from '../ast/index.js'
 
 import { ContextFirestore, PathParams } from '../firestore/namespaces.js'
-import { isRule, Rule } from '../rule/index.js'
+import { isRule, output, Rule } from '../rule/index.js'
 
 export * from './operators.js'
 
@@ -57,18 +57,44 @@ type Arg<T = any> = { name: string; type: T }
 
 type Member = ast.MemberExpression | ast.CallExpression
 
-export const builder = <T extends object>(parent?: (x: Member | ast.Ident) => Member): T => {
-  const bolder = (cb: (x: Member | ast.Ident) => Member) => builder((x) => cb(parent ? parent(x) : x))
+const handleArg = (x: any, left?: ast.Value): ast.Value => {
+  if (isRule(x)) return output(x, left) as ast.Value
+  if (x === null) return ast.ident([`null`])
+  if (typeof x === 'string') return ast.literal([`"${x}"`])
+  if (typeof x === 'number') return ast.literal([`${x}`])
+  if (Array.isArray(x)) return ast.array([x.map((y) => handleArg(y, left))])
+  if (typeof x === 'object') {
+    return ast.object([
+      Object.entries(x).map(([key, value]) => ast.property([ast.literal([key]), handleArg(value, left)])),
+    ])
+  }
+  throw new Error(`Unkown argument ${x}`)
+}
 
+export const builder = <T extends object>(parent?: (x?: Member | ast.Ident) => Member | ast.Ident | ast.Literal): T => {
   return new Proxy((() => {}) as any, {
-    apply: (_a, _b, c) => bolder((x) => ast.call([x, c.map((x) => ast.literal([`${x}`]))])),
+    apply: (_a, _b, c) => {
+      return builder((x) => {
+        const left = parent ? parent(x) : x
+        if (!left) throw new Error(`Hanging call expression`)
+        return ast.call([left as any, c.map((a) => handleArg(a, x))])
+      })
+    },
     get: (_t, k) => {
       if (isRule({ [k]: () => {} })) return (arg: any) => (parent ? parent(arg) : arg)
       if (typeof k !== 'string') throw new Error(`Unknown type accessor`)
-
-      if (/^\d{1,}:\d{1,}$/.test(k)) return bolder((x) => ast.member([x, true, ast.literal([k])]))
-      if (/^\d{1,}$/.test(k)) return bolder((x) => ast.member([x, true, ast.literal([k])]))
-      return bolder((x) => ast.member([x, false, ast.ident([k])]))
+      if (/^\d{1,}$/.test(k) || /^\d{1,}:\d{1,}$/.test(k)) {
+        return builder((x) => {
+          const next = parent ? parent(x) : x
+          if (!next) return ast.literal([k])
+          return ast.member([next, true, ast.literal([k])])
+        })
+      }
+      return builder((x) => {
+        const next = parent ? parent(x) : x
+        if (!next) return ast.ident([k])
+        return ast.member([next, false, ast.ident([k])])
+      })
     },
   })
 }

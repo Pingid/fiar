@@ -8,10 +8,12 @@ import { output } from '../rule/index.js'
 import plugin from '../plugin/index.js'
 import { print } from '../printer'
 
+import { formatAst } from '../_test/index.test.js'
+
 describe('string', () => {
   it('assert', () => match(s.string()).toBe('data is string'))
-  it('match regex', () => match(s.string({ match: /.*/g })).toBe('data is string && data.matches(/.*/g)'))
-  it('match regex string', () => match(s.string({ match: '.*' })).toBe("data is string && data.matches('.*')"))
+  it('match regex', () => match(s.string({ match: /.*/g })).toBe('data is string && data.matches(".*")'))
+  it('match regex string', () => match(s.string({ match: '.*' })).toBe(`data is string && data.matches(".*")`))
   it('min length', () => match(s.string({ min: 10 })).toBe('data is string && data.size() >= 10'))
   it('max length', () => match(s.string({ max: 10 })).toBe('data is string && data.size() <= 10'))
   it('match length', () => match(s.string({ size: 10 })).toBe('data is string && data.size() == 10'))
@@ -52,11 +54,11 @@ describe('timestamp', () => {
 
 describe('map', () => {
   it('assert', () => match(s.map({ fields: {}, loose: true })).toBe('data is map'))
-  it('assert strict', () => match(s.map({ fields: {} })).toBe('data is map && data.keys().hasOnly()'))
-  // it('assert fields', () =>
-  //   match(s.map({ fields: { foo: s.string(), bar: s.number() } })).toBe(
-  //     "data is map && data.keys().hasOnly(['foo', 'bar']) && data.foo is string && data.bar is number",
-  //   ))
+  it('assert strict', () => match(s.map({ fields: {} })).toBe('data is map && data.keys().hasOnly([])'))
+  it('assert fields', () =>
+    match(s.map({ fields: { foo: s.string(), bar: s.number() } })).toBe(
+      `data is map && data.keys().hasOnly(["foo", "bar"]) && data.foo is string && data.bar is number`,
+    ))
 })
 
 describe('list', () => {
@@ -84,9 +86,8 @@ const match = (schema: FireSchemaTypes) => {
   return expect(
     formatAst({
       ...output(
-        { kind: 'Ident', name: 'data' },
         transformRule(
-          builder(() => ({ kind: 'Ident', name: 'data' }) as any),
+          builder(() => ({ kind: 'Ident', name: 'data' })),
           schema,
         ),
       ),
@@ -94,16 +95,3 @@ const match = (schema: FireSchemaTypes) => {
     }),
   ).resolves
 }
-
-const formatAst = (ast) =>
-  format(`nothing`, {
-    filepath: 'test.test',
-    plugins: [
-      plugin,
-      {
-        languages: [{ name: 'Test', parsers: ['test'], extensions: ['.test'] }],
-        parsers: { test: { astFormat: 'test', locStart: () => 0, locEnd: () => 0, parse: () => ast } },
-        printers: { test: { print } },
-      },
-    ],
-  })

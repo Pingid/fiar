@@ -221,7 +221,8 @@ export interface Eq {
 }
 
 export interface In {
-  <T extends Rule>(list: RulesList<T>, v: TypeOfRule<T> | T): RulesBoolean
+  <T extends Rule>(v: TypeOfRule<T> | T, list: RulesList<T>): RulesBoolean
+  <T extends Rule>(v: TypeOfRule<T> | T, list: Array<T>): RulesBoolean
 }
 
 /**
@@ -266,7 +267,7 @@ export interface Eq {
 }
 
 export interface In {
-  <T extends Record<string, Rule>>(list: RulesMap<T>, v: string | RulesString): RulesBoolean
+  <T extends Record<string, Rule>>(v: string | RulesString, list: RulesMap<T>): RulesBoolean
 }
 
 /**
@@ -380,7 +381,7 @@ export interface Eq {
 
 export interface In {
   /** True if b is a member of a */
-  <T extends Rule>(a: RulesSet<T>, b: T | TypeOfRule<T>): RulesBoolean
+  <T extends Rule>(b: T | TypeOfRule<T>, a: RulesSet<T>): RulesBoolean
 }
 
 /**

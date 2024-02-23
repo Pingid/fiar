@@ -1,6 +1,6 @@
 import * as p from 'typescript-parsec'
 import * as ast from '../ast/index.js'
-import { Tok } from './lexer.js'
+import { Tok, lexer } from './lexer.js'
 
 /* -------------------------------- Utilities ------------------------------- */
 type P<T> = p.Parser<Tok, T>
@@ -207,4 +207,7 @@ export const rules = p.apply(p.rep_sc(p.alt_sc(version, func, service, comment, 
   ast.node({ kind: 'RulesDeclartion', statements: statements.filter(defined) }),
 )
 
-export const parse = p.alt_sc(rules, service, match, allow, func, value)
+export const parser = p.alt_sc(rules, service, match, allow, func, value)
+
+export const parse = <T>(parser: P<T>, value: string) =>
+  p.expectSingleResult(p.expectEOF(parser.parse(lexer.parse(value))))
