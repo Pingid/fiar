@@ -30,6 +30,7 @@ describe('expression builder', () => {
           match('/users/{userId}', ({ allow }) => {
             allow('read', (c) => validate(c.request.resource.data, { type: 'map', fields: typ.fields }))
             allow('write', (c) => isAdmin(c.request.auth.token.email))
+            func('scopped', [], () => op.eq(10, 10))
           })
         })
       })
