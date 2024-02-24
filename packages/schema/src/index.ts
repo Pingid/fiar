@@ -200,3 +200,5 @@ type FieldCreators = {
 export const s: FieldCreators = new Proxy({} as FieldCreators, {
   get: (_t, type) => (props: any) => ({ type, ...props }),
 })
+
+export const model = <const C extends FireModel>(x: C) => x

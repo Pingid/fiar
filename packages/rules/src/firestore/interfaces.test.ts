@@ -1,7 +1,7 @@
-import { expect, test, describe } from 'vitest'
+// import { expect, test, describe } from 'vitest'
 
-import { Rule, rule } from '../rule/index.js'
-import { InferRule } from './interfaces.js'
+// import { Rule, rule } from '../rule/index.js'
+// import { InferRule } from './interfaces.js'
 // import { op } from './operators.js'
 
 // const match = (x: Rule) => expect(format(x, createFormatter()))

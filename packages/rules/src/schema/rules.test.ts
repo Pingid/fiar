@@ -3,7 +3,7 @@ import { it, describe, expect } from 'vitest'
 
 import { formatAst } from '../_test/index.test.js'
 import { expression } from '../builder/index.js'
-import { transformRule } from './rules.js'
+import { validate } from './rules.js'
 import { output } from '../rule/index.js'
 
 describe('string', () => {
@@ -82,7 +82,7 @@ const match = (schema: FireSchemaTypes) => {
   return expect(
     formatAst({
       ...(output(
-        transformRule(
+        validate(
           expression(() => ({ kind: 'Ident', name: 'data' })),
           schema,
         ),

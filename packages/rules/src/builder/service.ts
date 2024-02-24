@@ -7,8 +7,10 @@ import * as rules from '../firestore/interfaces.js'
 import { parse, value } from '../parser/parsers.js'
 import { print } from '../printer/index.js'
 import * as ast from '../ast/index.js'
+// import { FireModel } from '@fiar/schema'
+// import { InferSchemaModelRules } from '../schema/index.js'
 
-type Arg<T = any> = { name: string; type: T }
+type Arg<T = any, K extends string = string> = { name: K; type: T }
 export const arg = <T extends any, K extends string = string>(name: K) => ({ name, type: {} as T })
 export const literal = (x: any) => rule(() => expressionBuilderArgument(x))
 export const raw = (rules: string) => rule(() => parse(value, rules))
@@ -21,122 +23,133 @@ type WithArgs<A extends Arg[]> = {
   [K in A[number]['name']]: rules.InferRule<Extract<A[number], { name: K }>['type']>
 }
 
-type WithFunction<N extends string, A extends Arg[], R extends any> = {
-  [_N in N]: (...args: { [K in keyof A]: A[K]['type'] | rules.InferRule<A[K]['type']> }) => R
-}
-
-export interface Rules<C> {
-  arg: <T extends any, K extends string = string>(name: K) => { name: K; type: T }
-  function: <K extends string, const A extends Arg[], R extends any>(
+interface Func<C> {
+  <K extends string, const A extends Arg[], R extends any>(
     name: K,
     args: A,
     cb: (x: C & WithArgs<A>) => R,
-  ) => Rules<C & WithFunction<K, A, R>>
-  ast: () => ast.RulesDeclartion
-  print: () => Promise<string>
-  service: {
-    (type: 'cloud.firestore', cb: (x: Service<C & ContextFirestore<rules.RulesMap<{}>>>) => Service<C>): Rules<C>
-    // (type: 'cloud.storage', cb: <T>(x: Rules<C>) => Rules<C & T>): Rules<C>
-  }
+  ): (...args: { [K in keyof A]: A[K]['type'] | rules.InferRule<A[K]['type']> }) => R
+}
+
+type AllowRule = 'write' | 'update' | 'delete' | 'create' | 'read' | 'list' | 'get'
+type AllowValue<C> = boolean | Rule | ((x: C) => Rule)
+// type AllowMap<C> = Partial<Record<`allow ${AllowRule}`, AllowValue<C>> & { _: (x: MatchScope<C>) => void }>
+
+interface Match<C> {
+  <P extends string, F extends (x: MatchScope<C & WithParams<P>>) => any>(path: P, cb: F): any
+  // <P extends string, A extends AllowMap<C & WithParams<P>>>(path: P, x: A): any
+  // <
+  //   M extends FireModel,
+  //   F extends (x: MatchScope<C & WithParams<M['path']> & ContextFirestore<InferSchemaModelRules<M>>>) => any,
+  // >(
+  //   model: M,
+  //   cb: F,
+  // ): any
+  // <F extends FireModel, T extends AllowMap<C & WithParams<F['path']> & ContextFirestore<InferSchemaModelRules<F>>>>(
+  //   model: F,
+  //   x: T,
+  // ): any
+}
+
+interface Allow<C> {
+  (x: AllowRule | AllowRule[], cb: AllowValue<C>): any
+  // <T extends Partial<Record<AllowRule, AllowValue<C>>>>(x: T): any
 }
 
 interface Service<C> {
-  function: <K extends string, const A extends Arg[], R extends any>(
-    name: K,
-    args: A,
-    cb: (x: C & WithArgs<A>) => R,
-  ) => Service<C & WithFunction<K, A, R>>
-  match: {
-    <P extends string>(path: P, cb: (x: Match<C & WithParams<P>>) => Match<any>): Service<C>
-  }
+  <N = C & ContextFirestore<rules.RulesMap<{}>>>(type: 'cloud.firestore', cb: (x: ServiceScope<N>) => void): void
 }
 
-type Allow = 'write' | 'update' | 'delete' | 'create' | 'read' | 'list' | 'get'
-interface Match<C> {
-  function: <K extends string, const A extends Arg[], R extends any>(
-    name: K,
-    args: A,
-    cb: (x: C & WithArgs<A>) => R,
-  ) => Service<C & WithFunction<K, A, R>>
-  allow: (x: Allow | Allow[], cb: (x: C) => Rule) => Match<C>
-  match: <P extends string>(path: P, cb: (x: Match<C & WithParams<P>>) => Match<any>) => Match<C>
+interface Scope<C> {
+  arg: <T extends any, K extends string = string>(name: K) => Arg<T, K>
+  func: Func<C>
+  // raw: (value: string) => any
 }
 
-export const defineRules = (): Rules<{}> => {
-  const rules_ast = ast.rules([[ast.version([ast.literal(['"2"'])])]])
+interface RuleScope<C> extends Scope<C> {
+  service: Service<C>
+}
 
-  type Handler<T> = (arr: any[], ret: () => any) => T
+interface ServiceScope<C> extends Scope<C> {
+  match: Match<C>
+}
 
-  const service: Handler<Rules<any>['service']> = (statements, ret) => (type, handle) => {
-    const node = ast.service([type, []])
+interface MatchScope<C> extends Scope<C> {
+  allow: Allow<C>
+  match: Match<C>
+}
 
-    const block: Service<any> = {
-      function: func(node.statements, () => block) as any,
-      match: match(node.statements, () => block),
-    }
+type Append<T> = (arr: any[]) => T
 
-    handle(block)
+const func: Append<Func<any>> = (statements) => (name, args, handler) => {
+  const node = ast.func([
+    ast.ident([name]),
+    args.map((y) => ast.ident([y.name])),
+    [ast.func_return([output(handler(expression()) as any) as any])],
+  ])
+  statements.push(ast.empty([]), node)
+  return expression(() => ast.ident([name]))
+}
 
-    statements.push(ast.empty([]), node)
-
-    return ret()
-  }
-
-  const match: Handler<Service<any>['match']> = (statements, ret) => (pth, handle) => {
-    const segs = pth
-      .split('/')
-      .filter(Boolean)
-      .map((x) => ast.segment([false, ast.ident([x])]))
-    const node = ast.match([ast.path([segs]), []])
-
-    const block: Match<any> = {
-      function: func(node.statements, () => block) as any,
-      allow: allow(node.statements, () => block),
-      match: match(node.statements, () => block) as any,
-    }
-
-    handle(block)
-    statements.push(node)
-
-    return ret()
-  }
-
-  const allow: Handler<Match<any>['allow']> = (statements, ret) => (tp, handle) => {
-    const type = Array.isArray(tp) ? tp.map((x) => ast.ident([x])) : [ast.ident([tp])]
-    const node = ast.allow([type, output(handle(expression())) as ast.Value])
-    statements.push(node)
-    return ret()
-  }
-
-  const func: Handler<Rules<any>['function']> = (statements, ret: () => any) => (name, args, handler) => {
-    const node = ast.func([
-      ast.ident([name]),
-      args.map((y) => ast.ident([y.name])),
-      [ast.func_return([output(handler(expression()) as any) as any])],
-    ])
-    statements.push(ast.empty([]), node)
-    return ret()
-  }
-
-  const rules: Rules<{}> = {
+const service: Append<Service<any>> = (statements) => (name, handler) => {
+  const scope = ast.service([name, []])
+  handler({
     arg: (name) => ({ name, type: undefined as any }),
-    function: func(rules_ast.statements, () => rules),
-    service: service(rules_ast.statements, () => rules),
-    ast: () => rules_ast,
+    func: func(scope.statements),
+    match: match(scope.statements),
+  })
+  statements.push(ast.empty([]), scope)
+}
+
+const match: Append<Match<any>> = (statements) => (a, handler) => {
+  const segments = a
+    .split('/')
+    .filter(Boolean)
+    .map((x) => ast.segment([false, ast.literal([x])]))
+  const scope = ast.match([ast.path([segments]), []])
+
+  handler({
+    arg: (name) => ({ name, type: undefined as any }),
+    func: func(scope.statements),
+    match: match(scope.statements),
+    allow: allow(scope.statements),
+  })
+  statements.push(ast.empty([]), scope)
+}
+
+const allow: Append<Allow<any>> = (statements) => (a, b) => {
+  const types = (Array.isArray(a) ? a : [a]).map((x) => ast.ident([x]))
+  const value =
+    typeof b === 'boolean' ? ast.literal([`${b}`]) : typeof b === 'function' ? output(b(expression())) : output(b)
+  statements.push(ast.allow([types, value as ast.Value]))
+}
+
+export const rulset = (
+  handler: (x: RuleScope<{}>) => void,
+): {
+  ast: () => ast.RulesDeclartion
+  print: () => Promise<string>
+} => {
+  const scope = ast.rules([[ast.version([ast.literal(['"2"'])])]])
+
+  handler({
+    arg: (name) => ({ name, type: undefined as any }),
+    func: func(scope.statements),
+    service: service(scope.statements),
+  })
+
+  return {
+    ast: () => scope,
     print: () =>
       format(`rules_version = "2"`, {
         filepath: 'test.test',
-        printWidth: 900,
-        singleQuote: true,
         plugins: [
           {
             languages: [{ name: 'Test', parsers: ['test'], extensions: ['.test'] }],
-            parsers: { test: { astFormat: 'test', locStart: () => 0, locEnd: () => 0, parse: () => rules_ast } },
+            parsers: { test: { astFormat: 'test', locStart: () => 0, locEnd: () => 0, parse: () => scope } },
             printers: { test: { print } },
           },
         ],
       }),
-  }
-
-  return rules
+  } as any
 }
