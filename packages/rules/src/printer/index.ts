@@ -1,4 +1,4 @@
-import { AstPath, Doc, Printer, doc } from 'prettier'
+import { AstPath, Doc, Options, Printer, doc, format } from 'prettier'
 
 import { Ast } from '../ast/index.js'
 
@@ -85,3 +85,17 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
 }
 
 // export const format = (ast: Ast.)
+
+export const formatAst = (ast: Ast, options?: Options) =>
+  format(`rules`, {
+    filepath: 'rules.rules',
+    ...options,
+    plugins: [
+      {
+        languages: [{ name: 'Rules', parsers: ['rules'], extensions: ['.rules'] }],
+        parsers: { rules: { astFormat: 'rules', locStart: () => 0, locEnd: () => 0, parse: () => ast } },
+        printers: { rules: { print } },
+      },
+      ...(options?.plugins ?? []),
+    ],
+  })

@@ -22,8 +22,11 @@ import type {
   RulesPath,
   RulesMap,
   RulesList,
-  Rule,
 } from '../firestore'
+
+import type { Rule } from '../rule/index.js'
+
+export * from './rules.js'
 
 type InferMapOptionalKeys<T> = { [K in keyof T]: T[K] extends { optional: true } ? K : never }[keyof T]
 type InferMapRequiredKeys<T> = { [K in keyof T]: T[K] extends { optional: true } ? never : K }[keyof T]

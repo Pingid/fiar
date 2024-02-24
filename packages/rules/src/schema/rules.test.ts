@@ -1,10 +1,10 @@
 import { FireSchemaTypes, s } from '@fiar/schema'
 import { it, describe, expect } from 'vitest'
 
-import { formatAst } from '../_test/index.test.js'
 import { expression } from '../builder/index.js'
-import { validate } from './rules.js'
+import { formatAst } from '../printer/index.js'
 import { output } from '../rule/index.js'
+import { validate } from './rules.js'
 
 describe('string', () => {
   it('assert', () => match(s.string()).toBe('data is string'))
@@ -80,14 +80,17 @@ describe('set', () => {
 
 const match = (schema: FireSchemaTypes) => {
   return expect(
-    formatAst({
-      ...(output(
-        validate(
-          expression(() => ({ kind: 'Ident', name: 'data' })),
-          schema,
-        ),
-      ) as any),
-      param: false,
-    }),
+    formatAst(
+      {
+        ...(output(
+          validate(
+            expression(() => ({ kind: 'Ident', name: 'data' })),
+            schema,
+          ),
+        ) as any),
+        param: false,
+      },
+      { printWidth: 900 },
+    ),
   ).resolves
 }

@@ -1,28 +1,22 @@
-import { format } from 'prettier'
+import type { Options } from 'prettier'
 
+import { expression, expressionBuilderArgument, op, and, or } from './builder.js'
 import { ContextFirestore, PathParams } from '../firestore/namespaces.js'
-import { expression, expressionBuilderArgument } from './builder.js'
 import { Rule, output, rule } from '../rule/index.js'
 import * as rules from '../firestore/interfaces.js'
 import { parse, value } from '../parser/parsers.js'
-import { print } from '../printer/index.js'
+import { formatAst } from '../printer/index.js'
 import * as ast from '../ast/index.js'
-// import { FireModel } from '@fiar/schema'
-// import { InferSchemaModelRules } from '../schema/index.js'
+import * as scope from './scope.js'
 
 type Arg<T = any, K extends string = string> = { name: K; type: T }
 export const arg = <T extends any, K extends string = string>(name: K) => ({ name, type: {} as T })
 export const literal = (x: any) => rule(() => expressionBuilderArgument(x))
 export const raw = (rules: string) => rule(() => parse(value, rules))
 
-type WithParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
-  ? PathParams<R, { [K in keyof A | N]: rules.RulesString }>
-  : A
-
 type WithArgs<A extends Arg[]> = {
   [K in A[number]['name']]: rules.InferRule<Extract<A[number], { name: K }>['type']>
 }
-
 interface Func<C> {
   <K extends string, const A extends Arg[], R extends any>(
     name: K,
@@ -35,6 +29,9 @@ type AllowRule = 'write' | 'update' | 'delete' | 'create' | 'read' | 'list' | 'g
 type AllowValue<C> = boolean | Rule | ((x: C) => Rule)
 // type AllowMap<C> = Partial<Record<`allow ${AllowRule}`, AllowValue<C>> & { _: (x: MatchScope<C>) => void }>
 
+type WithParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
+  ? PathParams<R, { [K in keyof A | N]: rules.RulesString }>
+  : A
 interface Match<C> {
   <P extends string, F extends (x: MatchScope<C & WithParams<P>>) => any>(path: P, cb: F): any
   // <P extends string, A extends AllowMap<C & WithParams<P>>>(path: P, x: A): any
@@ -63,6 +60,9 @@ interface Service<C> {
 interface Scope<C> {
   arg: <T extends any, K extends string = string>(name: K) => Arg<T, K>
   func: Func<C>
+  op: typeof op
+  or: typeof or
+  and: typeof and
   // raw: (value: string) => any
 }
 
@@ -79,49 +79,24 @@ interface MatchScope<C> extends Scope<C> {
   match: Match<C>
 }
 
-type Stack<T> = (cb: (...args: any[]) => any) => T
-type Scoped<T = any> = (cb: (push: (...args: any[]) => void) => void) => T[]
-let current: any[] = []
-const scope: Scoped = (cb) => {
-  let previous = current
-  current = []
-  cb((...args) => current.push(...args))
-  let next = current
-  current = previous
-  return next
-}
-
-const func: Stack<Func<any>> = (push) => (name, args, handler) => {
+export const func: Func<any> = (name, args, handler) => {
   const node = ast.func([
     ast.ident([name]),
     args.map((y) => ast.ident([y.name])),
     [ast.func_return([output(handler(expression()) as any) as any])],
   ])
-  push(ast.empty([]), node)
+  scope.push(ast.empty([]), node)
   return expression(() => ast.ident([name]))
 }
 
-const service: Stack<Service<any>> = (push) => (name, handler) => {
-  const statements = scope((push) =>
-    handler({
-      arg: (name) => ({ name, type: undefined as any }),
-      func: func((...args) => push(...args)),
-      match: match((...args) => push(...args)),
-    }),
-  )
+export const service: Service<any> = (name, handler) => {
+  const statements = scope.create(() => handler({ arg, func, match, op: op, and, or }))
   const node = ast.service([name, statements])
-  push(ast.empty([]), node)
+  scope.push(ast.empty([]), node)
 }
 
-const match: Stack<Match<any>> = (push) => (a, handler) => {
-  const statements = scope((push) => {
-    handler({
-      arg: (name) => ({ name, type: undefined as any }),
-      func: func((...args) => push(...args)),
-      match: match((...args) => push(...args)),
-      allow: allow((...args) => push(...args)),
-    })
-  })
+export const match: Match<any> = (a, handler) => {
+  const statements = scope.create(() => handler({ arg, func: func, match, allow, op, and, or }))
 
   const segments = a
     .split('/')
@@ -130,44 +105,25 @@ const match: Stack<Match<any>> = (push) => (a, handler) => {
 
   const node = ast.match([ast.path([segments]), statements])
 
-  push(ast.empty([]), node)
+  scope.push(ast.empty([]), node)
 }
 
-const allow: Stack<Allow<any>> = (push) => (a, b) => {
+export const allow: Allow<any> = (a, b) => {
   const types = (Array.isArray(a) ? a : [a]).map((x) => ast.ident([x]))
   const value =
     typeof b === 'boolean' ? ast.literal([`${b}`]) : typeof b === 'function' ? output(b(expression())) : output(b)
-  push(ast.allow([types, value as ast.Value]))
+  scope.push(ast.allow([types, value as ast.Value]))
 }
 
 export const rulset = (
   handler: (x: RuleScope<{}>) => void,
-): {
-  ast: () => ast.RulesDeclartion
-  print: () => Promise<string>
-} => {
-  const statements = scope((push) => {
-    handler({
-      arg: (name) => ({ name, type: undefined as any }),
-      func: func((...args) => push(...args)),
-      service: service((...args) => push(...args)),
-    })
-  })
+): { ast: () => ast.RulesDeclartion; print: () => Promise<string> } => {
+  const statements = scope.create(() => handler({ arg, func, service, op: op, and, or }))
 
   const node = ast.rules([[ast.version([ast.literal(['"2"'])]), ...statements]])
 
   return {
     ast: () => node,
-    print: () =>
-      format(`rules_version = "2"`, {
-        filepath: 'test.test',
-        plugins: [
-          {
-            languages: [{ name: 'Test', parsers: ['test'], extensions: ['.test'] }],
-            parsers: { test: { astFormat: 'test', locStart: () => 0, locEnd: () => 0, parse: () => node } },
-            printers: { test: { print } },
-          },
-        ],
-      }),
+    print: (options?: Options) => formatAst(node, options),
   } as any
 }

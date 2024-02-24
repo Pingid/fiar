@@ -69,116 +69,94 @@ const logical: (operator: string) => (...args: NonEmpty<rules.RulesBoolean>) => 
     }))
   }
 
-const joined = (div: string) => (a: Rule<any> | any, b: Rule<any> | any) =>
-  rule((x) => ast.expression([false, expressionBuilderArgument(a, x), undefined, div, expressionBuilderArgument(b, x)]))
-
 export const and: (...args: NonEmpty<rules.RulesBoolean>) => Rule<boolean> = logical('&&')
 
 export const or: (...args: NonEmpty<rules.RulesBoolean>) => Rule<boolean> = logical('||')
 
-export const is: (a: Rule, type: IFieldPrimitive) => rules.RulesBoolean = (a, type) =>
-  rule((left) => ast.expression([false, expressionBuilderArgument(a, left), undefined, 'is', ast.ident([type])]))
+export const op: {
+  (a: Rule, o: 'is', type: IFieldPrimitive): rules.RulesBoolean
+  (a: any, o: '==', b: any): rules.RulesBoolean
+  (a: any, o: '!=', b: any): rules.RulesBoolean
 
-export const eq: {
-  (a: any, b: any): rules.RulesBoolean
-} = joined('==')
-
-export const neq: {
-  (a: any, b: any): rules.RulesBoolean
-} = joined('!=')
-
-export const In: {
   /** True if b is a member of list a */
-  <T extends Rule>(b: T | TypeOfRule<T>, a: rules.RulesList<T>): rules.RulesBoolean
+  <T extends Rule>(b: T | TypeOfRule<T>, o: 'in', a: rules.RulesList<T>): rules.RulesBoolean
   /** True if b is a member of list a */
-  <T extends any>(b: T, a: rules.RulesList<rules.InferRule<T>>): rules.RulesBoolean
-
+  <T extends any>(b: T, o: 'in', a: rules.RulesList<rules.InferRule<T>>): rules.RulesBoolean
   /** True if b is a member of set a */
-  <T extends Rule>(b: T | TypeOfRule<T>, a: rules.RulesSet<T>): rules.RulesBoolean
+  <T extends Rule>(b: T | TypeOfRule<T>, o: 'in', a: rules.RulesSet<T>): rules.RulesBoolean
   /** True if b is a member of set a */
-  <T extends any>(b: T, a: rules.RulesSet<rules.InferRule<T>>): rules.RulesBoolean
-
+  <T extends any>(b: T, o: 'in', a: rules.RulesSet<rules.InferRule<T>>): rules.RulesBoolean
   /** True if b is a member of list a */
-  <T extends Rule>(b: T, a: TypeOfRule<T>[]): rules.RulesBoolean
-
+  <T extends Rule>(b: T, o: 'in', a: TypeOfRule<T>[]): rules.RulesBoolean
+  /** True if b is a member of list a */
+  <T extends any>(b: T, o: 'in', a: T[]): rules.RulesBoolean
   /** True if key k exists in map x */
-  <T extends Record<string, Rule>>(k: string | rules.RulesString, x: rules.RulesMap<T>): rules.RulesBoolean
-} = joined('in')
+  <T extends Record<string, Rule>>(k: string | rules.RulesString, o: 'in', x: rules.RulesMap<T>): rules.RulesBoolean
 
-export const gt: {
   /** True if a is greater than b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesBoolean
+  (a: rules.RulesNumber | number, o: '>', b: number | rules.RulesNumber): rules.RulesBoolean
   /** True if a is greater than b */
-  (a: rules.RulesString | string, b: string | rules.RulesString): rules.RulesBoolean
-} = joined('>')
+  (a: rules.RulesString | string, o: '>', b: string | rules.RulesString): rules.RulesBoolean
 
-export const gte: {
   /** True if a is greater or equal to than b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesBoolean
+  (a: rules.RulesNumber | number, o: '>=', b: number | rules.RulesNumber): rules.RulesBoolean
   /** True if a is greater or equal to than b */
-  (a: rules.RulesString | string, b: string | rules.RulesString): rules.RulesBoolean
-} = joined('>=')
+  (a: rules.RulesString | string, o: '>=', b: string | rules.RulesString): rules.RulesBoolean
 
-export const lt: {
   /** True if a is less than b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesBoolean
+  (a: rules.RulesNumber | number, p: '<', b: number | rules.RulesNumber): rules.RulesBoolean
   /** True if a is less than b */
-  (a: rules.RulesString | string, b: string | rules.RulesString): rules.RulesBoolean
-} = joined('<')
-
-export const lte: {
-  /** True if a is less than or equal to b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesBoolean
-  /** True if a is less than or equal to b */
-  (a: rules.RulesString | string, b: string | rules.RulesString): rules.RulesBoolean
-} = joined('<=')
-
-export const add: {
-  /** Add b to a */
-  (a: rules.RulesFloat, b: number | rules.RulesNumber): rules.RulesFloat
-  /** Add b to a */
-  (a: rules.RulesInteger, b: rules.RulesInteger): rules.RulesInteger
-  /** Add b to a */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesNumber
+  (a: rules.RulesString | string, p: '<', b: string | rules.RulesString): rules.RulesBoolean
 
   /** True if a is less than or equal to b */
-  (a: rules.RulesString | string, b: string | rules.RulesString): rules.RulesString
-} = joined('+') as any
+  (a: rules.RulesNumber | number, o: '<=', b: number | rules.RulesNumber): rules.RulesBoolean
+  /** True if a is less than or equal to b */
+  (a: rules.RulesString | string, o: '<=', b: string | rules.RulesString): rules.RulesBoolean
 
-export const sub: {
+  /** Add b to a */
+  (a: rules.RulesFloat, o: '+', b: number | rules.RulesNumber): rules.RulesFloat
+  /** Add b to a */
+  (a: rules.RulesInteger, o: '+', b: rules.RulesInteger): rules.RulesInteger
+  /** Add b to a */
+  (a: rules.RulesNumber | number, o: '+', b: number | rules.RulesNumber): rules.RulesNumber
+  /** True if a is less than or equal to b */
+  (a: rules.RulesString | string, o: '+', b: string | rules.RulesString): rules.RulesString
+
   /** Subtract b from a */
-  (a: rules.RulesFloat, b: number | rules.RulesNumber): rules.RulesFloat
+  (a: rules.RulesFloat, o: '-', b: number | rules.RulesNumber): rules.RulesFloat
   /** Subtract b from a */
-  (a: rules.RulesInteger, b: rules.RulesInteger): rules.RulesInteger
+  (a: rules.RulesInteger, o: '-', b: rules.RulesInteger): rules.RulesInteger
   /** Subtract b from a */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesNumber
-} = joined('-') as any
+  (a: rules.RulesNumber | number, o: '-', b: number | rules.RulesNumber): rules.RulesNumber
 
-export const div: {
   /** Divide a by b */
-  (a: rules.RulesFloat, b: number | rules.RulesNumber): rules.RulesFloat
+  (a: rules.RulesFloat, o: '/', b: number | rules.RulesNumber): rules.RulesFloat
   /** Divide a by b */
-  (a: rules.RulesInteger, b: rules.RulesInteger): rules.RulesFloat
+  (a: rules.RulesInteger, o: '/', b: rules.RulesInteger): rules.RulesFloat
   /** Divide a by b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesNumber
-} = joined('/') as any
+  (a: rules.RulesNumber | number, o: '/', b: number | rules.RulesNumber): rules.RulesNumber
 
-export const mult: {
   /** Multiply a by b */
-  (a: rules.RulesFloat, b: number | rules.RulesNumber): rules.RulesFloat
+  (a: rules.RulesFloat, o: '*', b: number | rules.RulesNumber): rules.RulesFloat
   /** Multiply a by b */
-  (a: rules.RulesInteger, b: rules.RulesInteger): rules.RulesInteger
+  (a: rules.RulesInteger, o: '*', b: rules.RulesInteger): rules.RulesInteger
   /** Multiply a by b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesNumber
-} = joined('*') as any
+  (a: rules.RulesNumber | number, o: '*', b: number | rules.RulesNumber): rules.RulesNumber
 
-export const mod: {
   /** Multiply a by b */
-  (a: rules.RulesFloat, b: number | rules.RulesNumber): rules.RulesInteger
+  (a: rules.RulesFloat, o: '%', b: number | rules.RulesNumber): rules.RulesInteger
   /** Multiply a by b */
-  (a: rules.RulesInteger, b: rules.RulesInteger): rules.RulesInteger
+  (a: rules.RulesInteger, o: '%', b: rules.RulesInteger): rules.RulesInteger
   /** Multiply a by b */
-  (a: rules.RulesNumber | number, b: number | rules.RulesNumber): rules.RulesInteger
-} = joined('%') as any
-
-export const op = { and, or, is, eq, neq, in: In, gt, gte, lt, lte, add, sub, div, mult, mod }
+  (a: rules.RulesNumber | number, o: '%', b: number | rules.RulesNumber): rules.RulesInteger
+} = (left: any, op: any, right: any): any => {
+  return rule((x) =>
+    ast.expression([
+      false,
+      expressionBuilderArgument(left, x),
+      undefined,
+      op,
+      op === 'is' ? ast.ident([right]) : expressionBuilderArgument(right, x),
+    ]),
+  )
+}

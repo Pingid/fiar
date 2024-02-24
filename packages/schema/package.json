@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest ./src/**/*.ts",
     "emulate": "firebase emulators:start --project fiarcms"
   },
   "keywords": [],

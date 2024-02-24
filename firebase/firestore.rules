@@ -1,68 +1,90 @@
-rules_version = '2'
+rules_version = "2";
+
 service cloud.firestore {
+
   match /databases/{database}/documents {
 
-    function validateArticles(data) {
-      return data is map && data.keys().hasOnly(['title', 'image', 'body', 'width', 'meta', 'tags']) &&
-        data.title is string &&
-        data.image is map &&
-        data.image.keys().hasOnly(['fullPath', 'bucket', 'name']) &&
-        data.image.fullPath is string &&
-        data.image.bucket is string &&
-        data.image.name is string &&
-        data.body is string &&
-        data.width is number &&
-        (data.meta == null ||
-          (data.meta is map && data.meta.keys().hasOnly(['title', 'description']) && data.meta.title is string &&
-            data.meta.description is string)) &&
-        data.tags is list;
+    function isArticle() {
+      return (request.resource.data is map
+          && request.resource.data.keys().hasOnly(["title", "image", "body", "width", "meta", "tags"])
+          && request.resource.data.title is string
+          && (request.resource.data.image is map
+            && request.resource.data.image.keys().hasOnly(["fullPath", "bucket", "name"])
+            && request.resource.data.image.fullPath is string
+            && request.resource.data.image.bucket is string
+            && request.resource.data.image.name is string)
+          && request.resource.data.body is string
+          && request.resource.data.width is number
+          && (request.resource.data.meta == null
+            || (request.resource.data.meta is map
+              && request.resource.data.meta.keys().hasOnly(["title", "description"])
+              && request.resource.data.meta.title is string
+              && request.resource.data.meta.description is string))
+          && request.resource.data.tags is list);
     }
 
-    function validateTest(data) {
-      return data is map && data.keys().hasOnly(['title', 'count', 'metadata', 'links']) && data.title is string &&
-        data.count is number &&
-        data.metadata is map &&
-        data.metadata.keys().hasOnly(['time', 'seo']) &&
-        data.metadata.time is string &&
-        (data.metadata.seo == null ||
-          (data.metadata.seo is map && data.metadata.seo.keys().hasOnly(['title', 'description']) &&
-            data.metadata.seo.title is string &&
-            data.metadata.seo.description is string)) &&
-        data.links is list;
+    function isTest() {
+      return (request.resource.data is map
+          && request.resource.data.keys().hasOnly(["title", "count", "metadata", "links"])
+          && request.resource.data.title is string
+          && request.resource.data.count is number
+          && (request.resource.data.metadata is map
+            && request.resource.data.metadata.keys().hasOnly(["time", "seo"])
+            && request.resource.data.metadata.time is string
+            && (request.resource.data.metadata.seo == null
+              || (request.resource.data.metadata.seo is map
+                && request.resource.data.metadata.seo.keys().hasOnly(["title", "description"])
+                && request.resource.data.metadata.seo.title is string
+                && request.resource.data.metadata.seo.description is string)))
+          && request.resource.data.links is list);
     }
 
-    function validatePagesLanding(data) {
-      return data is map && data.keys().hasOnly(['highlight', 'more', 'meta']) && data.highlight is path &&
-        data.more is list &&
-        (data.meta == null ||
-          (data.meta is map && data.meta.keys().hasOnly(['title', 'description']) && data.meta.title is string &&
-            data.meta.description is string));
+    function isLanding() {
+      return (request.resource.data is map
+          && request.resource.data.keys().hasOnly(["highlight", "more", "meta"])
+          && request.resource.data.highlight is path
+          && request.resource.data.more is list
+          && (request.resource.data.meta == null
+            || (request.resource.data.meta is map
+              && request.resource.data.meta.keys().hasOnly(["title", "description"])
+              && request.resource.data.meta.title is string
+              && request.resource.data.meta.description is string)));
+    }
+
+    function isTag() {
+      return (request.resource.data is map
+          && request.resource.data.keys().hasOnly(["name", "createdAt", "updatedAt"])
+          && request.resource.data.name is string
+          && request.resource.data.createdAt is timestamp
+          && request.resource.data.updatedAt is timestamp);
     }
 
     match /articles/{articleId} {
-      allow update: if validateArticles(request.resource.data)
-      allow create: if validateArticles(request.resource.data)
-      allow read: if true
+      allow read: if true;
+      allow create: if isArticle();
+      allow update: if isArticle();
+      allow delete: if request.auth != null;
     }
 
-    match /test/{id} {
-      allow update: if validateTest(request.resource.data)
-      allow create: if validateTest(request.resource.data)
-      allow read: if true
+    match /test {
+      allow read: if true;
+      allow create: if isTest();
+      allow update: if isTest();
+      allow delete: if request.auth != null;
     }
-
-    match /tags/{id} {
-      allow read: if true
-      allow write: if true
-    }
-
 
     match /pages/landing {
-      allow update: if
-        validatePagesLanding(request.resource.data)
-      allow create: if
-        validatePagesLanding(request.resource.data)
-      allow read: if true
+      allow read: if true;
+      allow create: if isLanding();
+      allow update: if isLanding();
+      allow delete: if request.auth != null;
+    }
+
+    match /tags/{tagId} {
+      allow read: if debug(database);
+      allow create: if isTag();
+      allow update: if isTag();
+      allow delete: if request.auth != null;
     }
   }
 }

@@ -1,7 +1,6 @@
 import { it, describe } from 'vitest'
 import { s, model } from '@fiar/schema'
 import { rulset } from './service.js'
-import { op } from './builder.js'
 import { validate } from '../schema/rules.js'
 
 const typ = model({
@@ -17,25 +16,25 @@ const typ = model({
 
 describe('expression builder', () => {
   console.log(typ)
-  const r = rulset(({ service, func, arg }) => {
-    const isAdmin = func('isAdmin', [arg<string, 'email'>('email')], (x) => op.in(x.email, ['james@gmail.com']))
+  const r = rulset(({ service, func, arg, op }) => {
+    const isAdmin = func('isAdmin', [arg<string, 'email'>('email')], (x) => op(x.email, 'in', ['james@gmail.com']))
 
     service('cloud.firestore', ({ match }) => {
       match('/users/{userId}', ({ allow, match }) => {
-        allow('read', op.eq(true, true))
+        allow('read', op(true, '==', true))
         allow('write', (c) => isAdmin(c.request.auth.token.email))
         match('/users/{userId}', ({ allow, match }) => {
-          allow('read', op.eq(true, true))
+          allow('read', op(true, '==', true))
           allow('write', (c) => isAdmin(c.request.auth.token.email))
           match('/users/{userId}', ({ allow }) => {
             allow('read', (c) => validate(c.request.resource.data, { type: 'map', fields: typ.fields }))
             allow('write', (c) => isAdmin(c.request.auth.token.email))
-            func('scopped', [], () => op.eq(10, 10))
+            func('scopped', [], () => op(10, '==', 10))
           })
         })
       })
       match('/users/{userId}', ({ allow }) => {
-        allow('read', op.eq(true, true))
+        allow('read', op(true, '==', true))
         allow('write', (c) => isAdmin(c.request.auth.token.email))
       })
       // match('/articles/{articleId}', {

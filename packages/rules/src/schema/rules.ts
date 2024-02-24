@@ -13,74 +13,74 @@ import {
 } from '@fiar/schema'
 
 import { RulesBoolean, RulesList, RulesMap, RulesNumber, RulesString, RulesTimestamp } from '../firestore/interfaces.js'
-import { op } from '../builder/index.js'
+import { op, or, and } from '../builder/index.js'
 import { Rule } from '../rule/index.js'
 
 export const validate = (left: Rule, type: FireSchemaTypes): RulesBoolean => {
   const validateer = defaultValidateers[type.type] as FieldTranformer<Rule, FireSchemaTypes>
-  if (type.optional) return op.or(op.eq(left as any, null), validateer(left, type as any))
+  if (type.optional) return or(op(left as any, '==', null), validateer(left, type as any))
   return validateer(left, type as any)
 }
 
 type FieldTranformer<R extends Rule, T extends FireSchemaTypes> = (rule: R, type: T) => RulesBoolean
 
 const validateString: FieldTranformer<RulesString, FireSchemaString> = (left, field) => {
-  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', field.type)]
   if (field.match instanceof RegExp) rules.push(left.matches(field.match.source))
   if (typeof field.match === 'string') rules.push(left.matches(field.match))
-  if (typeof field.min === 'number') rules.push(op.gte(left.size(), field.min))
-  if (typeof field.max === 'number') rules.push(op.lte(left.size(), field.max))
-  if (typeof field.size === 'number') rules.push(op.eq(left.size(), field.size))
-  return op.and(...rules)
+  if (typeof field.min === 'number') rules.push(op(left.size(), '>=', field.min))
+  if (typeof field.max === 'number') rules.push(op(left.size(), '<=', field.max))
+  if (typeof field.size === 'number') rules.push(op(left.size(), '==', field.size))
+  return and(...rules)
 }
 
 const validateNumber: FieldTranformer<RulesNumber, FireSchemaNumber> = (left, field) => {
-  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
-  if (typeof field.min === 'number') rules.push(op.gte(left, field.min))
-  if (typeof field.max === 'number') rules.push(op.lte(left, field.max))
-  return op.and(...rules)
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', field.type)]
+  if (typeof field.min === 'number') rules.push(op(left, '>=', field.min))
+  if (typeof field.max === 'number') rules.push(op(left, '<=', field.max))
+  return and(...rules)
 }
 
 const validateTimestamp: FieldTranformer<RulesTimestamp, FireSchemaTimestamp> = (left, field) => {
-  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
-  if (field.after) rules.push(op.gt(left.toMillis(), new Date(field.after).getTime()))
-  if (field.before) rules.push(op.lt(left.toMillis(), new Date(field.before).getTime()))
-  return op.and(...rules)
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', field.type)]
+  if (field.after) rules.push(op(left.toMillis(), '>', new Date(field.after).getTime()))
+  if (field.before) rules.push(op(left.toMillis(), '<', new Date(field.before).getTime()))
+  return and(...rules)
 }
 
 const validateMap: FieldTranformer<RulesMap<Record<string, any>>, FireSchemaMap> = (left, field) => {
-  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, 'map')]
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', 'map')]
   if (!field.loose) rules.push(left.keys().hasOnly(Object.keys(field.fields)))
   rules.push(...Object.keys(field.fields).map((key) => validate((left as any)[key], field.fields[key] as any)))
-  return op.and(...rules)
+  return and(...rules)
 }
 
 const validateList: FieldTranformer<RulesList<any>, FireSchemaList> = (left, field) => {
-  const rules: [RulesBoolean, ...RulesBoolean[]] = [op.is(left, field.type)]
-  if (typeof field.min === 'number') rules.push(op.gte(left.size(), field.min))
-  if (typeof field.max === 'number') rules.push(op.lte(left.size(), field.max))
-  if (typeof field.size === 'number') rules.push(op.eq(left.size(), field.size))
-  return op.and(...rules)
+  const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', field.type)]
+  if (typeof field.min === 'number') rules.push(op(left.size(), '>=', field.min))
+  if (typeof field.max === 'number') rules.push(op(left.size(), '<=', field.max))
+  if (typeof field.size === 'number') rules.push(op(left.size(), '==', field.size))
+  return and(...rules)
 }
 
 const validateSet: FieldTranformer<RulesList<any>, FireSchemaSet> = (left, field) => {
   const rules: [RulesBoolean, ...RulesBoolean[]] = [
-    op.is(left as any, 'list'),
+    op(left as any, 'is', 'list'),
     ...field.of.map((x, i) => validate(left[i], x)),
   ]
-  return op.and(...rules)
+  return and(...rules)
 }
 
 const validateUnion: FieldTranformer<Rule, FireSchemaUnion> = (left, field) => {
-  return op.or(...(field.of.map((x) => validate(left, x)) as [RulesBoolean]))
+  return or(...(field.of.map((x) => validate(left, x)) as [RulesBoolean]))
 }
 
-const validateLiteral: FieldTranformer<Rule, FireSchemaLiteral> = (left, field) => op.eq(left as any, field.value)
+const validateLiteral: FieldTranformer<Rule, FireSchemaLiteral> = (left, field) => op(left as any, '==', field.value)
 
 const assertType =
   <T extends FireSchemaTypes>(type?: string): FieldTranformer<Rule, T> =>
   (left, field) =>
-    op.is(left as any, type || (field.type as any))
+    op(left as any, 'is', type || (field.type as any))
 
 export const defaultValidateers = {
   string: validateString,
