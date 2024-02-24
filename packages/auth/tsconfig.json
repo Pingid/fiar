@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": { "rootDir": "src", "outDir": ".", "tsBuildInfoFile": ".tsbuildinfo" },
-  "exclude": ["**/*.js", "**/*.cjs", "**/*.d.ts"],
   "include": ["src/**/*"],
   "references": [{ "path": "../content" }, { "path": "../workbench" }, { "path": "../components" }]
 }

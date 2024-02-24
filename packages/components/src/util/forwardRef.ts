@@ -7,12 +7,11 @@ export const extend = <K extends keyof JSX.IntrinsicElements, P extends Record<s
   ) => JSX.Element,
 ): Extend<K, P> => React.forwardRef(comp) as any
 
-export type Extend<K extends keyof JSX.IntrinsicElements, P extends Record<string, any>> = {
-  <I extends JSX.IntrinsicElements[K] & P>(props: I): JSX.Element
-  <E extends keyof JSX.IntrinsicElements, I extends JSX.IntrinsicElements[E] & P & { elementType: E }>(
-    props: I,
-  ): JSX.Element
-}
+export type Extend<K extends keyof JSX.IntrinsicElements, P extends Record<string, any>> = <
+  E extends keyof JSX.IntrinsicElements = K,
+>(
+  props: JSX.IntrinsicElements[E] & P & { elementType?: E },
+) => JSX.Element
 
 export const forward = <K extends keyof JSX.IntrinsicElements, P extends Record<string, any> = {}>(
   comp: (
@@ -21,8 +20,6 @@ export const forward = <K extends keyof JSX.IntrinsicElements, P extends Record<
   ) => JSX.Element,
 ): Forward<K, P> => React.forwardRef(comp) as any
 
-export type Forward<K extends keyof JSX.IntrinsicElements, P extends Record<string, any>> = <
-  I extends JSX.IntrinsicElements[K] & P,
->(
-  props: I,
+export type Forward<K extends keyof JSX.IntrinsicElements, P extends Record<string, any>> = (
+  props: JSX.IntrinsicElements[K] & P,
 ) => JSX.Element

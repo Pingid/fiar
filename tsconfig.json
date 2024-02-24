@@ -56,5 +56,6 @@
     { "path": "./packages/workbench" },
     { "path": "./packages/prettier-plugin" }
   ],
-  "include": ["firebase.json"]
+  "include": ["firebase.json"],
+  "exclude": ["**/*.js", "**/*.cjs", "**/*.d.ts"]
 }
