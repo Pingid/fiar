@@ -3,8 +3,8 @@ import { DocumentReference, doc } from '@firebase/firestore'
 import { useController } from 'react-hook-form'
 import { useState } from 'react'
 
+import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
-import { Button, Field } from '@fiar/components'
 
 import { fieldError, type FieldForm, FieldPreview, PreviewField } from '../lib/index.js'
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
@@ -27,7 +27,7 @@ export const FormFieldRef: FieldForm<IFieldRef> = (props) => {
 
   return (
     <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
-      <Field.Control>
+      <FieldControl>
         {isSet && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
             <div />
@@ -70,7 +70,7 @@ export const FormFieldRef: FieldForm<IFieldRef> = (props) => {
             static
           />
         )}
-      </Field.Control>
+      </FieldControl>
     </Field>
   )
 }

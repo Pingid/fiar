@@ -13,23 +13,23 @@ import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
 import useMutation from 'swr/mutation'
 import React from 'react'
 
-import { Button, Field, Input, LoadingDots } from '@fiar/components'
+import { Button, Field, FieldControl, Input, LoadingDots } from '@fiar/components'
 import { useFirebaseAuth, useAuthConfig } from '../context/index.js'
 
 export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?: boolean }): JSX.Element => {
   const auth = useFirebaseAuth()
   const config = useAuthConfig()
 
-  const [password, setPassword] = React.useState('')
-  const [email, setEmail] = React.useState('')
   const [error, setError] = React.useState('')
 
   const emailPassword = config.providers.find((x) => x.providerId === 'password')
   const social = config.providers.filter((x) => x.providerId !== 'password')
-  const signinEmail = useMutation('auth', () => signInWithEmailAndPassword(auth, email, password), {
-    onError: (e) => setError(e.message),
-    onSuccess: props.onSuccess,
-  })
+  const signinEmail = useMutation(
+    'auth',
+    (_, p: { arg: { email: string; password: string } }) =>
+      signInWithEmailAndPassword(auth, p.arg.email, p.arg.password),
+    { onError: (e) => setError(e.message), onSuccess: props.onSuccess },
+  )
   const signinSocial = useMutation(
     config.method ?? 'redirect',
     (type: string, p: { arg: AuthProvider }) => {
@@ -57,29 +57,10 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
           <p className="text-error text-sm">{error}</p>
         </div>
         {emailPassword && (
-          <form className="space-y-3 px-4 py-6" onSubmit={(e) => (e.preventDefault(), signinEmail.trigger())}>
-            <Field label="email" name="email">
-              <Field.Control>
-                <Input id="email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </Field.Control>
-            </Field>
-            <Field label="password" name="password">
-              <Field.Control>
-                <Input
-                  id="password"
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Field.Control>
-            </Field>
-            <div className="flex justify-end pt-3">
-              <Button disabled={mutating} className="px-6 py-3">
-                Login
-              </Button>
-            </div>
-          </form>
+          <EmailAndPasswordForm
+            loading={mutating}
+            signIn={(email, password) => signinEmail.trigger({ email, password })}
+          />
         )}
         <div className="space-y-3 px-4 py-6">
           {social.map((x) => {
@@ -99,6 +80,37 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
         </div>
       </div>
     </div>
+  )
+}
+
+const EmailAndPasswordForm = (props: { signIn: (email: string, password: string) => any; loading?: boolean }) => {
+  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('')
+
+  return (
+    <form className="space-y-3 px-4 py-6" onSubmit={(e) => (e.preventDefault(), props.signIn(email, password))}>
+      <Field label="email" name="email">
+        <FieldControl>
+          <Input id="email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </FieldControl>
+      </Field>
+      <Field label="password" name="password">
+        <FieldControl>
+          <Input
+            id="password"
+            type="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </FieldControl>
+      </Field>
+      <div className="flex justify-end pt-3">
+        <Button disabled={props.loading} className="px-6 py-3">
+          Login
+        </Button>
+      </div>
+    </form>
   )
 }
 

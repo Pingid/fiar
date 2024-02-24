@@ -1,5 +1,5 @@
 import { get, useFormState } from 'react-hook-form'
-import { Field, Input } from '@fiar/components'
+import { Field, Input, FieldControl } from '@fiar/components'
 
 import { type FieldForm, fieldError, FieldPreview } from '../lib/index.js'
 import { type IFieldBoolean } from '../../schema/index.js'
@@ -10,13 +10,13 @@ export const FormFieldBool: FieldForm<IFieldBoolean> = (props) => {
 
   return (
     <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
-      <Field.Control>
+      <FieldControl>
         <Input
           id={props.name}
           type="checkbox"
           {...props.control.register(props.name, { required: !props.field.optional })}
         />
-      </Field.Control>
+      </FieldControl>
     </Field>
   )
 }

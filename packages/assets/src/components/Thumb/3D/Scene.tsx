@@ -1,9 +1,9 @@
 import { useGLTF, OrbitControls, Stage } from '@react-three/drei'
 import { Suspense, useLayoutEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Box3, Group } from 'three'
+import type { Box3, Group } from 'three'
 
-const Scene = (props: { url: string; active?: boolean }) => {
+const Scene = (props: { url: string; active?: boolean }): JSX.Element => {
   return (
     <Canvas shadows dpr={[1, 1.5]} camera={{ position: [0, 0, 150], fov: 50 }}>
       <ambientLight intensity={0.25} />
@@ -15,7 +15,7 @@ const Scene = (props: { url: string; active?: boolean }) => {
   )
 }
 
-const Model = (props: { url: string }) => {
+const Model = (props: { url: string }): JSX.Element => {
   const data = useGLTF(props.url)
   const group = useRef<Group<any>>(null)
 

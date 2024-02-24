@@ -2,8 +2,8 @@ import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline
 import { useState } from 'react'
 
 import { type FieldForm, type FieldPreview, useFormState, fieldError, get, useController } from '@fiar/content/fields'
+import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
-import { Button, Field } from '@fiar/components'
 
 import { SelectAssetProvider } from '../../context/select.js'
 import { useImageMeta } from '../../context/data.js'
@@ -12,7 +12,7 @@ import { Thumbnail } from '../index.js'
 
 export const PreviewFieldAsset: FieldPreview<IFieldAsset> = (props) => {
   const asset = useImageMeta(props.value?.fullPath)
-  console.log(asset.data)
+
   return (
     <div className="flex aspect-square h-28 w-28">
       <Thumbnail
@@ -45,7 +45,7 @@ export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
 
   return (
     <Field label={props.field.label} error={error}>
-      <Field.Control>
+      <FieldControl>
         {form.field.value && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
             <div />
@@ -80,7 +80,7 @@ export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
             </Button>
           </div>
         )}
-      </Field.Control>
+      </FieldControl>
 
       <SelectAssetProvider
         value={({ fullPath, name, bucket }) => {

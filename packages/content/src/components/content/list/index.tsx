@@ -66,7 +66,7 @@ const DocumentCard = (props: { model: IContentModel; titleField?: string }) => {
   return (
     <Card
       icon={<DocumentIcon />}
-      title={
+      head={
         <span className="flex w-full items-baseline justify-between">
           <span>{title}</span>
           <span className="text-sm opacity-60">{createTime && date(createTime).format('YY/MM/DD')}</span>

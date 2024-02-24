@@ -1,6 +1,6 @@
 import { cn } from 'mcn'
 
-import { forwardRefElem, forwardRefElement } from '../../util/forwardRef.js'
+import { forward, Forward } from '../../util/forwardRef.js'
 import { Markdown } from '../markdown/index.js'
 
 type FieldProps = {
@@ -8,15 +8,12 @@ type FieldProps = {
   name?: string
   label?: React.ReactNode
   description?: React.ReactNode
-  children: React.ReactNode
-} & JSX.IntrinsicElements['div']
+}
 
-export const Field: {
-  (props: FieldProps): React.ReactNode
-  Control: (
-    props: JSX.IntrinsicElements['div'] & React.RefAttributes<HTMLDivElement> & { error?: boolean },
-  ) => JSX.Element
-} = forwardRefElement<'div', FieldProps>(({ error, name, label, children, description, ...props }, ref) => {
+export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { error?: any }> } = forward<
+  'div',
+  FieldProps
+>(({ error, name, label, children, description, ...props }, ref) => {
   const DESCRIPTION =
     typeof description === 'string' ? (
       <Markdown className="text-front/50 pb-1 text-sm">{description}</Markdown>
@@ -49,14 +46,16 @@ export const Field: {
   )
 }) as any
 
-Field.Control = forwardRefElem<'div', { error?: any }>(({ error, className, ...props }, ref) => (
-  <div
-    {...props}
-    ref={ref}
-    className={cn(
-      'bg-frame focus-within:bg-back w-full rounded border',
-      [!!error, 'border-error', ' focus-within:border-line-focus'],
-      className,
-    )}
-  />
-))
+export const FieldControl: Forward<'div', { error?: any }> = forward<'div', { error?: any }>(
+  ({ error, className, ...props }, ref) => (
+    <div
+      {...props}
+      ref={ref}
+      className={cn(
+        'bg-frame focus-within:bg-back w-full rounded border',
+        [!!error, 'border-error', ' focus-within:border-line-focus'],
+        className,
+      )}
+    />
+  ),
+)

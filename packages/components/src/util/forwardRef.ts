@@ -1,13 +1,28 @@
-import React, { ElementRef } from 'react'
+import React, { ForwardedRef } from 'react'
 
-/* Alias to fixe type definition for `forwardRef`. */
-export const forwardRefElement: <T extends keyof JSX.IntrinsicElements = 'div', P = {}>(
-  render: (props: P, ref: React.Ref<ElementRef<T>>) => JSX.Element,
-) => (props: P & React.RefAttributes<ElementRef<T>>) => JSX.Element = React.forwardRef as any
+export const extend = <K extends keyof JSX.IntrinsicElements, P extends Record<string, any> = {}>(
+  comp: (
+    props: JSX.IntrinsicElements[K] & P & { elementType?: K },
+    ref: ForwardedRef<K extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[K] : any>,
+  ) => JSX.Element,
+): Extend<K, P> => React.forwardRef(comp) as any
 
-export const forwardRef = <T extends (props: any, ref?: React.ForwardedRef<any>) => any>(component: T) =>
-  React.forwardRef(component) as any as T
+export type Extend<K extends keyof JSX.IntrinsicElements, P extends Record<string, any>> = {
+  <I extends JSX.IntrinsicElements[K] & P>(props: I): JSX.Element
+  <E extends keyof JSX.IntrinsicElements, I extends JSX.IntrinsicElements[E] & P & { elementType: E }>(
+    props: I,
+  ): JSX.Element
+}
 
-export const forwardRefElem: <T extends keyof JSX.IntrinsicElements = 'div', P = {}>(
-  render: (props: JSX.IntrinsicElements[T] & P, ref: React.Ref<ElementRef<T>>) => JSX.Element,
-) => (props: JSX.IntrinsicElements[T] & P & React.RefAttributes<ElementRef<T>>) => JSX.Element = React.forwardRef as any
+export const forward = <K extends keyof JSX.IntrinsicElements, P extends Record<string, any> = {}>(
+  comp: (
+    props: JSX.IntrinsicElements[K] & P,
+    ref: ForwardedRef<K extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[K] : any>,
+  ) => JSX.Element,
+): Forward<K, P> => React.forwardRef(comp) as any
+
+export type Forward<K extends keyof JSX.IntrinsicElements, P extends Record<string, any>> = <
+  I extends JSX.IntrinsicElements[K] & P,
+>(
+  props: I,
+) => JSX.Element

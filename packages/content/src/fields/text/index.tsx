@@ -3,7 +3,7 @@ import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import { useEffect } from 'react'
 import { cn } from 'mcn'
 
-import { Field } from '@fiar/components'
+import { Field, FieldControl } from '@fiar/components'
 
 import { FieldForm, FieldPreview, fieldError, get, useController, useFormState } from '../lib/index.js'
 import { TipTipTools, useTipTapExtensions } from './provider.js'
@@ -50,10 +50,10 @@ export const FormFieldText: FieldForm<IFieldString> = (props) => {
 
   return (
     <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
-      <Field.Control error={!!error}>
+      <FieldControl error={!!error}>
         {editor && <EditorControls editor={editor} />}
         <EditorContent editor={editor} />
-      </Field.Control>
+      </FieldControl>
     </Field>
   )
 }

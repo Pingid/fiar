@@ -1,5 +1,5 @@
 import { useFormState, get } from 'react-hook-form'
-import { Field, Input } from '@fiar/components'
+import { Field, Input, FieldControl } from '@fiar/components'
 
 import { type FieldForm, type FieldPreview, fieldError } from '../lib/index.js'
 import { type IFieldString } from '../../schema/index.js'
@@ -10,7 +10,7 @@ export const FormFieldString: FieldForm<IFieldString> = (props) => {
 
   return (
     <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
-      <Field.Control error={!!error}>
+      <FieldControl error={!!error}>
         <Input
           id={props.name}
           type="text"
@@ -21,7 +21,7 @@ export const FormFieldString: FieldForm<IFieldString> = (props) => {
             },
           })}
         />
-      </Field.Control>
+      </FieldControl>
     </Field>
   )
 }
