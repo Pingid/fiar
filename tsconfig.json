@@ -53,8 +53,7 @@
     { "path": "./packages/fiar" },
     { "path": "./packages/rules" },
     { "path": "./packages/schema" },
-    { "path": "./packages/workbench" },
-    { "path": "./packages/prettier-plugin" }
+    { "path": "./packages/workbench" }
   ],
   "include": ["firebase.json"],
   "exclude": ["**/*.js", "**/*.cjs", "**/*.d.ts"]

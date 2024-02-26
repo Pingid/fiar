@@ -10,16 +10,16 @@ export type RulesPlugin = Plugin<Ast>
 
 export const languages = [
   {
-    name: 'Firestore',
-    parsers: ['firestore'],
+    name: 'Firebase',
+    parsers: ['firebase'],
     extensions: ['.rules'],
-    vscodeLanguageIds: ['firestore', 'firestorerules'],
+    vscodeLanguageIds: ['firebase', 'firebaserules'],
   },
 ] satisfies Plugin['languages']
 
 export const parsers = {
-  firestore: {
-    astFormat: 'firestore',
+  firebase: {
+    astFormat: 'firebase',
     locStart: () => 0,
     locEnd: () => 0,
     parse: (text, options) => {
@@ -43,6 +43,6 @@ export const parsers = {
   },
 } satisfies RulesPlugin['parsers']
 
-export const printers = { firestore: { print } } satisfies RulesPlugin['printers']
+export const printers = { firebase: { print } } satisfies RulesPlugin['printers']
 
 export default { languages, parsers, printers } satisfies RulesPlugin

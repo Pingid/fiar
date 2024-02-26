@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import prettier from 'prettier'
 
-import plugin from '../plugin/index.js'
+import plugin from '../prettier/index.js'
 
 const format = (str: string) => prettier.format(str, { filepath: 'test.rules', plugins: [plugin] })
 const match = (name: string, str: string) =>
