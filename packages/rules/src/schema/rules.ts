@@ -12,7 +12,7 @@ import {
   FireSchemaUnion,
 } from '@fiar/schema'
 
-import { RulesBoolean, RulesList, RulesMap, RulesNumber, RulesString, RulesTimestamp } from '../firestore/interfaces.js'
+import { RulesBoolean, RulesList, RulesMap, RulesNumber, RulesString, RulesTimestamp } from '../firestore/index.js'
 import { op, or, and } from '../builder/index.js'
 import { Rule } from '../rule/index.js'
 

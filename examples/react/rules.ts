@@ -4,8 +4,17 @@ import fs from 'node:fs'
 import { articles, test, landing, tags } from './src/admin/entities'
 
 const rules = rulset(({ service }) => {
+  // Storage rules
+  service('firebase.storage', ({ match }) => {
+    match('/b/{bucket}/o', ({ match }) => {
+      match('/photos/{name}', ({ allow }) => {
+        allow('read', true)
+      })
+    })
+  })
+  // Firestore rules
   service('cloud.firestore', ({ match }) => {
-    match('/databases/{database}/documents', ({ match, func, op }) => {
+    match('/databases/(default)/documents', ({ match, func, op }) => {
       const isArticle = func('isArticle', [], (c) =>
         validate(c.request.resource.data, { type: 'map', fields: articles.fields }),
       )
@@ -40,7 +49,7 @@ const rules = rulset(({ service }) => {
       })
 
       match(tags.path, ({ allow }) => {
-        allow('read', (c) => c.debug(c.database))
+        allow('read', true)
         allow('create', () => isTag())
         allow('update', () => isTag())
         allow('delete', (c) => op(c.request.auth, '!=', null))
@@ -49,4 +58,4 @@ const rules = rulset(({ service }) => {
   })
 })
 
-rules.print().then((str) => fs.writeFileSync(import.meta.resolve('../../firebase/firestore.rules').slice(7), str))
+rules.print().then((str) => fs.writeFileSync(import.meta.resolve('../../firebase/firebase.rules').slice(7), str))

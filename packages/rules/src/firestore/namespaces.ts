@@ -11,7 +11,17 @@ import type {
   RulesLatLng,
   RulesTimestamp,
   RulesString,
-} from './interfaces'
+} from './primitives.js'
+
+type SigninProviders =
+  | `custom`
+  | `password`
+  | `phone`
+  | `anonymous`
+  | `google.com`
+  | `facebook.com`
+  | `github.com`
+  | `twitter.com`
 
 export type NamespaceAuth = RulesMap<{
   uid: RulesString
@@ -35,47 +45,6 @@ export type NamespaceAuth = RulesMap<{
     }>
   }>
 }>
-
-/**
- * The incoming request context.
- *
- * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Request}
- * */
-export interface NamespaceFirestoreRequest<T> extends Rule {
-  /**
-   * Request authentication context.
-   * uid - the UID of the requesting user.
-   * token - a map of JWT token claims.
-   *
-   * The token map contains the following values:
-   */
-  auth: NamespaceAuth
-  /** The request method. One of. */
-  method: RulesString<'get' | 'list' | 'create' | 'update' | 'delete'>
-  /** Path of the affected resource. */
-  query: RulesMap<{ limit: RulesInteger; offset: RulesInteger; orderBy: RulesString }>
-  /** The new resource value, present on write requests only. */
-  resource: NamespaceFirestoreResource<T>
-  /**
-   * When the request was received by the service.
-   * For Firestore write operations that include server-side timestamps, this time will be equal to the server timestamp.
-   * */
-  time: RulesTimestamp
-}
-
-/**
- * The firestore document being read or written.
- *
- * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Resource}
- * */
-export interface NamespaceFirestoreResource<T> {
-  /** The full document name, as a path. */
-  __name__: RulesPath
-  /** Map of the document data. */
-  data: T
-  /** String of the document's key */
-  id: RulesString
-}
 
 export interface NamespaceDebug {
   /**
@@ -120,28 +89,6 @@ export interface NamespaceDuration {
     magnitude: RulesInteger | number,
     unit: RulesString<'w' | 'd' | 'h' | 'm' | 's' | 'ms' | 'ns'> | 'w' | 'd' | 'h' | 'm' | 's' | 'ms' | 'ns',
   ) => RulesDuration
-}
-
-/**
- * Context specific variables and methods for Cloud Firestore security rules.
- * Functions in this namespace are only available inside service cloud.firestore { ... }
- * blocks and do not need to be prefixed when used (get() not firestore.get()).
- *
- * {@link https://firebase.google.com/docs/reference/rules/rules.firestore}
- */
-export interface NamespaceFirestore<T> extends Rule {
-  /** TThe request context, including authentication information and pending data. */
-  request: NamespaceFirestoreRequest<T>
-  /** The resource being read or written. */
-  resource: NamespaceFirestoreResource<T>
-  /** Check if a document exists. */
-  exists: (path: string | RulesPath | RulesString) => RulesBoolean
-  /** Check if a document exists, assuming the current request succeeds. Equivalent to getAfter(path) != null. */
-  existsAfter: (path: string | RulesPath | RulesString) => RulesBoolean
-  /** Get the contents of a firestore document. */
-  get: <T extends Record<string, any>>(path: string | RulesPath | RulesString) => RulesMap<T>
-  /** Get the projected contents of a document. The document is returned as if the current request had succeeded. Useful for validating documents that are part of a batched write or transaction. */
-  getAfter: <T extends Record<string, any>>(path: string | RulesPath | RulesString) => RulesMap<T>
 }
 
 /**
@@ -210,25 +157,107 @@ export interface NamespaceTimestamp {
   value: (epochMillis: number | RulesInteger) => RulesTimestamp
 }
 
-type SigninProviders =
-  | `custom`
-  | `password`
-  | `phone`
-  | `anonymous`
-  | `google.com`
-  | `facebook.com`
-  | `github.com`
-  | `twitter.com`
+interface NamespaceRules extends NamespaceDebug {
+  duration: NamespaceDuration
+  hashing: NamespaceHashing
+  latlng: NamespaceLatlng
+  math: NamespaceMath
+  timestamp: NamespaceTimestamp
+}
 
-export type PathParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
-  ? PathParams<R, { [K in keyof A | N]: RulesString }>
-  : A
+/**
+ * Context specific variables and methods for Cloud Firestore security rules.
+ * Functions in this namespace are only available inside service cloud.firestore { ... }
+ * blocks and do not need to be prefixed when used (get() not firestore.get()).
+ *
+ * {@link https://firebase.google.com/docs/reference/rules/rules.firestore}
+ */
+export interface NamespaceFirestore<T> extends Rule {
+  /** TThe request context, including authentication information and pending data. */
+  request: NamespaceFirestoreRequest<T>
+  /** The resource being read or written. */
+  resource: NamespaceFirestoreResource<T>
+  /** Check if a document exists. */
+  exists: (path: string | RulesPath | RulesString) => RulesBoolean
+  /** Check if a document exists, assuming the current request succeeds. Equivalent to getAfter(path) != null. */
+  existsAfter: (path: string | RulesPath | RulesString) => RulesBoolean
+  /** Get the contents of a firestore document. */
+  get: <T extends Record<string, any>>(path: string | RulesPath | RulesString) => RulesMap<T>
+  /** Get the projected contents of a document. The document is returned as if the current request had succeeded. Useful for validating documents that are part of a batched write or transaction. */
+  getAfter: <T extends Record<string, any>>(path: string | RulesPath | RulesString) => RulesMap<T>
+}
 
-export type ContextFirestore<T> = NamespaceFirestore<T> &
-  NamespaceDebug & {
-    duration: NamespaceDuration
-    hashing: NamespaceHashing
-    latlng: NamespaceLatlng
-    math: NamespaceMath
-    timestamp: NamespaceTimestamp
+/**
+ * The incoming request context.
+ *
+ * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Request}
+ * */
+export interface NamespaceFirestoreRequest<T> extends Rule {
+  /**
+   * Request authentication context.
+   * uid - the UID of the requesting user.
+   * token - a map of JWT token claims.
+   *
+   * The token map contains the following values:
+   */
+  auth: NamespaceAuth
+  /** The request method. One of. */
+  method: RulesString<'get' | 'list' | 'create' | 'update' | 'delete'>
+  /** Path of the affected resource. */
+  query: RulesMap<{ limit: RulesInteger; offset: RulesInteger; orderBy: RulesString }>
+  /** The new resource value, present on write requests only. */
+  resource: NamespaceFirestoreResource<T>
+  /**
+   * When the request was received by the service.
+   * For Firestore write operations that include server-side timestamps, this time will be equal to the server timestamp.
+   * */
+  time: RulesTimestamp
+}
+
+/**
+ * The firestore document being read or written.
+ *
+ * {@link https://firebase.google.com/docs/reference/rules/rules.firestore.Resource}
+ * */
+export interface NamespaceFirestoreResource<T> {
+  /** The full document name, as a path. */
+  __name__: RulesPath
+  /** Map of the document data. */
+  data: T
+  /** String of the document's key */
+  id: RulesString
+}
+
+export type ContextFirestore<T> = NamespaceFirestore<T> & NamespaceRules
+
+export type NamespaceStorageResource = RulesMap<{
+  bucket: RulesString
+  contentDisposition: RulesString
+  contentEncoding: RulesString
+  contentType: RulesString
+  crc32c: RulesString
+  etag: RulesString
+  generation: RulesInteger
+  md5Hash: RulesString
+  metadata: RulesMap<Record<string, RulesString>>
+  metageneration: RulesInteger
+  name: RulesString
+  size: RulesInteger
+  timeCreated: RulesTimestamp
+  updated: RulesTimestamp
+}>
+
+export interface NamespaceStorage extends Rule {
+  request: {
+    resource: NamespaceStorageResource
+    time: RulesTimestamp
+    auth: NamespaceAuth
+    path: RulesPath
   }
+  firebase: {
+    exists: (path: string | RulesPath | RulesString) => RulesBoolean
+    get: <T extends Record<string, any>>(path: string | RulesPath | RulesString) => RulesMap<T>
+  }
+}
+
+export type ContextStorage = NamespaceStorage & NamespaceRules

@@ -1,6 +1,6 @@
 import type { IFieldPrimitive } from '@fiar/schema'
 
-import * as rules from '../firestore/interfaces.js'
+import * as rules from '../firestore/index.js'
 import * as ast from '../ast/index.js'
 
 import { Rule, TypeOfRule, isRule, output, rule } from '../rule/index.js'

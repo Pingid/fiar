@@ -1,8 +1,18 @@
 rules_version = "2";
 
+service firebase.storage {
+
+  match /b/{bucket}/o {
+
+    match /photos/{name} {
+      allow read: if true;
+    }
+  }
+}
+
 service cloud.firestore {
 
-  match /databases/{database}/documents {
+  match /databases/(default)/documents {
 
     function isArticle() {
       return (request.resource.data is map
@@ -81,7 +91,7 @@ service cloud.firestore {
     }
 
     match /tags/{tagId} {
-      allow read: if debug(database);
+      allow read: if true;
       allow create: if isTag();
       allow update: if isTag();
       allow delete: if request.auth != null;

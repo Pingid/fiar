@@ -1,7 +1,8 @@
 import { it, describe } from 'vitest'
 import { s, model } from '@fiar/schema'
-import { rulset } from './service.js'
+
 import { validate } from '../schema/rules.js'
+import { rulset } from './ruleset.js'
 
 const typ = model({
   type: 'collection',

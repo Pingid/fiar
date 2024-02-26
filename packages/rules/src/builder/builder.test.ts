@@ -1,7 +1,7 @@
 import { expect, it, describe } from 'vitest'
 
-import * as rules from '../firestore/interfaces.js'
 import { formatAst } from '../printer/index.js'
+import * as rules from '../firestore/index.js'
 import { expression, op } from './builder.js'
 import { output } from '../rule/index.js'
 

@@ -1,11 +1,12 @@
 import type { Options } from 'prettier'
 
 import { expression, expressionBuilderArgument, op, and, or } from './builder.js'
-import { ContextFirestore, PathParams } from '../firestore/namespaces.js'
+import { ContextFirestore, ContextStorage } from '../firestore/namespaces.js'
 import { Rule, output, rule } from '../rule/index.js'
-import * as rules from '../firestore/interfaces.js'
 import { parse, value } from '../parser/parsers.js'
 import { formatAst } from '../printer/index.js'
+
+import * as rules from '../firestore/index.js'
 import * as ast from '../ast/index.js'
 import * as scope from './scope.js'
 
@@ -29,6 +30,9 @@ type AllowRule = 'write' | 'update' | 'delete' | 'create' | 'read' | 'list' | 'g
 type AllowValue<C> = boolean | Rule | ((x: C) => Rule)
 // type AllowMap<C> = Partial<Record<`allow ${AllowRule}`, AllowValue<C>> & { _: (x: MatchScope<C>) => void }>
 
+type PathParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
+  ? PathParams<R, { [K in keyof A | N]: rules.RulesString }>
+  : A
 type WithParams<T, A extends Record<string, any> = {}> = T extends `${string}{${infer N}}${infer R}`
   ? PathParams<R, { [K in keyof A | N]: rules.RulesString }>
   : A
@@ -55,6 +59,7 @@ interface Allow<C> {
 
 interface Service<C> {
   <N = C & ContextFirestore<rules.RulesMap<{}>>>(type: 'cloud.firestore', cb: (x: ServiceScope<N>) => void): void
+  <N = C & ContextStorage>(type: 'firebase.storage', cb: (x: ServiceScope<N>) => void): void
 }
 
 interface Scope<C> {
@@ -93,6 +98,7 @@ export const service: Service<any> = (name, handler) => {
   const statements = scope.create(() => handler({ arg, func, match, op: op, and, or }))
   const node = ast.service([name, statements])
   scope.push(ast.empty([]), node)
+  return node
 }
 
 export const match: Match<any> = (a, handler) => {
@@ -106,13 +112,16 @@ export const match: Match<any> = (a, handler) => {
   const node = ast.match([ast.path([segments]), statements])
 
   scope.push(ast.empty([]), node)
+  return node
 }
 
 export const allow: Allow<any> = (a, b) => {
   const types = (Array.isArray(a) ? a : [a]).map((x) => ast.ident([x]))
   const value =
     typeof b === 'boolean' ? ast.literal([`${b}`]) : typeof b === 'function' ? output(b(expression())) : output(b)
-  scope.push(ast.allow([types, value as ast.Value]))
+  const node = ast.allow([types, value as ast.Value])
+  scope.push(node)
+  return node
 }
 
 export const rulset = (
