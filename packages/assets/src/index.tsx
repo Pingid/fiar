@@ -13,17 +13,24 @@ import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
 import { IFieldAsset } from './schema/index.js'
 
-export type { AssetConfig } from './context/index.js'
+export * from './context/index.js'
 export { image } from './schema/index.js'
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
     'field:form:asset': FieldForm<IFieldAsset>
     'field:preview:asset': FieldPreview<IFieldAsset>
+    'asset:source': { [x: string]: () => React.ReactNode }
   }
 }
 
-const extensions = { 'field:form:asset': FormFieldAsset, 'field:preview:asset': PreviewFieldAsset } satisfies Extensions
+const extensions = {
+  'field:form:asset': FormFieldAsset,
+  'field:preview:asset': PreviewFieldAsset,
+  'asset:source': {},
+} satisfies Extensions
+
+export { FolderAction } from './components/Folder/index.js'
 
 export const Assets = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
   useLayoutEffect(() => useAssetConfig.setState(config), [config])

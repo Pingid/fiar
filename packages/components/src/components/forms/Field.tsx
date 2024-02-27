@@ -52,7 +52,7 @@ export const FieldControl: Forward<'div', { error?: any }> = forward<'div', { er
       {...props}
       ref={ref}
       className={cn(
-        'bg-frame focus-within:bg-back w-full rounded border',
+        'bg-frame focus-within:bg-back w-full rounded border has-[select]:pr-1',
         [!!error, 'border-error', ' focus-within:border-line-focus'],
         className,
       )}

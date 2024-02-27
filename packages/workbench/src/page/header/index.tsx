@@ -1,8 +1,12 @@
 import { Link } from 'wouter'
 import { cn } from 'mcn'
 
-import { ErrorMessage, LoadingDots } from '@fiar/components'
+import { ErrorMessage, LoadingDots, createGlobalSlot } from '@fiar/components'
 import { useStatus } from '../index.js'
+
+const l = createGlobalSlot()
+export const Action = l.Place
+export const Actions = l.Locate
 
 export const Header = (props: {
   subtitle?: string

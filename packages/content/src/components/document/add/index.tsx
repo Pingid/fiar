@@ -10,7 +10,7 @@ import { useForm, FormProvider, useFormHooks, FormHooksProvider } from '../../..
 import { IContentModel } from '../../../schema/index.js'
 import { toFirestore } from '../../../util/firebase.js'
 import { DocumentFormFields } from '../fields/index.js'
-import { useFirestore } from '../../../hooks/index.js'
+import { toasty, useFirestore } from '../../../hooks/index.js'
 import { DocumentFormTitle } from '../title/index.js'
 import { DocumentPublish } from '../save/index.js'
 
@@ -34,6 +34,10 @@ export const DocumentAdd = (props: IContentModel) => {
       .then(() => {
         submitted.current = true
         nav(props.path, { replace: true })
+      })
+      .catch((e) => {
+        toasty(e)
+        return Promise.reject(e)
       })
   })
 

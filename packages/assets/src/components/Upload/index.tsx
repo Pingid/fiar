@@ -11,10 +11,10 @@ import { useEffect, useState } from 'react'
 
 import { Thumbnail } from '../Thumb/index.js'
 
-export const Upload = (props: { task: UploadTask; file: File }) => {
+export const Upload = (props: { task: UploadTask; contentType: string; url: string }) => {
   return (
     <div className="relative flex items-end gap-1 border">
-      <Thumbnail className={'h-[3rem] w-min'} url={URL.createObjectURL(props.file)} contentType={props.file.type} />
+      <Thumbnail className={'h-[3rem] w-min'} url={props.url} contentType={props.contentType} />
 
       <div className="p-1">
         <div className="bg-frame w-full min-w-[5rem] rounded-md">

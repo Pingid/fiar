@@ -1,4 +1,4 @@
-import { ListResult, StorageReference, deleteObject, listAll, ref } from '@firebase/storage'
+import { ListResult, StorageReference, deleteObject, listAll, ref, uploadBytesResumable } from '@firebase/storage'
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline'
 import { useDropzone } from 'react-dropzone'
 import { useCallback } from 'react'
@@ -9,14 +9,17 @@ import dayjs from 'dayjs'
 dayjs.extend(calender)
 
 import { Header, useStatus } from '@fiar/workbench'
-import { Button } from '@fiar/components'
+import { Button, createGlobalSlot } from '@fiar/components'
 
-import { useUploadStatus, useUploads } from '../../context/uploads.js'
 import { AssetFolder, useFirebaseStorage } from '../../context/index.js'
+import { useUploadStatus, useUploads } from '../../context/uploads.js'
 import { DropLayer } from './DropLayer/index.js'
 import { AssetGrid } from '../Grid/index.js'
 import { Upload } from '../Upload/index.js'
 import { Card } from '../Card/index.js'
+
+const FolderActionSlot = createGlobalSlot()
+export const FolderAction = FolderActionSlot.Place
 
 export const Folder = (props: AssetFolder): JSX.Element => {
   const storage = useFirebaseStorage()
@@ -28,10 +31,22 @@ export const Folder = (props: AssetFolder): JSX.Element => {
   const handle = useStatus((x) => x.promise)
   useUploadStatus()
 
-  const onDrop = useCallback(
-    (x: File[]) => addFiles(storage, props.path, x, () => assets.mutate((x) => x, { revalidate: true })),
-    [],
-  )
+  const onDrop = useCallback((files: File[]) => {
+    for (const file of files) {
+      const fullPath = `${props.path}/${file.name}`
+      if (useUploads.getState().uploads.some((y) => y.fullPath === fullPath)) continue
+      addFiles(
+        {
+          folder: props.path,
+          fullPath,
+          task: uploadBytesResumable(ref(storage, fullPath), file),
+          url: URL.createObjectURL(file),
+          contentType: file.type,
+        },
+        () => assets.mutate((x) => x, { revalidate: true }),
+      )
+    }
+  }, [])
   const zone = useDropzone({ onDrop, noClick: false, accept: props.accept as any })
 
   const onDelete = (x: StorageReference) =>
@@ -59,17 +74,20 @@ export const Folder = (props: AssetFolder): JSX.Element => {
         <div className="flex w-full items-center justify-between p-2">
           {/* <Pagination pages={0} onPage={() => {}} end /> */}
           <div />
-          <Button
-            icon={<CloudArrowUpIcon className="mr-1 h-5 w-5" />}
-            elementType="label"
-            htmlFor="upload"
-            color="active"
-            size="sm"
-            className="flex-0"
-          >
-            Upload
-          </Button>
-          <input id="upload" {...zone.getInputProps()} className="hover:bg-highlight rounded text-lg font-medium" />
+          <div className="flex items-center gap-2">
+            <FolderActionSlot.Locate use="div" />
+            <Button
+              icon={<CloudArrowUpIcon className="mr-1 h-5 w-5" />}
+              elementType="label"
+              htmlFor="upload"
+              color="active"
+              size="sm"
+              className="flex-0"
+            >
+              Upload
+            </Button>
+            <input id="upload" {...zone.getInputProps()} className="hover:bg-highlight rounded text-lg font-medium" />
+          </div>
         </div>
       </Header>
 

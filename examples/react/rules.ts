@@ -9,6 +9,7 @@ const rules = rulset(({ service }) => {
     match('/b/{bucket}/o', ({ match }) => {
       match('/photos/{name}', ({ allow }) => {
         allow('read', true)
+        allow('write', true)
       })
     })
   })

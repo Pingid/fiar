@@ -1,4 +1,5 @@
 import { EmailAuthProvider, GithubAuthProvider, GoogleAuthProvider } from '@firebase/auth'
+import { OpenAiPlugin } from '@fiar/openai'
 import { Dashboard } from '@fiar/workbench'
 import { Content } from '@fiar/content'
 import { Assets } from '@fiar/assets'
@@ -10,6 +11,7 @@ import { app } from './admin/firebase'
 export default function ReactApp() {
   return (
     <Dashboard>
+      <OpenAiPlugin />
       <Auth
         firebase={app}
         providers={[new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()]}

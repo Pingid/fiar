@@ -71,6 +71,7 @@ export const tags = s.defineCollection({
   columns: ['name', 'createdAt', 'updatedAt'],
   fields: {
     name: s.string({ label: 'Name' }),
+    type: s.string({ label: 'Type', select: [{ value: 'one' }, { value: 'two' }] }),
     createdAt: s.timestamp({ computed: 'on-create' }),
     updatedAt: s.timestamp({ computed: 'on-update' }),
   },
