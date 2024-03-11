@@ -1,7 +1,7 @@
 import { Control, UseFormRegister } from 'react-hook-form'
 
+import { FieldProvider, FormField } from '../../../context/field.js'
 import { IContentModel, IFields } from '../../../schema/index.js'
-import { FormField } from '../../../fields/index.js'
 
 export const DocumentFormFields = (props: {
   schema: IContentModel
@@ -10,9 +10,13 @@ export const DocumentFormFields = (props: {
 }) => {
   return (
     <div className="mx-auto mb-32 max-w-5xl space-y-6 p-4 py-6">
-      {Object.keys(props.schema.fields).map((key) => {
-        const field = props.schema.fields[key] as IFields
-        return <FormField {...props} key={key} name={key} field={{ ...field, label: field.label ?? key }} />
+      {Object.keys(props.schema.fields).map((name) => {
+        const schema = props.schema.fields[name] as IFields
+        return (
+          <FieldProvider key={name} value={{ schema, name }}>
+            <FormField />
+          </FieldProvider>
+        )
       })}
     </div>
   )

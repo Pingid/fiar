@@ -79,7 +79,6 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
   if (is(path, 'Ident')) return path.node.name
   if (is(path, 'Empty')) return ''
 
-  console.log({ path }, path.node)
   throw new Error(`Missing ${path.node.kind}`)
   // return `${path.node.kind}`
 }

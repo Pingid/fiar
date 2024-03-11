@@ -1,4 +1,5 @@
 import {
+  FireSchemaTypes,
   FireSchemaBool,
   FireSchemaString,
   FireSchemaNumber,
@@ -45,6 +46,7 @@ export interface IFieldList extends IFieldBase, FireSchemaList {
 export interface IFieldRef extends IFieldBase, FireSchemaRef {}
 
 export type IFields = IFieldBoolean | IFieldString | IFieldNumber | IFieldMap | IFieldList | IFieldRef | IFieldTimestamp
+export type IField = FireSchemaTypes & IFieldBase
 
 export interface IContentDocument extends FireModel {
   type: 'document'

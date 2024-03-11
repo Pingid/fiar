@@ -10,35 +10,37 @@ import {
   IFieldTimestamp,
 } from '../schema/index.js'
 
-import { FieldForm, FieldPreview } from '../fields/lib/index.js'
-
+import { FormFieldTimestamp, PreviewFieldTimestamp } from '../fields/timestamp/index.js'
+import { FormFieldString, PreviewFieldString } from '../fields/string/index.js'
+import { FieldNumber, PreviewFieldNumber } from '../fields/number/index.js'
 import { FormFieldList, PreviewFieldList } from '../fields/list/index.js'
 import { FormFieldBool, PreviewFieldBool } from '../fields/bool/index.js'
-import { FormFieldMap, PreviewFieldMap } from '../fields/map/index.js'
-import { FieldNumber, PreviewFieldNumber } from '../fields/number/index.js'
-import { FormFieldRef, PreviewFieldRef } from '../fields/ref/index.js'
-import { FormFieldString, PreviewFieldString } from '../fields/string/index.js'
 import { FormFieldText, PreviewFieldText } from '../fields/text/index.js'
-import { FormFieldTimestamp, PreviewFieldTimestamp } from '../fields/timestamp/index.js'
+import { FormFieldMap, PreviewFieldMap } from '../fields/map/index.js'
+import { FormFieldRef, PreviewFieldRef } from '../fields/ref/index.js'
+
+import { FieldPreview } from './field.js'
+
+type FieldForm = () => React.ReactNode
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
-    'field:form:list': FieldForm<IFieldList>
+    'field:form:list': FieldForm
     'field:preview:list': FieldPreview<IFieldList>
-    'field:form:bool': FieldForm<IFieldBoolean>
+    'field:form:bool': FieldForm
     'field:preview:bool': FieldPreview<IFieldBoolean>
-    'field:form:number': FieldForm<IFieldNumber>
+    'field:form:number': FieldForm
     'field:preview:number': FieldPreview<IFieldNumber>
-    'field:form:ref': FieldForm<IFieldRef>
+    'field:form:ref': FieldForm
     'field:preview:ref': FieldPreview<IFieldRef>
-    'field:form:string': FieldForm<IFieldString>
+    'field:form:string': FieldForm
     'field:preview:string': FieldPreview<IFieldString>
-    'field:form:map': FieldForm<IFieldMap>
+    'field:form:map': FieldForm
     'field:preview:map': FieldPreview<IFieldMap>
-    'field:form:timestamp': FieldForm<IFieldTimestamp>
+    'field:form:timestamp': FieldForm
     'field:preview:timestamp': FieldPreview<IFieldTimestamp>
 
-    'field:form:text': FieldForm<IFieldString>
+    'field:form:text': FieldForm
     'field:preview:text': FieldPreview<IFieldString>
   }
 }

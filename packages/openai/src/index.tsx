@@ -2,8 +2,8 @@
 // import { Authorize } from './authorize/index.js'
 import { ImageGenerateParams } from 'openai/resources/images.mjs'
 import { PaintBrushIcon } from '@heroicons/react/24/outline'
-import { useLayoutEffect, useState } from 'react'
 import { uploadBytesResumable, ref } from '@firebase/storage'
+import { useLayoutEffect, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { OpenAI } from 'openai'
 
@@ -51,8 +51,6 @@ const GenerateIcon = () => {
     return client.images.generate(form.getValues())
   })
   const model = form.watch('model')
-
-  console.log(generate.isMutating, generate.data?.data)
 
   return (
     <>

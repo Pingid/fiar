@@ -1,33 +1,31 @@
-import { useFormState, get } from 'react-hook-form'
 import { Field, Input, FieldControl, Select } from '@fiar/components'
 
-import { type FieldForm, type FieldPreview, fieldError } from '../lib/index.js'
+import { type FieldPreview, useFormField } from '../../context/field.js'
 import { type IFieldString } from '../../schema/index.js'
 
-export const FormFieldString: FieldForm<IFieldString> = (props) => {
-  const state = useFormState(props)
-  const error = fieldError(get(state.errors, props.name))
+export const FormFieldString = () => {
+  const field = useFormField<IFieldString>()
 
-  const register = props.control.register(props.name, {
+  const register = field.control.register(field.name, {
     validate: (x) => {
-      if (!x && !props.field.optional) return `Required value`
+      if (!x && !field.schema.optional) return `Required value`
       return true
     },
   })
 
   return (
-    <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
-      <FieldControl error={!!error}>
-        {props.field.select ? (
-          <Select id={props.name} {...register}>
-            {props.field.select.map((x) => (
+    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+      <FieldControl error={!!field.error}>
+        {field.schema.select ? (
+          <Select id={field.name} {...register}>
+            {field.schema.select.map((x) => (
               <option key={x.value} value={x.value}>
                 {x.label || x.value}
               </option>
             ))}
           </Select>
         ) : (
-          <Input id={props.name} type="text" {...register} />
+          <Input id={field.name} type="text" {...register} />
         )}
       </FieldControl>
     </Field>

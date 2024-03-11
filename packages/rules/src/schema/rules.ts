@@ -31,6 +31,14 @@ const validateString: FieldTranformer<RulesString, FireSchemaString> = (left, fi
   if (typeof field.min === 'number') rules.push(op(left.size(), '>=', field.min))
   if (typeof field.max === 'number') rules.push(op(left.size(), '<=', field.max))
   if (typeof field.size === 'number') rules.push(op(left.size(), '==', field.size))
+  if (field.select)
+    rules.push(
+      op(
+        left,
+        'in',
+        field.select.map((x) => x.value),
+      ),
+    )
   return and(...rules)
 }
 

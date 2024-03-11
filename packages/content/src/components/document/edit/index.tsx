@@ -1,52 +1,38 @@
-import { deleteDoc, doc, updateDoc } from '@firebase/firestore'
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
+import { doc } from '@firebase/firestore'
 import { useLocation } from 'wouter'
 import { useEffect } from 'react'
 
-import { Page, useIntercept, useStatus } from '@fiar/workbench'
+import { Page, useIntercept } from '@fiar/workbench'
 import { Button } from '@fiar/components'
 
-import { FormProvider, FormHooksProvider, useForm, useFormHooks } from '../../../context/form.js'
-import { useDocumentData, useFirestore } from '../../../hooks/index.js'
+import { useDocumentSnapshot, useFirestore } from '../../../context/firestore.js'
+import { parameterize, useModel, usePathRef } from '../../../context/model.js'
 import { fromFirestore, toFirestore } from '../../../util/firebase.js'
-import { IContentModel } from '../../../schema/index.js'
+import { FormProvider, useForm } from '../../../context/form.js'
+import { useDocumentMutation } from '../../../context/data.js'
 import { DocumentFormFields } from '../fields/index.js'
 import { DocumentFormTitle } from '../title/index.js'
 import { DocumentPublish } from '../save/index.js'
 
-export const DocumentEdit = (props: IContentModel) => {
+export const DocumentEdit = () => {
   const [_, nav] = useLocation()
+  const model = useModel()
+  const path = usePathRef()
 
-  const handle = useStatus((x) => x.promise)
   const firestore = useFirestore()
-  const ref = doc(firestore, props.path)
-  const hooks = useFormHooks()
+  const ref = doc(firestore, path)
+  const data = useDocumentSnapshot(ref, { once: true })
+  const form = useForm({ criteriaMode: 'firstError', context: { model: model, type: 'update' } })
+  const mutate = useDocumentMutation()
 
-  const data = useDocumentData(ref, { once: true })
+  const onSubmit = form.handleSubmit((value) =>
+    mutate
+      .trigger({ model: model, type: 'update', data: toFirestore(firestore, value, true), ref })
+      .then(() => form.reset(value)),
+  )
 
-  const form = useForm({
-    criteriaMode: 'firstError',
-    context: { model: props, status: 'update' },
-  })
-
-  const onSubmit = form.handleSubmit((value) => {
-    const transformed = toFirestore(firestore, value, true)
-    return data.mutate(
-      (x) =>
-        hooks.current
-          .reduce((next, hook) => next.then((y) => hook(y, 'update')), Promise.resolve(transformed))
-          .then((values) =>
-            handle(props.path, updateDoc(ref, values)).then(() => {
-              const next = fromFirestore(values)
-              form.reset(next)
-              return x ? Object.assign(x, { data: () => next }) : undefined
-            }),
-          ),
-      { revalidate: true },
-    )
-  })
-
-  const onDelete = () => (deleteDoc(ref), nav(props.type === 'collection' ? props.path.replace(/\/[^\/]+$/g, '') : '/'))
+  const onDelete = () => mutate.trigger({ model: model, ref, type: 'delete' }).then(() => nav('/'))
 
   useEffect(() => {
     if (!data.data) return
@@ -62,32 +48,28 @@ export const DocumentEdit = (props: IContentModel) => {
 
   return (
     <Page>
-      <FormHooksProvider value={hooks}>
-        <FormProvider {...form}>
-          <form onSubmit={onSubmit}>
-            <Page.Header
-              subtitle={props.path}
-              breadcrumbs={
-                [
-                  { children: 'Content', href: '/' },
-                  props.type === 'collection'
-                    ? { children: props.label, href: props.path.replace(/\/[^\/]+$/, '') }
-                    : null,
-                  { children: <DocumentFormTitle {...props} />, href: props.path },
-                ].filter(Boolean) as any[]
-              }
-            >
-              <div className="flex w-full justify-end gap-2 px-3 py-2">
-                <Button type="button" color="error" size="sm" disabled={!exists} onClick={() => onDelete()}>
-                  Delete
-                </Button>
-                <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
-              </div>
-            </Page.Header>
-            <DocumentFormFields control={form.control} register={form.register} schema={props} />
-          </form>
-        </FormProvider>
-      </FormHooksProvider>
+      <FormProvider {...form}>
+        <form onSubmit={onSubmit}>
+          <Page.Header
+            subtitle={path}
+            breadcrumbs={
+              [
+                { children: 'Content', href: '/' },
+                model.type === 'collection' ? { children: model.label, href: parameterize(model.path) } : null,
+                { children: <DocumentFormTitle />, href: path },
+              ].filter(Boolean) as any[]
+            }
+          >
+            <div className="flex w-full justify-end gap-2 px-3 py-2">
+              <Button type="button" color="error" size="sm" disabled={!exists} onClick={() => onDelete()}>
+                Delete
+              </Button>
+              <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+            </div>
+          </Page.Header>
+          <DocumentFormFields control={form.control} register={form.register} schema={model} />
+        </form>
+      </FormProvider>
     </Page>
   )
 }

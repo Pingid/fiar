@@ -5,22 +5,24 @@ import { cn } from 'mcn'
 
 import { Markdown, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldPreview, type FieldForm, FormField } from '../lib/index.js'
+import { FieldProvider, useFormField } from '../../context/field.js'
+import { FieldPreview, FormField } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 
 export const PreviewFieldList: FieldPreview<IFieldList> = (props) => {
   return JSON.stringify(props.value)
 }
 
-export const FormFieldList: FieldForm<IFieldList> = (props) => {
-  const control = useFieldArray(props)
+export const FormFieldList = () => {
+  const field = useFormField<IFieldList>()
+  const control = useFieldArray(field)
 
   return (
     <div className="space-y-2">
       <div className="flex w-full justify-between rounded-t">
-        <h2 className="py-1 text-2xl">{props.field.label}</h2>
+        <h2 className="py-1 text-2xl">{field.schema.label}</h2>
       </div>
-      <Markdown className="text-front/50 pb-1 text-sm">{props.field.description}</Markdown>
+      <Markdown className="text-front/50 pb-1 text-sm">{field.schema.description}</Markdown>
       <div className={cn('space-y-3')}>
         <Sortable
           items={control.value}
@@ -32,17 +34,19 @@ export const FormFieldList: FieldForm<IFieldList> = (props) => {
             <SortableItem
               key={x.id}
               id={x.id}
-              label={`${props.field.label?.replace(/s$/, '') ?? ''} ${i + 1}`}
+              label={`${field.schema.label?.replace(/s$/, '') ?? ''} ${i + 1}`}
               onRemove={() => control.remove(i)}
             >
-              <FormField {...props} name={`${props.name}.${i}`} parent={props.field} field={props.field.of} />
+              <FieldProvider value={{ schema: field.schema.of, name: `${field.name}.${i}`, parent: field.schema }}>
+                <FormField />
+              </FieldProvider>
             </SortableItem>
           ))}
         </Sortable>
         <button
           type="button"
           className="bg-frame hover:border-active hover:text-active flex w-full items-center justify-center rounded border py-1"
-          onClick={() => control.add(init(props.field.of))}
+          onClick={() => control.add(init(field.schema.of))}
         >
           <PlusIcon className="h-4 w-4" />
         </button>

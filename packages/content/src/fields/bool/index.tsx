@@ -1,20 +1,18 @@
-import { get, useFormState } from 'react-hook-form'
 import { Field, Input, FieldControl } from '@fiar/components'
 
-import { type FieldForm, fieldError, FieldPreview } from '../lib/index.js'
+import { FieldPreview, useFormField } from '../../context/field.js'
 import { type IFieldBoolean } from '../../schema/index.js'
 
-export const FormFieldBool: FieldForm<IFieldBoolean> = (props) => {
-  const state = useFormState(props)
-  const error = fieldError(get(state.errors, props.name))
+export const FormFieldBool = () => {
+  const field = useFormField<IFieldBoolean>()
 
   return (
-    <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
+    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
       <FieldControl>
         <Input
-          id={props.name}
+          id={field.name}
           type="checkbox"
-          {...props.control.register(props.name, { required: !props.field.optional })}
+          {...field.control.register(field.name, { required: !field.schema.optional })}
         />
       </FieldControl>
     </Field>

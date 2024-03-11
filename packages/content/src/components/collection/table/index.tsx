@@ -1,23 +1,29 @@
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { QueryDocumentSnapshot, deleteDoc, orderBy } from '@firebase/firestore'
+import { OrderByDirection, deleteDoc, orderBy } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Button } from '@fiar/components'
 import { useLocation } from 'wouter'
+import { useStore } from 'zustand'
 import { cn } from 'mcn'
 
-import { useCollectionQuery, useOrderBy } from '../hooks/index.js'
 import { useSelectDocument } from '../../../context/select.js'
-import { IContentCollection } from '../../../schema/index.js'
-import { PreviewField } from '../../../fields/index.js'
+import { FieldPreview } from '../../../context/field.js'
 
-export const Table = (props: IContentCollection & { docs: QueryDocumentSnapshot[] }) => {
-  const [columns] = useState(props.columns)
+import { useCollectionData } from '../../../context/data.js'
+import { useQueryStore } from '../../../context/query.js'
+import { useModel } from '../../../context/model.js'
+
+export const Table = () => {
+  const model = useModel<'collection'>()
+  const data = useCollectionData()
+  const [columns] = useState(model.columns)
   const select = useSelectDocument()
-  const [_, nav] = useLocation()
+  const [location, nav] = useLocation()
+  const store = useQueryStore()
 
   useEffect(() => {
-    if (props.sort) useCollectionQuery.getState().update('orderBy', orderBy(props.sort[0], props.sort[1]))
-  }, [props.sort])
+    if (model.sort) store.getState().constrain('orderBy', orderBy(model.sort[0], model.sort[1]))
+  }, [model.sort, store])
 
   return (
     <div
@@ -27,22 +33,22 @@ export const Table = (props: IContentCollection & { docs: QueryDocumentSnapshot[
       <div className="bg-front/5 col-span-full hidden w-full grid-cols-subgrid px-3 py-1 pt-2 sm:grid">
         {columns.map((key: string, i) => (
           <div key={key} className={cn('text-front/60 flex gap-2 text-sm font-medium', [i === 0, 'col-span-1'])}>
-            <span>{props.fields[key]?.label || key}</span>
+            <span>{model.fields[key]?.label || key}</span>
             <Order value={key} />
           </div>
         ))}
       </div>
-      {props.docs.map((x) => (
+      {data.data?.docs.map((x) => (
         <div
           key={x.id}
           role="button"
-          onClick={() => (select ? select(x.ref) : nav(`${props.path}/${x.id}`))}
+          onClick={() => (select ? select(x.ref) : nav(`${location}/${x.id}`))}
           className="hover:text-active active hover:border-active group col-span-full mb-2 grid border p-3 sm:grid-cols-subgrid sm:border-x-0 sm:border-b-0"
         >
           {columns.map((key: string) => (
             <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
-              <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{props.fields[key]?.label || key}</p>
-              <PreviewField name={key} field={props.fields[key] as any} value={x.data()[key]} />
+              <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{model.fields[key]?.label || key}</p>
+              <FieldPreview name={key} field={model.fields[key] as any} value={x.data()[key]} />
             </div>
           ))}
           <div className="flex w-full items-start justify-end">
@@ -71,4 +77,16 @@ const Order = (props: { value: string }) => {
       <ChevronDownIcon className={cn('h-4 w-4', [dir === 'asc' && active, 'rotate-180'])} />
     </button>
   )
+}
+
+export const useOrderBy = (v: string) => {
+  const store = useQueryStore()
+  const constraints = useStore(store, (x) => x.constraints)
+  const constrain = useStore(store, (x) => x.constrain)
+  const value = constraints.find((y) => y.type === 'orderBy')
+  const active = (value as any)?._field?.segments.join('.') === v
+  const dir = (value as any)?._direction || ('desc' as OrderByDirection)
+  const next = active ? (dir === 'asc' ? 'desc' : 'asc') : 'asc'
+  const toggle = () => (constrain('orderBy', orderBy(v, next)), constrain('startAfter'))
+  return [active, active ? dir : 'asc', toggle] as const
 }

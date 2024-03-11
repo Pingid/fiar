@@ -1,20 +1,23 @@
 import { DocumentPlusIcon } from '@heroicons/react/24/outline'
 import { startAfter } from '@firebase/firestore'
+import { useStore } from 'zustand'
 
 import { Button, Pagination } from '@fiar/components'
 import { Link } from '@fiar/workbench'
 
-import { useCollectionListData, useCollectionQuery } from '../hooks/index.js'
-import { IContentCollection } from '../../../schema/index.js'
+import { useCollectionData } from '../../../context/data.js'
+import { useQueryStore } from '../../../context/query.js'
+import { useModel } from '../../../context/model.js'
 
-export const CollectionHeader = (props: IContentCollection) => {
+export const CollectionHeader = () => {
+  const model = useModel()
   return (
     <div className="flex w-full items-start justify-between px-3 py-2">
       <div className="py-2">
-        <Paginater path={props.path} />
+        <Paginater />
       </div>
       <div className="flex gap-2">
-        <Link href={`/add${props.path}`} asChild>
+        <Link href={`/add${model.path}`} asChild>
           <Button size="sm" icon={<DocumentPlusIcon />} elementType="a" color="active">
             New
           </Button>
@@ -24,21 +27,22 @@ export const CollectionHeader = (props: IContentCollection) => {
   )
 }
 
-const Paginater = (props: { path: string }) => {
-  const pages = useCollectionQuery((x) => x.pages)
-  const update = useCollectionQuery((x) => x.update)
-  const limit = useCollectionQuery((x) => x.constraints.find((x) => x.type === 'limit'))
-  const data = useCollectionListData(props.path)
+const Paginater = () => {
+  const store = useQueryStore()
+  const pages = useStore(store, (x) => x.cursors)
+  const update = useStore(store, (x) => x.constrain)
+  const limit = useStore(store, (x) => x.constraints.find((x) => x.type === 'limit'))
+  const data = useCollectionData()
 
   const onPage = (n: number) => {
     const latest = data.data?.docs.slice(-1)[0]
     if (n > pages.length && latest) {
-      useCollectionQuery.setState((x) => ({ pages: [...x.pages, latest] }))
+      store.setState((x) => ({ cursors: [...x.cursors, latest] }))
       return update('startAfter', startAfter(latest))
     }
     const next = pages.slice(0, n)
     update('startAfter', next[next.length - 1] ? startAfter(next[next.length - 1]) : undefined)
-    useCollectionQuery.setState({ pages: next })
+    store.setState({ cursors: next })
   }
 
   return (

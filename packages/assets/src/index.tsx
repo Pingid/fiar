@@ -3,7 +3,7 @@ import { useLayoutEffect } from 'react'
 import { Route, Switch } from 'wouter'
 
 import { Extensions, useExtend } from '@fiar/workbench/extensions'
-import { FieldPreview, type FieldForm } from '@fiar/content/fields'
+import { FieldPreview } from '@fiar/content/fields'
 import { App } from '@fiar/workbench'
 
 import { useAssetConfig, AssetConfig } from './context/index.js'
@@ -18,7 +18,7 @@ export { image } from './schema/index.js'
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
-    'field:form:asset': FieldForm<IFieldAsset>
+    'field:form:asset': () => React.ReactNode
     'field:preview:asset': FieldPreview<IFieldAsset>
     'asset:source': { [x: string]: () => React.ReactNode }
   }

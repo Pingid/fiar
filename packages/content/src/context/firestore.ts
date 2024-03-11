@@ -28,7 +28,7 @@ export const useFirestore = () => {
   return firestore
 }
 
-export const useDocumentData = <T extends Record<string, any>>(
+export const useDocumentSnapshot = <T extends Record<string, any>>(
   ref: DocumentReference<T, T>,
   config?: SWRConfiguration<DocumentSnapshot<T, T>, FirestoreError> & { once?: boolean },
 ) => {
@@ -41,7 +41,7 @@ export const useDocumentData = <T extends Record<string, any>>(
   return data
 }
 
-export const useCollectionData = <T extends Record<string, any>>(
+export const useQuerySnapshot = <T extends Record<string, any>>(
   ref: CollectionReference<T, T>,
   config?: SWRConfiguration<QuerySnapshot<T, T>, FirestoreError> & {
     subscribe?: boolean
@@ -96,7 +96,7 @@ const queryCacheKey = (query: Query<any, any>) => {
 export const toasty = (error: FirebaseError) => {
   const message = errorMessages[error.code as FirestoreErrorCode]
   if (!message) return null
-  return toast.error(error.message)
+  return toast.error(`Error: ${error.message}`)
 }
 
 const errorMessages: Record<FirestoreErrorCode, string> = {

@@ -1,22 +1,24 @@
 import { Page } from '@fiar/workbench'
 
-import { IContentCollection } from '../../../schema/index.js'
-import { useCollectionListData } from '../hooks/index.js'
+import { QueryStateProvider } from '../../../context/query.js'
 import { CollectionHeader } from '../header/index.js'
+import { useModel } from '../../../context/model.js'
 import { Table } from '../table/index.js'
 
-export const CollectionPage = (props: IContentCollection) => {
-  const data = useCollectionListData(props.path)
+export const CollectionPage = () => {
+  const model = useModel()
   const breadcrumbs = [
     { children: 'Content', href: '/' },
-    { children: props.label, href: props.path },
+    { children: model.label, href: model.path },
   ]
   return (
-    <Page>
-      <Page.Header subtitle={props.path} breadcrumbs={breadcrumbs}>
-        <CollectionHeader {...props} />
-      </Page.Header>
-      <Table {...props} docs={data.data?.docs ?? []} />
-    </Page>
+    <QueryStateProvider>
+      <Page>
+        <Page.Header subtitle={model.path} breadcrumbs={breadcrumbs}>
+          <CollectionHeader />
+        </Page.Header>
+        <Table />
+      </Page>
+    </QueryStateProvider>
   )
 }

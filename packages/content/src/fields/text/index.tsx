@@ -5,8 +5,9 @@ import { cn } from 'mcn'
 
 import { Field, FieldControl } from '@fiar/components'
 
-import { FieldForm, FieldPreview, fieldError, get, useController, useFormState } from '../lib/index.js'
+import { useFormFieldControl, useFormField } from '../../context/field.js'
 import { TipTipTools, useTipTapExtensions } from './provider.js'
+import { FieldPreview } from '../../context/field.js'
 import { IFieldString } from '../../schema/index.js'
 
 export { TipTapTool, useTipTapExtensions } from './provider.js'
@@ -15,19 +16,10 @@ export const PreviewFieldText: FieldPreview<IFieldString> = (props) => {
   return <div dangerouslySetInnerHTML={{ __html: props.value }} className="line-clamp-3 text-sm" />
 }
 
-export const FormFieldText: FieldForm<IFieldString> = (props) => {
+export const FormFieldText = () => {
+  const field = useFormField<IFieldString>()
   const extensions = useTipTapExtensions((x) => x.extensions)
-  const control = useController({
-    ...props,
-    rules: {
-      validate: () => {
-        if (!editor?.getText() && !props.field.optional) return `Required value`
-        return true
-      },
-    },
-  })
-  const state = useFormState(props)
-  const error = fieldError(get(state.errors, props.name))
+  const control = useFormFieldControl<IFieldString>()
 
   const editor = useEditor({
     editable: !control.field.disabled,
@@ -49,8 +41,8 @@ export const FormFieldText: FieldForm<IFieldString> = (props) => {
   }, [control.field.value])
 
   return (
-    <Field name={props.name} label={props.field.label} error={error} description={props.field.description}>
-      <FieldControl error={!!error}>
+    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+      <FieldControl error={!!field.error}>
         {editor && <EditorControls editor={editor} />}
         <EditorContent editor={editor} />
       </FieldControl>

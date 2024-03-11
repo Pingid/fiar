@@ -9,13 +9,16 @@ import {
   useFormState as _useFormState,
   get as _get,
 } from 'react-hook-form'
-import { createContext, useContext, useEffect, useRef } from 'react'
+import { DocumentReference, getDoc, onSnapshot } from '@firebase/firestore'
+import { useSWRConfig } from 'swr'
+import { useEffect } from 'react'
 
+import { fromFirestore } from '../util/firebase.js'
 import { IContentModel } from '../schema/index.js'
 
 export interface DocumentFormContext {
   model: IContentModel
-  status: 'update' | 'create'
+  type: 'update' | 'set' | 'add'
 }
 
 export const fieldError = (err?: FieldError) => {
@@ -29,6 +32,28 @@ export const useForm = <TFieldValues extends FieldValues = FieldValues>(
   props: UseFormProps<TFieldValues, DocumentFormContext> & { context: DocumentFormContext },
 ) => _useForm(props)
 
+export const useDocumentForm = <TFieldValues extends FieldValues = FieldValues>(
+  props: UseFormProps<TFieldValues, DocumentFormContext> & { context: DocumentFormContext; ref: DocumentReference },
+) => {
+  const swr = useSWRConfig()
+  const form = useForm({
+    ...props,
+    defaultValues: (): Promise<any> => {
+      const cached = swr.cache.get(props.ref.path)
+      if (!cached?.data) return getDoc(props.ref).then((x) => fromFirestore(x.data()))
+      return fromFirestore(cached.data.data())
+    },
+  })
+
+  useEffect(() => {
+    return onSnapshot(props.ref, {
+      next: (x) => form.reset(fromFirestore(fromFirestore(x.data())), { keepDirty: true, keepDirtyValues: true }),
+    })
+  }, [props.ref.path])
+
+  return form
+}
+
 export const FormProvider = _FormProvider
 
 export const useFormContext = <
@@ -39,22 +64,3 @@ export const useFormContext = <
 export const useController = _useController
 export const useFormState = _useFormState
 export const get = _get
-
-type FormHook<T extends Record<string, any> = Record<string, any>> = (x: T, type: 'set' | 'update' | 'add') => T
-type FormHooksContext = React.MutableRefObject<FormHook<Record<string, any>>[]>
-const FormHooksContext = createContext<FormHooksContext>({ current: [] })
-export const useFormHooks = () => useRef<FormHook[]>([])
-export const FormHooksProvider = FormHooksContext.Provider
-
-export const useFormHook = <T extends Record<string, any>>(cb: FormHook<T>) => {
-  const ctx = useContext(FormHooksContext)
-  const handler = useRef<FormHook<T>>(cb)
-  useEffect(() => void (handler.current = cb))
-  useEffect(() => {
-    const _handler: FormHook<any> = (...args) => handler.current(...args)
-    ctx.current = [...ctx.current, _handler]
-    return () => {
-      ctx.current = ctx.current.filter((x) => x !== _handler)
-    }
-  }, [])
-}

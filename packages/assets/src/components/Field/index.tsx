@@ -1,7 +1,7 @@
 import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
-import { type FieldForm, type FieldPreview, useFormState, fieldError, get, useController } from '@fiar/content/fields'
+import { type FieldPreview, useFormState, fieldError, get, useController, useFormField } from '@fiar/content/fields'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
@@ -24,7 +24,8 @@ export const PreviewFieldAsset: FieldPreview<IFieldAsset> = (props) => {
   )
 }
 
-export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
+export const FormFieldAsset = () => {
+  const props = useFormField<IFieldAsset>()
   const [open, setOpen] = useState(false)
   const state = useFormState(props)
   const error = fieldError(get(state.errors, props.name))
@@ -32,9 +33,9 @@ export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
   const form = useController({
     ...props,
     rules: {
-      required: !props.field.optional,
+      required: !props.schema.optional,
       validate: (x) => {
-        if (!x && props.field.optional) return true
+        if (!x && props.schema.optional) return true
         if (!x) return 'Required'
         return true
       },
@@ -44,7 +45,7 @@ export const FormFieldAsset: FieldForm<IFieldAsset> = (props) => {
   const asset = useImageMeta(form.field.value?.fullPath)
 
   return (
-    <Field label={props.field.label} error={error}>
+    <Field label={props.schema.label} error={error}>
       <FieldControl>
         {form.field.value && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">

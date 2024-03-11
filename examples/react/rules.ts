@@ -13,17 +13,20 @@ const rules = rulset(({ service }) => {
       })
     })
   })
+
   // Firestore rules
   service('cloud.firestore', ({ match }) => {
     match('/databases/(default)/documents', ({ match, func, op }) => {
-      const isArticle = func('isArticle', [], (c) =>
-        validate(c.request.resource.data, { type: 'map', fields: articles.fields }),
+      const isArticle = func('isArticle', [], ({ request }) =>
+        validate(request.resource.data, { type: 'map', fields: articles.fields }),
       )
 
-      const isTest = func('isTest', [], (c) => validate(c.request.resource.data, { type: 'map', fields: test.fields }))
+      const isTest = func('isTest', [], ({ request }) =>
+        validate(request.resource.data, { type: 'map', fields: test.fields }),
+      )
 
-      const isLanding = func('isLanding', [], (c) =>
-        validate(c.request.resource.data, { type: 'map', fields: landing.fields }),
+      const isLanding = func('isLanding', [], ({ request }) =>
+        validate(request.resource.data, { type: 'map', fields: landing.fields }),
       )
 
       const isTag = func('isTag', [], (c) => validate(c.request.resource.data, { type: 'map', fields: tags.fields }))

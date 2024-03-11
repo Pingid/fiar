@@ -66,7 +66,8 @@ service cloud.firestore {
       return (request.resource.data is map
           && request.resource.data.keys().hasOnly(["name", "type", "createdAt", "updatedAt"])
           && request.resource.data.name is string
-          && request.resource.data.type is string
+          && (request.resource.data.type is string
+            && request.resource.data.type in ["one", "two"])
           && request.resource.data.createdAt is timestamp
           && request.resource.data.updatedAt is timestamp);
     }

@@ -26,7 +26,7 @@ const createExtensionStore = (parent?: StoreApi<ExtensionsStoreState>) =>
   })
 
 const defaultStore = createExtensionStore()
-defaultStore.subscribe((x) => console.log(x.extensions))
+
 const ExtensionsContext = createContext(defaultStore)
 export const useExtensionsStore = () => useContext(ExtensionsContext)
 export const useExtension = <K extends keyof Extensions>(key: K) => useStore(useExtensionsStore(), (x) => x.use(key))
