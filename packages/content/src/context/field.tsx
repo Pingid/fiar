@@ -9,10 +9,10 @@ import { IField, IFields } from '../schema/index.js'
 
 const FieldContext = createContext<{ name: string; schema: IField; parent?: IField } | null>(null)
 export const FieldProvider = FieldContext.Provider
-export const useField = () => {
+export const useField = <F extends IField>() => {
   const m = useContext(FieldContext)
   if (!m) throw new Error(`Missing Field Provider`)
-  return m
+  return m as { name: string; schema: F; parent?: IField }
 }
 
 type UseFormFieldReturn<F extends IField> = {
@@ -75,13 +75,21 @@ export const FormField = () => {
   )
 }
 
-export const FieldPreview = (props: { field: IFields; value: any; name: string }) => {
-  const extension = `field:preview:${props.field.component || props.field.type}`
-  return <UseExtension extension={extension} props={{ ...props, parent: props.field }} fallback={null} />
+const FieldValueContext = createContext(null)
+export const FieldValueProvider = FieldValueContext.Provider
+export const useFieldPreview = <F extends IField>() => {
+  const value = useContext(FieldValueContext)
+  const field = useField<F>()
+  return { ...field, value } as any as { value: InferSchemaType<F> }
 }
 
-export type FieldPreview<T extends IFields = IFields> = (props: {
-  field: T
-  value: InferSchemaType<T>
-  name: string
-}) => React.ReactNode
+export const FieldPreview = (props: { schema: IFields; value: any; name: string }) => {
+  const extension = `field:preview:${props.schema.component || props.schema.type}`
+  return (
+    <FieldValueProvider value={props.value}>
+      <FieldProvider value={props}>
+        <UseExtension extension={extension} props={{}} fallback={null} />
+      </FieldProvider>
+    </FieldValueProvider>
+  )
+}

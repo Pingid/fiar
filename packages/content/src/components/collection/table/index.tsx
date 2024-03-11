@@ -7,10 +7,9 @@ import { useStore } from 'zustand'
 import { cn } from 'mcn'
 
 import { useSelectDocument } from '../../../context/select.js'
-import { FieldPreview } from '../../../context/field.js'
-
 import { useCollectionData } from '../../../context/data.js'
 import { useQueryStore } from '../../../context/query.js'
+import { FieldPreview } from '../../../context/field.js'
 import { useModel } from '../../../context/model.js'
 
 export const Table = () => {
@@ -28,7 +27,7 @@ export const Table = () => {
   return (
     <div
       style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(50px,1fr)) 6rem` }}
-      className="grid w-full p-2 [grid-auto-rows:auto] sm:p-0"
+      className="grid w-full gap-x-6 p-2 [grid-auto-rows:auto] sm:p-0 "
     >
       <div className="bg-front/5 col-span-full hidden w-full grid-cols-subgrid px-3 py-1 pt-2 sm:grid">
         {columns.map((key: string, i) => (
@@ -48,7 +47,7 @@ export const Table = () => {
           {columns.map((key: string) => (
             <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
               <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{model.fields[key]?.label || key}</p>
-              <FieldPreview name={key} field={model.fields[key] as any} value={x.data()[key]} />
+              <FieldPreview name={key} schema={model.fields[key] as any} value={x.data()[key]} />
             </div>
           ))}
           <div className="flex w-full items-start justify-end">

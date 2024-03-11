@@ -1,15 +1,5 @@
 import { Extensions } from '@fiar/workbench/extensions'
 
-import {
-  IFieldBoolean,
-  IFieldList,
-  IFieldNumber,
-  IFieldRef,
-  IFieldString,
-  IFieldMap,
-  IFieldTimestamp,
-} from '../schema/index.js'
-
 import { FormFieldTimestamp, PreviewFieldTimestamp } from '../fields/timestamp/index.js'
 import { FormFieldString, PreviewFieldString } from '../fields/string/index.js'
 import { FieldNumber, PreviewFieldNumber } from '../fields/number/index.js'
@@ -22,26 +12,27 @@ import { FormFieldRef, PreviewFieldRef } from '../fields/ref/index.js'
 import { FieldPreview } from './field.js'
 
 type FieldForm = () => React.ReactNode
+type FieldPreview = () => React.ReactNode
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
     'field:form:list': FieldForm
-    'field:preview:list': FieldPreview<IFieldList>
+    'field:preview:list': FieldPreview
     'field:form:bool': FieldForm
-    'field:preview:bool': FieldPreview<IFieldBoolean>
+    'field:preview:bool': FieldPreview
     'field:form:number': FieldForm
-    'field:preview:number': FieldPreview<IFieldNumber>
+    'field:preview:number': FieldPreview
     'field:form:ref': FieldForm
-    'field:preview:ref': FieldPreview<IFieldRef>
+    'field:preview:ref': FieldPreview
     'field:form:string': FieldForm
-    'field:preview:string': FieldPreview<IFieldString>
+    'field:preview:string': FieldPreview
     'field:form:map': FieldForm
-    'field:preview:map': FieldPreview<IFieldMap>
+    'field:preview:map': FieldPreview
     'field:form:timestamp': FieldForm
-    'field:preview:timestamp': FieldPreview<IFieldTimestamp>
+    'field:preview:timestamp': FieldPreview
 
     'field:form:text': FieldForm
-    'field:preview:text': FieldPreview<IFieldString>
+    'field:preview:text': FieldPreview
   }
 }
 

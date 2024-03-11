@@ -7,9 +7,9 @@ import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
+import { FieldPreview, useFieldPreview, useFormField } from '../../context/field.js'
 import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
 import { IntermediateDocumentReference } from '../../util/firebase.js'
-import { FieldPreview, useFormField } from '../../context/field.js'
 import { SelectDocumentProvider } from '../../context/select.js'
 import { trailing } from '../../util/index.js'
 
@@ -76,8 +76,9 @@ export const FormFieldRef = () => {
   )
 }
 
-export const PreviewFieldRef: FieldPreview<IFieldRef> = (props) => {
-  return <>{(props as any).value.path}</>
+export const PreviewFieldRef = () => {
+  const field = useFieldPreview<IFieldRef>()
+  return <>{(field as any).value.path}</>
 }
 
 const DocCard = (props: {
@@ -94,7 +95,7 @@ const DocCard = (props: {
       {props.columns.map((key: string) => (
         <div key={key} className="mb-2 flex w-full min-w-0 flex-col leading-none">
           <p className="text-front/60 pb-2 text-xs leading-none">{props.model.fields[key]?.label || key}</p>
-          <FieldPreview name={key} field={props.model.fields[key] as any} value={data.data?.data()?.[key]} />
+          <FieldPreview name={key} schema={props.model.fields[key] as any} value={data.data?.data()?.[key]} />
         </div>
       ))}
     </div>

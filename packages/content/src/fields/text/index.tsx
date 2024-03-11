@@ -5,15 +5,15 @@ import { cn } from 'mcn'
 
 import { Field, FieldControl } from '@fiar/components'
 
-import { useFormFieldControl, useFormField } from '../../context/field.js'
+import { useFormFieldControl, useFormField, useFieldPreview } from '../../context/field.js'
 import { TipTipTools, useTipTapExtensions } from './provider.js'
-import { FieldPreview } from '../../context/field.js'
 import { IFieldString } from '../../schema/index.js'
 
 export { TipTapTool, useTipTapExtensions } from './provider.js'
 
-export const PreviewFieldText: FieldPreview<IFieldString> = (props) => {
-  return <div dangerouslySetInnerHTML={{ __html: props.value }} className="line-clamp-3 text-sm" />
+export const PreviewFieldText = () => {
+  const field = useFieldPreview<IFieldString>()
+  return <div dangerouslySetInnerHTML={{ __html: field.value }} className="line-clamp-3 text-sm" />
 }
 
 export const FormFieldText = () => {

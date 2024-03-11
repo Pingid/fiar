@@ -5,12 +5,13 @@ import { cn } from 'mcn'
 
 import { Markdown, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldProvider, useFormField } from '../../context/field.js'
-import { FieldPreview, FormField } from '../../context/field.js'
+import { FieldProvider, useFieldPreview, useFormField } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
+import { FormField } from '../../context/field.js'
 
-export const PreviewFieldList: FieldPreview<IFieldList> = (props) => {
-  return JSON.stringify(props.value)
+export const PreviewFieldList = () => {
+  const field = useFieldPreview<IFieldList>()
+  return JSON.stringify(field.value)
 }
 
 export const FormFieldList = () => {

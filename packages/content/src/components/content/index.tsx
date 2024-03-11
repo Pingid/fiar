@@ -7,26 +7,21 @@ import { cn } from 'mcn'
 import { Card } from '@fiar/components'
 import { Page } from '@fiar/workbench'
 
-import { IContentCollection, IContentDocument, IContentModel } from '../../schema/index.js'
 import { toasty, useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
+import { type IContentCollection, type IContentDocument } from '../../schema/index.js'
 import { date, parameterize, trailing } from '../../util/index.js'
+import { ModelProvider, useModel } from '../../context/model.js'
 
 export const ContentList = (props: { collections: IContentCollection[]; documents: IContentDocument[] }) => {
   return (
     <Page>
       <Page.Header breadcrumbs={[{ children: 'Content', href: '/' }]}></Page.Header>
-
       <ul className="space-y-2 p-2">
-        {props.collections.map((x) => (
+        {[...props.collections, ...props.documents].map((x) => (
           <li key={x.path}>
-            <CollectionCard key={x.path} {...x} />
-          </li>
-        ))}
-        {props.documents.map((x) => (
-          <li key={x.path}>
-            <Link href={x.path} className="w-full">
-              <DocumentCard key={x.path} model={x} />
-            </Link>
+            <ModelProvider value={x}>
+              <ModelCard />
+            </ModelProvider>
           </li>
         ))}
       </ul>
@@ -34,18 +29,22 @@ export const ContentList = (props: { collections: IContentCollection[]; document
   )
 }
 
+const ModelCard = () => {
+  const model = useModel()
+  if (model.type === 'collection') return <CollectionCard {...model} />
+  return <DocumentCard />
+}
+
 const CollectionCard = (props: IContentCollection) => {
   const path = trailing(props.path)
   const parameterized = parameterize(path)
   const ref = collection(useFirestore(), path)
-  const draft = useSWR(ref.path + 'count', () => getCountFromServer(ref), {
-    onError: (e) => toasty(e),
-  })
+  const draft = useSWR(ref.path + 'count', () => getCountFromServer(ref), { onError: (e) => toasty(e) })
   const count = draft.data?.data().count
 
   return (
     <Link to={parameterized} asChild>
-      <Card icon={<DocumentDuplicateIcon />} title={props.label ?? path} elementType="a" className="block">
+      <Card icon={<DocumentDuplicateIcon />} head={props.label ?? path} elementType="a" className="block">
         <div className="flex justify-between">
           <p className="pt-1 text-sm opacity-60">{path}</p>
           <div
@@ -63,36 +62,41 @@ const CollectionCard = (props: IContentCollection) => {
   )
 }
 
-const DocumentCard = (props: { model: IContentModel; titleField?: string }) => {
+const DocumentCard = () => {
+  const model = useModel()
+
   const firestore = useFirestore()
-  const data = useDocumentSnapshot(doc(firestore, props.model.path))
-  const docData = data.data?.data()
+  const data = useDocumentSnapshot(doc(firestore, model.path))
 
   const createTime = (data.data as any)?._document?.createTime?.timestamp?.toDate() as Date | undefined
   const updateTime = (data.data as any)?._document?.version?.timestamp?.toDate() as Date | undefined
 
-  const title = props.titleField ? docData?.[props.titleField] || props.model.label : props.model.label
+  const title = model.label
 
   return (
-    <Card
-      icon={<DocumentIcon />}
-      head={
-        <span className="flex w-full items-baseline justify-between">
-          <span>{title}</span>
-          <span className="text-sm opacity-60">{createTime && date(createTime).format('YY/MM/DD')}</span>
-        </span>
-      }
-    >
-      <div className="flex w-full justify-between">
-        <p className="pt-1 text-sm opacity-60"></p>
-        <div className="flex w-full justify-end gap-3 pt-1 text-sm leading-none opacity-60">
-          {data.data?.exists() ? (
-            <span>{updateTime && date(updateTime).calendar()}</span>
-          ) : (
-            <span className="opacity-40">Missing</span>
-          )}
+    <Link to={model.path} asChild>
+      <Card
+        icon={<DocumentIcon />}
+        elementType="a"
+        className="block"
+        head={
+          <span className="flex w-full items-baseline justify-between">
+            <span>{title}</span>
+            <span className="text-sm opacity-60">{createTime && date(createTime).format('YY/MM/DD')}</span>
+          </span>
+        }
+      >
+        <div className="flex w-full justify-between">
+          <p className="pt-1 text-sm opacity-60"></p>
+          <div className="flex w-full justify-end gap-3 pt-1 text-sm leading-none opacity-60">
+            {data.data?.exists() ? (
+              <span>{updateTime && date(updateTime).calendar()}</span>
+            ) : (
+              <span className="opacity-40">Missing</span>
+            )}
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   )
 }

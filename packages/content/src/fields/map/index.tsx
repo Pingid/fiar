@@ -2,8 +2,7 @@ import { cn } from 'mcn'
 
 import { Markdown } from '@fiar/components'
 
-import { type FieldPreview, FormField } from '../../context/field.js'
-import { FieldProvider, useFormField } from '../../context/field.js'
+import { FormField, useFieldPreview, FieldProvider, useFormField } from '../../context/field.js'
 import type { IFieldMap, IFields } from '../../schema/index.js'
 
 export const FormFieldMap = () => {
@@ -31,6 +30,7 @@ export const FormFieldMap = () => {
   )
 }
 
-export const PreviewFieldMap: FieldPreview<IFieldMap> = (props) => {
-  return JSON.stringify(props.value)
+export const PreviewFieldMap = () => {
+  const field = useFieldPreview<IFieldMap>()
+  return JSON.stringify(field.value)
 }

@@ -1,7 +1,7 @@
 import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
-import { type FieldPreview, useFormState, fieldError, get, useController, useFormField } from '@fiar/content/fields'
+import { useFieldPreview, useFormState, fieldError, get, useController, useFormField } from '@fiar/content/fields'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
@@ -10,11 +10,12 @@ import { useImageMeta } from '../../context/data.js'
 import { IFieldAsset } from '../../schema/index.js'
 import { Thumbnail } from '../index.js'
 
-export const PreviewFieldAsset: FieldPreview<IFieldAsset> = (props) => {
-  const asset = useImageMeta(props.value?.fullPath)
+export const PreviewFieldAsset = () => {
+  const field = useFieldPreview<IFieldAsset>()
+  const asset = useImageMeta(field.value?.fullPath)
 
   return (
-    <div className="flex aspect-square h-28 w-28">
+    <div className="flex max-h-28 w-full">
       <Thumbnail
         className="object-contain object-left-top"
         url={asset.data?.url}

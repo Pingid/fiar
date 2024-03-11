@@ -67,7 +67,7 @@ export const DocumentEdit = () => {
               <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
             </div>
           </Page.Header>
-          <DocumentFormFields control={form.control} register={form.register} schema={model} />
+          <DocumentFormFields schema={model} />
         </form>
       </FormProvider>
     </Page>

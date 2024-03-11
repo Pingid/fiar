@@ -16,8 +16,7 @@ const typ = model({
 })
 
 describe('expression builder', () => {
-  console.log(typ)
-  const r = rulset(({ service, func, arg, op }) => {
+  rulset(({ service, func, arg, op }) => {
     const isAdmin = func('isAdmin', [arg<string, 'email'>('email')], (x) => op(x.email, 'in', ['james@gmail.com']))
 
     service('cloud.firestore', ({ match }) => {
@@ -79,6 +78,6 @@ describe('expression builder', () => {
 
   it('should', async () => {
     // console.log(JSON.stringify(r.ast(), null, 2))
-    console.log(await r.print())
+    // console.log(await r.print())
   })
 })

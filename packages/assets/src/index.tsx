@@ -1,17 +1,15 @@
 import { CloudIcon } from '@heroicons/react/24/outline'
-import { useLayoutEffect } from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Route, Switch } from 'wouter'
 
 import { Extensions, useExtend } from '@fiar/workbench/extensions'
-import { FieldPreview } from '@fiar/content/fields'
 import { App } from '@fiar/workbench'
 
-import { useAssetConfig, AssetConfig } from './context/index.js'
 import { FormFieldAsset, PreviewFieldAsset } from './components/Field/index.js'
+import { useAssetConfig, AssetConfig } from './context/index.js'
 import { FolderList } from './components/List/index.js'
 import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
-import { IFieldAsset } from './schema/index.js'
 
 export * from './context/index.js'
 export { image } from './schema/index.js'
@@ -19,7 +17,7 @@ export { image } from './schema/index.js'
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
     'field:form:asset': () => React.ReactNode
-    'field:preview:asset': FieldPreview<IFieldAsset>
+    'field:preview:asset': () => React.ReactNode
     'asset:source': { [x: string]: () => React.ReactNode }
   }
 }

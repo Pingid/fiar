@@ -1,6 +1,6 @@
 import { Field, Input, FieldControl, Select } from '@fiar/components'
 
-import { type FieldPreview, useFormField } from '../../context/field.js'
+import { useFormField, useFieldPreview } from '../../context/field.js'
 import { type IFieldString } from '../../schema/index.js'
 
 export const FormFieldString = () => {
@@ -32,6 +32,7 @@ export const FormFieldString = () => {
   )
 }
 
-export const PreviewFieldString: FieldPreview<IFieldString> = (props) => {
-  return props.value
+export const PreviewFieldString = () => {
+  const field = useFieldPreview<IFieldString>()
+  return field.value
 }

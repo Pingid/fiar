@@ -1,7 +1,7 @@
 import { Field, Input, FieldControl } from '@fiar/components'
 
-import { FieldPreview, useFormField } from '../../context/field.js'
-import { type IFieldNumber } from '../../schema/index.js'
+import { IFieldBoolean, type IFieldNumber } from '../../schema/index.js'
+import { useFieldPreview, useFormField } from '../../context/field.js'
 
 export const FieldNumber = () => {
   const field = useFormField<IFieldNumber>()
@@ -20,6 +20,7 @@ export const FieldNumber = () => {
   )
 }
 
-export const PreviewFieldNumber: FieldPreview<IFieldNumber> = (props) => {
-  return props.value
+export const PreviewFieldNumber = () => {
+  const field = useFieldPreview<IFieldBoolean>()
+  return field.value
 }
