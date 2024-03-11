@@ -1,4 +1,4 @@
-import { rulset, validate } from '@fiar/rules'
+import { rulset } from '@fiar/rules'
 import fs from 'node:fs'
 
 import { articles, test, landing, tags } from './src/admin/entities'
@@ -11,51 +11,41 @@ const rules = rulset(({ service }) => {
         allow('read', true)
         allow('write', true)
       })
+      match('/icons/{name}', ({ allow }) => {
+        allow('read', true)
+        allow('write', true)
+      })
     })
   })
 
   // Firestore rules
   service('cloud.firestore', ({ match }) => {
-    match('/databases/(default)/documents', ({ match, func, op }) => {
-      const isArticle = func('isArticle', [], ({ request }) =>
-        validate(request.resource.data, { type: 'map', fields: articles.fields }),
-      )
-
-      const isTest = func('isTest', [], ({ request }) =>
-        validate(request.resource.data, { type: 'map', fields: test.fields }),
-      )
-
-      const isLanding = func('isLanding', [], ({ request }) =>
-        validate(request.resource.data, { type: 'map', fields: landing.fields }),
-      )
-
-      const isTag = func('isTag', [], (c) => validate(c.request.resource.data, { type: 'map', fields: tags.fields }))
-
-      match(articles.path, ({ allow }) => {
+    match('/databases/(default)/documents', ({ match, op }) => {
+      match(articles, ({ allow, isValid }) => {
         allow('read', true)
-        allow('create', () => isArticle())
-        allow('update', () => isArticle())
+        allow('create', () => isValid())
+        allow('update', () => isValid())
         allow('delete', (c) => op(c.request.auth, '!=', null))
       })
 
-      match(test.path, ({ allow }) => {
+      match(test, ({ allow, isValid }) => {
         allow('read', true)
-        allow('create', () => isTest())
-        allow('update', () => isTest())
+        allow('create', () => isValid())
+        allow('update', () => isValid())
         allow('delete', (c) => op(c.request.auth, '!=', null))
       })
 
-      match(landing.path, ({ allow }) => {
+      match(landing, ({ allow, isValid }) => {
         allow('read', true)
-        allow('create', () => isLanding())
-        allow('update', () => isLanding())
+        allow('create', () => isValid())
+        allow('update', () => isValid())
         allow('delete', (c) => op(c.request.auth, '!=', null))
       })
 
-      match(tags.path, ({ allow }) => {
+      match(tags, ({ allow, isValid }) => {
         allow('read', true)
-        allow('create', () => isTag())
-        allow('update', () => isTag())
+        allow('create', () => isValid())
+        allow('update', () => isValid())
         allow('delete', (c) => op(c.request.auth, '!=', null))
       })
     })

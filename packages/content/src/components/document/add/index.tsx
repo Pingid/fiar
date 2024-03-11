@@ -26,6 +26,7 @@ export const DocumentAdd = () => {
 
   const onSubmit = form.handleSubmit((x) => {
     const data = toFirestore(firestore, { ...x }, false)
+
     if (model.type === 'document') {
       return mutate.trigger({ model: model, type: 'set', data, ref: doc(firestore, model.path) })
     }

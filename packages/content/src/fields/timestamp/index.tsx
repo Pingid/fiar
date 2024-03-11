@@ -10,9 +10,11 @@ export const FormFieldTimestamp = () => {
   const field = useFormField<IFieldTimestamp>()
 
   useDocumentHook((e) => {
-    if (e.type === 'update' && field.schema.computed === 'on-update') set(e.data, field.name, serverTimestamp())
-    if (e.type === 'add' && field.schema.computed === 'on-create') set(e.data, field.name, serverTimestamp())
-    if (e.type === 'set' && field.schema.computed === 'on-create') set(e.data, field.name, serverTimestamp())
+    const onUpdate = field.schema.computed === 'on-update'
+    const onCreate = field.schema.computed === 'on-create'
+    if (e.type === 'update' && onUpdate) set(e.data, field.name, serverTimestamp())
+    if (e.type === 'add' && (onCreate || onUpdate)) set(e.data, field.name, serverTimestamp())
+    if (e.type === 'set' && (onCreate || onUpdate)) set(e.data, field.name, serverTimestamp())
     return e
   })
 

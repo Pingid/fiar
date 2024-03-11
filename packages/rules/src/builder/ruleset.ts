@@ -1,11 +1,14 @@
 import type { Options } from 'prettier'
 
+import type { FireModel } from '@fiar/schema'
+
 import { expression, expressionBuilderArgument, op, and, or } from './expressions.js'
 import { ContextFirestore, ContextStorage } from '../firestore/namespaces.js'
 import { Rule, output, rule } from '../rule/index.js'
 import { parse, value } from '../parser/parsers.js'
 import { formatAst } from '../printer/index.js'
 
+import { InferSchemaRules, validate } from '../index.js'
 import * as rules from '../firestore/index.js'
 import * as ast from '../ast/index.js'
 import * as scope from './scope.js'
@@ -39,7 +42,7 @@ export const func: Func<any> = (name, args, handler) => {
     args.map((y) => ast.ident([y.name])),
     [ast.func_return([output(handler(expression()) as any) as any])],
   ])
-  scope.push(ast.empty([]), node)
+  scope.push(node)
   return expression(() => ast.ident([name]))
 }
 
@@ -51,26 +54,59 @@ type WithPathParams<T, A extends Record<string, any> = {}> = T extends `${string
   : A
 interface Match<C> {
   <P extends string, F extends (x: MatchScope<C & WithPathParams<P>>) => any>(path: P, cb: F): any
-  // <P extends string, A extends AllowMap<C & WithParams<P>>>(path: P, x: A): any
-  // <
-  //   M extends FireModel,
-  //   F extends (x: MatchScope<C & WithParams<M['path']> & ContextFirestore<InferSchemaModelRules<M>>>) => any,
-  // >(
-  //   model: M,
-  //   cb: F,
-  // ): any
-  // <F extends FireModel, T extends AllowMap<C & WithParams<F['path']> & ContextFirestore<InferSchemaModelRules<F>>>>(
-  //   model: F,
-  //   x: T,
-  // ): any
+  <
+    M extends FireModel,
+    F extends (
+      x: MatchScope<
+        C & WithPathParams<M['path']> & ContextFirestore<InferSchemaRules<{ type: 'map'; fields: M['fields'] }>>
+      > & {
+        isValid: () => rules.RulesBoolean
+      },
+    ) => any,
+  >(
+    model: M,
+    cb: F,
+  ): any
 }
-export const match: Match<any> = (a, handler) => {
+export const match: Match<any> = (a: string | FireModel, handler: any) => {
+  if (typeof a !== 'string') return matchModel(a, handler)
+
   const statements = scope.create(() => handler({ arg, func: func, match, allow, op, and, or }))
 
   const segments = a
     .split('/')
     .filter(Boolean)
-    .map((x) => ast.segment([false, ast.literal([x])]))
+    .map((x: any) => ast.segment([false, ast.literal([x])]))
+
+  const node = ast.match([ast.path([segments]), statements])
+
+  scope.push(ast.empty([]), node)
+  return node
+}
+
+const matchModel: Match<any> = (a: FireModel, handler: any) => {
+  const statements = scope.create(() => {
+    const ctx = { arg, func: func, match, allow, op, and, or }
+    if (typeof a === 'string') return handler(ctx)
+
+    let name: any = null
+    const isValid = () => {
+      if (name) return name()
+      name = expression(() => ast.ident(['isValid']))
+      return name()
+    }
+
+    handler({ ...ctx, isValid })
+
+    if (name) func('isValid', [], (c) => validate(c.request.resource.data, { type: 'map', fields: a.fields }))
+  })
+
+  const path = a.type === 'collection' ? a.path.replace(/([^\}])$/, '$1/{id}') : a.path
+
+  const segments = path
+    .split('/')
+    .filter(Boolean)
+    .map((x: any) => ast.segment([false, ast.literal([x])]))
 
   const node = ast.match([ast.path([segments]), statements])
 
@@ -80,8 +116,8 @@ export const match: Match<any> = (a, handler) => {
 
 type AllowRule = 'write' | 'update' | 'delete' | 'create' | 'read' | 'list' | 'get'
 type AllowValue<C> = boolean | Rule | ((x: C) => Rule)
-// type AllowMap<C> = Partial<Record<`allow ${AllowRule}`, AllowValue<C>> & { _: (x: MatchScope<C>) => void }>
 type Allow<C> = (x: AllowRule | AllowRule[], cb: AllowValue<C>) => any
+
 export const allow: Allow<any> = (a, b) => {
   const types = (Array.isArray(a) ? a : [a]).map((x) => ast.ident([x]))
   const value =

@@ -34,14 +34,14 @@ export const useDocumentMutation = () => {
     '_',
     (_, p: { arg: DocumentHookEvent }) => {
       return resolve(p.arg)
-        .then((): any => {
-          if (p.arg.type === 'set') return setDoc(p.arg.ref, p.arg.data)
-          if (p.arg.type === 'add') return addDoc(p.arg.ref, p.arg.data).then(() => revalidate(p.arg.ref.path))
-          if (p.arg.type === 'update') {
-            const prms = updateDoc(p.arg.ref, p.arg.data)
-            return swr.mutate(p.arg.ref, (x: any) => prms.then(() => x), { revalidate: true })
+        .then((p): any => {
+          if (p.type === 'set') return setDoc(p.ref, p.data)
+          if (p.type === 'add') return addDoc(p.ref, p.data).then(() => revalidate(p.ref.path))
+          if (p.type === 'update') {
+            const prms = updateDoc(p.ref, p.data)
+            return swr.mutate(p.ref, (x: any) => prms.then(() => x), { revalidate: true })
           }
-          if (p.arg.type === 'delete') return swr.mutate(p.arg.ref, deleteDoc(p.arg.ref))
+          if (p.type === 'delete') return swr.mutate(p.ref, deleteDoc(p.ref))
         })
         .then(() => {})
     },

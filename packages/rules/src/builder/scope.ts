@@ -12,3 +12,4 @@ export const create: Scoped = (cb) => {
 }
 
 export const push = (...args: any[]) => stack.push(...args)
+export const prepend = (...args: any[]) => (stack = [...args, ...stack])

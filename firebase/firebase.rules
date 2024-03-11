@@ -8,6 +8,11 @@ service firebase.storage {
       allow read: if true;
       allow write: if true;
     }
+
+    match /icons/{name} {
+      allow read: if true;
+      allow write: if true;
+    }
   }
 }
 
@@ -15,89 +20,85 @@ service cloud.firestore {
 
   match /databases/(default)/documents {
 
-    function isArticle() {
-      return (request.resource.data is map
-          && request.resource.data.keys().hasOnly(["title", "image", "body", "width", "meta", "tags"])
-          && request.resource.data.title is string
-          && (request.resource.data.image is map
-            && request.resource.data.image.keys().hasOnly(["fullPath", "bucket", "name"])
-            && request.resource.data.image.fullPath is string
-            && request.resource.data.image.bucket is string
-            && request.resource.data.image.name is string)
-          && request.resource.data.body is string
-          && request.resource.data.width is number
-          && (request.resource.data.meta == null
-            || (request.resource.data.meta is map
-              && request.resource.data.meta.keys().hasOnly(["title", "description"])
-              && request.resource.data.meta.title is string
-              && request.resource.data.meta.description is string))
-          && request.resource.data.tags is list);
-    }
-
-    function isTest() {
-      return (request.resource.data is map
-          && request.resource.data.keys().hasOnly(["title", "count", "metadata", "links"])
-          && request.resource.data.title is string
-          && request.resource.data.count is number
-          && (request.resource.data.metadata is map
-            && request.resource.data.metadata.keys().hasOnly(["time", "seo"])
-            && request.resource.data.metadata.time is string
-            && (request.resource.data.metadata.seo == null
-              || (request.resource.data.metadata.seo is map
-                && request.resource.data.metadata.seo.keys().hasOnly(["title", "description"])
-                && request.resource.data.metadata.seo.title is string
-                && request.resource.data.metadata.seo.description is string)))
-          && request.resource.data.links is list);
-    }
-
-    function isLanding() {
-      return (request.resource.data is map
-          && request.resource.data.keys().hasOnly(["highlight", "more", "meta"])
-          && request.resource.data.highlight is path
-          && request.resource.data.more is list
-          && (request.resource.data.meta == null
-            || (request.resource.data.meta is map
-              && request.resource.data.meta.keys().hasOnly(["title", "description"])
-              && request.resource.data.meta.title is string
-              && request.resource.data.meta.description is string)));
-    }
-
-    function isTag() {
-      return (request.resource.data is map
-          && request.resource.data.keys().hasOnly(["name", "type", "createdAt", "updatedAt"])
-          && request.resource.data.name is string
-          && (request.resource.data.type is string
-            && request.resource.data.type in ["one", "two"])
-          && request.resource.data.createdAt is timestamp
-          && request.resource.data.updatedAt is timestamp);
-    }
-
     match /articles/{articleId} {
       allow read: if true;
-      allow create: if isArticle();
-      allow update: if isArticle();
+      allow create: if isValid();
+      allow update: if isValid();
       allow delete: if request.auth != null;
+      function isValid() {
+        return (request.resource.data is map
+            && request.resource.data.keys().hasOnly(["title", "image", "body", "width", "meta", "tags"])
+            && request.resource.data.title is string
+            && (request.resource.data.image is map
+              && request.resource.data.image.keys().hasOnly(["fullPath", "bucket", "name"])
+              && request.resource.data.image.fullPath is string
+              && request.resource.data.image.bucket is string
+              && request.resource.data.image.name is string)
+            && request.resource.data.body is string
+            && request.resource.data.width is number
+            && (request.resource.data.meta == null
+              || (request.resource.data.meta is map
+                && request.resource.data.meta.keys().hasOnly(["title", "description"])
+                && request.resource.data.meta.title is string
+                && request.resource.data.meta.description is string))
+            && request.resource.data.tags is list);
+      }
     }
 
-    match /test {
+    match /test/{id} {
       allow read: if true;
-      allow create: if isTest();
-      allow update: if isTest();
+      allow create: if isValid();
+      allow update: if isValid();
       allow delete: if request.auth != null;
+      function isValid() {
+        return (request.resource.data is map
+            && request.resource.data.keys().hasOnly(["title", "count", "metadata", "links"])
+            && request.resource.data.title is string
+            && request.resource.data.count is number
+            && (request.resource.data.metadata is map
+              && request.resource.data.metadata.keys().hasOnly(["time", "seo"])
+              && request.resource.data.metadata.time is string
+              && (request.resource.data.metadata.seo == null
+                || (request.resource.data.metadata.seo is map
+                  && request.resource.data.metadata.seo.keys().hasOnly(["title", "description"])
+                  && request.resource.data.metadata.seo.title is string
+                  && request.resource.data.metadata.seo.description is string)))
+            && request.resource.data.links is list);
+      }
     }
 
     match /pages/landing {
       allow read: if true;
-      allow create: if isLanding();
-      allow update: if isLanding();
+      allow create: if isValid();
+      allow update: if isValid();
       allow delete: if request.auth != null;
+      function isValid() {
+        return (request.resource.data is map
+            && request.resource.data.keys().hasOnly(["highlight", "more", "meta"])
+            && request.resource.data.highlight is path
+            && request.resource.data.more is list
+            && (request.resource.data.meta == null
+              || (request.resource.data.meta is map
+                && request.resource.data.meta.keys().hasOnly(["title", "description"])
+                && request.resource.data.meta.title is string
+                && request.resource.data.meta.description is string)));
+      }
     }
 
     match /tags/{tagId} {
       allow read: if true;
-      allow create: if isTag();
-      allow update: if isTag();
+      allow create: if isValid();
+      allow update: if isValid();
       allow delete: if request.auth != null;
+      function isValid() {
+        return (request.resource.data is map
+            && request.resource.data.keys().hasOnly(["name", "type", "createdAt", "updatedAt"])
+            && request.resource.data.name is string
+            && (request.resource.data.type is string
+              && request.resource.data.type in ["one", "two"])
+            && request.resource.data.createdAt is timestamp
+            && request.resource.data.updatedAt is timestamp);
+      }
     }
   }
 }
