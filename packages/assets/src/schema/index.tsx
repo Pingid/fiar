@@ -10,5 +10,5 @@ export const image = <const C extends Omit<IFieldAsset, 'fields' | 'type'>>(conf
   map({
     ...config,
     fields: { fullPath: string({}), bucket: string({}), name: string({}) },
-    component: 'asset',
+    components: { form: 'field/asset/form', preview: 'field/asset/preview' },
   })

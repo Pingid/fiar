@@ -3,14 +3,14 @@ import { Header } from '@fiar/workbench'
 import { Card } from '@fiar/components'
 import { Link } from 'wouter'
 
-import { useUploadStatus, useUploads } from '../../context/uploads.js'
 import { useAssetConfig } from '../../context/config.js'
+import { useUploads } from '../../context/uploads.js'
 import { Upload } from '../index.js'
 
 export const FolderList = () => {
   const config = useAssetConfig()
   const uploads = useUploads((x) => x.uploads)
-  useUploadStatus()
+
   return (
     <>
       <Header breadcrumbs={[{ children: 'Assets', href: '/' }]}></Header>
@@ -22,7 +22,7 @@ export const FolderList = () => {
         </div>
       )}
       <div className="space-y-2 p-2">
-        {config.folders?.map((x) => (
+        {config.assets?.map((x) => (
           <Link key={x.path} href={x.path} asChild>
             <Card
               elementType="a"
@@ -33,7 +33,7 @@ export const FolderList = () => {
                   <FolderOpenIcon className="relative hidden group-hover/card:block" />
                 </>
               }
-              title={x.title}
+              head={x.title}
             >
               <p className="text-front/60 pt-1 text-sm">{x.path}</p>
             </Card>

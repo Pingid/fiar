@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
+  EmailAuthProvider,
 } from '@firebase/auth'
 import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
 import useMutation from 'swr/mutation'
@@ -22,8 +23,8 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
 
   const [error, setError] = React.useState('')
 
-  const emailPassword = config.providers.find((x) => x.providerId === 'password')
-  const social = config.providers.filter((x) => x.providerId !== 'password')
+  const emailPassword = config.auth.providers.find((x) => (x as any)?.providerId === 'password' || x === 'email')
+  const social = config.auth.providers.filter((x) => (x as any)?.providerId !== 'password' && x !== 'email')
   const signinEmail = useMutation(
     'auth',
     (_, p: { arg: { email: string; password: string } }) =>
@@ -31,7 +32,7 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
     { onError: (e) => setError(e.message), onSuccess: props.onSuccess },
   )
   const signinSocial = useMutation(
-    config.method ?? 'redirect',
+    config.auth.strategy ?? 'redirect',
     (type: string, p: { arg: AuthProvider }) => {
       if (type === 'redirect') return signInWithRedirect(auth, p.arg)
       return signInWithPopup(auth, p.arg)
@@ -63,17 +64,27 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
           />
         )}
         <div className="space-y-3 px-4 py-6">
-          {social.map((x) => {
-            const selected = providertypes[x.providerId]
+          {social.map((p) => {
+            const provider =
+              typeof p === 'string'
+                ? {
+                    github: new GithubAuthProvider(),
+                    google: new GoogleAuthProvider(),
+                    facebook: new FacebookAuthProvider(),
+                    twitter: new TwitterAuthProvider(),
+                    email: new EmailAuthProvider(),
+                  }[p]
+                : p
+            const selected = providertypes[provider.providerId]
             return (
               <Button
-                key={x.providerId}
+                key={provider.providerId}
                 className="flex w-full items-center justify-center py-3"
-                onClick={() => signinSocial.trigger(x)}
+                onClick={() => signinSocial.trigger(provider)}
                 disabled={mutating}
                 icon={selected?.icon}
               >
-                Sign in via {selected?.title || x.providerId}
+                Sign in via {selected?.title || provider.providerId}
               </Button>
             )
           })}

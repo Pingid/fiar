@@ -1,17 +1,17 @@
 import { DocumentReference, FieldValue, Firestore, Timestamp, deleteField, doc } from '@firebase/firestore'
 
-export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boolean): any => {
+export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boolean, root = true): any => {
   if (x instanceof IntermediateDocumentReference) return x.ref(firestore)
   if (x instanceof Timestamp) return x
   if (x instanceof FieldValue) return x
-  if (typeof x === 'undefined' && deleteUndefined) return deleteField()
-  if (Array.isArray(x)) return x.map((x) => toFirestore(firestore, x, deleteUndefined))
-  if (typeof x === null || typeof x === 'function') return x
+  if (typeof x === 'undefined' && deleteUndefined && root) return deleteField()
+  if (Array.isArray(x)) return x.map((x) => toFirestore(firestore, x, deleteUndefined, false))
+  if (x === null || typeof x === 'function') return x
   if (typeof x === 'object') {
     return Object.fromEntries(
       Object.entries(x)
-        .filter(([_key, value]) => !(deleteUndefined && typeof value === 'undefined'))
-        .map(([key, value]) => [key, toFirestore(firestore, value, deleteUndefined)]),
+        .filter(([_key, value]) => !((!deleteUndefined || !root) && typeof value === 'undefined'))
+        .map(([key, value]) => [key, toFirestore(firestore, value, deleteUndefined, false)]),
     )
   }
   return x

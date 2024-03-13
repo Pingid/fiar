@@ -4,20 +4,20 @@ import { Link } from 'wouter'
 import useSWR from 'swr'
 import { cn } from 'mcn'
 
+import { Header } from '@fiar/workbench'
 import { Card } from '@fiar/components'
-import { Page } from '@fiar/workbench'
 
-import { toasty, useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
-import { type IContentCollection, type IContentDocument } from '../../schema/index.js'
+import { type IContentModel, type IContentCollection } from '../../schema/index.js'
+import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
 import { date, parameterize, trailing } from '../../util/index.js'
 import { ModelProvider, useModel } from '../../context/model.js'
 
-export const ContentList = (props: { collections: IContentCollection[]; documents: IContentDocument[] }) => {
+export const ContentList = (props: { models: IContentModel[] }) => {
   return (
-    <Page>
-      <Page.Header breadcrumbs={[{ children: 'Content', href: '/' }]}></Page.Header>
+    <>
+      <Header breadcrumbs={[{ children: 'Content', href: '/' }]}></Header>
       <ul className="space-y-2 p-2">
-        {[...props.collections, ...props.documents].map((x) => (
+        {props.models.map((x) => (
           <li key={x.path}>
             <ModelProvider value={x}>
               <ModelCard />
@@ -25,7 +25,7 @@ export const ContentList = (props: { collections: IContentCollection[]; document
           </li>
         ))}
       </ul>
-    </Page>
+    </>
   )
 }
 
@@ -39,7 +39,7 @@ const CollectionCard = (props: IContentCollection) => {
   const path = trailing(props.path)
   const parameterized = parameterize(path)
   const ref = collection(useFirestore(), path)
-  const draft = useSWR(ref.path + 'count', () => getCountFromServer(ref), { onError: (e) => toasty(e) })
+  const draft = useSWR(ref.path + 'count', () => getCountFromServer(ref))
   const count = draft.data?.data().count
 
   return (
@@ -49,12 +49,12 @@ const CollectionCard = (props: IContentCollection) => {
           <p className="pt-1 text-sm opacity-60">{path}</p>
           <div
             className={cn('flex w-full justify-end gap-3 pt-1 text-sm leading-none', [
-              !!count,
-              'opacity-60',
+              draft.isLoading,
               'opacity-30',
+              'opacity-60',
             ])}
           >
-            <span>{count ?? '0'} Documents</span>
+            {draft.error ? <span className="text-error">Error</span> : <span>{count ?? '0'} Documents</span>}
           </div>
         </div>
       </Card>

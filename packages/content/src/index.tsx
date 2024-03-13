@@ -19,9 +19,9 @@ import { extensions } from './context/extensions.js'
 export type { ContentConfig } from './context/config.js'
 
 export const Content = ({ children, ...props }: { children?: React.ReactNode } & ContentConfig) => {
-  if (!useContentConfig.getState().firebase) useContentConfig.setState(props)
+  if (!useContentConfig.getState().app) useContentConfig.setState(props)
   useLayoutEffect(() => useContentConfig.setState(props), [props])
-  const firebase = useContentConfig((x) => (x.firebase ? getFirestore(x.firebase) : null))
+  const firebase = useContentConfig((x) => (x.app ? getFirestore(x.app) : null))
   useExtend(extensions)
 
   return (
@@ -29,14 +29,14 @@ export const Content = ({ children, ...props }: { children?: React.ReactNode } &
       <DocumentHooksProvider>
         <App title="Content" icon={<CircleStackIcon />} href="/content">
           <div className="h-full min-h-0 w-full min-w-0">
-            {[...(props.collections ?? []), ...(props.documents ?? [])].map((model) => (
+            {props.content.map((model) => (
               <ModelProvider key={model.path} value={model}>
                 <ModelRoutes />
               </ModelProvider>
             ))}
 
             <Route path="/" key="/">
-              <ContentList collections={props.collections ?? []} documents={props.documents ?? []} />
+              <ContentList models={props.content} />
             </Route>
             {children}
           </div>

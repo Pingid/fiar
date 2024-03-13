@@ -3,7 +3,7 @@ import { doc } from '@firebase/firestore'
 import { useLocation } from 'wouter'
 import { useEffect } from 'react'
 
-import { Page, useIntercept } from '@fiar/workbench'
+import { Header, useIntercept } from '@fiar/workbench'
 import { Button } from '@fiar/components'
 
 import { useDocumentSnapshot, useFirestore } from '../../../context/firestore.js'
@@ -26,11 +26,20 @@ export const DocumentEdit = () => {
   const form = useForm({ criteriaMode: 'firstError', context: { model: model, type: 'update' } })
   const mutate = useDocumentMutation()
 
-  const onSubmit = form.handleSubmit((value) =>
-    mutate
-      .trigger({ model: model, type: 'update', data: toFirestore(firestore, value, true), ref })
-      .then(() => form.reset(value)),
-  )
+  const onSubmit = form.handleSubmit((value) => {
+    if (model.type === 'document' && !data.data?.exists()) {
+      return mutate.trigger({
+        model: model,
+        type: 'set',
+        data: toFirestore(firestore, { ...value }, false),
+        ref: doc(firestore, model.path),
+      })
+    }
+
+    return mutate
+      .trigger({ model: model, type: 'update', data: toFirestore(firestore, { ...value }, true), ref })
+      .then(() => form.reset(value))
+  })
 
   const onDelete = () => mutate.trigger({ model: model, ref, type: 'delete' }).then(() => nav('/'))
 
@@ -47,29 +56,27 @@ export const DocumentEdit = () => {
   })
 
   return (
-    <Page>
-      <FormProvider {...form}>
-        <form onSubmit={onSubmit}>
-          <Page.Header
-            subtitle={path}
-            breadcrumbs={
-              [
-                { children: 'Content', href: '/' },
-                model.type === 'collection' ? { children: model.label, href: parameterize(model.path) } : null,
-                { children: <DocumentFormTitle />, href: path },
-              ].filter(Boolean) as any[]
-            }
-          >
-            <div className="flex w-full justify-end gap-2 px-3 py-2">
-              <Button type="button" color="error" size="sm" disabled={!exists} onClick={() => onDelete()}>
-                Delete
-              </Button>
-              <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
-            </div>
-          </Page.Header>
-          <DocumentFormFields schema={model} />
-        </form>
-      </FormProvider>
-    </Page>
+    <FormProvider {...form}>
+      <form onSubmit={onSubmit}>
+        <Header
+          subtitle={path}
+          breadcrumbs={
+            [
+              { children: 'Content', href: '/' },
+              model.type === 'collection' ? { children: model.label, href: parameterize(model.path) } : null,
+              { children: <DocumentFormTitle />, href: path },
+            ].filter(Boolean) as any[]
+          }
+        >
+          <div className="flex w-full justify-end gap-2 px-3 py-2">
+            <Button type="button" color="error" size="sm" disabled={!exists} onClick={() => onDelete()}>
+              Delete
+            </Button>
+            <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+          </div>
+        </Header>
+        <DocumentFormFields schema={model} />
+      </form>
+    </FormProvider>
   )
 }

@@ -16,23 +16,21 @@ export { image } from './schema/index.js'
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
-    'field:form:asset': () => React.ReactNode
-    'field:preview:asset': () => React.ReactNode
-    'asset:source': { [x: string]: () => React.ReactNode }
+    'field/asset/form': () => React.ReactNode
+    'field/asset/preview': () => React.ReactNode
   }
 }
 
 const extensions = {
-  'field:form:asset': FormFieldAsset,
-  'field:preview:asset': PreviewFieldAsset,
-  'asset:source': {},
+  'field/asset/form': FormFieldAsset,
+  'field/asset/preview': PreviewFieldAsset,
 } satisfies Extensions
 
 export { FolderAction } from './components/Folder/index.js'
 
 export const Assets = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
   useLayoutEffect(() => useAssetConfig.setState(config), [config])
-  if (!useAssetConfig.getState().firebase) useAssetConfig.setState(config)
+  if (!useAssetConfig.getState().app) useAssetConfig.setState(config)
 
   useExtend(extensions)
 
@@ -42,7 +40,7 @@ export const Assets = ({ children, ...config }: { children?: React.ReactNode } &
       <App title="Assets" icon={<CloudIcon />} href="/assets">
         <div className="h-full min-h-0 w-full min-w-0">
           <Switch>
-            {config.folders?.map((x) => (
+            {config.assets?.map((x) => (
               <Route key={x.path} path={`/${x.path.replace(/^\//, '')}`}>
                 <Folder {...x} />
               </Route>

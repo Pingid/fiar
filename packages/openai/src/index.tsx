@@ -1,19 +1,16 @@
-// import { AuthConfig, useAuthConfig } from './context/index.js'
-// import { Authorize } from './authorize/index.js'
 import { ImageGenerateParams } from 'openai/resources/images.mjs'
 import { PaintBrushIcon } from '@heroicons/react/24/outline'
 import { uploadBytesResumable, ref } from '@firebase/storage'
 import { useLayoutEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import useSWRMutation from 'swr/mutation'
 import { OpenAI } from 'openai'
 
 import { Button, Field, FieldControl, Input, Select, TextArea } from '@fiar/components'
 import { FolderAction, useFirebaseStorage, useUploads } from '@fiar/assets'
 import { Header, WorkbenchModal } from '@fiar/workbench'
-// import * as s from '@fiar/content/schema'
 
 import { OpenAiConfig, useOpenAiConfig } from './context/index.js'
-import { useForm } from 'react-hook-form'
 
 export const OpenAiPlugin = (props: OpenAiConfig) => {
   useLayoutEffect(() => useOpenAiConfig.setState(props), [props])

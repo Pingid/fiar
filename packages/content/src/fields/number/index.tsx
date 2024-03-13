@@ -3,7 +3,7 @@ import { Field, Input, FieldControl } from '@fiar/components'
 import { IFieldBoolean, type IFieldNumber } from '../../schema/index.js'
 import { useFieldPreview, useFormField } from '../../context/field.js'
 
-export const FieldNumber = () => {
+export const FormFieldNumber = () => {
   const field = useFormField<IFieldNumber>()
 
   return (

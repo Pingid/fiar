@@ -1,4 +1,4 @@
-import { Page } from '@fiar/workbench'
+import { Header } from '@fiar/workbench'
 
 import { QueryStateProvider } from '../../../context/query.js'
 import { CollectionHeader } from '../header/index.js'
@@ -13,12 +13,10 @@ export const CollectionPage = () => {
   ]
   return (
     <QueryStateProvider>
-      <Page>
-        <Page.Header subtitle={model.path} breadcrumbs={breadcrumbs}>
-          <CollectionHeader />
-        </Page.Header>
-        <Table />
-      </Page>
+      <Header subtitle={model.path} breadcrumbs={breadcrumbs}>
+        <CollectionHeader />
+      </Header>
+      <Table />
     </QueryStateProvider>
   )
 }

@@ -6,14 +6,14 @@ export type AssetFolder = { title: string; path: `/${string}`; accept?: Record<s
 
 export type AssetConfig = {
   rootPath?: string | null | undefined
-  firebase?: FirebaseApp | null
-  folders: AssetFolder[]
+  app?: FirebaseApp | null
+  assets: AssetFolder[]
 }
 
-export const useAssetConfig = create<AssetConfig>(() => ({ rootPath: null, storage: null, folders: [] }))
+export const useAssetConfig = create<AssetConfig>(() => ({ rootPath: null, storage: null, assets: [] }))
 
 export const useFirebaseStorage = () => {
-  const storage = useAssetConfig((x) => (x.firebase ? getStorage(x.firebase) : null))
+  const storage = useAssetConfig((x) => (x.app ? getStorage(x.app) : null))
   if (!storage) throw new Error(`Missing firebase storage instance`)
   return storage
 }

@@ -36,7 +36,7 @@ service cloud.firestore {
               && request.resource.data.image.name is string)
             && request.resource.data.body is string
             && request.resource.data.width is number
-            && (request.resource.data.meta == null
+            && (!("meta" in request.resource.data)
               || (request.resource.data.meta is map
                 && request.resource.data.meta.keys().hasOnly(["title", "description"])
                 && request.resource.data.meta.title is string
@@ -58,7 +58,7 @@ service cloud.firestore {
             && (request.resource.data.metadata is map
               && request.resource.data.metadata.keys().hasOnly(["time", "seo"])
               && request.resource.data.metadata.time is string
-              && (request.resource.data.metadata.seo == null
+              && (!("seo" in request.resource.data.metadata)
                 || (request.resource.data.metadata.seo is map
                   && request.resource.data.metadata.seo.keys().hasOnly(["title", "description"])
                   && request.resource.data.metadata.seo.title is string
@@ -77,7 +77,7 @@ service cloud.firestore {
             && request.resource.data.keys().hasOnly(["highlight", "more", "meta"])
             && request.resource.data.highlight is path
             && request.resource.data.more is list
-            && (request.resource.data.meta == null
+            && (!("meta" in request.resource.data)
               || (request.resource.data.meta is map
                 && request.resource.data.meta.keys().hasOnly(["title", "description"])
                 && request.resource.data.meta.title is string

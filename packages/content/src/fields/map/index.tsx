@@ -1,32 +1,51 @@
 import { cn } from 'mcn'
 
-import { Markdown } from '@fiar/components'
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Field, FieldControl } from '@fiar/components'
 
-import { FormField, useFieldPreview, FieldProvider, useFormField } from '../../context/field.js'
+import { FormField, useFieldPreview, FieldProvider, useFormField, useFormFieldControl } from '../../context/field.js'
 import type { IFieldMap, IFields } from '../../schema/index.js'
 
 export const FormFieldMap = () => {
   const field = useFormField<IFieldMap>()
   const isListItem = field.parent?.type === 'list'
+  const control = useFormFieldControl<IFieldMap>()
+  const optional = field.schema.optional
 
   return (
-    <div className="">
-      <div className="flex w-full justify-between rounded-t">
-        <h2 className="py-1 text-2xl">{field.schema.label}</h2>
-      </div>
-      <Markdown className="text-front/50 pb-1 text-sm">{field.schema.description}</Markdown>
-      <div className={cn('space-y-4', [!isListItem, 'border-l pl-4 pt-3', 'py-3'])}>
-        {Object.keys(field.schema.fields).map((key) => {
-          const inner = field.schema.fields[key] as IFields
-          const name = field.name ? `${field.name}.${key}` : key
-          return (
-            <FieldProvider key={key} value={{ schema: inner, name, parent: field.schema }}>
-              <FormField {...(field as any)} name={name} field={{ ...inner, label: inner.label ?? key }} />
-            </FieldProvider>
-          )
-        })}
-      </div>
-    </div>
+    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+      <FieldControl>
+        {optional && (
+          <div className="bg-back flex w-full justify-between border-b p-1 px-2">
+            <div />
+            <div className="flex items-center gap-1.5">
+              {control.field.value ? (
+                <button type="button" onClick={() => control.field.onChange(undefined)}>
+                  <XMarkIcon className="h-[1.1rem] w-[1.1rem]" />
+                </button>
+              ) : (
+                <button type="button" onClick={() => control.field.onChange({})}>
+                  <PlusIcon className="h-[1.1rem] w-[1.1rem]" />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+        {(control.field.value || !optional) && (
+          <div className={cn('bg-back space-y-4 p-3', [!isListItem, '', 'py-3'])}>
+            {Object.keys(field.schema.fields).map((key) => {
+              const inner = field.schema.fields[key] as IFields
+              const name = field.name ? `${field.name}.${key}` : key
+              return (
+                <FieldProvider key={key} value={{ schema: inner, name, parent: field.schema }}>
+                  <FormField {...(field as any)} name={name} field={{ ...inner, label: inner.label ?? key }} />
+                </FieldProvider>
+              )
+            })}
+          </div>
+        )}
+      </FieldControl>
+    </Field>
   )
 }
 

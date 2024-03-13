@@ -1,9 +1,9 @@
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
-import { collection, doc } from '@firebase/firestore'
+import { collection } from '@firebase/firestore'
 import { useLocation } from 'wouter'
 import { useRef } from 'react'
 
-import { Page, useIntercept } from '@fiar/workbench'
+import { useIntercept, Header } from '@fiar/workbench'
 import { Button } from '@fiar/components'
 
 import { useForm, FormProvider } from '../../../context/form.js'
@@ -22,14 +22,15 @@ export const DocumentAdd = () => {
   const submitted = useRef(false)
   const [_, nav] = useLocation()
 
-  const mutate = useDocumentMutation()
+  const mutate = useDocumentMutation({
+    onSuccess: () => {
+      const pth = model.type === 'collection' ? model.path : '/content'
+      nav(pth)
+    },
+  })
 
   const onSubmit = form.handleSubmit((x) => {
     const data = toFirestore(firestore, { ...x }, false)
-
-    if (model.type === 'document') {
-      return mutate.trigger({ model: model, type: 'set', data, ref: doc(firestore, model.path) })
-    }
     return mutate.trigger({ model: model, type: 'add', data, ref: collection(firestore, model.path) })
   })
 
@@ -40,27 +41,25 @@ export const DocumentAdd = () => {
   })
 
   return (
-    <Page>
-      <FormProvider {...form}>
-        <form onSubmit={onSubmit}>
-          <Page.Header
-            subtitle={model.path}
-            breadcrumbs={[
-              { children: 'Content', href: '/' },
-              { children: model.label, href: model.path },
-              { children: <DocumentFormTitle /> },
-            ]}
-          >
-            <div className="flex w-full justify-end gap-2 px-3 py-2">
-              <Button size="sm" type="button" onClick={() => nav(model.path, { replace: true })}>
-                Cancel
-              </Button>
-              <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
-            </div>
-          </Page.Header>
-          <DocumentFormFields schema={model} />
-        </form>
-      </FormProvider>
-    </Page>
+    <FormProvider {...form}>
+      <form onSubmit={onSubmit}>
+        <Header
+          subtitle={model.path}
+          breadcrumbs={[
+            { children: 'Content', href: '/' },
+            { children: model.label, href: model.path },
+            { children: <DocumentFormTitle /> },
+          ]}
+        >
+          <div className="flex w-full justify-end gap-2 px-3 py-2">
+            <Button size="sm" type="button" onClick={() => nav(model.path, { replace: true })}>
+              Cancel
+            </Button>
+            <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+          </div>
+        </Header>
+        <DocumentFormFields schema={model} />
+      </form>
+    </FormProvider>
   )
 }

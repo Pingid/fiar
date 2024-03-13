@@ -13,15 +13,17 @@ export default function ReactApp() {
     <Dashboard>
       <OpenAiPlugin />
       <Auth
-        firebase={app}
-        providers={[new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()]}
-        method="popup"
+        app={app}
+        auth={{
+          strategy: 'popup',
+          providers: [new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()],
+        }}
         allowNoAuth
       />
-      <Content firebase={app} collections={[test, articles, tags]} documents={[landing]}></Content>
+      <Content app={app} content={[test, articles, tags, landing]}></Content>
       <Assets
-        firebase={app}
-        folders={[
+        app={app}
+        assets={[
           { title: 'Photos', path: '/photos', accept: { ['image/*']: [] } },
           { title: 'Icons', path: '/icons' },
         ]}

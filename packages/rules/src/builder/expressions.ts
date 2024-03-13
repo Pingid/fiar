@@ -72,6 +72,7 @@ const logical: (operator: string) => (...args: NonEmpty<rules.RulesBoolean>) => 
 export const and: (...args: NonEmpty<rules.RulesBoolean>) => Rule<boolean> = logical('&&')
 
 export const or: (...args: NonEmpty<rules.RulesBoolean>) => Rule<boolean> = logical('||')
+export const not: (x: any) => Rule<boolean> = (a) => rule((b) => ast.unary([output(a, b) as any]))
 
 export const op: {
   (a: Rule, o: 'is', type: IFieldPrimitive): rules.RulesBoolean

@@ -8,11 +8,11 @@ import calender from 'dayjs/plugin/calendar.js'
 import dayjs from 'dayjs'
 dayjs.extend(calender)
 
-import { Header, useStatus } from '@fiar/workbench'
 import { Button, createGlobalSlot } from '@fiar/components'
+import { Header } from '@fiar/workbench'
 
 import { AssetFolder, useFirebaseStorage } from '../../context/index.js'
-import { useUploadStatus, useUploads } from '../../context/uploads.js'
+import { useUploads } from '../../context/uploads.js'
 import { DropLayer } from './DropLayer/index.js'
 import { AssetGrid } from '../Grid/index.js'
 import { Upload } from '../Upload/index.js'
@@ -28,8 +28,6 @@ export const Folder = (props: AssetFolder): JSX.Element => {
 
   const uploads = useUploads((x) => x.uploads.filter((x) => x.folder === props.path))
   const addFiles = useUploads((x) => x.add)
-  const handle = useStatus((x) => x.promise)
-  useUploadStatus()
 
   const onDrop = useCallback((files: File[]) => {
     for (const file of files) {
@@ -50,18 +48,15 @@ export const Folder = (props: AssetFolder): JSX.Element => {
   const zone = useDropzone({ onDrop, noClick: false, accept: props.accept as any })
 
   const onDelete = (x: StorageReference) =>
-    handle(
-      x.fullPath,
-      assets.mutate(deleteObject(x) as Promise<any>, {
-        revalidate: true,
-        rollbackOnError: true,
-        optimisticData: (y): ListResult => ({
-          ...y,
-          prefixes: [],
-          items: (y?.items || []).filter((z) => z.fullPath !== x.fullPath),
-        }),
+    assets.mutate(deleteObject(x) as Promise<any>, {
+      revalidate: true,
+      rollbackOnError: true,
+      optimisticData: (y): ListResult => ({
+        ...y,
+        prefixes: [],
+        items: (y?.items || []).filter((z) => z.fullPath !== x.fullPath),
       }),
-    )
+    })
 
   return (
     <>

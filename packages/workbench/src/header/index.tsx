@@ -1,13 +1,6 @@
 import { Link } from 'wouter'
 import { cn } from 'mcn'
 
-import { ErrorMessage, LoadingDots, createGlobalSlot } from '@fiar/components'
-import { useStatus } from '../index.js'
-
-const l = createGlobalSlot()
-export const Action = l.Place
-export const Actions = l.Locate
-
 export const Header = (props: {
   subtitle?: string
   children?: React.ReactNode
@@ -18,10 +11,8 @@ export const Header = (props: {
       <div className={cn('relative z-20 space-y-2 p-3 pb-6', [!props.children, 'border-b'])}>
         <div className="grid [grid-template-columns:1fr_max-content]">
           <Breadcrumbs>{props.breadcrumbs?.map((p, i) => <Breadcrumb key={i} {...p} />)}</Breadcrumbs>
-          <ShowLoading />
         </div>
         {props.subtitle && <p className="text-front/60 text-xs leading-none">{props.subtitle}</p>}
-        <ShowError />
       </div>
       {props.children && (
         <div className="bg-back sticky top-[calc(var(--asside-height)-1px)] z-20 flex justify-between border-b border-t">
@@ -32,14 +23,10 @@ export const Header = (props: {
   )
 }
 
-const ShowError = () => <ErrorMessage>{useStatus((x) => x.error)}</ErrorMessage>
-const ShowLoading = () => {
-  const loading = useStatus((x) => x.loading)
-  return <div className="px-6 py-1">{loading && <LoadingDots />}</div>
-}
 const Breadcrumbs = (props: { children: React.ReactNode }) => {
   const nav = cn(
-    '[&>*]:text-front/50 [&>*:hover]:text-front [&>*:last-child]:text-front [&>*:last-child]:after:hidden [&>*:first-child]:ml-0 [&>*:first-child]:pl-0',
+    '[&>*]:text-front/50 [&>*:hover]:text-front [&>*:last-child]:text-front',
+    '[&>*:last-child]:after:hidden [&>*:first-child]:ml-0 [&>*:first-child]:pl-0',
   )
   return <nav className={cn('relative text-3xl', nav)}>{props.children}</nav>
 }

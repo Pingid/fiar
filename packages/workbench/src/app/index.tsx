@@ -4,7 +4,7 @@ import { create } from 'zustand'
 
 import { DashboardRouter, useIsDashboard, type DashboardRouterProps } from '../router/index.js'
 import { ExtensionsProvider } from '../extensions/index.js'
-import { StatusProvider } from '../page/status/index.js'
+import { StatusProvider } from '../status/index.js'
 import { AppLink } from '../nav/index.js'
 
 type App = { title: string; children: React.ReactNode; icon?: React.ReactNode; href: string | undefined }

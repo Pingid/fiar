@@ -61,14 +61,14 @@ export const useFieldError = () => {
 
 export const FormField = () => {
   const { schema: field } = useField()
-  const extension = `field:form:${field.component || field.type}`
+  const extension = field.components?.form || `field/${field.type}/form`
   return (
     <UseExtension
       extension={extension}
       props={{}}
       fallback={
         <p className="text-front/60 text-sm">
-          Missing component <span className="text-error">{field.component}</span>
+          Missing component <span className="text-error">{field.components?.form}</span>
         </p>
       }
     />
@@ -84,7 +84,7 @@ export const useFieldPreview = <F extends IField>() => {
 }
 
 export const FieldPreview = (props: { schema: IFields; value: any; name: string }) => {
-  const extension = `field:preview:${props.schema.component || props.schema.type}`
+  const extension = props.schema.components?.preview || `field/${props.schema.type}/preview`
   return (
     <FieldValueProvider value={props.value}>
       <FieldProvider value={props}>

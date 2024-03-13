@@ -13,12 +13,12 @@ import {
 } from '@fiar/schema'
 
 import { RulesBoolean, RulesList, RulesMap, RulesNumber, RulesString, RulesTimestamp } from '../firestore/index.js'
-import { op, or, and } from '../builder/index.js'
+import { op, or, and, not } from '../builder/index.js'
 import { Rule } from '../rule/index.js'
 
 export const validate = (left: Rule, type: FireSchemaTypes): RulesBoolean => {
   const validateer = defaultValidateers[type.type] as FieldTranformer<Rule, FireSchemaTypes>
-  if (type.optional) return or(op(left as any, '==', null), validateer(left, type as any))
+  // if (type.optional) return or(op(left as any, '==', null), validateer(left, type as any))
   return validateer(left, type as any)
 }
 
@@ -59,7 +59,13 @@ const validateTimestamp: FieldTranformer<RulesTimestamp, FireSchemaTimestamp> = 
 const validateMap: FieldTranformer<RulesMap<Record<string, any>>, FireSchemaMap> = (left, field) => {
   const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', 'map')]
   if (!field.loose) rules.push(left.keys().hasOnly(Object.keys(field.fields)))
-  rules.push(...Object.keys(field.fields).map((key) => validate((left as any)[key], field.fields[key] as any)))
+  rules.push(
+    ...Object.keys(field.fields).map((key) => {
+      const value = field.fields[key]
+      if (!value?.optional) return validate((left as any)[key], field.fields[key] as any)
+      return or(not(op(key, 'in', left)), validate((left as any)[key], field.fields[key] as any))
+    }),
+  )
   return and(...rules)
 }
 

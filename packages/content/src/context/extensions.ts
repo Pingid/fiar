@@ -2,7 +2,7 @@ import { Extensions } from '@fiar/workbench/extensions'
 
 import { FormFieldTimestamp, PreviewFieldTimestamp } from '../fields/timestamp/index.js'
 import { FormFieldString, PreviewFieldString } from '../fields/string/index.js'
-import { FieldNumber, PreviewFieldNumber } from '../fields/number/index.js'
+import { FormFieldNumber, PreviewFieldNumber } from '../fields/number/index.js'
 import { FormFieldList, PreviewFieldList } from '../fields/list/index.js'
 import { FormFieldBool, PreviewFieldBool } from '../fields/bool/index.js'
 import { FormFieldText, PreviewFieldText } from '../fields/text/index.js'
@@ -16,41 +16,40 @@ type FieldPreview = () => React.ReactNode
 
 declare module '@fiar/workbench/extensions' {
   export interface Extensions {
-    'field:form:list': FieldForm
-    'field:preview:list': FieldPreview
-    'field:form:bool': FieldForm
-    'field:preview:bool': FieldPreview
-    'field:form:number': FieldForm
-    'field:preview:number': FieldPreview
-    'field:form:ref': FieldForm
-    'field:preview:ref': FieldPreview
-    'field:form:string': FieldForm
-    'field:preview:string': FieldPreview
-    'field:form:map': FieldForm
-    'field:preview:map': FieldPreview
-    'field:form:timestamp': FieldForm
-    'field:preview:timestamp': FieldPreview
-
-    'field:form:text': FieldForm
-    'field:preview:text': FieldPreview
+    'field/list/form': FieldForm
+    'field/list/preview': FieldPreview
+    'field/bool/form': FieldForm
+    'field/bool/preview': FieldPreview
+    'field/number/form': FieldForm
+    'field/number/preview': FieldPreview
+    'field/ref/form': FieldForm
+    'field/ref/preview': FieldPreview
+    'field/string/form': FieldForm
+    'field/string/preview': FieldPreview
+    'field/map/form': FieldForm
+    'field/map/preview': FieldPreview
+    'field/timestamp/form': FieldForm
+    'field/timestamp/preview': FieldPreview
+    'field/text/form': FieldForm
+    'field/text/preview': FieldPreview
   }
 }
 
 export const extensions = {
-  'field:form:list': FormFieldList,
-  'field:preview:list': PreviewFieldList,
-  'field:form:bool': FormFieldBool,
-  'field:preview:bool': PreviewFieldBool,
-  'field:form:number': FieldNumber,
-  'field:preview:number': PreviewFieldNumber,
-  'field:form:ref': FormFieldRef,
-  'field:preview:ref': PreviewFieldRef,
-  'field:form:string': FormFieldString,
-  'field:preview:string': PreviewFieldString,
-  'field:form:text': FormFieldText,
-  'field:preview:text': PreviewFieldText,
-  'field:form:map': FormFieldMap,
-  'field:preview:map': PreviewFieldMap,
-  'field:form:timestamp': FormFieldTimestamp,
-  'field:preview:timestamp': PreviewFieldTimestamp,
+  'field/list/form': FormFieldList,
+  'field/list/preview': PreviewFieldList,
+  'field/bool/form': FormFieldBool,
+  'field/bool/preview': PreviewFieldBool,
+  'field/number/form': FormFieldNumber,
+  'field/number/preview': PreviewFieldNumber,
+  'field/ref/form': FormFieldRef,
+  'field/ref/preview': PreviewFieldRef,
+  'field/string/form': FormFieldString,
+  'field/string/preview': PreviewFieldString,
+  'field/map/form': FormFieldMap,
+  'field/map/preview': PreviewFieldMap,
+  'field/timestamp/form': FormFieldTimestamp,
+  'field/timestamp/preview': PreviewFieldTimestamp,
+  'field/text/form': FormFieldText,
+  'field/text/preview': PreviewFieldText,
 } satisfies Extensions

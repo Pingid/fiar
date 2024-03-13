@@ -1,8 +1,5 @@
 import { UploadTask } from '@firebase/storage'
-import { useEffect } from 'react'
 import { create } from 'zustand'
-
-import { useStatus } from '@fiar/workbench'
 
 export type UploadAsset = { task: UploadTask; folder: string; fullPath: string; url: string; contentType: string }
 export type UploadState = {
@@ -25,10 +22,3 @@ export const useUploads = create<UploadState>((set, get) => ({
     set({ uploads: [...get().uploads, up] })
   },
 }))
-
-export const useUploadStatus = () => {
-  const loading = useUploads((x) => x.uploads.length > 0)
-  const error = useUploads((x) => x.error)
-  const update = useStatus((x) => x.update)
-  useEffect(() => update('asset-uploads', { loading, error }), [loading, error])
-}

@@ -1,13 +1,13 @@
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { OrderByDirection, deleteDoc, orderBy } from '@firebase/firestore'
+import { OrderByDirection, doc, orderBy } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
 import { Button } from '@fiar/components'
 import { useLocation } from 'wouter'
 import { useStore } from 'zustand'
 import { cn } from 'mcn'
 
+import { useCollectionData, useCollectionRef, useDocumentMutation } from '../../../context/data.js'
 import { useSelectDocument } from '../../../context/select.js'
-import { useCollectionData } from '../../../context/data.js'
 import { useQueryStore } from '../../../context/query.js'
 import { FieldPreview } from '../../../context/field.js'
 import { useModel } from '../../../context/model.js'
@@ -19,6 +19,8 @@ export const Table = () => {
   const select = useSelectDocument()
   const [location, nav] = useLocation()
   const store = useQueryStore()
+  const update = useDocumentMutation()
+  const ref = useCollectionRef()
 
   useEffect(() => {
     if (model.sort) store.getState().constrain('orderBy', orderBy(model.sort[0], model.sort[1]))
@@ -56,7 +58,7 @@ export const Table = () => {
                 icon={<TrashIcon />}
                 size="sm"
                 color="error"
-                onClick={(e) => (e.stopPropagation(), deleteDoc(x.ref))}
+                onClick={(e) => (e.stopPropagation(), update.trigger({ type: 'delete', model, ref: doc(ref, x.id) }))}
               ></Button>
             </div>
           </div>

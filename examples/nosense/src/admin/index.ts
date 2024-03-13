@@ -5,12 +5,13 @@ import { articles, landing } from './entities'
 import { firebase } from './firebase'
 
 createFiar({
+  app: firebase,
   node: document.getElementById('root')!,
-  firebase,
+  content: [articles, landing],
+  assets: [{ path: '/fiar', title: 'Photos' }],
   router: { type: 'hash' },
-  collections: [articles],
-  documents: [landing],
-  folders: [{ path: '/fiar', title: 'Photos' }],
-  providers: [new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()],
-  method: 'popup',
+  auth: {
+    providers: [new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()],
+    strategy: 'popup',
+  },
 })

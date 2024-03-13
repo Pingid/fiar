@@ -1,11 +1,10 @@
-import type { IContentCollection, IContentDocument } from '../schema/index.js'
+import type { IContentModel } from '../schema/index.js'
 import type { FirebaseApp } from '@firebase/app'
 import { create } from 'zustand'
 
 export type ContentConfig = {
-  firebase?: FirebaseApp
-  collections?: IContentCollection[]
-  documents?: IContentDocument[]
+  app?: FirebaseApp
+  content: IContentModel[]
 }
 
-export const useContentConfig = create<ContentConfig>(() => ({}))
+export const useContentConfig = create<ContentConfig>(() => ({ content: [] }))

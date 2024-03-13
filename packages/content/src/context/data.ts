@@ -1,5 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, setDoc, updateDoc } from '@firebase/firestore'
-import useSWRMutation from 'swr/mutation'
+import useSWRMutation, { SWRMutationConfiguration } from 'swr/mutation'
 import { useStore } from 'zustand'
 import { useSWRConfig } from 'swr'
 
@@ -11,21 +11,16 @@ import { useQueryStore } from './query.js'
 import { usePathRef } from './model.js'
 
 const onError = (e: any) => toast(e instanceof Error ? e.message : JSON.stringify(e))
-
+export const useCollectionRef = () => collection(useFirestore(), usePathRef())
 export const useCollectionData = () => {
   const constraints = useStore(useQueryStore(), (x) => x.constraints)
-  const path = usePathRef()
-  const fs = useFirestore()
-  return useQuerySnapshot(collection(fs, path), { constraints })
+  return useQuerySnapshot(useCollectionRef(), { constraints })
 }
 
-export const useDocData = () => {
-  const fs = useFirestore()
-  const path = usePathRef()
-  return useDocumentSnapshot(doc(fs, path))
-}
+export const useDocRef = () => doc(useFirestore(), usePathRef())
+export const useDocData = () => useDocumentSnapshot(useDocRef())
 
-export const useDocumentMutation = () => {
+export const useDocumentMutation = (m?: SWRMutationConfiguration<any, any>) => {
   const resolve = useHooksHandler()
   const swr = useSWRConfig()
   const revalidate = (path: string) => swr.mutate(path, (x: any) => x, { revalidate: true })
@@ -45,6 +40,6 @@ export const useDocumentMutation = () => {
         })
         .then(() => {})
     },
-    { onError },
+    { onError, ...(m as any) },
   )
 }

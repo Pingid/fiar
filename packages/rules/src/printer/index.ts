@@ -74,16 +74,16 @@ export const print: RulesPrinter['print'] = (path, _options, print) => {
     return b.group(['{', b.indent([b.line, b.join([',', b.line], path.map(print, 'properties'))]), b.line, '}'])
   }
   if (is(path, 'Property')) return [path.call(print, 'key'), ':', ' ', path.call(print, 'value')]
-  if (is(path, 'UnaryExpression')) return ['!', path.call(print, 'argument')]
+  if (is(path, 'UnaryExpression')) {
+    if (path.node.argument.kind === 'Expression') return ['!', '(', path.call(print, 'argument'), ')']
+    return ['!', path.call(print, 'argument')]
+  }
   if (is(path, 'Literal')) return path.node.value
   if (is(path, 'Ident')) return path.node.name
   if (is(path, 'Empty')) return ''
 
   throw new Error(`Missing ${path.node.kind}`)
-  // return `${path.node.kind}`
 }
-
-// export const format = (ast: Ast.)
 
 export const formatAst = (ast: Ast, options?: Options) =>
   format(`rules`, {
