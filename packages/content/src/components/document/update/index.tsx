@@ -1,54 +1,93 @@
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
+import { useEffect, useMemo, useRef } from 'react'
 import { doc } from '@firebase/firestore'
 import { useLocation } from 'wouter'
-import { useEffect } from 'react'
 
 import { Header, useIntercept } from '@fiar/workbench'
-import { Button } from '@fiar/components'
+import { Button, LoadingDots } from '@fiar/components'
 
-import { useDocumentSnapshot, useFirestore } from '../../../context/firestore.js'
 import { parameterize, useModel, usePathRef } from '../../../context/model.js'
+import { useDocData, useDocumentMutation } from '../../../context/data.js'
 import { fromFirestore, toFirestore } from '../../../util/firebase.js'
 import { FormProvider, useForm } from '../../../context/field.js'
-import { useDocumentMutation } from '../../../context/data.js'
+import { useFirestore } from '../../../context/firestore.js'
 import { DocumentFormFields } from '../fields/index.js'
 import { DocumentFormTitle } from '../title/index.js'
 import { DocumentPublish } from '../save/index.js'
 
 export const DocumentUpdate = () => {
   const [_, nav] = useLocation()
+  const data = useDocData()
   const schema = useModel()
   const path = usePathRef()
 
-  const firestore = useFirestore()
-  const ref = doc(firestore, path)
-  const data = useDocumentSnapshot(ref, { once: true })
-  const form = useForm({ criteriaMode: 'firstError', context: { schema } })
-  const mutate = useDocumentMutation()
+  const snapshot = data.data
+  const breadcrumbs = [
+    { children: 'Content', href: '/' },
+    { children: schema.label, href: path },
+  ]
 
-  const onSubmit = form.handleSubmit((value) => {
-    if (schema.type === 'document' && !data.data?.exists()) {
-      return mutate.trigger({
-        schema,
-        type: 'set',
-        data: toFirestore(firestore, { ...value }, false),
-        ref: doc(firestore, schema.path),
-      })
-    }
-
-    return mutate
-      .trigger({ schema, type: 'update', data: toFirestore(firestore, { ...value }, true), ref })
-      .then(() => form.reset(value))
-  })
-
-  const onDelete = () => mutate.trigger({ schema, ref, type: 'delete' }).then(() => nav('/'))
-
-  useEffect(() => {
-    if (!data.data) return
-    form.reset(fromFirestore(data.data.data()), { keepDirty: true, keepDirtyValues: true })
+  const value = useMemo(() => {
+    if (!data.data) return null
+    return fromFirestore(data.data.data())
   }, [data.data])
 
-  const exists = !!data.data?.exists()
+  if (data.isLoading) {
+    return (
+      <Header subtitle={path} breadcrumbs={breadcrumbs}>
+        <div className="flex w-full justify-end gap-2 px-3 py-2">
+          <div>
+            <LoadingDots />
+          </div>
+        </div>
+      </Header>
+    )
+  }
+
+  if (!snapshot?.exists() || !value) {
+    return (
+      <Header subtitle={path} breadcrumbs={breadcrumbs}>
+        <div className="flex w-full justify-between gap-2 px-3 py-2">
+          <div>Missing document</div>
+          <Button type="button" size="sm" onClick={() => nav('/')}>
+            Back
+          </Button>
+        </div>
+      </Header>
+    )
+  }
+
+  return (
+    <DocumentUpdateForm defaultValues={value} onBack={() => nav(schema.type === 'collection' ? schema.path : '/')} />
+  )
+}
+
+export const DocumentUpdateForm = (props: { defaultValues: Record<string, any>; onBack: () => void }) => {
+  const mutate = useDocumentMutation()
+  const firestore = useFirestore()
+  const submit = useRef(false)
+  const schema = useModel()
+  const path = usePathRef()
+
+  const ref = doc(firestore, path)
+  const form = useForm({ criteriaMode: 'firstError', context: { schema }, ...props })
+
+  const onSubmit = form.handleSubmit((value) =>
+    mutate.trigger({ schema, type: 'update', data: toFirestore(firestore, { ...value }, true), ref }),
+  )
+
+  const onDelete = () => mutate.trigger({ schema, ref, type: 'delete' }).then(() => props.onBack())
+
+  useEffect(() => {
+    if (form.formState.isSubmitting) {
+      submit.current = true
+    } else if (form.formState.isSubmitSuccessful && submit.current) {
+      submit.current = false
+      form.reset(form.getValues())
+    } else if (props.defaultValues) {
+      form.reset(props.defaultValues, { keepDirty: true, keepDirtyValues: true })
+    }
+  }, [props.defaultValues, form.formState.isSubmitSuccessful, form.formState.isSubmitting])
 
   useIntercept((next) => {
     if (!form.formState.isDirty) return next()
@@ -69,7 +108,7 @@ export const DocumentUpdate = () => {
           }
         >
           <div className="flex w-full justify-end gap-2 px-3 py-2">
-            <Button type="button" color="error" size="sm" disabled={!exists} onClick={() => onDelete()}>
+            <Button type="button" color="error" size="sm" onClick={() => onDelete()}>
               Delete
             </Button>
             <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
@@ -80,25 +119,3 @@ export const DocumentUpdate = () => {
     </FormProvider>
   )
 }
-
-// export const useDocumentForm = (
-//   props: UseFormProps<TFieldValues, DocumentFormContext> & { context: DocumentFormContext; ref: DocumentReference },
-// ) => {
-//   const swr = useSWRConfig()
-//   const form = useForm({
-//     ...props,
-//     defaultValues: (): Promise<any> => {
-//       const cached = swr.cache.get(props.ref.path)
-//       if (!cached?.data) return getDoc(props.ref).then((x) => fromFirestore(x.data()))
-//       return fromFirestore(cached.data.data())
-//     },
-//   })
-
-//   useEffect(() => {
-//     return onSnapshot(props.ref, {
-//       next: (x) => form.reset(fromFirestore(fromFirestore(x.data())), { keepDirty: true, keepDirtyValues: true }),
-//     })
-//   }, [props.ref.path])
-
-//   return form
-// }

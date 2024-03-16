@@ -30,7 +30,6 @@ export const useDocumentMutation = (m?: SWRMutationConfiguration<any, any>) => {
     (_, p: { arg: DocumentHookEvent }) => {
       return resolve(p.arg)
         .then((p): any => {
-          console.log('resolved', p.data)
           if (p.type === 'set') return setDoc(p.ref, p.data)
           if (p.type === 'add') return addDoc(p.ref, p.data).then(() => revalidate(p.ref.path))
           if (p.type === 'update') {

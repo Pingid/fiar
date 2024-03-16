@@ -1,37 +1,40 @@
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
-import { Button } from '@fiar/components'
+import { doc } from '@firebase/firestore'
+import { useRef } from 'react'
 
 import { Header, useIntercept, useLocation } from '@fiar/workbench'
+import { Button } from '@fiar/components'
 
 import { FormProvider, useForm } from '../../../context/field.js'
+import { useModel, usePathRef } from '../../../context/model.js'
 import { useDocumentMutation } from '../../../context/data.js'
 import { useFirestore } from '../../../context/firestore.js'
 import { toFirestore } from '../../../util/firebase.js'
 import { DocumentFormFields } from '../fields/index.js'
 import { DocumentFormTitle } from '../title/index.js'
-import { useModel } from '../../../context/model.js'
 import { DocumentPublish } from '../save/index.js'
-import { doc } from '@firebase/firestore'
 
 export const DocumentSet = () => {
-  const update = useDocumentMutation()
   const [_, nav] = useLocation()
+  const submitted = useRef(false)
   const fs = useFirestore()
   const schema = useModel()
+  const path = usePathRef()
+
+  const update = useDocumentMutation({
+    onSuccess: () => {
+      submitted.current = true
+      nav('/')
+    },
+  })
 
   const form = useForm({ criteriaMode: 'firstError', context: { schema } })
   const onSubmit = form.handleSubmit((data) =>
-    update
-      .trigger({ type: 'set', data: toFirestore(fs, data, false), schema, ref: doc(fs, schema.path) })
-      .then(() => form.reset())
-      .then(() => nav('/')),
+    update.trigger({ type: 'set', data: toFirestore(fs, data, false), schema, ref: doc(fs, path) }),
   )
 
-  console.log('out', { ...form.formState })
-
   useIntercept((next) => {
-    console.log('in', { ...form.formState })
-    if (!form.formState.isDirty) return next()
+    if (!form.formState.isDirty || submitted.current) return next()
     return window.confirm(`You have unsaved changes that you will loose if you continue`) ? next() : null
   })
 
@@ -39,11 +42,11 @@ export const DocumentSet = () => {
     <FormProvider {...form}>
       <form onSubmit={onSubmit}>
         <Header
-          subtitle={schema.path}
+          subtitle={path}
           breadcrumbs={
             [
               { children: 'Content', href: '/' },
-              { children: <DocumentFormTitle />, href: schema.path },
+              { children: <DocumentFormTitle />, href: path },
             ].filter(Boolean) as any[]
           }
         >

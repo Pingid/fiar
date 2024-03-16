@@ -25,14 +25,15 @@ export const DocumentAdd = () => {
   const mutate = useDocumentMutation({
     onSuccess: () => {
       const pth = schema.type === 'collection' ? schema.path : '/content'
+      submitted.current = true
       nav(pth)
     },
   })
 
-  const onSubmit = form.handleSubmit((x) => {
-    const data = toFirestore(firestore, { ...x }, false)
-    return mutate.trigger({ schema, type: 'add', data, ref: collection(firestore, schema.path) })
-  })
+  const ref = collection(firestore, schema.path)
+  const onSubmit = form.handleSubmit((x) =>
+    mutate.trigger({ schema, type: 'add', data: toFirestore(firestore, x, false), ref }),
+  )
 
   useIntercept((next) => {
     const valid = !form.formState.isDirty || submitted.current || Object.keys(form.formState.touchedFields).length === 0
