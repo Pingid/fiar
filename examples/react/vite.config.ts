@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import fs from 'fs'
 
-const local = (root) => {
+const local = (root: string) => {
   const root_dir = path.resolve(`../../${root}`)
   return fs
     .readdirSync(root_dir)

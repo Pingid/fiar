@@ -18,29 +18,29 @@
     "watch": "../../scripts/watch.js"
   },
   "dependencies": {
-    "zustand": "^4.5.0",
     "@fiar/components": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.1.1",
-    "firebase-functions": "^4.7.0",
+    "firebase-functions": "^4.8.0",
     "mcn": "^0.0.4",
     "react-icons": "^5.0.1",
     "swr": "^2.2.5",
-    "wouter": "^3.0.0"
+    "wouter": "^3.1.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@firebase/app": "^0.9.27",
     "@fiar/content": "workspace:^",
-    "@firebase/auth": "^1.6.0",
-    "@firebase/functions": "^0.11.1",
-    "@types/react": "^18.2.55",
+    "@firebase/app": "^0.9.29",
+    "@firebase/auth": "^1.6.2",
+    "@firebase/functions": "^0.11.2",
+    "@types/react": "^18.2.66",
     "firebase-admin": "^12.0.0",
     "react": "^18.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.2"
   },
   "peerDependencies": {
-    "@firebase/app": "^0.9.27",
     "@fiar/content": "workspace:^",
+    "@firebase/app": "^0.9.27",
     "@firebase/auth": "^1.6.0",
     "@firebase/functions": "^0.10.0",
     "firebase-admin": "^11.10.1",
