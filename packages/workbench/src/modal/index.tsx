@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect, useRef } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Transition } from 'react-transition-group'
+import React, { Fragment, useRef } from 'react'
 import { Route, Switch } from 'wouter'
 import { cn } from 'mcn'
 
@@ -11,8 +11,6 @@ import { DashboardRouter } from '../router/index.js'
 import { useApps } from '../app/index.js'
 
 export const WorkbenchModal = (p: { open: boolean; close: () => void; children: React.ReactNode }): JSX.Element => {
-  useLockBodyScroll(p.open)
-
   return (
     <Modal>
       <Animate open={p.open}>
@@ -75,15 +73,6 @@ export const WorkbenchPageModal = (p: {
       </InterceptProvider>
     </WorkbenchModal>
   )
-}
-
-const useLockBodyScroll = (active: boolean) => {
-  useEffect(() => {
-    const originalOverflowStyle = document.body.style.overflow
-    if (active) document.body.style.overflow = 'hidden'
-    else document.body.style.overflow = originalOverflowStyle
-    return () => void (document.body.style.overflow = originalOverflowStyle)
-  }, [active])
 }
 
 const Animate = (p: {

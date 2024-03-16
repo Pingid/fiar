@@ -1,13 +1,13 @@
 import { serverTimestamp } from '@firebase/firestore'
 import { set } from 'react-hook-form'
 
-import { useFieldPreview, useFormField } from '../../context/field.js'
+import { useFieldPreview, useFieldForm } from '../../context/field.js'
 import { useDocumentHook } from '../../context/hooks.js'
 import { IFieldTimestamp } from '../../schema/index.js'
 import { date } from '../../util/index.js'
 
 export const FormFieldTimestamp = () => {
-  const field = useFormField<IFieldTimestamp>()
+  const field = useFieldForm<IFieldTimestamp>()
 
   useDocumentHook((e) => {
     const onUpdate = field.schema.computed === 'on-update'

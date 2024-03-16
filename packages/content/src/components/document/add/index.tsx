@@ -6,7 +6,7 @@ import { useRef } from 'react'
 import { useIntercept, Header } from '@fiar/workbench'
 import { Button } from '@fiar/components'
 
-import { useForm, FormProvider } from '../../../context/form.js'
+import { useForm, FormProvider } from '../../../context/field.js'
 import { useDocumentMutation } from '../../../context/data.js'
 import { useFirestore } from '../../../context/firestore.js'
 import { toFirestore } from '../../../util/firebase.js'
@@ -17,7 +17,7 @@ import { DocumentPublish } from '../save/index.js'
 
 export const DocumentAdd = () => {
   const model = useModel()
-  const form = useForm({ defaultValues: {}, context: { model, type: 'add' } })
+  const form = useForm({ defaultValues: {}, context: { schema: model } })
   const firestore = useFirestore()
   const submitted = useRef(false)
   const [_, nav] = useLocation()

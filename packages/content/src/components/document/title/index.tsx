@@ -1,20 +1,16 @@
 import { useWatch } from 'react-hook-form'
 
-import { useFormContext } from '../../../fields/lib/index.js'
+import { useFormContext } from '../../../context/field.js'
 import { useModel } from '../../../context/model.js'
 
-export const DocumentFormTitle = (props: { default?: string }) => {
-  const form = useFormContext()
+export const DocumentFormTitle = () => {
   const model = useModel()
+  if (model.type === 'collection' && model.titleField) return <TitleField titleField={model.titleField} />
+  return model.label
+}
 
-  const watched = useWatch({
-    control: form.control,
-    name: (model.type === 'collection' ? [model.titleField as string] : []) as [string],
-    defaultValue: model.type === 'collection' ? ['Untitled'] : [model.label],
-    disabled: model.type !== 'collection',
-  })
-
-  const value = model.type !== 'collection' ? model.label : watched[0]
-
-  return value && value.trim() ? value : props.default
+const TitleField = (props: { titleField: string }) => {
+  const form = useFormContext()
+  const watched = useWatch({ control: form.control, name: props.titleField, defaultValue: 'Untitled' })
+  return watched
 }

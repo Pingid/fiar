@@ -1,10 +1,10 @@
 import { Field, Input, FieldControl } from '@fiar/components'
 
-import { useFieldPreview, useFormField } from '../../context/field.js'
+import { useFieldPreview, useFieldForm } from '../../context/field.js'
 import { type IFieldBoolean } from '../../schema/index.js'
 
 export const FormFieldBool = () => {
-  const field = useFormField<IFieldBoolean>()
+  const field = useFieldForm<IFieldBoolean>()
 
   return (
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
@@ -21,5 +21,5 @@ export const FormFieldBool = () => {
 
 export const PreviewFieldBool = () => {
   const field = useFieldPreview<IFieldBoolean>()
-  return <Input type="checkbox" checked={field.value} />
+  return <Input type="checkbox" checked={field.value} disabled />
 }

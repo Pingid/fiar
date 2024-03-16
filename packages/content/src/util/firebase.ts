@@ -22,7 +22,7 @@ export const fromFirestore = (x: any): any => {
   if (x instanceof Timestamp) return x
   if (x instanceof FieldValue) return x
   if (Array.isArray(x)) return x.map((x) => fromFirestore(x))
-  if (typeof x === null || typeof x === 'function') return x
+  if (x === null || typeof x === 'function') return x
   if (typeof x === 'object') {
     return Object.fromEntries(Object.entries(x).map((y) => [y[0], fromFirestore(y[1])]))
   }

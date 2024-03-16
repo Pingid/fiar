@@ -7,14 +7,14 @@ import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
-import { FieldPreview, useFieldPreview, useFormField } from '../../context/field.js'
+import { FieldPreview, useFieldPreview, useFieldForm } from '../../context/field.js'
 import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
 import { IntermediateDocumentReference } from '../../util/firebase.js'
 import { SelectDocumentProvider } from '../../context/select.js'
 import { trailing } from '../../util/index.js'
 
 export const FormFieldRef = () => {
-  const field = useFormField<IFieldRef>()
+  const field = useFieldForm<IFieldRef>()
   const controller = useController(field)
 
   const [select, setSelect] = useState(false)
@@ -31,7 +31,7 @@ export const FormFieldRef = () => {
       <FieldControl>
         {isSet && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
-            <div />
+            <div>{target.label}</div>
             <div className="flex items-center gap-1.5">
               <button type="button" onClick={() => setEdit(true)}>
                 <PencilIcon className="h-3 w-3" />
@@ -63,7 +63,7 @@ export const FormFieldRef = () => {
         <SelectDocumentProvider value={onSelect}>
           <WorkbenchPageModal open={select} close={() => setSelect(false)} path={`/content${trailing(target.path)}`} />
         </SelectDocumentProvider>
-        {controller.field.value && (
+        {controller.field.value && controller.field.value.path && (
           <WorkbenchPageModal
             open={edit}
             close={() => setEdit(false)}

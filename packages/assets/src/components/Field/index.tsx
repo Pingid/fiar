@@ -1,7 +1,7 @@
 import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
-import { useFieldPreview, useFormState, fieldError, get, useController, useFormField } from '@fiar/content/fields'
+import { useFieldPreview, useController, useFieldForm } from '@fiar/content/fields'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
@@ -26,17 +26,15 @@ export const PreviewFieldAsset = () => {
 }
 
 export const FormFieldAsset = () => {
-  const props = useFormField<IFieldAsset>()
+  const field = useFieldForm<IFieldAsset>()
   const [open, setOpen] = useState(false)
-  const state = useFormState(props)
-  const error = fieldError(get(state.errors, props.name))
 
   const form = useController({
-    ...props,
+    ...field,
     rules: {
-      required: !props.schema.optional,
+      required: !field.schema.optional,
       validate: (x) => {
-        if (!x && props.schema.optional) return true
+        if (!x && field.schema.optional) return true
         if (!x) return 'Required'
         return true
       },
@@ -46,7 +44,7 @@ export const FormFieldAsset = () => {
   const asset = useImageMeta(form.field.value?.fullPath)
 
   return (
-    <Field label={props.schema.label} error={error}>
+    <Field label={field.schema.label} error={field.error}>
       <FieldControl>
         {form.field.value && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
@@ -74,7 +72,7 @@ export const FormFieldAsset = () => {
           <div className="flex w-full items-center justify-center">
             <Button
               icon={<PhotoIcon />}
-              color={!!error ? 'error' : 'active'}
+              color={!!field.error ? 'error' : 'active'}
               className="w-full justify-center py-6"
               onClick={() => setOpen(true)}
             >

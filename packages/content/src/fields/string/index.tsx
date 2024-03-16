@@ -1,10 +1,10 @@
 import { Field, Input, FieldControl, Select } from '@fiar/components'
 
-import { useFormField, useFieldPreview } from '../../context/field.js'
+import { useFieldForm, useFieldPreview } from '../../context/field.js'
 import { type IFieldString } from '../../schema/index.js'
 
 export const FormFieldString = () => {
-  const field = useFormField<IFieldString>()
+  const field = useFieldForm<IFieldString>()
 
   const register = field.control.register(field.name, {
     validate: (x) => {

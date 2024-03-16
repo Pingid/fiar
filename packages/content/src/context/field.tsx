@@ -1,10 +1,22 @@
-import { Control, ControllerFieldState, UseControllerProps, UseFormStateReturn } from 'react-hook-form'
+import {
+  Control,
+  ControllerFieldState,
+  FieldValues,
+  UseControllerProps,
+  UseFormProps,
+  UseFormStateReturn,
+  FormProvider as _FormProvider,
+  useForm as _useForm,
+  useFormContext as _useFormContext,
+  useController as _useController,
+  useFormState as _useFormState,
+  get as _get,
+} from 'react-hook-form'
 import { createContext, useContext } from 'react'
 
 import { UseExtension } from '@fiar/workbench/extensions'
 import { InferSchemaType } from '@fiar/schema'
 
-import { get, useController, useFormContext, useFormState } from './form.js'
 import { IField, IFields } from '../schema/index.js'
 
 const FieldContext = createContext<{ name: string; schema: IField; parent?: IField } | null>(null)
@@ -15,6 +27,25 @@ export const useField = <F extends IField>() => {
   return m as { name: string; schema: F; parent?: IField }
 }
 
+export interface FormContext {
+  schema: { fields: Record<string, IFields> }
+}
+
+export const useForm = <TFieldValues extends FieldValues = FieldValues>(
+  props: UseFormProps<TFieldValues, FormContext> & { context: FormContext },
+) => _useForm(props)
+
+export const FormProvider = _FormProvider
+
+export const useFormContext = <
+  TFieldValues extends FieldValues,
+  TransformedValues extends FieldValues = TFieldValues,
+>() => _useFormContext<TFieldValues, FormContext, TransformedValues>()
+
+export const useController = _useController
+export const useFormState = _useFormState
+export const get = _get
+
 type UseFormFieldReturn<F extends IField> = {
   name: string
   schema: F
@@ -22,7 +53,7 @@ type UseFormFieldReturn<F extends IField> = {
   control: Control
   error?: string
 }
-export const useFormField = <F extends IField>(): UseFormFieldReturn<F> => {
+export const useFieldForm = <F extends IField>(): UseFormFieldReturn<F> => {
   const field = useField()
   const form = useFormContext()
   const error = useFieldError()

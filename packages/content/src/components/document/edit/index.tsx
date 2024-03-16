@@ -9,7 +9,7 @@ import { Button } from '@fiar/components'
 import { useDocumentSnapshot, useFirestore } from '../../../context/firestore.js'
 import { parameterize, useModel, usePathRef } from '../../../context/model.js'
 import { fromFirestore, toFirestore } from '../../../util/firebase.js'
-import { FormProvider, useForm } from '../../../context/form.js'
+import { FormProvider, useForm } from '../../../context/field.js'
 import { useDocumentMutation } from '../../../context/data.js'
 import { DocumentFormFields } from '../fields/index.js'
 import { DocumentFormTitle } from '../title/index.js'
@@ -23,10 +23,11 @@ export const DocumentEdit = () => {
   const firestore = useFirestore()
   const ref = doc(firestore, path)
   const data = useDocumentSnapshot(ref, { once: true })
-  const form = useForm({ criteriaMode: 'firstError', context: { model: model, type: 'update' } })
+  const form = useForm({ criteriaMode: 'firstError', context: { schema: model } })
   const mutate = useDocumentMutation()
 
   const onSubmit = form.handleSubmit((value) => {
+    console.log({ value })
     if (model.type === 'document' && !data.data?.exists()) {
       return mutate.trigger({
         model: model,
@@ -80,3 +81,25 @@ export const DocumentEdit = () => {
     </FormProvider>
   )
 }
+
+// export const useDocumentForm = (
+//   props: UseFormProps<TFieldValues, DocumentFormContext> & { context: DocumentFormContext; ref: DocumentReference },
+// ) => {
+//   const swr = useSWRConfig()
+//   const form = useForm({
+//     ...props,
+//     defaultValues: (): Promise<any> => {
+//       const cached = swr.cache.get(props.ref.path)
+//       if (!cached?.data) return getDoc(props.ref).then((x) => fromFirestore(x.data()))
+//       return fromFirestore(cached.data.data())
+//     },
+//   })
+
+//   useEffect(() => {
+//     return onSnapshot(props.ref, {
+//       next: (x) => form.reset(fromFirestore(fromFirestore(x.data())), { keepDirty: true, keepDirtyValues: true }),
+//     })
+//   }, [props.ref.path])
+
+//   return form
+// }

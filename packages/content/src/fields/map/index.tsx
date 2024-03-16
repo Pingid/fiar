@@ -3,11 +3,11 @@ import { cn } from 'mcn'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Field, FieldControl } from '@fiar/components'
 
-import { FormField, useFieldPreview, FieldProvider, useFormField, useFormFieldControl } from '../../context/field.js'
+import { FormField, useFieldPreview, FieldProvider, useFieldForm, useFormFieldControl } from '../../context/field.js'
 import type { IFieldMap, IFields } from '../../schema/index.js'
 
 export const FormFieldMap = () => {
-  const field = useFormField<IFieldMap>()
+  const field = useFieldForm<IFieldMap>()
   const isListItem = field.parent?.type === 'list'
   const control = useFormFieldControl<IFieldMap>()
   const optional = field.schema.optional

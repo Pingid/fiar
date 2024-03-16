@@ -5,7 +5,7 @@ import { cn } from 'mcn'
 
 import { Field, FieldControl } from '@fiar/components'
 
-import { useFormFieldControl, useFormField, useFieldPreview } from '../../context/field.js'
+import { useFormFieldControl, useFieldForm, useFieldPreview } from '../../context/field.js'
 import { TipTipTools, useTipTapExtensions } from './provider.js'
 import { IFieldString } from '../../schema/index.js'
 
@@ -17,7 +17,7 @@ export const PreviewFieldText = () => {
 }
 
 export const FormFieldText = () => {
-  const field = useFormField<IFieldString>()
+  const field = useFieldForm<IFieldString>()
   const extensions = useTipTapExtensions((x) => x.extensions)
   const control = useFormFieldControl<IFieldString>()
 

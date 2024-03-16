@@ -1,11 +1,12 @@
 import { Control, useController } from 'react-hook-form'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
+import { Timestamp } from '@firebase/firestore'
 import { cn } from 'mcn'
 
-import { Markdown, Sortable, SortableItem } from '@fiar/components'
+import { Field, Markdown, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldProvider, useFieldPreview, useFormField } from '../../context/field.js'
+import { FieldProvider, useFieldPreview, useFieldForm } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
 
@@ -15,14 +16,11 @@ export const PreviewFieldList = () => {
 }
 
 export const FormFieldList = () => {
-  const field = useFormField<IFieldList>()
+  const field = useFieldForm<IFieldList>()
   const control = useFieldArray(field)
 
   return (
-    <div className="space-y-2">
-      <div className="flex w-full justify-between rounded-t">
-        <h2 className="py-1 text-2xl">{field.schema.label}</h2>
-      </div>
+    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
       <Markdown className="text-front/50 pb-1 text-sm">{field.schema.description}</Markdown>
       <div className={cn('space-y-3')}>
         <Sortable
@@ -52,7 +50,7 @@ export const FormFieldList = () => {
           <PlusIcon className="h-4 w-4" />
         </button>
       </div>
-    </div>
+    </Field>
   )
 }
 
@@ -119,5 +117,6 @@ const init = (field: IFields) => {
   if (field.type === 'string') return ''
   if (field.type === 'number') return 0
   if (field.type === 'bool') return false
+  if (field.type === 'timestamp') return Timestamp.now()
   return null
 }
