@@ -1,5 +1,5 @@
-import { collection, doc, getCountFromServer } from '@firebase/firestore'
 import { DocumentDuplicateIcon, DocumentIcon } from '@heroicons/react/24/outline'
+import { collection, doc, getCountFromServer } from '@firebase/firestore'
 import { Link } from 'wouter'
 import useSWR from 'swr'
 import { cn } from 'mcn'
@@ -38,7 +38,7 @@ const ModelCard = () => {
 const CollectionCard = (props: IContentCollection) => {
   const path = trailing(props.path)
   const parameterized = parameterize(path)
-  const ref = collection(useFirestore(), path)
+  const ref = collection(useFirestore(), 'articles')
   const draft = useSWR(ref.path + 'count', () => getCountFromServer(ref))
   const count = draft.data?.data().count
 

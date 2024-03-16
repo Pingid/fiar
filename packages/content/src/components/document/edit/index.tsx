@@ -27,7 +27,6 @@ export const DocumentEdit = () => {
   const mutate = useDocumentMutation()
 
   const onSubmit = form.handleSubmit((value) => {
-    console.log({ value })
     if (model.type === 'document' && !data.data?.exists()) {
       return mutate.trigger({
         model: model,

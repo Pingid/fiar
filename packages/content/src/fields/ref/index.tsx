@@ -15,7 +15,16 @@ import { trailing } from '../../util/index.js'
 
 export const FormFieldRef = () => {
   const field = useFieldForm<IFieldRef>()
-  const controller = useController(field)
+  const controller = useController({
+    ...field,
+    rules: {
+      validate: (x) => {
+        console.log('validate', { x })
+        if (!x && !field.schema.optional) return `Required value`
+        return true
+      },
+    },
+  })
 
   const [select, setSelect] = useState(false)
   const [edit, setEdit] = useState(false)

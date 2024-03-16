@@ -5,12 +5,16 @@ export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boole
   if (x instanceof Timestamp) return x
   if (x instanceof FieldValue) return x
   if (typeof x === 'undefined' && deleteUndefined && root) return deleteField()
-  if (Array.isArray(x)) return x.map((x) => toFirestore(firestore, x, deleteUndefined, false))
   if (x === null || typeof x === 'function') return x
+  if (Array.isArray(x)) {
+    return x
+      .filter((value) => typeof value !== 'undefined')
+      .map((x) => toFirestore(firestore, x, deleteUndefined, false))
+  }
   if (typeof x === 'object') {
     return Object.fromEntries(
       Object.entries(x)
-        .filter(([_key, value]) => !((!deleteUndefined || !root) && typeof value === 'undefined'))
+        .filter(([_k, value]) => typeof value !== 'undefined')
         .map(([key, value]) => [key, toFirestore(firestore, value, deleteUndefined, false)]),
     )
   }

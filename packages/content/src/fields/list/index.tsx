@@ -23,12 +23,7 @@ export const FormFieldList = () => {
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
       <Markdown className="text-front/50 pb-1 text-sm">{field.schema.description}</Markdown>
       <div className={cn('space-y-3')}>
-        <Sortable
-          items={control.value}
-          onSort={(from, to) => {
-            return control.move(from, to)
-          }}
-        >
+        <Sortable items={control.value} onSort={(from, to) => control.move(from, to)}>
           {control.value.map((x, i) => (
             <SortableItem
               key={x.id}
@@ -78,20 +73,14 @@ const useFieldArray = (props: { control: Control; name: string }) => {
     value: items,
     add: (value: any) => setItems((x) => [...x, { value, id: Date.now() }]),
     remove: (index: number) => {
-      setItems((x) => {
-        const next = x.filter((_, i) => i !== index)
-        skip.current = true
-        control.field.onChange(getValue().filter((_, i) => i !== index))
-        return next
-      })
+      skip.current = true
+      control.field.onChange(getValue().filter((_, i) => i !== index))
+      setItems(items.filter((_, i) => i !== index))
     },
     move: (from: number, to: number) => {
-      setItems((x) => {
-        const next = move(x, from, to)
-        skip.current = true
-        control.field.onChange(move(getValue(), from, to))
-        return next
-      })
+      skip.current = true
+      control.field.onChange(move(getValue(), from, to))
+      setItems(move(items, from, to))
     },
   }
 }
