@@ -15,9 +15,9 @@ export const createFiar = (
   createRoot(config.node).render(
     <ExtensionsProvider value={config.components || {}}>
       <Dashboard {...config}>
-        {config && <Auth {...config} />}
-        {config && <Content {...config} />}
-        {config && <Assets {...config} />}
+        <Auth {...config} />
+        <Content {...config} />
+        <Assets {...config} />
       </Dashboard>
     </ExtensionsProvider>,
   )

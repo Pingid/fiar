@@ -6,7 +6,7 @@ import { getStorage, connectStorageEmulator } from '@firebase/storage'
 import { getAuth, connectAuthEmulator } from '@firebase/auth'
 import { initializeApp } from '@firebase/app'
 
-export const firebase = initializeApp({
+export const app = initializeApp({
   apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
   authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
@@ -20,10 +20,10 @@ let saved: any = null
 if (import.meta.env.PUBLIC_FIRE_EMULATE) {
   const get = import('../../../../firebase.json').then((x) => ((saved = x), connect(x)))
   const connect = (config: Awaited<typeof get>) => {
-    connectFunctionsEmulator(getFunctions(firebase), `localhost`, config.emulators.functions.port)
-    connectFirestoreEmulator(getFirestore(firebase), `localhost`, config.emulators.firestore.port)
-    connectStorageEmulator(getStorage(firebase), `localhost`, config.emulators.storage.port)
-    connectAuthEmulator(getAuth(firebase), `http://localhost:${config.emulators.auth.port}`)
+    connectFunctionsEmulator(getFunctions(app), `localhost`, config.emulators.functions.port)
+    connectFirestoreEmulator(getFirestore(app), `localhost`, config.emulators.firestore.port)
+    connectStorageEmulator(getStorage(app), `localhost`, config.emulators.storage.port)
+    connectAuthEmulator(getAuth(app), `http://localhost:${config.emulators.auth.port}`)
   }
   if (saved) connect(saved)
 }

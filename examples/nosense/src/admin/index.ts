@@ -2,10 +2,10 @@ import { GoogleAuthProvider, GithubAuthProvider, EmailAuthProvider } from '@fire
 import { createFiar } from 'fiar'
 
 import { articles, landing } from './entities'
-import { firebase } from './firebase'
+import { app } from './firebase'
 
 createFiar({
-  app: firebase,
+  app,
   node: document.getElementById('root')!,
   content: [articles, landing],
   assets: [{ path: '/fiar', title: 'Photos' }],

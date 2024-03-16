@@ -2,6 +2,7 @@ import * as s from 'fiar/schema'
 
 const seoPageMeta = s.map({
   label: 'SEO page meta',
+  optional: true,
   fields: {
     title: s.string({ label: 'Page title' }),
     description: s.string({
@@ -24,8 +25,9 @@ export const articles = s.defineCollection({
   fields: {
     title: s.string({ label: 'Title' }),
     image: s.image({ label: 'Main image' }),
-    // body: s.text({ label: 'Content' }),
-    width: s.number({ label: 'Width' }),
+    body: s.text({ label: 'Content' }),
+    // updatedAt: s.timestamp({ computed: 'on-update' }),
+    // createdAt: s.timestamp({ computed: 'on-create' }),
     meta: seoPageMeta,
   },
 })
