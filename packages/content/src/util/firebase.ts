@@ -4,7 +4,6 @@ export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boole
   if (x instanceof IntermediateDocumentReference) return x.ref(firestore)
   if (x instanceof Timestamp) return x
   if (x instanceof FieldValue) return x
-  if (typeof x === 'undefined' && deleteUndefined && root) return deleteField()
   if (x === null || typeof x === 'function') return x
   if (Array.isArray(x)) {
     return x
@@ -14,8 +13,12 @@ export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boole
   if (typeof x === 'object') {
     return Object.fromEntries(
       Object.entries(x)
-        .filter(([_k, value]) => typeof value !== 'undefined')
-        .map(([key, value]) => [key, toFirestore(firestore, value, deleteUndefined, false)]),
+        .map(([key, value]) => {
+          if (typeof value === 'undefined' && deleteUndefined && root) return [key, deleteField()]
+          if (typeof value === 'undefined') return [key, undefined]
+          return [key, toFirestore(firestore, value, deleteUndefined, false)]
+        })
+        .filter(([_k, value]) => typeof value !== 'undefined'),
     )
   }
   return x

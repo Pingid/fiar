@@ -72,9 +72,9 @@ export const DocumentUpdateForm = (props: { defaultValues: Record<string, any>; 
   const ref = doc(firestore, path)
   const form = useForm({ criteriaMode: 'firstError', context: { schema }, ...props })
 
-  const onSubmit = form.handleSubmit((value) =>
-    mutate.trigger({ schema, type: 'update', data: toFirestore(firestore, { ...value }, true), ref }),
-  )
+  const onSubmit = form.handleSubmit((value) => {
+    return mutate.trigger({ schema, type: 'update', data: toFirestore(firestore, { ...value }, true), ref })
+  })
 
   const onDelete = () => mutate.trigger({ schema, ref, type: 'delete' }).then(() => props.onBack())
 
@@ -85,7 +85,7 @@ export const DocumentUpdateForm = (props: { defaultValues: Record<string, any>; 
       submit.current = false
       form.reset(form.getValues())
     } else if (props.defaultValues) {
-      form.reset(props.defaultValues, { keepDirty: true, keepDirtyValues: true })
+      form.reset(props.defaultValues, { keepDirty: true, keepDirtyValues: true, keepErrors: true })
     }
   }, [props.defaultValues, form.formState.isSubmitSuccessful, form.formState.isSubmitting])
 

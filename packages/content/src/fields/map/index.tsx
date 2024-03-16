@@ -3,7 +3,14 @@ import { cn } from 'mcn'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Field, FieldControl } from '@fiar/components'
 
-import { FormField, useFieldPreview, FieldProvider, useFieldForm, useFormFieldControl } from '../../context/field.js'
+import {
+  FormField,
+  useFieldPreview,
+  FieldProvider,
+  useFieldForm,
+  useFormFieldControl,
+  useController,
+} from '../../context/field.js'
 import type { IFieldMap, IFields } from '../../schema/index.js'
 
 export const FormFieldMap = () => {
@@ -44,6 +51,7 @@ export const FormFieldMap = () => {
             })}
           </div>
         )}
+        {/* <ExtraFields /> */}
       </FieldControl>
     </Field>
   )
@@ -52,4 +60,20 @@ export const FormFieldMap = () => {
 export const PreviewFieldMap = () => {
   const field = useFieldPreview<IFieldMap>()
   return JSON.stringify(field.value)
+}
+
+export const ExtraFields = () => {
+  const field = useFieldForm<IFieldMap>()
+  const control = useController(field)
+
+  const extra = Object.keys(control.field.value ?? {}).filter((key) => !(key in field.schema.fields))
+  return (
+    <ul>
+      {extra.map((key) => (
+        <p key={key}>
+          {key}: {JSON.stringify(control.field.value[key])}
+        </p>
+      ))}
+    </ul>
+  )
 }

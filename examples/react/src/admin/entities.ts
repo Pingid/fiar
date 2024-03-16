@@ -26,6 +26,7 @@ export const articles = s.defineCollection({
   sort: ['title', 'asc'],
   fields: {
     title: s.string({ label: 'Title' }),
+    // extra: s.string({ label: 'Extra' }),
     image: image({ label: 'Main image' }),
     body: s.text({ label: 'Content' }),
     meta: seoPageMeta,
