@@ -53,8 +53,7 @@
     { "path": "./packages/fiar" },
     { "path": "./packages/rules" },
     { "path": "./packages/schema" },
-    { "path": "./packages/workbench" },
-    { "path": "./packages/openai" }
+    { "path": "./packages/workbench" }
   ],
   "files": [],
   "include": ["firebase.json"],

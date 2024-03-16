@@ -1,4 +1,3 @@
-import { Control, useController } from 'react-hook-form'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useEffect, useRef, useState } from 'react'
 import { Timestamp } from '@firebase/firestore'
@@ -6,7 +5,7 @@ import { cn } from 'mcn'
 
 import { Field, Markdown, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldProvider, useFieldPreview, useFieldForm } from '../../context/field.js'
+import { FieldProvider, useFieldPreview, useFieldForm, UserFieldForm, useController } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
 
@@ -49,12 +48,18 @@ export const FormFieldList = () => {
   )
 }
 
-const useFieldArray = (props: { control: Control; name: string }) => {
-  const control = useController({ ...props, defaultValue: [] })
+const useFieldArray = (props: UserFieldForm<IFieldList>) => {
+  const control = useController(props)
   const value = Array.isArray(control.field.value) ? control.field.value : []
   const [items, setItems] = useState<{ id: number }[]>(value.map((_, i) => ({ id: Date.now() + i })))
   const getValue = () => props.control._getFieldArray(props.name)
   const skip = useRef(false)
+
+  useEffect(() => {
+    if (!Array.isArray(control.field.value) && !props.schema.optional) {
+      control.field.onChange([])
+    }
+  }, [control.field.value, props.schema.optional])
 
   useEffect(() => {
     if (skip.current) {

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "../../scripts/env.js vite",
     "build": "../../scripts/env.js tsc && vite build",
+    "emulate": "../../scripts/env.js 'firebase emulators:start --project $FIREBASE_PROJECT_ID'",
+    "rules": "tsx ./rules.ts",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -13,7 +15,6 @@
     "@fiar/auth": "workspace:^",
     "@fiar/components": "workspace:^",
     "@fiar/content": "workspace:^",
-    "@fiar/openai": "workspace:^",
     "@fiar/rules": "workspace:^",
     "@fiar/schema": "workspace:^",
     "@fiar/workbench": "workspace:^",

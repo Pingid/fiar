@@ -46,14 +46,14 @@ export const useController = _useController
 export const useFormState = _useFormState
 export const get = _get
 
-type UseFormFieldReturn<F extends IField> = {
+export type UserFieldForm<F extends IField> = {
   name: string
   schema: F
   parent?: IField
   control: Control
   error?: string
 }
-export const useFieldForm = <F extends IField>(): UseFormFieldReturn<F> => {
+export const useFieldForm = <F extends IField>(): UserFieldForm<F> => {
   const field = useField()
   const form = useFormContext()
   const error = useFieldError()

@@ -8,9 +8,10 @@ import { useExtend } from '@fiar/workbench/extensions'
 import { App } from '@fiar/workbench'
 
 import { ModelProvider, PathRefProvider, useModel } from './context/model.js'
-import { DocumentAdd, DocumentEdit } from './components/document/index.js'
-import { CollectionPage } from './components/collection/page/index.js'
+import { DocumentAdd, DocumentUpdate } from './components/document/index.js'
+import { DocumentList } from './components/collection/page/index.js'
 import { ContentConfig, useContentConfig } from './context/config.js'
+import { DocumentSet } from './components/document/set/index.js'
 import { ContentList } from './components/content/index.js'
 import { DocumentHooksProvider } from './context/hooks.js'
 import { FirestoreProvider } from './context/firestore.js'
@@ -48,12 +49,20 @@ export const Content = ({ children, ...props }: { children?: React.ReactNode } &
 
 const ModelRoutes = () => {
   const model = useModel()
-  if (model.type === 'document') return <ContentRoute path={model.path} component={DocumentEdit} />
+  if (model.type === 'document') {
+    return (
+      <>
+        <ContentRoute path={model.path} page="set" component={DocumentSet} />
+        <ContentRoute path={model.path} component={DocumentUpdate} />
+      </>
+    )
+  }
+
   return (
     <>
       <ContentRoute path={`${model.path}`} page="add" component={DocumentAdd} />
-      <ContentRoute path={`${model.path}/:docId`} component={DocumentEdit} />
-      <ContentRoute path={`${model.path}`} component={CollectionPage} />
+      <ContentRoute path={`${model.path}/:docId`} component={DocumentUpdate} />
+      <ContentRoute path={`${model.path}`} component={DocumentList} />
     </>
   )
 }

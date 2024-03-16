@@ -157,9 +157,6 @@ importers:
       '@fiar/content':
         specifier: workspace:^
         version: link:../../packages/content
-      '@fiar/openai':
-        specifier: workspace:^
-        version: link:../../packages/openai
       '@fiar/rules':
         specifier: workspace:^
         version: link:../../packages/rules
@@ -538,67 +535,6 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.22
         version: 18.2.22
-      typescript:
-        specifier: ^5.4.2
-        version: 5.4.2
-
-  packages/openai:
-    dependencies:
-      '@fiar/assets':
-        specifier: workspace:^
-        version: link:../assets
-      '@fiar/components':
-        specifier: workspace:^
-        version: link:../components
-      '@fiar/content':
-        specifier: workspace:^
-        version: link:../content
-      '@fiar/workbench':
-        specifier: workspace:^
-        version: link:../workbench
-      '@firebase/auth':
-        specifier: ^1.6.0
-        version: 1.6.0(@firebase/app@0.9.27)
-      '@firebase/storage':
-        specifier: ^0.12.2
-        version: 0.12.2(@firebase/app@0.9.29)
-      '@heroicons/react':
-        specifier: ^2.1.1
-        version: 2.1.1(react@18.2.0)
-      firebase-functions:
-        specifier: ^4.8.0
-        version: 4.8.0(firebase-admin@12.0.0)
-      mcn:
-        specifier: ^0.0.4
-        version: 0.0.4
-      openai:
-        specifier: ^4.29.1
-        version: 4.29.1
-      react-hook-form:
-        specifier: ^7.51.0
-        version: 7.51.0(react@18.2.0)
-      swr:
-        specifier: ^2.2.5
-        version: 2.2.5(react@18.2.0)
-      zustand:
-        specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.66)(react@18.2.0)
-    devDependencies:
-      '@firebase/app':
-        specifier: ^0.9.29
-        version: 0.9.29
-      '@firebase/functions':
-        specifier: ^0.11.2
-        version: 0.11.2(@firebase/app@0.9.29)
-      '@types/react':
-        specifier: ^18.2.66
-        version: 18.2.66
-      firebase-admin:
-        specifier: ^12.0.0
-        version: 12.0.0
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
       typescript:
         specifier: ^5.4.2
         version: 5.4.2
@@ -1820,11 +1756,6 @@ packages:
     dependencies:
       text-decoding: 1.0.0
 
-  /@fastify/busboy@2.1.0:
-    resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
-    engines: {node: '>=14'}
-    dev: false
-
   /@fastify/busboy@2.1.1:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
@@ -1909,16 +1840,6 @@ packages:
   /@firebase/app-types@0.9.0:
     resolution: {integrity: sha512-AeweANOIo0Mb8GiYm3xhTEBVCmPwTYAu9Hcd2qSkLuga/6+j9b1Jskl5bpiSQWy9eJ/j5pavxj6eYogmnuzm+Q==}
 
-  /@firebase/app@0.9.27:
-    resolution: {integrity: sha512-p2Dvl1ge4kRsyK5+wWcmdAIE9MSwZ0pDKAYB51LZgZuz6wciUZk4E1yAEdkfQlRxuHehn+Ol9WP5Qk2XQZiHGg==}
-    dependencies:
-      '@firebase/component': 0.6.5
-      '@firebase/logger': 0.4.0
-      '@firebase/util': 1.9.4
-      idb: 7.1.1
-      tslib: 2.6.2
-    dev: false
-
   /@firebase/app@0.9.29:
     resolution: {integrity: sha512-HbKTjfmILklasIu/ij6zKnFf3SgLYXkBDVN7leJfVGmohl+zA7Ig+eXM1ZkT1pyBJ8FTYR+mlOJer/lNEnUCtw==}
     dependencies:
@@ -1957,23 +1878,6 @@ packages:
     dependencies:
       '@firebase/app-types': 0.9.0
       '@firebase/util': 1.9.4
-    dev: false
-
-  /@firebase/auth@1.6.0(@firebase/app@0.9.27):
-    resolution: {integrity: sha512-Qhl35eJTV6BwvuueTPCY6x8kUlYyzALtjp/Ws0X3fw3AnjVVfuVb7oQ3Xh5VPVfMFhaIuUAd1KXwcAuIklkSDw==}
-    peerDependencies:
-      '@firebase/app': 0.x
-      '@react-native-async-storage/async-storage': ^1.18.1
-    peerDependenciesMeta:
-      '@react-native-async-storage/async-storage':
-        optional: true
-    dependencies:
-      '@firebase/app': 0.9.27
-      '@firebase/component': 0.6.5
-      '@firebase/logger': 0.4.0
-      '@firebase/util': 1.9.4
-      tslib: 2.6.2
-      undici: 5.26.5
     dev: false
 
   /@firebase/auth@1.6.2(@firebase/app@0.9.29):
@@ -10367,13 +10271,6 @@ packages:
 
   /undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
-
-  /undici@5.26.5:
-    resolution: {integrity: sha512-cSb4bPFd5qgR7qr2jYAi0hlX9n5YKK2ONKkLFkxl+v/9BvC0sOpZjBHDBSXc5lWAf5ty9oZdRXytBIHzgUcerw==}
-    engines: {node: '>=14.0'}
-    dependencies:
-      '@fastify/busboy': 2.1.0
-    dev: false
 
   /undici@5.28.3:
     resolution: {integrity: sha512-3ItfzbrhDlINjaP0duwnNsKpDQk3acHI3gVJ1z4fmwMK31k5G9OVIAMLSIaP6w4FaGkaAkN6zaQO9LUvZ1t7VA==}

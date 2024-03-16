@@ -28,7 +28,6 @@ export const articles = s.defineCollection({
     title: s.string({ label: 'Title' }),
     image: image({ label: 'Main image' }),
     body: s.text({ label: 'Content' }),
-    width: s.number({ label: 'Width' }),
     meta: seoPageMeta,
     tags: s.list({ label: 'Tags', of: s.string() }),
   },

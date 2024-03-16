@@ -15,33 +15,33 @@ import { DocumentFormFields } from '../fields/index.js'
 import { DocumentFormTitle } from '../title/index.js'
 import { DocumentPublish } from '../save/index.js'
 
-export const DocumentEdit = () => {
+export const DocumentUpdate = () => {
   const [_, nav] = useLocation()
-  const model = useModel()
+  const schema = useModel()
   const path = usePathRef()
 
   const firestore = useFirestore()
   const ref = doc(firestore, path)
   const data = useDocumentSnapshot(ref, { once: true })
-  const form = useForm({ criteriaMode: 'firstError', context: { schema: model } })
+  const form = useForm({ criteriaMode: 'firstError', context: { schema } })
   const mutate = useDocumentMutation()
 
   const onSubmit = form.handleSubmit((value) => {
-    if (model.type === 'document' && !data.data?.exists()) {
+    if (schema.type === 'document' && !data.data?.exists()) {
       return mutate.trigger({
-        model: model,
+        schema,
         type: 'set',
         data: toFirestore(firestore, { ...value }, false),
-        ref: doc(firestore, model.path),
+        ref: doc(firestore, schema.path),
       })
     }
 
     return mutate
-      .trigger({ model: model, type: 'update', data: toFirestore(firestore, { ...value }, true), ref })
+      .trigger({ schema, type: 'update', data: toFirestore(firestore, { ...value }, true), ref })
       .then(() => form.reset(value))
   })
 
-  const onDelete = () => mutate.trigger({ model: model, ref, type: 'delete' }).then(() => nav('/'))
+  const onDelete = () => mutate.trigger({ schema, ref, type: 'delete' }).then(() => nav('/'))
 
   useEffect(() => {
     if (!data.data) return
@@ -63,7 +63,7 @@ export const DocumentEdit = () => {
           breadcrumbs={
             [
               { children: 'Content', href: '/' },
-              model.type === 'collection' ? { children: model.label, href: parameterize(model.path) } : null,
+              schema.type === 'collection' ? { children: schema.label, href: parameterize(schema.path) } : null,
               { children: <DocumentFormTitle />, href: path },
             ].filter(Boolean) as any[]
           }
@@ -75,7 +75,7 @@ export const DocumentEdit = () => {
             <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
           </div>
         </Header>
-        <DocumentFormFields schema={model} />
+        <DocumentFormFields schema={schema} />
       </form>
     </FormProvider>
   )

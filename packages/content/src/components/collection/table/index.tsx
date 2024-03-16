@@ -13,9 +13,9 @@ import { FieldPreview } from '../../../context/field.js'
 import { useModel } from '../../../context/model.js'
 
 export const Table = () => {
-  const model = useModel<'collection'>()
+  const schema = useModel<'collection'>()
   const data = useCollectionData()
-  const [columns] = useState(model.columns)
+  const [columns] = useState(schema.columns)
   const select = useSelectDocument()
   const [location, nav] = useLocation()
   const store = useQueryStore()
@@ -23,8 +23,8 @@ export const Table = () => {
   const ref = useCollectionRef()
 
   useEffect(() => {
-    if (model.sort) store.getState().constrain('orderBy', orderBy(model.sort[0], model.sort[1]))
-  }, [model.sort, store])
+    if (schema.sort) store.getState().constrain('orderBy', orderBy(schema.sort[0], schema.sort[1]))
+  }, [schema.sort, store])
 
   return (
     <div
@@ -34,7 +34,7 @@ export const Table = () => {
       <div className="bg-front/5 col-span-full hidden w-full grid-cols-subgrid px-3 py-1 pt-2 sm:grid">
         {columns.map((key: string, i) => (
           <div key={key} className={cn('text-front/60 flex gap-2 text-sm font-medium', [i === 0, 'col-span-1'])}>
-            <span>{model.fields[key]?.label || key}</span>
+            <span>{schema.fields[key]?.label || key}</span>
             <Order value={key} />
           </div>
         ))}
@@ -48,8 +48,8 @@ export const Table = () => {
         >
           {columns.map((key: string) => (
             <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
-              <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{model.fields[key]?.label || key}</p>
-              <FieldPreview name={key} schema={model.fields[key] as any} value={x.data()[key]} />
+              <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{schema.fields[key]?.label || key}</p>
+              <FieldPreview name={key} schema={schema.fields[key] as any} value={x.data()[key]} />
             </div>
           ))}
           <div className="flex w-full items-start justify-end">
@@ -58,7 +58,7 @@ export const Table = () => {
                 icon={<TrashIcon />}
                 size="sm"
                 color="error"
-                onClick={(e) => (e.stopPropagation(), update.trigger({ type: 'delete', model, ref: doc(ref, x.id) }))}
+                onClick={(e) => (e.stopPropagation(), update.trigger({ type: 'delete', schema, ref: doc(ref, x.id) }))}
               ></Button>
             </div>
           </div>

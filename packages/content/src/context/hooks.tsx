@@ -3,10 +3,10 @@ import { useRef, createContext, useContext, useEffect } from 'react'
 import { IContentModel } from '../schema/index.js'
 
 export type DocumentHookEvent<T extends Record<string, any> = Record<string, any>> =
-  | { model: IContentModel; ref: DocumentReference<T, T>; data: T; type: 'update' }
-  | { model: IContentModel; ref: CollectionReference<T, T>; data: T; type: 'add' }
-  | { model: IContentModel; ref: DocumentReference<T, T>; data: T; type: 'set' }
-  | { model: IContentModel; ref: DocumentReference<T, T>; data?: undefined; type: 'delete' }
+  | { schema: IContentModel; ref: DocumentReference<T, T>; data: T; type: 'update' }
+  | { schema: IContentModel; ref: CollectionReference<T, T>; data: T; type: 'add' }
+  | { schema: IContentModel; ref: DocumentReference<T, T>; data: T; type: 'set' }
+  | { schema: IContentModel; ref: DocumentReference<T, T>; data?: undefined; type: 'delete' }
 
 export type DocumentHook<T extends Record<string, any> = Record<string, any>> = (
   event: DocumentHookEvent<T>,

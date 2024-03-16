@@ -5,7 +5,7 @@ import { CollectionHeader } from '../header/index.js'
 import { useModel } from '../../../context/model.js'
 import { Table } from '../table/index.js'
 
-export const CollectionPage = () => {
+export const DocumentList = () => {
   const model = useModel()
   const breadcrumbs = [
     { children: 'Content', href: '/' },

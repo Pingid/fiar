@@ -27,7 +27,7 @@ service cloud.firestore {
       allow delete: if request.auth != null;
       function isValid() {
         return (request.resource.data is map
-            && request.resource.data.keys().hasOnly(["title", "image", "body", "width", "meta", "tags"])
+            && request.resource.data.keys().hasOnly(["title", "image", "body", "meta", "tags"])
             && request.resource.data.title is string
             && (request.resource.data.image is map
               && request.resource.data.image.keys().hasOnly(["fullPath", "bucket", "name"])
@@ -35,7 +35,6 @@ service cloud.firestore {
               && request.resource.data.image.bucket is string
               && request.resource.data.image.name is string)
             && request.resource.data.body is string
-            && request.resource.data.width is number
             && (!("meta" in request.resource.data)
               || (request.resource.data.meta is map
                 && request.resource.data.meta.keys().hasOnly(["title", "description"])

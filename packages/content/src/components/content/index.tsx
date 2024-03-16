@@ -38,7 +38,7 @@ const ModelCard = () => {
 const CollectionCard = (props: IContentCollection) => {
   const path = trailing(props.path)
   const parameterized = parameterize(path)
-  const ref = collection(useFirestore(), 'articles')
+  const ref = collection(useFirestore(), path)
   const draft = useSWR(ref.path + 'count', () => getCountFromServer(ref))
   const count = draft.data?.data().count
 
@@ -72,9 +72,10 @@ const DocumentCard = () => {
   const updateTime = (data.data as any)?._document?.version?.timestamp?.toDate() as Date | undefined
 
   const title = model.label
+  const exists = data.data?.exists()
 
   return (
-    <Link to={model.path} asChild>
+    <Link to={exists ? model.path : `/set${model.path}`} asChild>
       <Card
         icon={<DocumentIcon />}
         elementType="a"

@@ -52,4 +52,4 @@ const rules = rulset(({ service }) => {
   })
 })
 
-rules.print().then((str) => fs.writeFileSync(import.meta.resolve('../../firebase/firebase.rules').slice(7), str))
+rules.print().then((str) => fs.writeFileSync(import.meta.resolve('./firebase/firebase.rules').slice(7), str))

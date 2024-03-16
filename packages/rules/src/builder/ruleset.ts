@@ -138,15 +138,15 @@ interface Scope<C> {
   and: typeof and
 }
 
-interface RulesetScope<C> extends Scope<C> {
+export interface RulesetScope<C> extends Scope<C> {
   service: Service<C>
 }
 
-interface ServiceScope<C> extends Scope<C> {
+export interface ServiceScope<C> extends Scope<C> {
   match: Match<C>
 }
 
-interface MatchScope<C> extends Scope<C> {
+export interface MatchScope<C> extends Scope<C> {
   allow: Allow<C>
   match: Match<C>
 }

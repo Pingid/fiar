@@ -16,22 +16,22 @@ import { useModel } from '../../../context/model.js'
 import { DocumentPublish } from '../save/index.js'
 
 export const DocumentAdd = () => {
-  const model = useModel()
-  const form = useForm({ defaultValues: {}, context: { schema: model } })
+  const schema = useModel()
+  const form = useForm({ defaultValues: {}, context: { schema: schema } })
   const firestore = useFirestore()
   const submitted = useRef(false)
   const [_, nav] = useLocation()
 
   const mutate = useDocumentMutation({
     onSuccess: () => {
-      const pth = model.type === 'collection' ? model.path : '/content'
+      const pth = schema.type === 'collection' ? schema.path : '/content'
       nav(pth)
     },
   })
 
   const onSubmit = form.handleSubmit((x) => {
     const data = toFirestore(firestore, { ...x }, false)
-    return mutate.trigger({ model: model, type: 'add', data, ref: collection(firestore, model.path) })
+    return mutate.trigger({ schema, type: 'add', data, ref: collection(firestore, schema.path) })
   })
 
   useIntercept((next) => {
@@ -44,21 +44,21 @@ export const DocumentAdd = () => {
     <FormProvider {...form}>
       <form onSubmit={onSubmit}>
         <Header
-          subtitle={model.path}
+          subtitle={schema.path}
           breadcrumbs={[
             { children: 'Content', href: '/' },
-            { children: model.label, href: model.path },
+            { children: schema.label, href: schema.path },
             { children: <DocumentFormTitle /> },
           ]}
         >
           <div className="flex w-full justify-end gap-2 px-3 py-2">
-            <Button size="sm" type="button" onClick={() => nav(model.path, { replace: true })}>
+            <Button size="sm" type="button" onClick={() => nav(schema.path, { replace: true })}>
               Cancel
             </Button>
             <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
           </div>
         </Header>
-        <DocumentFormFields schema={model} />
+        <DocumentFormFields schema={schema} />
       </form>
     </FormProvider>
   )

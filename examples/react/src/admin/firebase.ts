@@ -4,7 +4,7 @@ import { getStorage, connectStorageEmulator } from '@firebase/storage'
 import { getAuth, connectAuthEmulator } from '@firebase/auth'
 import { initializeApp } from '@firebase/app'
 
-import config from '../../../../firebase.json'
+import config from '../../firebase.json'
 
 export const app = initializeApp({
   apiKey: process.env.FIREBASE_API_KEY,
