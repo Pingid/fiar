@@ -7,3 +7,5 @@
 !.npmignore
 !tailwind.config.ts
 !README.md
+!tailwind.config.cjs
+!tailwind.config.d.ts

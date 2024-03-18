@@ -10,7 +10,7 @@ export const TextArea = extend<'textarea', TextareaAutosizeProps>((props, ref) =
     {...props}
     ref={ref}
     className={cn(
-      'h-full w-full resize-none bg-transparent px-2 pt-1 focus:border-none focus:outline-none',
+      '-mb-0.5 h-full w-full resize-none bg-transparent px-2 pt-1 focus:border-none focus:outline-none',
       props.className,
     )}
   />

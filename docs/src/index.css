@@ -4,28 +4,28 @@
 
 :root[data-theme='light'],
 [data-theme='light'] ::backdrop {
-  --sl-color-accent: rgb(var(--color-active) / 1);
-  --sl-color-text-accent: rgb(var(--color-active) / 1);
+  --sl-color-accent: hsl(var(--color-active) / 1);
+  --sl-color-text-accent: hsl(var(--color-active) / 1);
 
-  --sl-color-black: rgb(var(--color-back) / 1);
-  --sl-color-gray-5: rgb(var(--color-front) / 0.1);
-  --sl-color-hairline-shade: rgb(var(--color-front) / 0.1);
+  --sl-color-black: hsl(var(--color-back) / 1);
+  --sl-color-gray-5: hsl(var(--color-frame) / 0.1);
+  --sl-color-hairline-shade: hsl(var(--color-line) / 0.1);
 
-  --sl-color-bg: rgb(var(--color-back) / 1);
-  --sl-color-bg-nav: rgb(var(--color-back) / 1);
-  --sl-color-bg-sidebar: rgb(var(--color-back) / 1);
+  --sl-color-bg: hsl(var(--color-back) / 1);
+  --sl-color-bg-nav: hsl(var(--color-back) / 1);
+  --sl-color-bg-sidebar: hsl(var(--color-back) / 1);
 }
 
 :root[data-theme='dark'],
 [data-theme='dark'] ::backdrop {
-  --sl-color-accent: rgb(var(--color-active) / 1);
-  --sl-color-text-accent: rgb(var(--color-active) / 1);
+  --sl-color-accent: hsl(var(--color-active) / 1);
+  --sl-color-text-accent: hsl(var(--color-active) / 1);
 
-  --sl-color-black: rgb(var(--color-back) / 1);
-  --sl-color-gray-5: rgb(var(--color-front) / 0.1);
-  --sl-color-hairline-shade: rgb(var(--color-front) / 0.1);
+  --sl-color-black: hsl(var(--color-back) / 1);
+  --sl-color-gray-5: hsl(var(--color-frame) / 0.1);
+  --sl-color-hairline-shade: hsl(var(--color-line) / 0.1);
 
-  --sl-color-bg: rgb(var(--color-back) / 1);
-  --sl-color-bg-nav: rgb(var(--color-back) / 1);
-  --sl-color-bg-sidebar: rgb(var(--color-back) / 1);
+  --sl-color-bg: hsl(var(--color-back) / 1);
+  --sl-color-bg-nav: hsl(var(--color-back) / 1);
+  --sl-color-bg-sidebar: hsl(var(--color-back) / 1);
 }

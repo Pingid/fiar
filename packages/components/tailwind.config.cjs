@@ -1,5 +1,4 @@
-import typography from '@tailwindcss/typography'
-import type { Config } from 'tailwindcss'
+const typography = require('@tailwindcss/typography');
 
 const light = {
   '--color-back': `0deg 0% 100%`,
@@ -32,7 +31,7 @@ const base = {
   html: { 'background-color': `hsl(var(--color-back) / 1)`, color: `hsl(var(--color-front) / 1)` },
 }
 
-const _config = {
+module.exports = {
   content: ['./src/**/*.{ts,tsx}'],
   darkMode: ['class', 'media'],
   theme: {
@@ -73,6 +72,5 @@ const _config = {
     },
   },
   plugins: [{ handler: (x) => x.addBase(base) }, typography],
-} satisfies Config
+} 
 
-export default _config

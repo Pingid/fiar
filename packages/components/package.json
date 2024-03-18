@@ -50,7 +50,8 @@
     },
     "./tailwind.config": {
       "types": "./tailwind.config.d.ts",
-      "import": "./tailwind.config.js"
+      "import": "./tailwind.config.js",
+      "require": "./tailwind.config.cjs"
     },
     "./style.css": {
       "import": "./style.css"
