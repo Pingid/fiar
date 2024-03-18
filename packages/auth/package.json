@@ -58,40 +58,15 @@
       "import": "./authorize/index.js",
       "require": "./authorize/index.cjs"
     },
-    "./button": {
-      "types": "./button/index.d.ts",
-      "import": "./button/index.js",
-      "require": "./button/index.cjs"
-    },
     "./context": {
       "types": "./context/index.d.ts",
       "import": "./context/index.js",
       "require": "./context/index.cjs"
     },
-    "./functions": {
-      "types": "./functions/index.d.ts",
-      "import": "./functions/index.js",
-      "require": "./functions/index.cjs"
-    },
     "./login": {
       "types": "./login/index.d.ts",
       "import": "./login/index.js",
       "require": "./login/index.cjs"
-    },
-    "./functions/config": {
-      "types": "./functions/config/index.d.ts",
-      "import": "./functions/config/index.js",
-      "require": "./functions/config/index.cjs"
-    },
-    "./functions/hooks": {
-      "types": "./functions/hooks/index.d.ts",
-      "import": "./functions/hooks/index.js",
-      "require": "./functions/hooks/index.cjs"
-    },
-    "./functions/users": {
-      "types": "./functions/users/index.d.ts",
-      "import": "./functions/users/index.js",
-      "require": "./functions/users/index.cjs"
     }
   }
 }

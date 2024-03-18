@@ -45,55 +45,10 @@
       "import": "./index.js",
       "require": "./index.cjs"
     },
-    "./app": {
-      "types": "./app/index.d.ts",
-      "import": "./app/index.js",
-      "require": "./app/index.cjs"
-    },
-    "./components": {
-      "types": "./components/index.d.ts",
-      "import": "./components/index.js",
-      "require": "./components/index.cjs"
-    },
     "./extensions": {
       "types": "./extensions/index.d.ts",
       "import": "./extensions/index.js",
       "require": "./extensions/index.cjs"
-    },
-    "./modal": {
-      "types": "./modal/index.d.ts",
-      "import": "./modal/index.js",
-      "require": "./modal/index.cjs"
-    },
-    "./nav": {
-      "types": "./nav/index.d.ts",
-      "import": "./nav/index.js",
-      "require": "./nav/index.cjs"
-    },
-    "./page": {
-      "types": "./page/index.d.ts",
-      "import": "./page/index.js",
-      "require": "./page/index.cjs"
-    },
-    "./router": {
-      "types": "./router/index.d.ts",
-      "import": "./router/index.js",
-      "require": "./router/index.cjs"
-    },
-    "./page/breadcrumb": {
-      "types": "./page/breadcrumb/index.d.ts",
-      "import": "./page/breadcrumb/index.js",
-      "require": "./page/breadcrumb/index.cjs"
-    },
-    "./page/layout": {
-      "types": "./page/layout/index.d.ts",
-      "import": "./page/layout/index.js",
-      "require": "./page/layout/index.cjs"
-    },
-    "./page/status": {
-      "types": "./page/status/index.d.ts",
-      "import": "./page/status/index.js",
-      "require": "./page/status/index.cjs"
     }
   }
 }

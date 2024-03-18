@@ -44,85 +44,16 @@
   },
   "exports": {
     "./package.json": "./package.json",
-    "./tailwind.config.js": "./tailwind.config.js",
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "import": "./index.js"
     },
     "./tailwind.config": {
       "types": "./tailwind.config.d.ts",
-      "import": "./tailwind.config.js",
-      "require": "./tailwind.config.cjs"
+      "import": "./tailwind.config.js"
     },
     "./style.css": {
-      "import": "./style.css",
-      "require": "./style.css"
-    },
-    "./components": {
-      "types": "./components/index.d.ts",
-      "import": "./components/index.js",
-      "require": "./components/index.cjs"
-    },
-    "./hooks": {
-      "types": "./hooks/index.d.ts",
-      "import": "./hooks/index.js",
-      "require": "./hooks/index.cjs"
-    },
-    "./components/Avatar": {
-      "types": "./components/Avatar/index.d.ts",
-      "import": "./components/Avatar/index.js",
-      "require": "./components/Avatar/index.cjs"
-    },
-    "./components/Button": {
-      "types": "./components/Button/index.d.ts",
-      "import": "./components/Button/index.js",
-      "require": "./components/Button/index.cjs"
-    },
-    "./components/Markdown": {
-      "types": "./components/Markdown/index.d.ts",
-      "import": "./components/Markdown/index.js",
-      "require": "./components/Markdown/index.cjs"
-    },
-    "./components/Sortable": {
-      "types": "./components/Sortable/index.d.ts",
-      "import": "./components/Sortable/index.js",
-      "require": "./components/Sortable/index.cjs"
-    },
-    "./components/error": {
-      "types": "./components/error/index.d.ts",
-      "import": "./components/error/index.js",
-      "require": "./components/error/index.cjs"
-    },
-    "./components/forms": {
-      "types": "./components/forms/index.d.ts",
-      "import": "./components/forms/index.js",
-      "require": "./components/forms/index.cjs"
-    },
-    "./components/label": {
-      "types": "./components/label/index.d.ts",
-      "import": "./components/label/index.js",
-      "require": "./components/label/index.cjs"
-    },
-    "./components/loading": {
-      "types": "./components/loading/index.d.ts",
-      "import": "./components/loading/index.js",
-      "require": "./components/loading/index.cjs"
-    },
-    "./components/menu": {
-      "types": "./components/menu/index.d.ts",
-      "import": "./components/menu/index.js",
-      "require": "./components/menu/index.cjs"
-    },
-    "./components/modal": {
-      "types": "./components/modal/index.d.ts",
-      "import": "./components/modal/index.js",
-      "require": "./components/modal/index.cjs"
-    },
-    "./components/Sortable/SortableItem": {
-      "types": "./components/Sortable/SortableItem/index.d.ts",
-      "import": "./components/Sortable/SortableItem/index.js",
-      "require": "./components/Sortable/SortableItem/index.cjs"
+      "import": "./style.css"
     }
   }
 }

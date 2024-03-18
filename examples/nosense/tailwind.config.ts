@@ -1,4 +1,4 @@
-import config from '@fiar/components/tailwind.config.js'
+import config from '@fiar/components/tailwind.config'
 import type { Config } from 'tailwindcss'
 import path from 'path'
 import fs from 'fs'

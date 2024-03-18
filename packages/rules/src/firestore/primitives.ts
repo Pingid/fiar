@@ -1,4 +1,4 @@
-import { type Timestamp } from 'firebase/firestore'
+import { type Timestamp } from '@firebase/firestore'
 
 import { TypeOfRule, type Rule } from '../rule/index.js'
 

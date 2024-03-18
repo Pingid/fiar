@@ -1,4 +1,4 @@
-import type { CollectionReference, DocumentReference, Timestamp } from 'firebase/firestore'
+import type { CollectionReference, DocumentReference, Timestamp } from '@firebase/firestore'
 
 export type IFieldPrimitive =
   | 'bool'

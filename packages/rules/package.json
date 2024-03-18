@@ -1,29 +1,25 @@
 {
   "name": "@fiar/rules",
   "version": "0.0.0-alpha.12",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "vitest ./src/**/*.ts",
-    "emulate": "firebase emulators:start --project fiarcms"
+  "description": "Firestore rules type definitions, parser and builder",
+  "author": "Dan Beaven <dm.beaven@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pingid/fiar"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "sideEffects": false,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "type": "module",
   "dependencies": {
     "@fiar/schema": "workspace:^",
     "@firebase/firestore": "^4.5.0",
-    "@firebase/rules-unit-testing": "^3.0.1",
-    "firebase": "^10.9.0",
-    "firebase-admin": "^12.0.0",
     "prettier": "^3.2.5",
     "typescript-parsec": "^0.3.4",
     "vitest": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.28",
-    "jsdom": "^24.0.0",
-    "ts-check-perf": "^0.0.0",
     "tsx": "^4.7.1"
   }
 }

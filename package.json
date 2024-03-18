@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsc --build",
     "watch": "tsc --build --watch",
+    "build:packages": "pnpm run --filter '@fiar/*' --filter 'fiar' -r build",
     "clean": "find . -d -not \\( -path '*node_modules**' -o -path '*git**' -o -path './.env' \\) | git check-ignore --stdin | xargs rm -rf",
     "clean:deps": "find . -d -not \\( -path '*git**' -o -path './.env' \\) | git check-ignore --stdin | xargs rm -rf",
     "test": "pnpm run -r test",

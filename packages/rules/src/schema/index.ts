@@ -22,7 +22,7 @@ import type {
   RulesPath,
   RulesMap,
   RulesList,
-} from '../firestore'
+} from '../firestore/index.js'
 
 import type { Rule } from '../rule/index.js'
 

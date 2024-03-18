@@ -1,4 +1,4 @@
-import type { Rule } from '../rule'
+import type { Rule } from '../rule/index.js'
 import type {
   RulesMap,
   RulesDuration,

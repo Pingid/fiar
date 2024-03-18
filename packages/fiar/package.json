@@ -22,6 +22,7 @@
     "@fiar/auth": "workspace:^",
     "@fiar/content": "workspace:^",
     "@fiar/workbench": "workspace:^",
+    "@fiar/rules": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zustand": "^4.5.2"
@@ -46,25 +47,10 @@
       "import": "./style.css",
       "require": "./style.css"
     },
-    "./plugins": {
-      "types": "./plugins/index.d.ts",
-      "import": "./plugins/index.js",
-      "require": "./plugins/index.cjs"
-    },
     "./schema": {
       "types": "./schema/index.d.ts",
       "import": "./schema/index.js",
       "require": "./schema/index.cjs"
-    },
-    "./v2": {
-      "types": "./v2/index.d.ts",
-      "import": "./v2/index.js",
-      "require": "./v2/index.cjs"
-    },
-    "./v2/schema": {
-      "types": "./v2/schema/index.d.ts",
-      "import": "./v2/schema/index.js",
-      "require": "./v2/schema/index.cjs"
     }
   }
 }
