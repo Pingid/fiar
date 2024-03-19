@@ -2,8 +2,9 @@ import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { doc } from '@firebase/firestore'
 import { useRef } from 'react'
 
-import { Header, useIntercept, useLocation } from '@fiar/workbench'
+import { useLocation, useIntercept } from '@fiar/workbench/router'
 import { Button } from '@fiar/components'
+import { Header } from '@fiar/workbench'
 
 import { FormProvider, useForm } from '../../../context/field.js'
 import { useModel, usePathRef } from '../../../context/model.js'

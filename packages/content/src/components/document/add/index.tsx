@@ -1,10 +1,10 @@
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { collection } from '@firebase/firestore'
-import { useLocation } from 'wouter'
 import { useRef } from 'react'
 
-import { useIntercept, Header } from '@fiar/workbench'
+import { useIntercept, useLocation } from '@fiar/workbench/router'
 import { Button } from '@fiar/components'
+import { Header } from '@fiar/workbench'
 
 import { useForm, FormProvider } from '../../../context/field.js'
 import { useDocumentMutation } from '../../../context/data.js'

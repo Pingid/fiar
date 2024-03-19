@@ -1,8 +1,8 @@
 import { CloudIcon } from '@heroicons/react/24/outline'
 import React, { useLayoutEffect } from 'react'
-import { Route, Switch } from 'wouter'
 
 import { Extensions, useExtend } from '@fiar/workbench/extensions'
+import { Route, Switch } from '@fiar/workbench/router'
 import { App } from '@fiar/workbench'
 
 import { FormFieldAsset, PreviewFieldAsset } from './components/Field/index.js'

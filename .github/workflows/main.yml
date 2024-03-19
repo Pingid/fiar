@@ -1,10 +1,9 @@
 name: Checks
 
 on:
-  workflow_dispatch:
-  # push:
-  #   branches:
-  #     - '*'
+  push:
+    branches:
+      - '*'
 
 env:
   FORCE_COLOR: true
@@ -44,4 +43,7 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm build:packages
+        run: pnpm build
+
+      - name: Build
+        run: pnpm test

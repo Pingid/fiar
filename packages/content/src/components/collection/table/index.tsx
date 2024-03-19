@@ -1,10 +1,11 @@
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { OrderByDirection, doc, orderBy } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
-import { Button } from '@fiar/components'
-import { useLocation } from 'wouter'
 import { useStore } from 'zustand'
 import { cn } from 'mcn'
+
+import { useLocation } from '@fiar/workbench/router'
+import { Button } from '@fiar/components'
 
 import { useCollectionData, useCollectionRef, useDocumentMutation } from '../../../context/data.js'
 import { useSelectDocument } from '../../../context/select.js'

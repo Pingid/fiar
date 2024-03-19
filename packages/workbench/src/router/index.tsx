@@ -6,6 +6,9 @@ import { memoryLocation } from 'wouter/memory-location'
 
 import { useInterceptor } from '../interceptor/index.js'
 
+export { useIntercept, useInterceptor } from '../interceptor/index.js'
+export * from 'wouter'
+
 export type DashboardRouterProps = {
   children?: React.ReactNode
   router?:

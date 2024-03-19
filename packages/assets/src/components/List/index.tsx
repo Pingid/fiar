@@ -1,7 +1,7 @@
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
+import { Link } from '@fiar/workbench/router'
 import { Header } from '@fiar/workbench'
 import { Card } from '@fiar/components'
-import { Link } from 'wouter'
 
 import { useAssetConfig } from '../../context/config.js'
 import { useUploads } from '../../context/uploads.js'

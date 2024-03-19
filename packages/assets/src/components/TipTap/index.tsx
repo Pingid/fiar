@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import useSWRMutation from 'swr/mutation'
 import { Editor } from '@tiptap/react'
 
-import { TipTapTool, useTipTapExtensions, TipTapToolButton } from '@fiar/content/components'
+import { TipTapTool, useTipTapExtensions, TipTapToolButton } from '@fiar/content/fields'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
 import { SelectAssetProvider } from '../../context/select.js'

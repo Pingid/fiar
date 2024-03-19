@@ -3,7 +3,7 @@ import { startAfter } from '@firebase/firestore'
 import { useStore } from 'zustand'
 
 import { Button, Pagination } from '@fiar/components'
-import { Link } from '@fiar/workbench'
+import { Link } from '@fiar/workbench/router'
 
 import { useCollectionData } from '../../../context/data.js'
 import { useQueryStore } from '../../../context/query.js'

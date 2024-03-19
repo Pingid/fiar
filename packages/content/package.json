@@ -15,26 +15,20 @@
   "scripts": {
     "dev": "pnpm watch",
     "build": "../../scripts/build.js",
-    "watch": "../../scripts/watch.js",
-    "test": "vitest  --environment jsdom"
+    "watch": "../../scripts/watch.js"
   },
   "dependencies": {
     "@fiar/components": "workspace:^",
     "@fiar/schema": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.1.1",
-    "@tiptap/pm": "^2.2.4",
     "@tiptap/react": "^2.2.4",
     "@tiptap/starter-kit": "^2.2.4",
     "dayjs": "^1.11.10",
     "mcn": "^0.0.4",
     "react-hook-form": "^7.51.0",
-    "react-hot-toast": "^2.4.1",
-    "react-icons": "^5.0.1",
     "regexparam": "^3.0.0",
     "swr": "^2.2.5",
-    "typeofit": "^0.0.5",
-    "wouter": "^3.1.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -60,133 +54,19 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "import": "./index.js"
     },
     "./components": {
       "types": "./components/index.d.ts",
-      "import": "./components/index.js",
-      "require": "./components/index.cjs"
+      "import": "./components/index.js"
     },
     "./fields": {
       "types": "./fields/index.d.ts",
-      "import": "./fields/index.js",
-      "require": "./fields/index.cjs"
+      "import": "./fields/index.js"
     },
     "./schema": {
       "types": "./schema/index.d.ts",
-      "import": "./schema/index.js",
-      "require": "./schema/index.cjs"
-    },
-    "./util": {
-      "types": "./util/index.d.ts",
-      "import": "./util/index.js",
-      "require": "./util/index.cjs"
-    },
-    "./components/content": {
-      "types": "./components/content/index.d.ts",
-      "import": "./components/content/index.js",
-      "require": "./components/content/index.cjs"
-    },
-    "./components/document": {
-      "types": "./components/document/index.d.ts",
-      "import": "./components/document/index.js",
-      "require": "./components/document/index.cjs"
-    },
-    "./fields/bool": {
-      "types": "./fields/bool/index.d.ts",
-      "import": "./fields/bool/index.js",
-      "require": "./fields/bool/index.cjs"
-    },
-    "./fields/list": {
-      "types": "./fields/list/index.d.ts",
-      "import": "./fields/list/index.js",
-      "require": "./fields/list/index.cjs"
-    },
-    "./fields/map": {
-      "types": "./fields/map/index.d.ts",
-      "import": "./fields/map/index.js",
-      "require": "./fields/map/index.cjs"
-    },
-    "./fields/number": {
-      "types": "./fields/number/index.d.ts",
-      "import": "./fields/number/index.js",
-      "require": "./fields/number/index.cjs"
-    },
-    "./fields/ref": {
-      "types": "./fields/ref/index.d.ts",
-      "import": "./fields/ref/index.js",
-      "require": "./fields/ref/index.cjs"
-    },
-    "./fields/string": {
-      "types": "./fields/string/index.d.ts",
-      "import": "./fields/string/index.js",
-      "require": "./fields/string/index.cjs"
-    },
-    "./fields/text": {
-      "types": "./fields/text/index.d.ts",
-      "import": "./fields/text/index.js",
-      "require": "./fields/text/index.cjs"
-    },
-    "./fields/timestamp": {
-      "types": "./fields/timestamp/index.d.ts",
-      "import": "./fields/timestamp/index.js",
-      "require": "./fields/timestamp/index.cjs"
-    },
-    "./components/collection/filter": {
-      "types": "./components/collection/filter/index.d.ts",
-      "import": "./components/collection/filter/index.js",
-      "require": "./components/collection/filter/index.cjs"
-    },
-    "./components/collection/header": {
-      "types": "./components/collection/header/index.d.ts",
-      "import": "./components/collection/header/index.js",
-      "require": "./components/collection/header/index.cjs"
-    },
-    "./components/collection/page": {
-      "types": "./components/collection/page/index.d.ts",
-      "import": "./components/collection/page/index.js",
-      "require": "./components/collection/page/index.cjs"
-    },
-    "./components/collection/paginate": {
-      "types": "./components/collection/paginate/index.d.ts",
-      "import": "./components/collection/paginate/index.js",
-      "require": "./components/collection/paginate/index.cjs"
-    },
-    "./components/collection/table": {
-      "types": "./components/collection/table/index.d.ts",
-      "import": "./components/collection/table/index.js",
-      "require": "./components/collection/table/index.cjs"
-    },
-    "./components/document/add": {
-      "types": "./components/document/add/index.d.ts",
-      "import": "./components/document/add/index.js",
-      "require": "./components/document/add/index.cjs"
-    },
-    "./components/document/fields": {
-      "types": "./components/document/fields/index.d.ts",
-      "import": "./components/document/fields/index.js",
-      "require": "./components/document/fields/index.cjs"
-    },
-    "./components/document/save": {
-      "types": "./components/document/save/index.d.ts",
-      "import": "./components/document/save/index.js",
-      "require": "./components/document/save/index.cjs"
-    },
-    "./components/document/set": {
-      "types": "./components/document/set/index.d.ts",
-      "import": "./components/document/set/index.js",
-      "require": "./components/document/set/index.cjs"
-    },
-    "./components/document/title": {
-      "types": "./components/document/title/index.d.ts",
-      "import": "./components/document/title/index.js",
-      "require": "./components/document/title/index.cjs"
-    },
-    "./components/document/update": {
-      "types": "./components/document/update/index.d.ts",
-      "import": "./components/document/update/index.js",
-      "require": "./components/document/update/index.cjs"
+      "import": "./schema/index.js"
     }
   }
 }

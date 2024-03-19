@@ -7,11 +7,9 @@ import { ExtensionsProvider } from './extensions/index.js'
 import { Nav } from './nav/index.js'
 
 export { toast, type ExternalToast, type ToastT } from 'sonner'
-export * from 'wouter'
 
 export { NavButton, useNavState, NavActionTop } from './nav/index.js'
 export { WorkbenchModal, WorkbenchPageModal } from './modal/index.js'
-export { useIntercept, useInterceptor } from './interceptor/index.js'
 export { type DashboardRouterProps } from './router/index.js'
 export { Header } from './header/index.js'
 export { useAuth } from './auth/index.js'

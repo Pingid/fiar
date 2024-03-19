@@ -15,7 +15,7 @@ import useMutation from 'swr/mutation'
 import React from 'react'
 
 import { Button, Field, FieldControl, Input, LoadingDots } from '@fiar/components'
-import { useFirebaseAuth, useAuthConfig } from '../context/index.js'
+import { useFirebaseAuth, useAuthConfig } from '../../context/index.js'
 
 export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?: boolean }): JSX.Element => {
   const auth = useFirebaseAuth()

@@ -1,9 +1,9 @@
 import { CircleStackIcon } from '@heroicons/react/24/outline'
-import { Route, RouteProps, useRoute } from 'wouter'
 import { getFirestore } from '@firebase/firestore'
 import { useLayoutEffect } from 'react'
 import { inject } from 'regexparam'
 
+import { Route, RouteProps, useRoute } from '@fiar/workbench/router'
 import { useExtend } from '@fiar/workbench/extensions'
 import { App } from '@fiar/workbench'
 

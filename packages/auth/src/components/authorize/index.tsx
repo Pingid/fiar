@@ -1,11 +1,11 @@
-import { Redirect, useLocation, useRoute, useSearch } from 'wouter'
 import { type User, signOut } from '@firebase/auth'
 import { useEffect, useState } from 'react'
 import { cn } from 'mcn'
 
+import { Redirect, useLocation, useRoute, useSearch } from '@fiar/workbench/router'
 import { useAuth } from '@fiar/workbench'
 
-import { useAuthConfig, useFirebaseAuth } from '../context/index.js'
+import { useAuthConfig, useFirebaseAuth } from '../../context/index.js'
 import { Login } from '../login/index.js'
 
 export const Authorize = () => {

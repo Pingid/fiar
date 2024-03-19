@@ -1,6 +1,7 @@
-import { AuthConfig, useAuthConfig } from './context/index.js'
-import { Authorize } from './authorize/index.js'
 import { useLayoutEffect } from 'react'
+
+import { AuthConfig, useAuthConfig } from './context/index.js'
+import { Authorize } from './components/index.js'
 
 export type { AuthConfig } from './context/index.js'
 

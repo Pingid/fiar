@@ -31,7 +31,6 @@
     "react-use": "^17.5.0",
     "swr": "^2.2.5",
     "three": "^0.161.0",
-    "wouter": "^3.1.0",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -53,73 +52,19 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "import": "./index.js"
     },
     "./components": {
       "types": "./components/index.d.ts",
-      "import": "./components/index.js",
-      "require": "./components/index.cjs"
+      "import": "./components/index.js"
     },
     "./context": {
       "types": "./context/index.d.ts",
-      "import": "./context/index.js",
-      "require": "./context/index.cjs"
+      "import": "./context/index.js"
     },
     "./schema": {
       "types": "./schema/index.d.ts",
-      "import": "./schema/index.js",
-      "require": "./schema/index.cjs"
-    },
-    "./components/Card": {
-      "types": "./components/Card/index.d.ts",
-      "import": "./components/Card/index.js",
-      "require": "./components/Card/index.cjs"
-    },
-    "./components/Field": {
-      "types": "./components/Field/index.d.ts",
-      "import": "./components/Field/index.js",
-      "require": "./components/Field/index.cjs"
-    },
-    "./components/Folder": {
-      "types": "./components/Folder/index.d.ts",
-      "import": "./components/Folder/index.js",
-      "require": "./components/Folder/index.cjs"
-    },
-    "./components/Grid": {
-      "types": "./components/Grid/index.d.ts",
-      "import": "./components/Grid/index.js",
-      "require": "./components/Grid/index.cjs"
-    },
-    "./components/List": {
-      "types": "./components/List/index.d.ts",
-      "import": "./components/List/index.js",
-      "require": "./components/List/index.cjs"
-    },
-    "./components/Thumb": {
-      "types": "./components/Thumb/index.d.ts",
-      "import": "./components/Thumb/index.js",
-      "require": "./components/Thumb/index.cjs"
-    },
-    "./components/TipTap": {
-      "types": "./components/TipTap/index.d.ts",
-      "import": "./components/TipTap/index.js",
-      "require": "./components/TipTap/index.cjs"
-    },
-    "./components/Upload": {
-      "types": "./components/Upload/index.d.ts",
-      "import": "./components/Upload/index.js",
-      "require": "./components/Upload/index.cjs"
-    },
-    "./components/Folder/DropLayer": {
-      "types": "./components/Folder/DropLayer/index.d.ts",
-      "import": "./components/Folder/DropLayer/index.js",
-      "require": "./components/Folder/DropLayer/index.cjs"
-    },
-    "./components/Thumb/3D": {
-      "types": "./components/Thumb/3D/index.d.ts",
-      "import": "./components/Thumb/3D/index.js",
-      "require": "./components/Thumb/3D/index.cjs"
+      "import": "./schema/index.js"
     }
   }
 }

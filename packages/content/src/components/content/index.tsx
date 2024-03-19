@@ -1,9 +1,9 @@
 import { DocumentDuplicateIcon, DocumentIcon } from '@heroicons/react/24/outline'
 import { collection, doc, getCountFromServer } from '@firebase/firestore'
-import { Link } from 'wouter'
 import useSWR from 'swr'
 import { cn } from 'mcn'
 
+import { Link } from '@fiar/workbench/router'
 import { Header } from '@fiar/workbench'
 import { Card } from '@fiar/components'
 
