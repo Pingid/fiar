@@ -8,8 +8,12 @@ import {
   FireSchemaRef,
   FireModel,
   FireSchemaTimestamp,
+  InferModelType,
+  InferSchemaType,
 } from '@fiar/schema'
 import { Timestamp } from '@firebase/firestore'
+
+export type TypeOf<T> = T extends FireModel ? InferModelType<T> : T extends FireSchemaTypes ? InferSchemaType<T> : never
 
 export interface IFieldBase {
   label?: string
@@ -62,7 +66,7 @@ export interface IContentCollection extends FireModel {
 
   titleField?: keyof this['fields']
   columns: (keyof this['fields'])[]
-  sort: [keyof this['fields'], 'asc' | 'desc']
+  sort?: [keyof this['fields'], 'asc' | 'desc']
 }
 
 export type IContentModel = IContentDocument | IContentCollection

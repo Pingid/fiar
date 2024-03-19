@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config'
 import starlight from '@astrojs/starlight'
-
 import tailwind from '@astrojs/tailwind'
+
+import react from '@astrojs/react'
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +18,11 @@ export default defineConfig({
       components: {},
     }),
     tailwind({ applyBaseStyles: false }),
+    react(),
   ],
-  image: { service: { entrypoint: 'astro/assets/services/sharp' } },
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+    },
+  },
 })
