@@ -29,3 +29,7 @@
   --sl-color-bg-nav: hsl(var(--color-back) / 1);
   --sl-color-bg-sidebar: hsl(var(--color-back) / 1);
 }
+
+.site-title {
+  color: hsl(var(--color-front) / 1) !important;
+}

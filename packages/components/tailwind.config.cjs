@@ -28,7 +28,7 @@ const base = {
   '@media (prefers-color-scheme: dark)': { ':root': dark },
   '[data-theme="light"]': light,
   '[data-theme="dark"]': dark,
-  html: { 'background-color': `hsl(var(--color-back) / 1)`, color: `hsl(var(--color-front) / 1)` },
+  html: { 'background-color': `hsl(var(--color-back) / 1)`, color: `hsl(var(--color-front) / 1)`, fontFamily: `var(--font-sans)` },
 }
 
 module.exports = {
