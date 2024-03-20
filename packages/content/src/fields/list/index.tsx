@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Timestamp } from '@firebase/firestore'
 import { cn } from 'mcn'
 
-import { Field, Markdown, Sortable, SortableItem } from '@fiar/components'
+import { Field, Sortable, SortableItem } from '@fiar/components'
 
 import { FieldProvider, useFieldPreview, useFieldForm, UserFieldForm, useController } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
@@ -20,7 +20,6 @@ export const FormFieldList = () => {
 
   return (
     <Field name={field.name} label={field.schema.label} description={field.schema.description}>
-      <Markdown className="text-front/50 pb-1 text-sm">{field.schema.description}</Markdown>
       <div className={cn('space-y-3')}>
         <Sortable items={control.value} onSort={(from, to) => control.move(from, to)}>
           {control.value.map((x, i) => (
