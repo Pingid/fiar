@@ -1,7 +1,7 @@
 import { cn } from 'mcn'
 
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Button, Field, FieldControl } from '@fiar/components'
+import { Button, Field } from '@fiar/components'
 
 import { useFieldPreview, useFieldForm, useFormFieldControl, useController, Fields } from '../../context/field.js'
 import type { IFieldMap } from '../../schema/index.js'
@@ -14,7 +14,7 @@ export const FormFieldMap = () => {
 
   return (
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
-      <FieldControl>
+      <div className="border">
         {optional && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
             <div />
@@ -39,7 +39,7 @@ export const FormFieldMap = () => {
             <Fields fields={field.schema.fields} name={field.name} parent={field.schema} />
           </div>
         )}
-      </FieldControl>
+      </div>
     </Field>
   )
 }
