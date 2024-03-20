@@ -29,9 +29,9 @@ export const DocumentSet = () => {
     },
   })
 
-  const form = useForm({ criteriaMode: 'firstError', context: { schema } })
-  const onSubmit = form.handleSubmit((data) =>
-    update.trigger({ type: 'set', data: toFirestore(fs, data, false), schema, ref: doc(fs, path) }),
+  const form = useForm({ defaultValues: { data: {} }, criteriaMode: 'firstError', context: { schema } })
+  const onSubmit = form.handleSubmit((x) =>
+    update.trigger({ type: 'set', data: toFirestore(fs, x.data, false), schema, ref: doc(fs, path) }),
   )
 
   useIntercept((next) => {

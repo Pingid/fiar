@@ -1,17 +1,10 @@
 import { cn } from 'mcn'
 
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Field, FieldControl } from '@fiar/components'
+import { Button, Field, FieldControl } from '@fiar/components'
 
-import {
-  FormField,
-  useFieldPreview,
-  FieldProvider,
-  useFieldForm,
-  useFormFieldControl,
-  useController,
-} from '../../context/field.js'
-import type { IFieldMap, IFields } from '../../schema/index.js'
+import { useFieldPreview, useFieldForm, useFormFieldControl, useController, Fields } from '../../context/field.js'
+import type { IFieldMap } from '../../schema/index.js'
 
 export const FormFieldMap = () => {
   const field = useFieldForm<IFieldMap>()
@@ -38,20 +31,14 @@ export const FormFieldMap = () => {
             </div>
           </div>
         )}
+
         {(control.field.value || !optional) && (
           <div className={cn('bg-back space-y-4 p-3', [!isListItem, '', 'py-3'])}>
-            {Object.keys(field.schema.fields).map((key) => {
-              const inner = field.schema.fields[key] as IFields
-              const name = field.name ? `${field.name}.${key}` : key
-              return (
-                <FieldProvider key={key} value={{ schema: inner, name, parent: field.schema }}>
-                  <FormField {...(field as any)} name={name} field={{ ...inner, label: inner.label ?? key }} />
-                </FieldProvider>
-              )
-            })}
+            <UndeclaredFields {...field} />
+
+            <Fields fields={field.schema.fields} name={field.name} parent={field.schema} />
           </div>
         )}
-        {/* <ExtraFields /> */}
       </FieldControl>
     </Field>
   )
@@ -62,18 +49,44 @@ export const PreviewFieldMap = () => {
   return JSON.stringify(field.value)
 }
 
-export const ExtraFields = () => {
-  const field = useFieldForm<IFieldMap>()
-  const control = useController(field)
+const getUndeclared = (value: Record<string, any>, fields: Record<string, any>) =>
+  Object.keys(value).filter((key) => !(key in fields) && typeof value[key] !== 'undefined')
 
-  const extra = Object.keys(control.field.value ?? {}).filter((key) => !(key in field.schema.fields))
+export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => {
+  const control = useController({
+    ...props,
+    rules: {
+      validate: (x) => {
+        if (getUndeclared(x, props.schema.fields).length === 0) return true
+        return 'Field not declared in schema'
+      },
+    },
+  })
+  const value = control.field.value
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return null
+  const extra = getUndeclared(value, props.schema.fields)
+  const onRemove = () => {
+    const next = { ...control.field.value }
+    extra.forEach((key) => delete next[key])
+    control.field.onChange(next)
+  }
+  if (extra.length === 0) return null
   return (
-    <ul>
-      {extra.map((key) => (
-        <p key={key}>
-          {key}: {JSON.stringify(control.field.value[key])}
-        </p>
-      ))}
-    </ul>
+    <div className="border-error/40 bg-error/5 border p-3">
+      <p className="text-error text-sm">Found undeclared fields in document</p>
+      <ul className="pt-2 text-sm">
+        {extra.map((key) => (
+          <div key={key} className="flex items-center gap-1">
+            <span className="text-front/70">{key}:</span>
+            {JSON.stringify(value[key] || null)}
+          </div>
+        ))}
+      </ul>
+      <div className="flex justify-end">
+        <Button size="sm" color="error" onClick={onRemove}>
+          Delete
+        </Button>
+      </div>
+    </div>
   )
 }

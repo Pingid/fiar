@@ -5,7 +5,7 @@ import { useFirebaseStorage } from './config.js'
 
 export const useImageMeta = (fullPath?: string) => {
   const storage = useFirebaseStorage()
-  return useSWR([fullPath, 'meta'], () =>
+  return useSWR(`${fullPath}-meta`, () =>
     Promise.all([getMetadata(ref(storage, fullPath)), getDownloadURL(ref(storage, fullPath))]).then(([meta, url]) => ({
       ...meta,
       url,

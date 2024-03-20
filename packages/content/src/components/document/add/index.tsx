@@ -17,7 +17,7 @@ import { DocumentPublish } from '../save/index.js'
 
 export const DocumentAdd = () => {
   const schema = useModel()
-  const form = useForm({ defaultValues: {}, context: { schema: schema } })
+  const form = useForm({ defaultValues: { data: {} }, context: { schema: schema } })
   const firestore = useFirestore()
   const submitted = useRef(false)
   const [_, nav] = useLocation()
@@ -32,7 +32,7 @@ export const DocumentAdd = () => {
 
   const ref = collection(firestore, schema.path)
   const onSubmit = form.handleSubmit((x) =>
-    mutate.trigger({ schema, type: 'add', data: toFirestore(firestore, x, false), ref }),
+    mutate.trigger({ schema, type: 'add', data: toFirestore(firestore, x.data, false), ref }),
   )
 
   useIntercept((next) => {

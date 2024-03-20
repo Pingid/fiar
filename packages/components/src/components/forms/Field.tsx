@@ -16,19 +16,19 @@ export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { err
 >(({ error, name, label, children, description, ...props }, ref) => {
   const DESCRIPTION =
     typeof description === 'string' ? (
-      <Markdown className="text-front/50 pb-1 text-sm">{description}</Markdown>
-    ) : (
-      <p className="text-front/50 pb-1 text-sm">{description}</p>
-    )
+      <Markdown className="text-front/50 pb-2 leading-snug">{description}</Markdown>
+    ) : description ? (
+      <p className="text-front/50 pb-2">{description}</p>
+    ) : null
 
   return (
     <div
       {...props}
       ref={ref}
-      className={cn('relative transition-[padding]', [!!error, 'pb-6'], [!!label, 'pt-6'], props.className)}
+      className={cn('group relative transition-[padding]', [!!error, 'pb-6'], [!!label, 'pt-6'], props.className)}
     >
       {label && (
-        <label htmlFor={name} className="group-focus-within:text-active absolute -top-0 text-sm">
+        <label htmlFor={name} className="group-focus-within:text-active block pb-0.5 text-sm">
           {label}
         </label>
       )}

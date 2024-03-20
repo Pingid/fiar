@@ -29,7 +29,7 @@ export const DocumentUpdate = () => {
 
   const value = useMemo(() => {
     if (!data.data) return null
-    return fromFirestore(data.data.data())
+    return { data: fromFirestore(data.data.data()) }
   }, [data.data])
 
   if (data.isLoading) {
@@ -62,7 +62,7 @@ export const DocumentUpdate = () => {
   )
 }
 
-export const DocumentUpdateForm = (props: { defaultValues: Record<string, any>; onBack: () => void }) => {
+export const DocumentUpdateForm = (props: { defaultValues: { data: Record<string, any> }; onBack: () => void }) => {
   const mutate = useDocumentMutation()
   const firestore = useFirestore()
   const submit = useRef(false)
@@ -72,8 +72,8 @@ export const DocumentUpdateForm = (props: { defaultValues: Record<string, any>; 
   const ref = doc(firestore, path)
   const form = useForm({ criteriaMode: 'firstError', context: { schema }, ...props })
 
-  const onSubmit = form.handleSubmit((value) => {
-    return mutate.trigger({ schema, type: 'update', data: toFirestore(firestore, { ...value }, true), ref })
+  const onSubmit = form.handleSubmit((x) => {
+    return mutate.trigger({ schema, type: 'update', data: toFirestore(firestore, x.data, true), ref })
   })
 
   const onDelete = () => mutate.trigger({ schema, ref, type: 'delete' }).then(() => props.onBack())

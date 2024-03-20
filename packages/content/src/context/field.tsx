@@ -19,7 +19,7 @@ import { InferSchemaType } from '@fiar/schema'
 
 import { IField, IFields } from '../schema/index.js'
 
-const FieldContext = createContext<{ name: string; schema: IField; parent?: IField } | null>(null)
+const FieldContext = createContext<{ name: string; schema: IField; parent?: IField | undefined } | null>(null)
 export const FieldProvider = FieldContext.Provider
 export const useField = <F extends IField>() => {
   const m = useContext(FieldContext)
@@ -122,5 +122,20 @@ export const FieldPreview = (props: { schema: IFields; value: any; name: string 
         <UseExtension extension={extension} props={{}} fallback={null} />
       </FieldProvider>
     </FieldValueProvider>
+  )
+}
+
+export const Fields = (props: { fields: Record<string, IFields>; name: string; parent?: IField }) => {
+  return (
+    <>
+      {Object.keys(props.fields).map((key) => {
+        const schema = props.fields[key] as IFields
+        return (
+          <FieldProvider key={key} value={{ schema, name: `${props.name}.${key}`, parent: props.parent }}>
+            <FormField />
+          </FieldProvider>
+        )
+      })}
+    </>
   )
 }

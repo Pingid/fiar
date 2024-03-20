@@ -5,7 +5,7 @@ const light = {
   '--color-frame': `0deg 0% 96%`,
   '--color-front': `0deg 0% 20%`,
   '--color-line': `0deg 0% 88%`,
-  '--color-line-focus': `0deg 0% 50%`,
+  '--color-line-focus': `0deg 0% 65%`,
 
   '--color-active': `255deg 86% 45%`,
   '--color-error': `351deg 78% 62%`,
