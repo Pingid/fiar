@@ -19,8 +19,7 @@ export const FormFieldRef = () => {
     ...field,
     rules: {
       validate: (x) => {
-        console.log('validate', { x })
-        if (!x && !field.schema.optional) return `Required value`
+        if (!x && !field.schema.optional) return `Required`
         return true
       },
     },

@@ -72,21 +72,23 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
   }
   if (extra.length === 0) return null
   return (
-    <div className="border-error/40 bg-error/5 border p-3">
-      <p className="text-error text-sm">Found undeclared fields in document</p>
-      <ul className="pt-2 text-sm">
-        {extra.map((key) => (
-          <div key={key} className="flex items-center gap-1">
-            <span className="text-front/70">{key}:</span>
-            {JSON.stringify(value[key] || null)}
-          </div>
-        ))}
-      </ul>
-      <div className="flex justify-end">
-        <Button size="sm" color="error" onClick={onRemove}>
-          Delete
-        </Button>
+    <Field error={control.fieldState.error?.message}>
+      <div className="border-error/40 bg-error/5 z-20 border p-3">
+        <p className="text-error text-sm">Found undeclared fields in document</p>
+        <ul className="pt-2 text-sm">
+          {extra.map((key) => (
+            <div key={key} className="flex items-center gap-1">
+              <span className="text-front/70">{key}:</span>
+              {JSON.stringify(value[key] || null)}
+            </div>
+          ))}
+        </ul>
+        <div className="flex justify-end">
+          <Button size="sm" color="error" onClick={onRemove}>
+            Remove
+          </Button>
+        </div>
       </div>
-    </div>
+    </Field>
   )
 }

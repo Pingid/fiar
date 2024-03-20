@@ -4,10 +4,10 @@ import { forward, Forward } from '../../util/forwardRef.js'
 import { Markdown } from '../markdown/index.js'
 
 type FieldProps = {
-  error?: string | null | Error | undefined
-  name?: string
+  error?: string | undefined
+  name?: string | undefined
   label?: React.ReactNode
-  description?: React.ReactNode
+  description?: React.ReactNode | undefined
 }
 
 export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { error?: any }> } = forward<
@@ -32,14 +32,17 @@ export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { err
           {label}
         </label>
       )}
-      {error && (
-        <label
-          htmlFor={name}
-          className="text-error/80 group-focus-within:text-error absolute -bottom-0 right-2 text-sm"
-        >
-          {error instanceof Error ? error.message : error}
-        </label>
-      )}
+
+      <label
+        htmlFor={name}
+        className={cn(
+          'text-error/80 group-focus-within:text-error absolute bottom-0 right-0 z-0 block text-sm transition-opacity delay-75',
+          [!!error, 'opacity-100', 'opacity-0'],
+        )}
+      >
+        {error}
+      </label>
+
       {DESCRIPTION}
       {children}
     </div>

@@ -11,6 +11,7 @@ import {
   useController as _useController,
   useFormState as _useFormState,
   get as _get,
+  FormProviderProps,
 } from 'react-hook-form'
 import { createContext, useContext } from 'react'
 
@@ -35,7 +36,13 @@ export const useForm = <TFieldValues extends FieldValues = FieldValues>(
   props: UseFormProps<TFieldValues, FormContext> & { context: FormContext },
 ) => _useForm(props)
 
-export const FormProvider = _FormProvider
+export const FormProvider: <
+  TFieldValues extends FieldValues,
+  TContext = any,
+  TTransformedValues extends FieldValues | undefined = undefined,
+>(
+  props: FormProviderProps<TFieldValues, TContext, TTransformedValues>,
+) => React.JSX.Element = _FormProvider
 
 export const useFormContext = <
   TFieldValues extends FieldValues,
@@ -86,7 +93,7 @@ export const useFieldError = () => {
   const err = get(state.errors, useField().name)
   if (!err) return undefined
   if (err.message) return err.message
-  if (err.type === 'required') return `Required value`
+  if (err.type === 'required') return `Required`
   return 'Invalid'
 }
 

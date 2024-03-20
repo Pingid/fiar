@@ -8,7 +8,7 @@ export const FormFieldString = () => {
 
   const register = field.control.register(field.name, {
     validate: (x) => {
-      if (!x && !field.schema.optional) return `Required value`
+      if (!x && !field.schema.optional) return `Required`
       if (typeof x === 'undefined') return true
       if (typeof field.schema.max === 'number' && x > field.schema.max)
         return `Failed is limited to ${field.schema.max} charactors`
