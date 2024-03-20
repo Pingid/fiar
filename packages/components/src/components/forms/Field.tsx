@@ -28,7 +28,7 @@ export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { err
       className={cn('group relative transition-[padding]', [!!error, 'pb-6'], [!!label, 'pt-6'], props.className)}
     >
       {label && (
-        <label htmlFor={name} className="group-focus-within:text-active block pb-0.5 text-sm">
+        <label htmlFor={name} className="block pb-0.5 text-sm">
           {label}
         </label>
       )}

@@ -1,3 +1,4 @@
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { ModalProvider } from '@fiar/components'
 import { Toaster } from 'sonner'
 
@@ -20,7 +21,15 @@ export const Dashboard = ({ children, ...props }: DashboardRouterProps) => {
     <ExtensionsProvider>
       <InterceptProvider>
         <ModalProvider className="fixed left-0 top-0 z-50">
-          <Toaster className="" />
+          <Toaster
+            className=""
+            toastOptions={{
+              duration: 60_000,
+              className: '!rounded-none !items-start p-3',
+              classNames: { error: '!border-error' },
+            }}
+            icons={{ error: <ExclamationTriangleIcon className="relative top-1 h-full w-full" /> }}
+          />
           <DashboardRouter {...props}>
             <div className="min-h-[--container-height] w-full [--asside-height:3rem] [--container-height:100dvh] sm:[--asside-height:0rem]">
               <Nav>{children}</Nav>

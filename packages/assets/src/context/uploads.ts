@@ -1,4 +1,5 @@
 import { UploadTask } from '@firebase/storage'
+import { toast } from '@fiar/workbench'
 import { create } from 'zustand'
 
 export type UploadAsset = { task: UploadTask; folder: string; fullPath: string; url: string; contentType: string }
@@ -13,7 +14,10 @@ export const useUploads = create<UploadState>((set, get) => ({
   uploads: [],
   add: (up, revalidate) => {
     up.task
-      .catch((error) => set({ error }))
+      .catch((error) => {
+        set({ error })
+        toast.error(error.message)
+      })
       .then(() => {
         set({ uploads: get().uploads.filter((y) => y.task !== up.task) })
         revalidate()

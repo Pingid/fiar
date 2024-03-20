@@ -10,7 +10,8 @@ import { DocumentHookEvent, useHooksHandler } from './hooks.js'
 import { useQueryStore } from './query.js'
 import { usePathRef } from './model.js'
 
-const onError = (e: any) => toast(e instanceof Error ? e.message : JSON.stringify(e))
+const onError = (e: any) => toast.error(e instanceof Error ? e.message : JSON.stringify(e))
+
 export const useCollectionRef = () => collection(useFirestore(), usePathRef())
 export const useCollectionData = () => {
   const constraints = useStore(useQueryStore(), (x) => x.constraints)
