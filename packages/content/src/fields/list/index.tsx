@@ -19,7 +19,7 @@ export const FormFieldList = () => {
   const control = useFieldArray(field)
 
   return (
-    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+    <Field name={field.name} label={field.schema.label} description={field.schema.description}>
       <Markdown className="text-front/50 pb-1 text-sm">{field.schema.description}</Markdown>
       <div className={cn('space-y-3')}>
         <Sortable items={control.value} onSort={(from, to) => control.move(from, to)}>
