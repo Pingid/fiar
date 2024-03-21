@@ -1,11 +1,19 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { useEffect, useRef, useState } from 'react'
 import { Timestamp } from '@firebase/firestore'
+import { useEffect, useState } from 'react'
 import { cn } from 'mcn'
 
 import { Field, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldProvider, useFieldPreview, useFieldForm, UseFieldForm, useController } from '../../context/field.js'
+import {
+  FieldProvider,
+  useFieldPreview,
+  useFieldForm,
+  UseFieldForm,
+  useController,
+  useFormContext,
+  get,
+} from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
 
@@ -48,11 +56,15 @@ export const FormFieldList = () => {
 }
 
 const useFieldArray = (props: UseFieldForm<IFieldList>) => {
+  const form = useFormContext()
   const control = useController(props)
   const value = Array.isArray(control.field.value) ? control.field.value : []
   const [items, setItems] = useState<{ id: number }[]>(value.map((_, i) => ({ id: Date.now() + i })))
-  const getValue = () => props.control._getFieldArray(props.name)
-  const skip = useRef(false)
+  const getValue = () => {
+    const value = get(form.getValues(), props.name)
+    if (!Array.isArray(value)) return []
+    return value
+  }
 
   useEffect(() => {
     if (!Array.isArray(control.field.value) && !props.schema.optional) {
@@ -61,36 +73,34 @@ const useFieldArray = (props: UseFieldForm<IFieldList>) => {
   }, [control.field.value, props.schema.optional])
 
   useEffect(() => {
-    if (skip.current) {
-      skip.current = false
-      return
-    }
     setItems((x) => {
       const values = getValue()
       if (x.length > values.length) return x
-      return values.map((_, i) => ({ id: Date.now() + i }))
+      return values.map((value, i) => ({ value, id: Date.now() + i }))
     })
   }, [value])
 
   return {
     ...control,
     value: items,
-    add: (value: any) => setItems((x) => [...x, { value, id: Date.now() }]),
+    add: (value: any) => {
+      control.field.onChange([...getValue(), value])
+      setItems((x) => [...x, { value, id: Date.now() }])
+    },
     remove: (index: number) => {
-      skip.current = true
       control.field.onChange(getValue().filter((_, i) => i !== index))
       setItems(items.filter((_, i) => i !== index))
     },
     move: (from: number, to: number) => {
-      skip.current = true
       control.field.onChange(move(getValue(), from, to))
       setItems(move(items, from, to))
     },
   }
 }
 
-const move = <A extends ReadonlyArray<any>>(array: A, from: number, to: number): A =>
-  array.reduce(
+const move = <A extends ReadonlyArray<any>>(array: A, from: number, to: number): A => {
+  if (from < 0 || to < 0 || from > array.length || to > array.length) return array
+  return array.reduce(
     (prev, current, idx, self) => {
       if (from === to) prev.push(current)
       if (idx === from) return prev
@@ -101,6 +111,7 @@ const move = <A extends ReadonlyArray<any>>(array: A, from: number, to: number):
     },
     [] as any as A,
   )
+}
 
 const init = (field: IFields) => {
   if (field.type === 'map') return {}
