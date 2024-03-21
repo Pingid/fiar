@@ -13,7 +13,7 @@ export const FormFieldMap = () => {
   const optional = field.schema.optional
 
   return (
-    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+    <Field name={field.name} label={field.schema.label} description={field.schema.description}>
       <div className="border">
         {optional && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">

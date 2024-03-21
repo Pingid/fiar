@@ -1,13 +1,12 @@
 import { ArrowPathIcon, LinkIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { DocumentReference, doc } from '@firebase/firestore'
-import { useController } from 'react-hook-form'
 import { useState } from 'react'
 
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
+import { FieldPreview, useFieldPreview, useFieldForm, useFormFieldControl } from '../../context/field.js'
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
-import { FieldPreview, useFieldPreview, useFieldForm } from '../../context/field.js'
 import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
 import { IntermediateDocumentReference } from '../../util/firebase.js'
 import { SelectDocumentProvider } from '../../context/select.js'
@@ -15,8 +14,7 @@ import { trailing } from '../../util/index.js'
 
 export const FormFieldRef = () => {
   const field = useFieldForm<IFieldRef>()
-  const controller = useController({
-    ...field,
+  const controller = useFormFieldControl<IFieldRef>({
     rules: {
       validate: (x) => {
         if (!x && !field.schema.optional) return `Required`
@@ -63,7 +61,7 @@ export const FormFieldRef = () => {
 
         {isSet && (
           <DocCard
-            model={{ ...target, path: controller.field.value.path }}
+            model={{ ...target, path: controller.field.value.path as `/${string}` }}
             titleField={target.titleField}
             columns={target.columns}
           />

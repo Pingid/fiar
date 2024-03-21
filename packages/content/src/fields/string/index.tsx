@@ -7,6 +7,7 @@ export const FormFieldString = () => {
   const field = useFieldForm<IFieldString>()
 
   const register = field.control.register(field.name, {
+    ...field.schema,
     validate: (x) => {
       if (!x && !field.schema.optional) return `Required`
       if (typeof x === 'undefined') return true

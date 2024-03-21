@@ -1,7 +1,7 @@
 import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
-import { useFieldPreview, useController, useFieldForm } from '@fiar/content/fields'
+import { useFieldPreview, useFieldForm, useFormFieldControl } from '@fiar/content/fields'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
@@ -29,10 +29,8 @@ export const FormFieldAsset = () => {
   const field = useFieldForm<IFieldAsset>()
   const [open, setOpen] = useState(false)
 
-  const form = useController({
-    ...field,
+  const form = useFormFieldControl<IFieldAsset>({
     rules: {
-      required: !field.schema.optional,
       validate: (x) => {
         if (!x && field.schema.optional) return true
         if (!x) return 'Required'

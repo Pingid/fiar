@@ -48,7 +48,9 @@ export interface IFieldList extends IFieldBase, FireSchemaList {
   of: IFields
 }
 
-export interface IFieldRef extends IFieldBase, FireSchemaRef {}
+export interface IFieldRef<T extends Record<string, FireSchemaTypes> = Record<string, FireSchemaTypes>>
+  extends IFieldBase,
+    FireSchemaRef<T> {}
 
 export type IFields = IFieldBoolean | IFieldString | IFieldNumber | IFieldMap | IFieldList | IFieldRef | IFieldTimestamp
 export type IField = FireSchemaTypes & IFieldBase

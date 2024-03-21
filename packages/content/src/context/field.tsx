@@ -13,12 +13,13 @@ import {
   get as _get,
   FormProviderProps,
 } from 'react-hook-form'
+import { DocumentReference } from '@firebase/firestore'
 import { createContext, useContext } from 'react'
 
 import { UseExtension } from '@fiar/workbench/extensions'
 import { InferSchemaType } from '@fiar/schema'
 
-import { IField, IFields } from '../schema/index.js'
+import { IField, IFieldRef, IFields } from '../schema/index.js'
 
 const FieldContext = createContext<{ name: string; schema: IField; parent?: IField | undefined } | null>(null)
 export const FieldProvider = FieldContext.Provider
@@ -72,7 +73,7 @@ type UseFieldControllerReturn<F extends IField> = {
   field: {
     onChange: (...event: any[]) => void
     onBlur: () => void
-    value: InferSchemaType<F>
+    value: F extends IFieldRef ? DocumentReference : InferSchemaType<F>
     disabled?: boolean
     name: string
     ref: (instance: any) => void
@@ -85,7 +86,14 @@ export const useFormFieldControl = <F extends IField>(
   props?: Omit<UseControllerProps, 'control' | 'name'>,
 ): UseFieldControllerReturn<F> => {
   const form = useFormContext()
-  return useController({ control: form.control, name: useField().name as 'name', ...(props as {}) }) as any
+  const field = useField()
+  return useController({
+    ...field.schema,
+    ...(props as {}),
+    control: form.control,
+    name: field.name as 'name',
+    rules: { required: !field.schema.optional, ...(props as any)?.rules },
+  }) as any
 }
 
 export const useFieldError = () => {

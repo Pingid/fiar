@@ -5,14 +5,13 @@ import { type IFieldBoolean } from '../../schema/index.js'
 
 export const FormFieldBool = () => {
   const field = useFieldForm<IFieldBoolean>()
-
   return (
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
       <FieldControl>
         <Input
           id={field.name}
           type="checkbox"
-          {...field.control.register(field.name, { required: !field.schema.optional })}
+          {...field.control.register(field.name, { ...field.schema, required: !field.schema.optional })}
         />
       </FieldControl>
     </Field>
