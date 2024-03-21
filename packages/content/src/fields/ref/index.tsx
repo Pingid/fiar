@@ -102,8 +102,8 @@ const DocCard = (props: {
   return (
     <div className="grid gap-1 p-2 sm:grid-flow-col-dense sm:gap-3">
       {props.columns.map((key: string) => (
-        <div key={key} className="mb-2 flex w-full min-w-0 flex-col leading-none">
-          <p className="text-front/60 pb-2 text-xs leading-none">{props.model.fields[key]?.label || key}</p>
+        <div key={key} className="mb-2 flex w-full min-w-0 flex-col text-sm">
+          <p className="text-front/60 text-xs">{props.model.fields[key]?.label || key}</p>
           <FieldPreview name={key} schema={props.model.fields[key] as any} value={data.data?.data()?.[key]} />
         </div>
       ))}

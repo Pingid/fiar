@@ -39,5 +39,5 @@ export const FormFieldString = () => {
 
 export const PreviewFieldString = () => {
   const field = useFieldPreview<IFieldString>()
-  return field.value
+  return <p>{field.value}</p>
 }

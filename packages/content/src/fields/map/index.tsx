@@ -3,15 +3,25 @@ import { cn } from 'mcn'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button, Field } from '@fiar/components'
 
-import { useFieldPreview, useFieldForm, useFormFieldControl, useController, Fields } from '../../context/field.js'
+import {
+  useFieldPreview,
+  useFieldForm,
+  useFormFieldControl,
+  useController,
+  Fields,
+  useFormContext,
+  get,
+} from '../../context/field.js'
 import type { IFieldMap } from '../../schema/index.js'
 
 export const FormFieldMap = () => {
+  const form = useFormContext()
   const field = useFieldForm<IFieldMap>()
   const isListItem = field.parent?.type === 'list'
   const control = useFormFieldControl<IFieldMap>()
   const optional = field.schema.optional
-  const open = control.field.value || !optional
+  const value = get(form.getValues(), field.name)
+  const open = value || !optional
 
   return (
     <Field name={field.name} label={field.schema.label} description={field.schema.description}>
@@ -20,7 +30,7 @@ export const FormFieldMap = () => {
           <div className="bg-back flex w-full justify-between border-b">
             <div />
             <div className="flex items-center gap-1.5">
-              {control.field.value ? (
+              {value ? (
                 <Button icon={<XMarkIcon />} variant="ghost" onClick={() => control.field.onChange(undefined)}>
                   Remove
                 </Button>
@@ -58,7 +68,7 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
     ...props,
     rules: {
       validate: (x) => {
-        if (getUndeclared(x, props.schema.fields).length === 0) return true
+        if (!x || getUndeclared(x, props.schema.fields).length === 0) return true
         return 'Field not declared in schema'
       },
     },

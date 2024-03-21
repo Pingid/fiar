@@ -49,7 +49,7 @@ export const Table = () => {
         >
           {columns.map((key: string) => (
             <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
-              <p className="text-front/60 pb-0.5 text-xs leading-none sm:hidden">{schema.fields[key]?.label || key}</p>
+              <p className="text-front/60 pb-0.5 text-xs sm:hidden">{schema.fields[key]?.label || key}</p>
               <FieldPreview name={key} schema={schema.fields[key] as any} value={x.data()[key]} />
             </div>
           ))}
