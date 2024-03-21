@@ -13,6 +13,7 @@ import {
   get,
 } from '../../context/field.js'
 import type { IFieldMap } from '../../schema/index.js'
+import { useRef } from 'react'
 
 export const FormFieldMap = () => {
   const form = useFormContext()
@@ -64,15 +65,18 @@ const getUndeclared = (value: Record<string, any>, fields: Record<string, any>) 
   Object.keys(value).filter((key) => !(key in fields) && typeof value[key] !== 'undefined')
 
 export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => {
+  const ref = useRef<HTMLDivElement>(null)
   const control = useController({
     ...props,
     rules: {
       validate: (x) => {
         if (!x || getUndeclared(x, props.schema.fields).length === 0) return true
+        ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
         return 'Field not declared in schema'
       },
     },
   })
+
   const value = control.field.value
   if (typeof value !== 'object' || value === null || Array.isArray(value)) return null
   const extra = getUndeclared(value, props.schema.fields)
@@ -82,8 +86,9 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
     control.field.onChange(next)
   }
   if (extra.length === 0) return null
+
   return (
-    <Field error={control.fieldState.error?.message}>
+    <Field error={control.fieldState.error?.message} ref={ref}>
       <div className="border-error/40 bg-error/5 z-20 border p-3">
         <p className="text-error text-sm">Found undeclared fields in document</p>
         <ul className="pt-2 text-sm">

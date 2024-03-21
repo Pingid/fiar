@@ -99,6 +99,7 @@ export const useFormFieldControl = <F extends IField>(
   const form = useFormContext()
   const field = useField()
   return useController({
+    shouldUnregister: true,
     ...field.schema,
     ...(props as {}),
     control: form.control,

@@ -19,7 +19,7 @@ export const SortableItem = (props: {
     <div ref={setNodeRef} style={style} {...attributes} className="bg-back rounded border">
       <div {...listeners} className="bg-frame flex justify-between border-b p-1">
         <div className="flex items-center gap-1">
-          <button className="relative h-5 w-5 cursor-move">
+          <button type="button" className="relative h-5 w-5 cursor-move">
             <EllipsisVerticalIcon className="absolute left-[-3px] top-0 h-full w-full" />
             <EllipsisVerticalIcon className="absolute left-[3px] top-0 h-full w-full" />
           </button>
@@ -28,7 +28,7 @@ export const SortableItem = (props: {
 
         {props.onRemove && (
           <button
-            className=""
+            type="button"
             onPointerDown={(e) => e.stopPropagation()}
             onClick={() => props.onRemove && props.onRemove()}
           >
