@@ -5,7 +5,7 @@ import { cn } from 'mcn'
 
 import { Field, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldProvider, useFieldPreview, useFieldForm, UserFieldForm, useController } from '../../context/field.js'
+import { FieldProvider, useFieldPreview, useFieldForm, UseFieldForm, useController } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
 
@@ -47,7 +47,7 @@ export const FormFieldList = () => {
   )
 }
 
-const useFieldArray = (props: UserFieldForm<IFieldList>) => {
+const useFieldArray = (props: UseFieldForm<IFieldList>) => {
   const control = useController(props)
   const value = Array.isArray(control.field.value) ? control.field.value : []
   const [items, setItems] = useState<{ id: number }[]>(value.map((_, i) => ({ id: Date.now() + i })))

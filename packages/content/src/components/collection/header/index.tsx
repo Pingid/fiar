@@ -18,7 +18,7 @@ export const CollectionHeader = () => {
       </div>
       <div className="flex gap-2">
         <Link href={`/add${model.path}`} asChild>
-          <Button size="sm" icon={<DocumentPlusIcon />} elementType="a" color="active">
+          <Button icon={<DocumentPlusIcon />} elementType="a" color="active">
             New
           </Button>
         </Link>

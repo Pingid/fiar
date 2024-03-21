@@ -52,7 +52,7 @@ export const DocumentSet = () => {
           }
         >
           <div className="flex w-full justify-end gap-2 px-3 py-2">
-            <Button type="button" size="sm" onClick={() => nav('/')}>
+            <Button type="button" onClick={() => nav('/')}>
               Cancel
             </Button>
             <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />

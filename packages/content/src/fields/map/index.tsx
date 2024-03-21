@@ -11,28 +11,29 @@ export const FormFieldMap = () => {
   const isListItem = field.parent?.type === 'list'
   const control = useFormFieldControl<IFieldMap>()
   const optional = field.schema.optional
+  const open = control.field.value || !optional
 
   return (
     <Field name={field.name} label={field.schema.label} description={field.schema.description}>
-      <div className="border">
+      <div className={cn('border-x border-t', [!!open, 'border-b'])}>
         {optional && (
-          <div className="bg-back flex w-full justify-between border-b p-1 px-2">
+          <div className="bg-back flex w-full justify-between border-b">
             <div />
             <div className="flex items-center gap-1.5">
               {control.field.value ? (
-                <button type="button" onClick={() => control.field.onChange(undefined)}>
-                  <XMarkIcon className="h-[1.1rem] w-[1.1rem]" />
-                </button>
+                <Button icon={<XMarkIcon />} variant="ghost" onClick={() => control.field.onChange(undefined)}>
+                  Remove
+                </Button>
               ) : (
-                <button type="button" onClick={() => control.field.onChange({})}>
-                  <PlusIcon className="h-[1.1rem] w-[1.1rem]" />
-                </button>
+                <Button icon={<PlusIcon />} variant="ghost" onClick={() => control.field.onChange({})}>
+                  Add
+                </Button>
               )}
             </div>
           </div>
         )}
 
-        {(control.field.value || !optional) && (
+        {open && (
           <div className={cn('bg-back space-y-4 p-3', [!isListItem, '', 'py-3'])}>
             <UndeclaredFields {...field} />
 
@@ -84,7 +85,7 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
           ))}
         </ul>
         <div className="flex justify-end">
-          <Button size="sm" color="error" onClick={onRemove}>
+          <Button color="error" onClick={onRemove}>
             Remove
           </Button>
         </div>

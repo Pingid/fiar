@@ -6,18 +6,25 @@ import { type IFieldString } from '../../schema/index.js'
 export const FormFieldString = () => {
   const field = useFieldForm<IFieldString>()
 
-  const register = field.control.register(field.name, {
-    ...field.schema,
+  const register = field.register({
     validate: (x) => {
       if (!x && !field.schema.optional) return `Required`
       if (typeof x === 'undefined') return true
-      if (typeof field.schema.max === 'number' && x > field.schema.max)
+      if (typeof field.schema.max === 'number' && x.length > field.schema.max)
         return `Failed is limited to ${field.schema.max} charactors`
       return true
     },
   })
 
-  const inner = field.schema.multiline ? (
+  const inner = field.schema.select ? (
+    <Select id={field.name} {...register}>
+      {field.schema.select.map((x) => (
+        <option key={x.value} value={x.value}>
+          {x.label || x.value}
+        </option>
+      ))}
+    </Select>
+  ) : field.schema.multiline ? (
     <TextArea id={field.name} rows={1} style={{ height: 25 }} {...register} />
   ) : (
     <Input id={field.name} type="text" {...register} />
@@ -25,19 +32,7 @@ export const FormFieldString = () => {
 
   return (
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
-      <FieldControl error={!!field.error}>
-        {field.schema.select ? (
-          <Select id={field.name} {...register}>
-            {field.schema.select.map((x) => (
-              <option key={x.value} value={x.value}>
-                {x.label || x.value}
-              </option>
-            ))}
-          </Select>
-        ) : (
-          inner
-        )}
-      </FieldControl>
+      <FieldControl error={!!field.error}>{inner}</FieldControl>
     </Field>
   )
 }

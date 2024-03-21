@@ -7,7 +7,7 @@ export const DocumentPublish = (props: { title: string; icon: React.ReactNode; o
   const disabled = !form.formState.isDirty || form.formState.isLoading
 
   return (
-    <Button type="submit" size="sm" color="published" icon={props.icon} onClick={props.onClick} disabled={disabled}>
+    <Button type="submit" color="published" icon={props.icon} onClick={props.onClick} disabled={disabled}>
       {props.title}
     </Button>
   )

@@ -57,7 +57,6 @@ export const Table = () => {
             <div className="hidden gap-1 sm:flex">
               <Button
                 icon={<TrashIcon />}
-                size="sm"
                 color="error"
                 onClick={(e) => (e.stopPropagation(), update.trigger({ type: 'delete', schema, ref: doc(ref, x.id) }))}
               ></Button>

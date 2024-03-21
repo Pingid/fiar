@@ -8,11 +8,7 @@ export const FormFieldBool = () => {
   return (
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
       <FieldControl>
-        <Input
-          id={field.name}
-          type="checkbox"
-          {...field.control.register(field.name, { ...field.schema, required: !field.schema.optional })}
-        />
+        <Input id={field.name} type="checkbox" {...field.register()} />
       </FieldControl>
     </Field>
   )

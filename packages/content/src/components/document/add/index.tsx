@@ -53,7 +53,7 @@ export const DocumentAdd = () => {
           ]}
         >
           <div className="flex w-full justify-end gap-2 px-3 py-2">
-            <Button size="sm" type="button" onClick={() => nav(schema.path, { replace: true })}>
+            <Button type="button" onClick={() => nav(schema.path, { replace: true })}>
               Cancel
             </Button>
             <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />

@@ -49,7 +49,7 @@ export const DocumentUpdate = () => {
       <Header subtitle={path} breadcrumbs={breadcrumbs}>
         <div className="flex w-full justify-between gap-2 px-3 py-2">
           <div>Missing document</div>
-          <Button type="button" size="sm" onClick={() => nav('/')}>
+          <Button type="button" onClick={() => nav('/')}>
             Back
           </Button>
         </div>
@@ -108,7 +108,7 @@ export const DocumentUpdateForm = (props: { defaultValues: { data: Record<string
           }
         >
           <div className="flex w-full justify-end gap-2 px-3 py-2">
-            <Button type="button" color="error" size="sm" onClick={() => onDelete()}>
+            <Button type="button" color="error" onClick={() => onDelete()}>
               Delete
             </Button>
             <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />

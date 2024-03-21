@@ -78,6 +78,7 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
             const selected = providertypes[provider.providerId]
             return (
               <Button
+                size="lg"
                 key={provider.providerId}
                 className="flex w-full items-center justify-center py-3"
                 onClick={() => signinSocial.trigger(provider)}
@@ -117,7 +118,7 @@ const EmailAndPasswordForm = (props: { signIn: (email: string, password: string)
         </FieldControl>
       </Field>
       <div className="flex justify-end pt-3">
-        <Button disabled={props.loading} className="px-6 py-3">
+        <Button size="lg" disabled={props.loading} className="px-6 py-3">
           Login
         </Button>
       </div>

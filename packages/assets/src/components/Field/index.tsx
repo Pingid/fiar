@@ -69,6 +69,7 @@ export const FormFieldAsset = () => {
         {!form.field.value && (
           <div className="flex w-full items-center justify-center">
             <Button
+              size="lg"
               icon={<PhotoIcon />}
               color={!!field.error ? 'error' : 'active'}
               className="w-full justify-center py-6"

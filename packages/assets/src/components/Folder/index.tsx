@@ -76,7 +76,6 @@ export const Folder = (props: AssetFolder): JSX.Element => {
               elementType="label"
               htmlFor="upload"
               color="active"
-              size="sm"
               className="flex-0"
             >
               Upload

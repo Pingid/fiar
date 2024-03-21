@@ -56,7 +56,7 @@ export const FormFieldRef = () => {
         )}
         {!isSet && (
           <div className="flex w-full items-center justify-center p-3">
-            <Button icon={<LinkIcon />} color="active" onClick={() => setSelect(true)}>
+            <Button size="lg" icon={<LinkIcon />} color="active" onClick={() => setSelect(true)}>
               Select {target.label || target.path}
             </Button>
           </div>

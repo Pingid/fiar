@@ -12,6 +12,8 @@ import {
   useFormState as _useFormState,
   get as _get,
   FormProviderProps,
+  RegisterOptions,
+  UseFormRegisterReturn,
 } from 'react-hook-form'
 import { DocumentReference } from '@firebase/firestore'
 import { createContext, useContext } from 'react'
@@ -54,19 +56,28 @@ export const useController = _useController
 export const useFormState = _useFormState
 export const get = _get
 
-export type UserFieldForm<F extends IField> = {
+export type UseFieldForm<F extends IField> = {
   name: string
   schema: F
   parent?: IField
   control: Control
+  register: (
+    options?: RegisterOptions<{ data: InferSchemaType<F> } & FieldValues, 'data'>,
+  ) => UseFormRegisterReturn<string>
   error?: string
 }
-export const useFieldForm = <F extends IField>(): UserFieldForm<F> => {
+export const useFieldForm = <F extends IField>(): UseFieldForm<F> => {
   const field = useField()
   const form = useFormContext()
   const error = useFieldError()
 
-  return { ...field, control: form.control, error } as any
+  return {
+    ...field,
+    control: form.control,
+    error,
+    register: (options: any) =>
+      form.control.register(field.name, { ...field.schema, required: !field.schema.optional, ...options }),
+  } as any
 }
 
 type UseFieldControllerReturn<F extends IField> = {
