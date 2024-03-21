@@ -1,4 +1,4 @@
-import { ArrowPathIcon, LinkIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, DocumentDuplicateIcon, LinkIcon, PencilIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { DocumentReference, doc } from '@firebase/firestore'
 import { useState } from 'react'
 
@@ -37,7 +37,10 @@ export const FormFieldRef = () => {
       <FieldControl>
         {isSet && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
-            <div>{target.label}</div>
+            <div className="flex items-center gap-1">
+              <DocumentDuplicateIcon className="relative -top-[1px] h-4 w-4" />
+              {target.label}
+            </div>
             <div className="flex items-center gap-1.5">
               <button type="button" onClick={() => setEdit(true)}>
                 <PencilIcon className="h-3 w-3" />

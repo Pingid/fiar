@@ -83,7 +83,7 @@ export const landing = s.defineDocument({
   label: 'Landing page',
   fields: {
     highlight: s.ref({ label: 'Main article', of: () => articles }),
-    more: s.list({ label: 'Articles', of: s.ref({ of: () => articles }) }),
+    more: s.list({ label: 'Highlight articles', of: s.ref({ of: () => articles }) }),
     meta: seoPageMeta,
   },
 })

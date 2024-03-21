@@ -22,12 +22,7 @@ export const Dashboard = ({ children, ...props }: DashboardRouterProps) => {
       <InterceptProvider>
         <ModalProvider className="fixed left-0 top-0 z-50">
           <Toaster
-            className=""
-            toastOptions={{
-              duration: 60_000,
-              className: '!rounded-none !items-start p-3',
-              classNames: { error: '!border-error' },
-            }}
+            toastOptions={{ className: '!rounded-none !items-start p-3', classNames: { error: '!border-error' } }}
             icons={{ error: <ExclamationTriangleIcon className="relative top-1 h-full w-full" /> }}
           />
           <DashboardRouter {...props}>
