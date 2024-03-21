@@ -31,9 +31,9 @@ export const DocumentAdd = () => {
   })
 
   const ref = collection(firestore, schema.path)
-  const onSubmit = form.handleSubmit((x) =>
-    mutate.trigger({ schema, type: 'add', data: toFirestore(firestore, x.data, false), ref }),
-  )
+  const onSubmit = form.handleSubmit((x) => {
+    return mutate.trigger({ schema, type: 'add', data: toFirestore(firestore, x.data, false), ref })
+  })
 
   useIntercept((next) => {
     const valid = !form.formState.isDirty || submitted.current || Object.keys(form.formState.touchedFields).length === 0

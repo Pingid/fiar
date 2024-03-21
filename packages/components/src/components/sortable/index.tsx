@@ -11,7 +11,7 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 
 export { SortableItem } from './item/index.js'
 
-export const Sortable = <T extends { id: number }>(props: {
+export const Sortable = <T extends { id: number | string }>(props: {
   onSort: (from: number, to: number) => void
   items: T[]
   children: JSX.Element[]

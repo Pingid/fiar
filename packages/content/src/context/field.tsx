@@ -16,15 +16,25 @@ import {
   UseFormRegisterReturn,
 } from 'react-hook-form'
 import { DocumentReference } from '@firebase/firestore'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 
 import { UseExtension } from '@fiar/workbench/extensions'
 import { InferSchemaType } from '@fiar/schema'
 
 import { IField, IFieldRef, IFields } from '../schema/index.js'
 
+type FieldContext = { name: string; schema: IField; parent?: IField | undefined }
 const FieldContext = createContext<{ name: string; schema: IField; parent?: IField | undefined } | null>(null)
-export const FieldProvider = FieldContext.Provider
+export const FieldProvider = (props: { value: FieldContext; children: React.ReactNode }) => {
+  return (
+    <FieldContext.Provider
+      value={useMemo(() => props.value, [props.value.schema, props.value.parent, props.value.name])}
+    >
+      {props.children}
+    </FieldContext.Provider>
+  )
+}
+
 export const useField = <F extends IField>() => {
   const m = useContext(FieldContext)
   if (!m) throw new Error(`Missing Field Provider`)
@@ -99,7 +109,6 @@ export const useFormFieldControl = <F extends IField>(
   const form = useFormContext()
   const field = useField()
   return useController({
-    shouldUnregister: true,
     ...field.schema,
     ...(props as {}),
     control: form.control,

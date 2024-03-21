@@ -1,19 +1,11 @@
+import { memo, useEffect, useReducer, useRef } from 'react'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { Timestamp } from '@firebase/firestore'
-import { useEffect, useState } from 'react'
 import { cn } from 'mcn'
 
 import { Field, Sortable, SortableItem } from '@fiar/components'
 
-import {
-  FieldProvider,
-  useFieldPreview,
-  useFieldForm,
-  UseFieldForm,
-  useController,
-  useFormContext,
-  get,
-} from '../../context/field.js'
+import { FieldProvider, useFieldPreview, useFieldForm, UseFieldForm, useFormContext } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
 
@@ -22,15 +14,17 @@ export const PreviewFieldList = () => {
   return JSON.stringify(field.value)
 }
 
+const Item = memo(FormField)
+
 export const FormFieldList = () => {
   const field = useFieldForm<IFieldList>()
-  const control = useFieldArray(field)
+  const control = useFieldList({ ...field })
 
   return (
     <Field name={field.name} label={field.schema.label} description={field.schema.description}>
       <div className={cn('space-y-3')}>
-        <Sortable items={control.value} onSort={(from, to) => control.move(from, to)}>
-          {control.value.map((x, i) => (
+        <Sortable items={control.fields} onSort={(from, to) => control.move(from, to)}>
+          {control.fields.map((x, i) => (
             <SortableItem
               key={x.id}
               id={x.id}
@@ -38,7 +32,7 @@ export const FormFieldList = () => {
               onRemove={() => control.remove(i)}
             >
               <FieldProvider value={{ schema: field.schema.of, name: `${field.name}.${i}`, parent: field.schema }}>
-                <FormField />
+                <Item />
               </FieldProvider>
             </SortableItem>
           ))}
@@ -46,7 +40,7 @@ export const FormFieldList = () => {
         <button
           type="button"
           className="bg-frame hover:border-active hover:text-active flex w-full items-center justify-center rounded border py-1"
-          onClick={() => control.add(init(field.schema.of))}
+          onClick={() => control.append(init(field.schema.of))}
         >
           <PlusIcon className="h-4 w-4" />
         </button>
@@ -55,45 +49,46 @@ export const FormFieldList = () => {
   )
 }
 
-const useFieldArray = (props: UseFieldForm<IFieldList>) => {
+export const useFieldList = (props: UseFieldForm<IFieldList>) => {
+  const [_, rerender] = useReducer(() => ({}), {})
   const form = useFormContext()
-  const control = useController(props)
-  const value = Array.isArray(control.field.value) ? control.field.value : []
-  const [items, setItems] = useState<{ id: number }[]>(value.map((_, i) => ({ id: Date.now() + i })))
-  const getValue = () => {
-    const value = get(form.getValues(), props.name)
+
+  const r = form.register(props.name)
+  useEffect(() => () => form.unregister(props.name), [props.name])
+
+  const read = () => {
+    const value = form.control._getFieldArray(props.name)
     if (!Array.isArray(value)) return []
     return value
   }
 
-  useEffect(() => {
-    if (!Array.isArray(control.field.value) && !props.schema.optional) {
-      control.field.onChange([])
-    }
-  }, [control.field.value, props.schema.optional])
+  const write = (next: any[]) => {
+    form.control._updateFieldArray(props.name, next, () => {}, {})
+    form.control._names.mount = new Set(
+      [...form.control._names.mount.values()].filter((x) => !x.startsWith(props.name)),
+    )
+    rerender()
+  }
 
-  useEffect(() => {
-    setItems((x) => {
-      const values = getValue()
-      if (x.length > values.length) return x
-      return values.map((value, i) => ({ value, id: Date.now() + i }))
-    })
-  }, [value])
+  const ids = useRef(read().map((_, i) => ({ id: Date.now() + i })))
 
   return {
-    ...control,
-    value: items,
-    add: (value: any) => {
-      control.field.onChange([...getValue(), value])
-      setItems((x) => [...x, { value, id: Date.now() }])
+    ...r,
+    fields: ids.current,
+    append: (value: any) => {
+      const next = [...read(), value]
+      ids.current.push({ id: read().length + 1 })
+      write(next)
     },
     remove: (index: number) => {
-      control.field.onChange(getValue().filter((_, i) => i !== index))
-      setItems(items.filter((_, i) => i !== index))
+      const next = read().filter((_, i) => i !== index)
+      ids.current = ids.current.filter((_, i) => i !== index)
+      write(next)
     },
     move: (from: number, to: number) => {
-      control.field.onChange(move(getValue(), from, to))
-      setItems(move(items, from, to))
+      const next = move(read(), from, to)
+      ids.current = move(ids.current, from, to)
+      write(next)
     },
   }
 }

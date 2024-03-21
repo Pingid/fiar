@@ -43,7 +43,7 @@ export const Button: Extend<'button', ButtonProps> = extend<'button', { icon?: R
   ({ color, size, icon, className, children, elementType, variant, ...props }, ref) => {
     const Element: any = elementType ?? 'button'
     return (
-      <Element ref={ref} type="button" {...props} role="button" className={button({ size, color, variant, className })}>
+      <Element ref={ref} type="button" role="button" {...props} className={button({ size, color, variant, className })}>
         {icon && <span className={buttonIcon(!!children, size)}>{icon}</span>}
         {children}
       </Element>

@@ -3,7 +3,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 export const SortableItem = (props: {
-  id: number
+  id: number | string
   label?: React.ReactNode
   children: React.ReactNode
   onRemove?: () => void

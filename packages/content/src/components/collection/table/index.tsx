@@ -16,7 +16,7 @@ import { useModel } from '../../../context/model.js'
 export const Table = () => {
   const schema = useModel<'collection'>()
   const data = useCollectionData()
-  const [columns] = useState(schema.columns)
+  const [columns] = useState(schema.columns.filter((x) => !!schema.fields[x]))
   const select = useSelectDocument()
   const [location, nav] = useLocation()
   const store = useQueryStore()
