@@ -11,6 +11,7 @@ import {
   Fields,
   useFormContext,
   get,
+  registerField,
 } from '../../context/field.js'
 import type { IFieldMap } from '../../schema/index.js'
 import { useRef } from 'react'
@@ -60,6 +61,8 @@ export const PreviewFieldMap = () => {
   const field = useFieldPreview<IFieldMap>()
   return JSON.stringify(field.value)
 }
+
+registerField('map', { form: FormFieldMap, preview: PreviewFieldMap })
 
 const getUndeclared = (value: Record<string, any>, fields: Record<string, any>) =>
   Object.keys(value).filter((key) => !(key in fields) && typeof value[key] !== 'undefined')

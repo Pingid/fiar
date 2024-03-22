@@ -44,10 +44,6 @@
     "./router": {
       "types": "./router/index.d.ts",
       "import": "./router/index.js"
-    },
-    "./extensions": {
-      "types": "./extensions/index.d.ts",
-      "import": "./extensions/index.js"
     }
   }
 }

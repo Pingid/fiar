@@ -1,6 +1,6 @@
 import { Field, Input, FieldControl, Select, TextArea } from '@fiar/components'
 
-import { useFieldForm, useFieldPreview } from '../../context/field.js'
+import { useFieldForm, useFieldPreview, registerField } from '../../context/field.js'
 import { type IFieldString } from '../../schema/index.js'
 
 export const FormFieldString = () => {
@@ -41,3 +41,5 @@ export const PreviewFieldString = () => {
   const field = useFieldPreview<IFieldString>()
   return <p>{field.value}</p>
 }
+
+registerField('string', { form: FormFieldString, preview: PreviewFieldString })

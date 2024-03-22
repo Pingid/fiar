@@ -19,7 +19,7 @@ export interface IFieldBase {
   label?: string
   description?: string
   optional?: boolean
-  components?: { preview?: string; form?: string }
+  component?: string
 }
 
 export interface IFieldBoolean extends IFieldBase, FireSchemaBool {
@@ -78,7 +78,7 @@ export const boolean = <const T extends Omit<IFieldBoolean, 'type'>>(x?: T) =>
 export const string = <const T extends Omit<IFieldString, 'type'> = {}>(x?: T) =>
   ({ type: 'string' as const, ...x }) as T & { readonly type: 'string' }
 export const text = <const T extends Omit<IFieldString, 'type'> = {}>(x?: T) =>
-  ({ type: 'string' as const, components: { form: 'field/text/form', preview: 'field/text/preview' }, ...x }) as T & {
+  ({ type: 'string' as const, component: 'text', ...x }) as T & {
     readonly type: 'string'
   }
 

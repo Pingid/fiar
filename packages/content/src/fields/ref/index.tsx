@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
-import { FieldPreview, useFieldPreview, useFieldForm, useFormFieldControl } from '../../context/field.js'
+import { FieldPreview, useFieldPreview, useFieldForm, useFormFieldControl, registerField } from '../../context/field.js'
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
 import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
 import { EnumerableDocumentReference } from '../../util/firebase.js'
@@ -88,6 +88,8 @@ export const PreviewFieldRef = () => {
   const field = useFieldPreview<IFieldRef>()
   return <>{(field as any).value.path}</>
 }
+
+registerField('ref', { form: FormFieldRef, preview: PreviewFieldRef })
 
 const DocCard = (props: {
   model: IContentModel

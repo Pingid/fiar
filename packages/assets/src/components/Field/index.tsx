@@ -1,7 +1,7 @@
 import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
-import { useFieldPreview, useFieldForm, useFormFieldControl } from '@fiar/content/fields'
+import { useFieldPreview, useFieldForm, useFormFieldControl, registerField } from '@fiar/content/fields'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
@@ -92,3 +92,5 @@ export const FormFieldAsset = () => {
     </Field>
   )
 }
+
+registerField('asset', { form: FormFieldAsset, preview: PreviewFieldAsset })

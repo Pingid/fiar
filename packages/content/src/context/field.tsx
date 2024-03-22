@@ -15,13 +15,19 @@ import {
   RegisterOptions,
   UseFormRegisterReturn,
 } from 'react-hook-form'
-import { DocumentReference } from '@firebase/firestore'
 import { createContext, useContext, useMemo } from 'react'
-
-import { UseExtension } from '@fiar/workbench/extensions'
+import { DocumentReference } from '@firebase/firestore'
 import { InferSchemaType } from '@fiar/schema'
+import { create } from 'zustand'
 
 import { IField, IFieldRef, IFields } from '../schema/index.js'
+import { DocumentHook } from './hooks.js'
+
+type FieldState = { hook?: DocumentHook; form?: () => React.ReactNode; preview?: () => React.ReactNode }
+type FieldStoreState = Record<string, FieldState>
+export const useFieldsStore = create<FieldStoreState>(() => ({}))
+
+export const registerField = (key: string, state: FieldState) => useFieldsStore.setState({ [key]: state })
 
 type FieldContext = { name: string; schema: IField; parent?: IField | undefined }
 const FieldContext = createContext<{ name: string; schema: IField; parent?: IField | undefined } | null>(null)
@@ -127,19 +133,11 @@ export const useFieldError = () => {
 }
 
 export const FormField = () => {
-  const { schema: field } = useField()
-  const extension = field.components?.form || `field/${field.type}/form`
-  return (
-    <UseExtension
-      extension={extension}
-      props={{}}
-      fallback={
-        <p className="text-front/60 text-sm">
-          Missing component <span className="text-error">{field.components?.form}</span>
-        </p>
-      }
-    />
-  )
+  const field = useField()
+  const key = field.schema.component || field.schema.type
+  const Form = useFieldsStore((x) => (key ? x[key]?.form : undefined))
+  if (!Form) return null
+  return <Form />
 }
 
 const FieldValueContext = createContext(null)
@@ -151,11 +149,14 @@ export const useFieldPreview = <F extends IField>() => {
 }
 
 export const FieldPreview = (props: { schema: IFields; value: any; name: string }) => {
-  const extension = props.schema.components?.preview || `field/${props.schema.type}/preview`
+  const key = props.schema.component || props.schema.type
+  const Preview = useFieldsStore((x) => (key ? x[key]?.preview : undefined))
+  if (!Preview) return null
   return (
     <FieldValueProvider value={props.value}>
       <FieldProvider value={props}>
-        <UseExtension extension={extension} props={{}} fallback={null} />
+        <Preview />
+        {/* <UseExtension extension={key} props={{}} fallback={null} /> */}
       </FieldProvider>
     </FieldValueProvider>
   )

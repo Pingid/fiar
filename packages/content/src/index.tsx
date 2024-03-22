@@ -4,7 +4,6 @@ import { useLayoutEffect } from 'react'
 import { inject } from 'regexparam'
 
 import { Route, RouteProps, useRoute } from '@fiar/workbench/router'
-import { useExtend } from '@fiar/workbench/extensions'
 import { App } from '@fiar/workbench'
 
 import { ModelProvider, PathRefProvider, useModel } from './context/model.js'
@@ -15,7 +14,7 @@ import { DocumentSet } from './components/document/set/index.js'
 import { ContentList } from './components/content/index.js'
 import { DocumentHooksProvider } from './context/hooks.js'
 import { FirestoreProvider } from './context/firestore.js'
-import { extensions } from './context/extensions.js'
+import './components/index.js'
 
 export type { ContentConfig } from './context/config.js'
 
@@ -23,7 +22,6 @@ export const Content = ({ children, ...props }: { children?: React.ReactNode } &
   if (!useContentConfig.getState().app) useContentConfig.setState(props)
   useLayoutEffect(() => useContentConfig.setState(props), [props])
   const firebase = useContentConfig((x) => (x.app ? getFirestore(x.app) : null))
-  useExtend(extensions)
 
   return (
     <FirestoreProvider value={firebase}>

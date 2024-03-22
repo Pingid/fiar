@@ -5,7 +5,14 @@ import { cn } from 'mcn'
 
 import { Field, Sortable, SortableItem } from '@fiar/components'
 
-import { FieldProvider, useFieldPreview, useFieldForm, UseFieldForm, useFormContext } from '../../context/field.js'
+import {
+  FieldProvider,
+  useFieldPreview,
+  useFieldForm,
+  UseFieldForm,
+  useFormContext,
+  registerField,
+} from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
 
@@ -49,7 +56,9 @@ export const FormFieldList = () => {
   )
 }
 
-export const useFieldList = (props: UseFieldForm<IFieldList>) => {
+registerField('list', { form: FormFieldList, preview: PreviewFieldList })
+
+const useFieldList = (props: UseFieldForm<IFieldList>) => {
   const [_, rerender] = useReducer(() => ({}), {})
   const form = useFormContext()
 

@@ -5,7 +5,7 @@ import { cn } from 'mcn'
 
 import { Field, FieldControl } from '@fiar/components'
 
-import { useFormFieldControl, useFieldForm, useFieldPreview } from '../../context/field.js'
+import { useFormFieldControl, useFieldForm, useFieldPreview, registerField } from '../../context/field.js'
 import { TipTipTools, useTipTapExtensions } from './provider.js'
 import { IFieldString } from '../../schema/index.js'
 
@@ -49,6 +49,8 @@ export const FormFieldText = () => {
     </Field>
   )
 }
+
+registerField('text', { form: FormFieldText, preview: PreviewFieldText })
 
 const EditorControls = ({ editor }: { editor: Editor }) => {
   return (

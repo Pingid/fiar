@@ -1,7 +1,7 @@
 import { serverTimestamp } from '@firebase/firestore'
 import { set } from 'react-hook-form'
 
-import { useFieldPreview, useFieldForm } from '../../context/field.js'
+import { useFieldPreview, useFieldForm, registerField } from '../../context/field.js'
 import { useDocumentHook } from '../../context/hooks.js'
 import { IFieldTimestamp } from '../../schema/index.js'
 import { date } from '../../util/index.js'
@@ -25,3 +25,5 @@ export const PreviewFieldTimestamp = () => {
   const field = useFieldPreview<IFieldTimestamp>()
   return date(field.value.toDate()).format('DD/MM/YY HH:mm')
 }
+
+registerField('timestamp', { form: FormFieldTimestamp, preview: PreviewFieldTimestamp })
