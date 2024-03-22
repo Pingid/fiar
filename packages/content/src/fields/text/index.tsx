@@ -41,7 +41,7 @@ export const FormFieldText = () => {
   }, [control.field.value])
 
   return (
-    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+    <Field {...field}>
       <FieldControl error={!!field.error}>
         {editor && <EditorControls editor={editor} />}
         <EditorContent editor={editor} />

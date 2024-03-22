@@ -6,32 +6,33 @@ import { Markdown } from '../markdown/index.js'
 type FieldProps = {
   error?: string | undefined
   name?: string | undefined
-  label?: React.ReactNode
-  description?: React.ReactNode | undefined
+  schema?: { label?: string; description?: string; optional?: boolean }
 }
 
 export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { error?: any }> } = forward<
   'div',
   FieldProps
->(({ error, name, label, children, description, ...props }, ref) => {
+>(({ error, name, schema, children, ...props }, ref) => {
   const DESCRIPTION =
-    typeof description === 'string' ? (
-      <Markdown className="text-front/50 pb-2 leading-snug">{description}</Markdown>
-    ) : description ? (
-      <p className="text-front/50 pb-2">{description}</p>
+    typeof schema?.description === 'string' ? (
+      <Markdown className="text-front/50 pb-2 leading-snug">{schema?.description}</Markdown>
     ) : null
 
   return (
     <div
       {...props}
       ref={ref}
-      className={cn('group relative transition-[padding]', [!!error, 'pb-6'], [!!label, 'pt-0'], props.className)}
-    >
-      {label && (
-        <label htmlFor={name} className="block pb-1 text-sm">
-          {label}
-        </label>
+      className={cn(
+        'group relative transition-[padding]',
+        [!!error, 'pb-6'],
+        [!!schema?.label, 'pt-0'],
+        props.className,
       )}
+    >
+      <label htmlFor={name} className="flex w-full justify-between pb-1 text-sm">
+        <span>{schema?.label}</span>
+        <span className="text-front/50">{schema?.optional && 'optional'}</span>
+      </label>
 
       <label
         htmlFor={name}

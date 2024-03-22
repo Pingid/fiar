@@ -26,7 +26,7 @@ export const FormFieldMap = () => {
   const open = value || !optional
 
   return (
-    <Field name={field.name} label={field.schema.label} description={field.schema.description}>
+    <Field {...field}>
       <div className={cn('border-x border-t', [!!open, 'border-b'])}>
         {optional && (
           <div className="bg-back flex w-full justify-between border-b">
@@ -59,7 +59,19 @@ export const FormFieldMap = () => {
 
 export const PreviewFieldMap = () => {
   const field = useFieldPreview<IFieldMap>()
-  return JSON.stringify(field.value)
+
+  return (
+    <div className="grid grid-cols-2 text-sm">
+      {Object.keys(field.schema.fields)
+        .slice(0, 3)
+        .map((x) => (
+          <p key={x} className="col-span-2 grid-cols-subgrid">
+            <span className="text-front/60">{x}:</span>
+            <span className="pl-1">{JSON.stringify(field.value[x], null, 2)}</span>
+          </p>
+        ))}
+    </div>
+  )
 }
 
 registerField('map', { form: FormFieldMap, preview: PreviewFieldMap })
@@ -91,7 +103,7 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
   if (extra.length === 0) return null
 
   return (
-    <Field error={control.fieldState.error?.message} ref={ref}>
+    <Field {...props} ref={ref}>
       <div className="border-error/40 bg-error/5 z-20 border p-3">
         <p className="text-error text-sm">Found undeclared fields in document</p>
         <ul className="pt-2 text-sm">

@@ -31,7 +31,7 @@ export const FormFieldString = () => {
   )
 
   return (
-    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+    <Field {...field}>
       <FieldControl error={!!field.error}>{inner}</FieldControl>
     </Field>
   )

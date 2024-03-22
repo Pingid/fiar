@@ -28,7 +28,7 @@ export const FormFieldList = () => {
   const control = useFieldList({ ...field })
 
   return (
-    <Field name={field.name} label={field.schema.label} description={field.schema.description}>
+    <Field {...field}>
       <div className={cn('space-y-3')}>
         <Sortable items={control.fields} onSort={(from, to) => control.move(from, to)}>
           {control.fields.map((x, i) => (

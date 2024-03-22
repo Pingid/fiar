@@ -5,15 +5,15 @@ import {
   UseControllerProps,
   UseFormProps,
   UseFormStateReturn,
+  FormProviderProps,
+  RegisterOptions,
+  UseFormRegisterReturn,
   FormProvider as _FormProvider,
   useForm as _useForm,
   useFormContext as _useFormContext,
   useController as _useController,
   useFormState as _useFormState,
   get as _get,
-  FormProviderProps,
-  RegisterOptions,
-  UseFormRegisterReturn,
 } from 'react-hook-form'
 import { createContext, useContext, useMemo } from 'react'
 import { DocumentReference } from '@firebase/firestore'
@@ -130,7 +130,7 @@ export const FieldValueProvider = FieldValueContext.Provider
 export const useFieldPreview = <F extends IField>() => {
   const value = useContext(FieldValueContext)
   const field = useField<F>()
-  return { ...field, value } as any as { value: InferSchemaType<F> }
+  return { ...field, value } as any as { value: InferSchemaType<F>; name: string; schema: F; parent?: IField }
 }
 
 /* --------------------------- Component Registry --------------------------- */

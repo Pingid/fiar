@@ -101,12 +101,12 @@ const EmailAndPasswordForm = (props: { signIn: (email: string, password: string)
 
   return (
     <form className="space-y-3 px-4 py-6" onSubmit={(e) => (e.preventDefault(), props.signIn(email, password))}>
-      <Field label="email" name="email">
+      <Field schema={{ label: 'email' }} name="email">
         <FieldControl>
           <Input id="email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </FieldControl>
       </Field>
-      <Field label="password" name="password">
+      <Field schema={{ label: 'password' }} name="password">
         <FieldControl>
           <Input
             id="password"

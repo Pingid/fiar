@@ -2,6 +2,21 @@ import { CollectionReference, DocumentReference } from '@firebase/firestore'
 import { useRef, createContext, useContext, useEffect } from 'react'
 import { IContentModel } from '../schema/index.js'
 
+// type LifeCycle<T extends Record<string, any> = Record<string, any>> = {
+//   'before:update': { ref: DocumentReference<T, T>; data: T }
+//   'after:update': { ref: DocumentReference<T, T>; data?: undefined }
+//   'before:get': { ref: DocumentReference<T, T>; data?: undefined }
+//   'after:get': { ref: DocumentReference<T, T>; data: T }
+//   'before:list': { ref: CollectionReference<T, T>; data?: undefined }
+//   'after:list': { ref: CollectionReference<T, T>; data: T[] }
+//   'before:add': { ref: CollectionReference<T, T>; data: T }
+//   'after:add': { ref: CollectionReference<T, T>; data?: undefined }
+//   'before:set': { ref: DocumentReference<T, T>; data: T }
+//   'after:set': { ref: DocumentReference<T, T>; data?: undefined }
+//   'before:delete': { ref: DocumentReference<T, T>; data?: undefined }
+//   'after:delete': { ref: DocumentReference<T, T>; data?: undefined }
+// }
+
 export type DocumentHookEvent<T extends Record<string, any> = Record<string, any>> =
   | { schema: IContentModel; ref: DocumentReference<T, T>; data: T; type: 'update' }
   | { schema: IContentModel; ref: CollectionReference<T, T>; data: T; type: 'add' }

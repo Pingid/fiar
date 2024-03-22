@@ -32,7 +32,7 @@ export const FormFieldRef = () => {
   })
 
   return (
-    <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
+    <Field {...field}>
       <FieldControl ref={controller.field.ref}>
         {isSet && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">

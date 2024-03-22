@@ -42,7 +42,7 @@ export const FormFieldAsset = () => {
   const asset = useImageMeta(form.field.value?.fullPath)
 
   return (
-    <Field label={field.schema.label} error={field.error}>
+    <Field {...field}>
       <FieldControl>
         {form.field.value && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
