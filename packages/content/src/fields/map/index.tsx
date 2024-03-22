@@ -8,7 +8,7 @@ import {
   useFieldForm,
   useFormFieldControl,
   useController,
-  Fields,
+  FormFields,
   useFormContext,
   get,
   registerField,
@@ -49,7 +49,7 @@ export const FormFieldMap = () => {
           <div className={cn('bg-back space-y-4 p-3', [!isListItem, '', 'py-3'])}>
             <UndeclaredFields {...field} />
 
-            <Fields fields={field.schema.fields} name={field.name} parent={field.schema} />
+            <FormFields fields={field.schema.fields} name={field.name} parent={field.schema} />
           </div>
         )}
       </div>

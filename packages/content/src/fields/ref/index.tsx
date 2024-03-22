@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
-import { FieldPreview, useFieldPreview, useFieldForm, useFormFieldControl, registerField } from '../../context/field.js'
+import { PreviewField, useFieldPreview, useFieldForm, useFormFieldControl, registerField } from '../../context/field.js'
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
 import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
 import { EnumerableDocumentReference } from '../../util/firebase.js'
@@ -105,7 +105,7 @@ const DocCard = (props: {
       {props.columns.map((key: string) => (
         <div key={key} className="mb-2 flex w-full min-w-0 flex-col text-sm">
           <p className="text-front/60 text-xs">{props.model.fields[key]?.label || key}</p>
-          <FieldPreview name={key} schema={props.model.fields[key] as any} value={data.data?.data()?.[key]} />
+          <PreviewField name={key} schema={props.model.fields[key] as any} value={data.data?.data()?.[key]} />
         </div>
       ))}
     </div>

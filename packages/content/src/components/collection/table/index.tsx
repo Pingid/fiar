@@ -10,7 +10,7 @@ import { Button } from '@fiar/components'
 import { useCollectionData, useCollectionRef, useDocumentMutation } from '../../../context/data.js'
 import { useSelectDocument } from '../../../context/select.js'
 import { useQueryStore } from '../../../context/query.js'
-import { FieldPreview } from '../../../context/field.js'
+import { PreviewField } from '../../../context/field.js'
 import { useModel } from '../../../context/model.js'
 
 export const Table = () => {
@@ -50,7 +50,7 @@ export const Table = () => {
           {columns.map((key: string) => (
             <div key={key} className="mb-2 flex w-full min-w-0 flex-col sm:mb-0">
               <p className="text-front/60 pb-0.5 text-xs sm:hidden">{schema.fields[key]?.label || key}</p>
-              <FieldPreview name={key} schema={schema.fields[key] as any} value={x.data()[key]} />
+              <PreviewField name={key} schema={schema.fields[key] as any} value={x.data()[key]} />
             </div>
           ))}
           <div className="flex w-full items-start justify-end">

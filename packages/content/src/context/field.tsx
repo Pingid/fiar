@@ -23,12 +23,6 @@ import { create } from 'zustand'
 import { IField, IFieldRef, IFields } from '../schema/index.js'
 import { DocumentHook } from './hooks.js'
 
-type FieldState = { hook?: DocumentHook; form?: () => React.ReactNode; preview?: () => React.ReactNode }
-type FieldStoreState = Record<string, FieldState>
-export const useFieldsStore = create<FieldStoreState>(() => ({}))
-
-export const registerField = (key: string, state: FieldState) => useFieldsStore.setState({ [key]: state })
-
 type FieldContext = { name: string; schema: IField; parent?: IField | undefined }
 const FieldContext = createContext<{ name: string; schema: IField; parent?: IField | undefined } | null>(null)
 export const FieldProvider = (props: { value: FieldContext; children: React.ReactNode }) => {
@@ -47,10 +41,8 @@ export const useField = <F extends IField>() => {
   return m as { name: string; schema: F; parent?: IField }
 }
 
-export interface FormContext {
-  schema: { fields: Record<string, IFields> }
-}
-
+/* ------------------------- React Hook Form Aliases ------------------------ */
+export type FormContext = { schema: { fields: Record<string, IFields> } }
 export const useForm = <TFieldValues extends FieldValues = FieldValues>(
   props: UseFormProps<TFieldValues, FormContext> & { context: FormContext },
 ) => _useForm(props)
@@ -72,6 +64,7 @@ export const useController = _useController
 export const useFormState = _useFormState
 export const get = _get
 
+/* ---------------------------- Form Custom Hooks --------------------------- */
 export type UseFieldForm<F extends IField> = {
   name: string
   schema: F
@@ -132,14 +125,6 @@ export const useFieldError = () => {
   return 'Invalid'
 }
 
-export const FormField = () => {
-  const field = useField()
-  const key = field.schema.component || field.schema.type
-  const Form = useFieldsStore((x) => (key ? x[key]?.form : undefined))
-  if (!Form) return null
-  return <Form />
-}
-
 const FieldValueContext = createContext(null)
 export const FieldValueProvider = FieldValueContext.Provider
 export const useFieldPreview = <F extends IField>() => {
@@ -148,7 +133,22 @@ export const useFieldPreview = <F extends IField>() => {
   return { ...field, value } as any as { value: InferSchemaType<F> }
 }
 
-export const FieldPreview = (props: { schema: IFields; value: any; name: string }) => {
+/* --------------------------- Component Registry --------------------------- */
+type FieldState = { hook?: DocumentHook; form?: () => React.ReactNode; preview?: () => React.ReactNode }
+type FieldStoreState = Record<string, FieldState>
+export const useFieldsStore = create<FieldStoreState>(() => ({}))
+
+export const registerField = (key: string, state: FieldState) => useFieldsStore.setState({ [key]: state })
+
+export const FormField = () => {
+  const field = useField()
+  const key = field.schema.component || field.schema.type
+  const Form = useFieldsStore((x) => (key ? x[key]?.form : undefined))
+  if (!Form) return null
+  return <Form />
+}
+
+export const PreviewField = (props: { schema: IFields; value: any; name: string }) => {
   const key = props.schema.component || props.schema.type
   const Preview = useFieldsStore((x) => (key ? x[key]?.preview : undefined))
   if (!Preview) return null
@@ -156,23 +156,18 @@ export const FieldPreview = (props: { schema: IFields; value: any; name: string 
     <FieldValueProvider value={props.value}>
       <FieldProvider value={props}>
         <Preview />
-        {/* <UseExtension extension={key} props={{}} fallback={null} /> */}
       </FieldProvider>
     </FieldValueProvider>
   )
 }
 
-export const Fields = (props: { fields: Record<string, IFields>; name: string; parent?: IField }) => {
-  return (
-    <>
-      {Object.keys(props.fields).map((key) => {
-        const schema = props.fields[key] as IFields
-        return (
-          <FieldProvider key={key} value={{ schema, name: `${props.name}.${key}`, parent: props.parent }}>
-            <FormField />
-          </FieldProvider>
-        )
-      })}
-    </>
-  )
+export const FormFields = (props: { fields: Record<string, IFields>; name: string; parent?: IField }) => {
+  return Object.keys(props.fields).map((key) => {
+    const schema = props.fields[key] as IFields
+    return (
+      <FieldProvider key={key} value={{ schema, name: `${props.name}.${key}`, parent: props.parent }}>
+        <FormField />
+      </FieldProvider>
+    )
+  })
 }
