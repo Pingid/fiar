@@ -1,14 +1,12 @@
 import { DocumentReference, FieldValue, Firestore, Timestamp, deleteField, doc } from '@firebase/firestore'
 
-export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boolean, root = true): any => {
-  if (x instanceof IntermediateDocumentReference) return x.ref(firestore)
+export const toFirestore = (x: any, deleteUndefined: boolean, root = true): any => {
+  if (x instanceof EnumerableDocumentReference) return x.ref()
   if (x instanceof Timestamp) return x
   if (x instanceof FieldValue) return x
   if (x === null || typeof x === 'function') return x
   if (Array.isArray(x)) {
-    return x
-      .filter((value) => typeof value !== 'undefined')
-      .map((x) => toFirestore(firestore, x, deleteUndefined, false))
+    return x.filter((value) => typeof value !== 'undefined').map((x) => toFirestore(x, deleteUndefined, false))
   }
   if (typeof x === 'object') {
     return Object.fromEntries(
@@ -16,7 +14,7 @@ export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boole
         .map(([key, value]) => {
           if (typeof value === 'undefined' && deleteUndefined && root) return [key, deleteField()]
           if (typeof value === 'undefined') return [key, undefined]
-          return [key, toFirestore(firestore, value, deleteUndefined, false)]
+          return [key, toFirestore(value, deleteUndefined, false)]
         })
         .filter(([_k, value]) => typeof value !== 'undefined'),
     )
@@ -25,7 +23,7 @@ export const toFirestore = (firestore: Firestore, x: any, deleteUndefined: boole
 }
 
 export const fromFirestore = (x: any): any => {
-  if (x instanceof DocumentReference) return new IntermediateDocumentReference(x)
+  if (x instanceof DocumentReference) return new EnumerableDocumentReference(x)
   if (x instanceof Timestamp) return x
   if (x instanceof FieldValue) return x
   if (Array.isArray(x)) return x.map((x) => fromFirestore(x))
@@ -36,14 +34,22 @@ export const fromFirestore = (x: any): any => {
   return x
 }
 
-export class IntermediateDocumentReference {
+export class EnumerableDocumentReference {
+  firestore: Firestore
   path: string
   id: string
   constructor(ref: DocumentReference) {
     this.path = ref.path
     this.id = ref.id
+    this.firestore = ref.firestore
+    Object.defineProperty(this, 'firestore', {
+      value: ref.firestore,
+      enumerable: false,
+      writable: false,
+      configurable: true,
+    })
   }
-  ref(firestore: Firestore) {
-    return doc(firestore, this.path)
+  ref() {
+    return doc(this.firestore, this.path)
   }
 }

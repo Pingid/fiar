@@ -32,7 +32,7 @@ export const DocumentAdd = () => {
 
   const ref = collection(firestore, schema.path)
   const onSubmit = form.handleSubmit((x) => {
-    return mutate.trigger({ schema, type: 'add', data: toFirestore(firestore, x.data, false), ref })
+    return mutate.trigger({ schema, type: 'add', data: toFirestore(x.data, false), ref })
   })
 
   useIntercept((next) => {

@@ -8,33 +8,32 @@ import { WorkbenchPageModal } from '@fiar/workbench'
 import { FieldPreview, useFieldPreview, useFieldForm, useFormFieldControl } from '../../context/field.js'
 import { IContentCollection, IContentModel, type IFieldRef } from '../../schema/index.js'
 import { useDocumentSnapshot, useFirestore } from '../../context/firestore.js'
-import { IntermediateDocumentReference } from '../../util/firebase.js'
+import { EnumerableDocumentReference } from '../../util/firebase.js'
 import { SelectDocumentProvider } from '../../context/select.js'
+import { useDocumentHook } from '../../context/hooks.js'
 import { trailing } from '../../util/index.js'
 
 export const FormFieldRef = () => {
   const field = useFieldForm<IFieldRef>()
-  const controller = useFormFieldControl<IFieldRef>({
-    rules: {
-      validate: (x) => {
-        if (!x && !field.schema.optional) return `Required`
-        return true
-      },
-    },
-  })
+  const controller = useFormFieldControl<IFieldRef>({ rules: { required: !field.schema.optional } })
 
   const [select, setSelect] = useState(false)
   const [edit, setEdit] = useState(false)
   const isSet = controller.field.value?.id && controller.field.value?.path
   const target = field.schema.of() as IContentCollection
   const onSelect = (ref: DocumentReference) => {
-    controller.field.onChange(new IntermediateDocumentReference(ref))
+    controller.field.onChange(new EnumerableDocumentReference(ref))
     setSelect(false)
   }
 
+  useDocumentHook((x) => {
+    console.log(x)
+    return x
+  })
+
   return (
     <Field name={field.name} label={field.schema.label} error={field.error} description={field.schema.description}>
-      <FieldControl>
+      <FieldControl ref={controller.field.ref}>
         {isSet && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
             <div className="flex items-center gap-1">

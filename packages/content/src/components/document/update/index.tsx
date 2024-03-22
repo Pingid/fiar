@@ -73,7 +73,7 @@ export const DocumentUpdateForm = (props: { defaultValues: { data: Record<string
   const form = useForm({ criteriaMode: 'firstError', context: { schema }, ...props })
 
   const onSubmit = form.handleSubmit((x) => {
-    return mutate.trigger({ schema, type: 'update', data: toFirestore(firestore, x.data, true), ref })
+    return mutate.trigger({ schema, type: 'update', data: toFirestore(x.data, true), ref })
   })
 
   const onDelete = () => mutate.trigger({ schema, ref, type: 'delete' }).then(() => props.onBack())
