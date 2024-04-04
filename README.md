@@ -1,8 +1,19 @@
-# Fiar
+**# Fiar**
 
-Fiar is a highly customizable and type-safe Content Management System (CMS) and admin panel built on top of Firebase and react. As Fiar is currently in alpha, please be aware that the APIs are subject to significant changes.
+Fiar is a set of tools for projects working with firebase. It includes a customizable CMS and admin dashboard. A type infered entity schemas. A typescript firestore rules abstraction with auto schema field type validation.
 
-## Quick Start
+The libraries can be used seperately and are designed incrimentally adopted or abondoned as application requirements change.
+
+**## Guides**
+
+- [Security rules](packages/rules/README.md)
+- [Content CMS](packages/content/README.md)
+- [Dashboard Auth](packages/auth/README.md)
+- [Storage Assets](packages/assets/README.md)
+
+## CMS Quick Start
+
+This guide goes through setting up a simple blog.
 
 It is best to look at the [example](examples/nosense) where you will find the code in implimentation code in `/src/admin`.
 

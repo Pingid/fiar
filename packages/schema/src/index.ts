@@ -198,7 +198,13 @@ type FieldCreators = {
       }
 }
 
-export const s: FieldCreators = new Proxy({} as FieldCreators, {
+type S = {
+  [K in FireSchemaTypes['type']]: {
+    <const O extends Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>>(props: O): Evaluate<O & { type: K }>
+  }
+}
+
+export const s: S = new Proxy({} as FieldCreators, {
   get: (_t, type) => (props: any) => ({ type, ...props }),
 })
 

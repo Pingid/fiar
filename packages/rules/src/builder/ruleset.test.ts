@@ -8,10 +8,10 @@ const typ = model({
   type: 'collection',
   path: '/articles/{articleId}',
   fields: {
-    title: s.string(),
-    author: s.path(),
-    body: s.string(),
-    tags: s.list({ of: s.string() }),
+    title: s.string({}),
+    author: s.path({}),
+    body: s.string({}),
+    tags: s.list({ of: s.string({}) }),
   },
 })
 
