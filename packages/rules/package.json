@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@fiar/schema": "workspace:^",
-    "@firebase/firestore": "^4.5.0",
+    "@firebase/firestore": "^4.5.1",
     "prettier": "^3.2.5",
     "typescript-parsec": "^0.3.4",
     "vitest": "^1.4.0"
