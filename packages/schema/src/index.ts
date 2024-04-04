@@ -185,27 +185,24 @@ export type InferSchemaType<T extends FireSchemaTypes> = T['type'] extends Typeo
 export type InferModelType<T extends FireModel> = InferSchemaType<{ type: 'map'; fields: T['fields'] }>
 
 // -------------------------------------------------------------------
-// Creators
+// Helper functions for creating fields
 // -------------------------------------------------------------------
-type FieldCreators = {
-  [K in FireSchemaTypes['type']]: string extends InferMapRequiredKeys<
-    Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>
-  >
-    ? { <const O extends Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>>(props: O): Evaluate<O & { type: K }> }
+type RequiredKeys<T> = Exclude<{ [K in keyof T]: undefined extends T[K] ? never : K }[keyof T], undefined>
+type FieldCreator = {
+  [K in FireSchemaTypes['type']]: string extends RequiredKeys<Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>>
+    ? {
+        <const O extends Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>>(props: O): Evaluate<O & { type: K }>
+      }
     : {
         (): { type: K }
         <const O extends Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>>(props: O): Evaluate<O & { type: K }>
       }
 }
 
-type S = {
-  [K in FireSchemaTypes['type']]: {
-    <const O extends Omit<Extract<FireSchemaTypes, { type: K }>, 'type'>>(props: O): Evaluate<O & { type: K }>
-  }
-}
+export const model = <const C extends FireModel>(x: C) => x
 
-export const s: S = new Proxy({} as FieldCreators, {
+export const s: FieldCreator = new Proxy({} as FieldCreator, {
   get: (_t, type) => (props: any) => ({ type, ...props }),
 })
 
-export const model = <const C extends FireModel>(x: C) => x
+export default { ...s, model }
