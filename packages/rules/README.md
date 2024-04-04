@@ -1,5 +1,7 @@
 # Fiar Security Rules
 
+Part of the [fiar](https://github.com/Pingid/fiar) ecosystem.
+
 This library facilitates the creation of Firestore and Firebase storage security rules with TypeScript, offering an expressive method to establish security constraints programmatically. This approach leverages TypeScript's type-checking and IDE support, enhancing maintainability and minimizing errors in security rule definitions. It also supports a modular approach to defining individual match declarations.
 
 ## Getting Started
@@ -14,7 +16,7 @@ yarn add @fiar/rules
 
 ## Basic Usage
 
-Here's how you might define Firestore rules for a simple blog application:
+Below is an example of how to define Firestore rules for a simple blog application:
 
 ```ts
 import { ruleset } from '@fiar/rules'
@@ -43,7 +45,7 @@ console.log(await rules.print())
 
 ## Use an entity schema
 
-If you have defined a model schema using `@fiar/schema` you can use this to generate strict field type checking from within firebase security ruleset. You can also use a schema defined by `@fiar/content/schema` which currently a smaller subset of `@fiar/schema`.
+If you've defined a model schema using `@fiar/schema`, you can leverage it to enforce strict field type checking within your Firebase security ruleset. The `@fiar/content/schema` can also be used but offers a smaller subset of functionalities compared to `@fiar/schema`.
 
 ```ts
 import { s, model } from '@fiar/schema'
@@ -61,7 +63,7 @@ const posts = model({
 })
 ```
 
-Replacing the path field in a match declaration provides infered model type into the `request.resource.data` and an extra utility function called
+Providing the model as the first argument in a match declaration injects the inferred model type into the `request.resource.data` and introduces an additional utility function called `isValid`:
 
 ```ts
 const ruless = ruleset(({ service }) => {
