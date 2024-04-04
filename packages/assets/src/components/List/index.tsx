@@ -22,7 +22,7 @@ export const FolderList = () => {
         </div>
       )}
       <div className="space-y-2 p-2">
-        {config.assets?.map((x) => (
+        {config.folders?.map((x) => (
           <Link key={x.path} href={x.path} asChild>
             <Card
               elementType="a"

@@ -1,27 +1,25 @@
 import { EmailAuthProvider, GithubAuthProvider, GoogleAuthProvider } from '@firebase/auth'
 import { Dashboard } from '@fiar/workbench'
 import { Content } from '@fiar/content'
-import { Assets } from '@fiar/assets'
+import { Storage } from '@fiar/assets'
 import { Auth } from '@fiar/auth'
 
-import { articles, landing, test, tags } from './admin/entities'
-import { app } from './admin/firebase'
+import { articles, landing, test, tags } from './admin/models.js'
+import { app } from './admin/firebase.js'
 
 export default function ReactApp() {
   return (
     <Dashboard>
       <Auth
         app={app}
-        auth={{
-          strategy: 'popup',
-          providers: [new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()],
-        }}
+        strategy={'popup'}
+        providers={[new EmailAuthProvider(), new GoogleAuthProvider(), new GithubAuthProvider()]}
         allowNoAuth
       />
-      <Content app={app} content={[test, articles, tags, landing]}></Content>
-      <Assets
+      <Content app={app} models={[test, articles, tags, landing]}></Content>
+      <Storage
         app={app}
-        assets={[
+        folders={[
           { title: 'Photos', path: '/photos', accept: { ['image/*']: [] } },
           { title: 'Icons', path: '/icons' },
         ]}

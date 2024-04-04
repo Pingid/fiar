@@ -7,7 +7,7 @@ Fiar is a set of tools for projects working with firebase. It includes a customi
 - [Security rules](packages/rules/README.md)
 - [Content CMS](packages/content/README.md)
 - [Dashboard Auth](packages/auth/README.md)
-- [Storage Assets](packages/assets/README.md)
+- [Assets CMS](packages/assets/README.md)
 
 ## Quick Start
 

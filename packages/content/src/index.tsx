@@ -28,14 +28,14 @@ export const Content = ({ children, ...props }: { children?: React.ReactNode } &
       <DocumentHooksProvider>
         <App title="Content" icon={<CircleStackIcon />} href="/content">
           <div className="h-full min-h-0 w-full min-w-0">
-            {props.content.map((model) => (
+            {props.models.map((model) => (
               <ModelProvider key={model.path} value={model}>
                 <ModelRoutes />
               </ModelProvider>
             ))}
 
             <Route path="/" key="/">
-              <ContentList models={props.content} />
+              <ContentList models={props.models} />
             </Route>
             {children}
           </div>

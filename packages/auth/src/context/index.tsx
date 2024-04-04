@@ -5,13 +5,11 @@ import { create } from 'zustand'
 export type AuthConfig = {
   app?: FirebaseApp | undefined
   allowNoAuth?: boolean | undefined
-  auth: {
-    providers: (AuthProvider | 'github' | 'google' | 'facebook' | 'twitter' | 'email')[]
-    strategy?: 'redirect' | 'popup' | undefined
-  }
+  providers: (AuthProvider | 'github' | 'google' | 'facebook' | 'twitter' | 'email')[]
+  strategy?: 'redirect' | 'popup' | undefined
 }
 
-export const useAuthConfig = create<AuthConfig>(() => ({ auth: { providers: [] } }))
+export const useAuthConfig = create<AuthConfig>(() => ({ providers: [] }))
 
 export const useFirebaseAuth = () => {
   const auth = useAuthConfig((x) => (x.app ? getAuth(x.app) : null))

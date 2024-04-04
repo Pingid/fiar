@@ -14,7 +14,7 @@ export { FolderAction } from './components/Folder/index.js'
 export { image } from './schema/index.js'
 export * from './context/index.js'
 
-export const Assets = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
+export const Storage = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
   useLayoutEffect(() => useAssetConfig.setState(config), [config])
   if (!useAssetConfig.getState().app) useAssetConfig.setState(config)
 
@@ -24,7 +24,7 @@ export const Assets = ({ children, ...config }: { children?: React.ReactNode } &
       <App title="Assets" icon={<CloudIcon />} href="/assets">
         <div className="h-full min-h-0 w-full min-w-0">
           <Switch>
-            {config.assets?.map((x) => (
+            {config.folders?.map((x) => (
               <Route key={x.path} path={`/${x.path.replace(/^\//, '')}`}>
                 <Folder {...x} />
               </Route>

@@ -7,10 +7,10 @@ export type AssetFolder = { title: string; path: `/${string}`; accept?: Record<s
 export type AssetConfig = {
   rootPath?: string | null | undefined
   app?: FirebaseApp | null
-  assets: AssetFolder[]
+  folders: AssetFolder[]
 }
 
-export const useAssetConfig = create<AssetConfig>(() => ({ rootPath: null, storage: null, assets: [] }))
+export const useAssetConfig = create<AssetConfig>(() => ({ rootPath: null, storage: null, folders: [] }))
 
 export const useFirebaseStorage = () => {
   const storage = useAssetConfig((x) => (x.app ? getStorage(x.app) : null))

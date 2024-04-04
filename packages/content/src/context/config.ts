@@ -4,7 +4,7 @@ import { create } from 'zustand'
 
 export type ContentConfig = {
   app?: FirebaseApp
-  content: IContentModel[]
+  models: IContentModel[]
 }
 
-export const useContentConfig = create<ContentConfig>(() => ({ content: [] }))
+export const useContentConfig = create<ContentConfig>(() => ({ models: [] }))

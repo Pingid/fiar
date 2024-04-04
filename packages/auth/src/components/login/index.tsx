@@ -23,8 +23,8 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
 
   const [error, setError] = React.useState('')
 
-  const emailPassword = config.auth.providers.find((x) => (x as any)?.providerId === 'password' || x === 'email')
-  const social = config.auth.providers.filter((x) => (x as any)?.providerId !== 'password' && x !== 'email')
+  const emailPassword = config.providers.find((x) => (x as any)?.providerId === 'password' || x === 'email')
+  const social = config.providers.filter((x) => (x as any)?.providerId !== 'password' && x !== 'email')
   const signinEmail = useMutation(
     'auth',
     (_, p: { arg: { email: string; password: string } }) =>
@@ -32,7 +32,7 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
     { onError: (e) => setError(e.message), onSuccess: props.onSuccess },
   )
   const signinSocial = useMutation(
-    config.auth.strategy ?? 'redirect',
+    config.strategy ?? 'redirect',
     (type: string, p: { arg: AuthProvider }) => {
       if (type === 'redirect') return signInWithRedirect(auth, p.arg)
       return signInWithPopup(auth, p.arg)
