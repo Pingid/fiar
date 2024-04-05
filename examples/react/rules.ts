@@ -1,9 +1,9 @@
-import { rulset } from '@fiar/rules'
+import { ruleset } from '@fiar/rules'
 import fs from 'node:fs'
 
 import { articles, test, landing, tags } from './src/admin/models'
 
-const rules = rulset(({ service }) => {
+const rules = ruleset(({ service }) => {
   // Storage rules
   service('firebase.storage', ({ match }) => {
     match('/b/{bucket}/o', ({ match }) => {

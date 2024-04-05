@@ -20,6 +20,7 @@ export interface IFieldBase {
   description?: string
   optional?: boolean
   component?: string
+  initialValue?: any
 }
 
 export interface IFieldBoolean extends IFieldBase, FireSchemaBool {

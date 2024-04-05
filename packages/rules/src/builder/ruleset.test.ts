@@ -2,7 +2,7 @@ import { it, describe } from 'vitest'
 import { s, model } from '@fiar/schema'
 
 import { validate } from '../schema/rules.js'
-import { rulset } from './ruleset.js'
+import { ruleset } from './ruleset.js'
 
 const typ = model({
   type: 'collection',
@@ -16,7 +16,7 @@ const typ = model({
 })
 
 describe('expression builder', () => {
-  rulset(({ service, func, arg, op }) => {
+  ruleset(({ service, func, arg, op }) => {
     const isAdmin = func('isAdmin', [arg<string, 'email'>('email')], (x) => op(x.email, 'in', ['james@gmail.com']))
 
     service('cloud.firestore', ({ match }) => {

@@ -20,7 +20,7 @@
     "@firebase/functions": "^0.11.3",
     "@firebase/storage": "^0.12.3",
     "@sentry/astro": "^7.109.0",
-    "@spotlightjs/astro": "^1.0.19",
+    "@spotlightjs/astro": "^1.0.20",
     "@types/react": "^18.2.74",
     "@types/react-dom": "^18.2.24",
     "astro": "^4.5.16",

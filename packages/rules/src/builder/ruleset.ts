@@ -151,7 +151,7 @@ export interface MatchScope<C> extends Scope<C> {
   match: Match<C>
 }
 
-export const rulset = (
+export const ruleset = (
   handler: (x: RulesetScope<{}>) => void,
 ): { ast: () => ast.RulesDeclartion; print: () => Promise<string> } => {
   const statements = scope.create(() => handler({ arg, func, service, op: op, and, or }))

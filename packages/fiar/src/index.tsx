@@ -12,13 +12,13 @@ export const createFiar = (
     app: FirebaseApp
     content?: Omit<ContentConfig, 'app'>
     storage?: Omit<AssetConfig, 'app'>
-    auth?: Omit<AuthConfig, 'app'>
+    auth?: Omit<AuthConfig, 'app'> | boolean
   } & DashboardRouterProps,
 ) => {
   createRoot(config.node).render(
     <>
       <Dashboard {...config}>
-        {config.auth && <Auth app={config.app} {...config.auth} />}
+        {config.auth && <Auth app={config.app} {...(typeof config.auth === 'boolean' ? {} : config.auth)} />}
         {config.content && <Content app={config.app} {...config.content} />}
         {config.storage && <Storage app={config.app} {...config.storage} />}
       </Dashboard>

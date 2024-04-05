@@ -21,11 +21,11 @@ import { DocumentReference } from '@firebase/firestore'
 import { InferSchemaType } from '@fiar/schema'
 import { create } from 'zustand'
 
-import { IField, IFieldRef, IFields } from '../schema/index.js'
+import { IFieldRef, IFields } from '../schema/index.js'
 import { DocumentHook } from './hooks.js'
 
-type FieldContext = { name: string; schema: IField; parent?: IField | undefined }
-const FieldContext = createContext<{ name: string; schema: IField; parent?: IField | undefined } | null>(null)
+type FieldContext = { name: string; schema: IFields; parent?: IFields | undefined }
+const FieldContext = createContext<{ name: string; schema: IFields; parent?: IFields | undefined } | null>(null)
 export const FieldProvider = (props: { value: FieldContext; children: React.ReactNode }) => {
   return (
     <FieldContext.Provider
@@ -36,10 +36,10 @@ export const FieldProvider = (props: { value: FieldContext; children: React.Reac
   )
 }
 
-export const useField = <F extends IField>() => {
+export const useField = <F extends IFields>() => {
   const m = useContext(FieldContext)
   if (!m) throw new Error(`Missing Field Provider`)
-  return m as { name: string; schema: F; parent?: IField }
+  return m as { name: string; schema: F; parent?: IFields }
 }
 
 /* ------------------------- React Hook Form Aliases ------------------------ */
@@ -67,17 +67,17 @@ export const get = _get
 export const set = _set
 
 /* ---------------------------- Form Custom Hooks --------------------------- */
-export type UseFieldForm<F extends IField> = {
+export type UseFieldForm<F extends IFields> = {
   name: string
   schema: F
-  parent?: IField
+  parent?: IFields
   control: Control
   register: (
     options?: RegisterOptions<{ data: InferSchemaType<F> } & FieldValues, 'data'>,
   ) => UseFormRegisterReturn<string>
   error?: string
 }
-export const useFieldForm = <F extends IField>(): UseFieldForm<F> => {
+export const useFieldForm = <F extends IFields>(): UseFieldForm<F> => {
   const field = useField()
   const form = useFormContext()
   const error = useFieldError()
@@ -86,12 +86,16 @@ export const useFieldForm = <F extends IField>(): UseFieldForm<F> => {
     ...field,
     control: form.control,
     error,
-    register: (options: any) =>
-      form.control.register(field.name, { ...field.schema, required: !field.schema.optional, ...options }),
+    register: (options: any) => {
+      if (typeof field.schema.initialValue !== 'undefined') {
+        set(form.control._defaultValues, field.name, field.schema.initialValue)
+      }
+      return form.control.register(field.name, { ...field.schema, required: !field.schema.optional, ...options })
+    },
   } as any
 }
 
-type UseFieldControllerReturn<F extends IField> = {
+type UseFieldControllerReturn<F extends IFields> = {
   field: {
     onChange: (...event: any[]) => void
     onBlur: () => void
@@ -104,7 +108,7 @@ type UseFieldControllerReturn<F extends IField> = {
   fieldState: ControllerFieldState
 }
 
-export const useFormFieldControl = <F extends IField>(
+export const useFormFieldControl = <F extends IFields>(
   props?: Omit<UseControllerProps, 'control' | 'name'>,
 ): UseFieldControllerReturn<F> => {
   const form = useFormContext()
@@ -129,10 +133,10 @@ export const useFieldError = () => {
 
 const FieldValueContext = createContext(null)
 export const FieldValueProvider = FieldValueContext.Provider
-export const useFieldPreview = <F extends IField>() => {
+export const useFieldPreview = <F extends IFields>() => {
   const value = useContext(FieldValueContext)
   const field = useField<F>()
-  return { ...field, value } as any as { value: InferSchemaType<F>; name: string; schema: F; parent?: IField }
+  return { ...field, value } as any as { value: InferSchemaType<F>; name: string; schema: F; parent?: IFields }
 }
 
 /* --------------------------- Component Registry --------------------------- */
@@ -163,7 +167,7 @@ export const PreviewField = (props: { schema: IFields; value: any; name: string 
   )
 }
 
-export const FormFields = (props: { fields: Record<string, IFields>; name: string; parent?: IField }) => {
+export const FormFields = (props: { fields: Record<string, IFields>; name: string; parent?: IFields }) => {
   return Object.keys(props.fields).map((key) => {
     const schema = props.fields[key] as IFields
     return (

@@ -42,17 +42,18 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.cjs"
+      "import": "./index.js"
     },
     "./style.css": {
-      "import": "./style.css",
-      "require": "./style.css"
+      "import": "./style.css"
     },
     "./schema": {
       "types": "./schema/index.d.ts",
-      "import": "./schema/index.js",
-      "require": "./schema/index.cjs"
+      "import": "./schema/index.js"
+    },
+    "./rules": {
+      "types": "./rules/index.d.ts",
+      "import": "./rules/index.js"
     }
   }
 }
