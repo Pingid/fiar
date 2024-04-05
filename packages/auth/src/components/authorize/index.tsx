@@ -18,10 +18,8 @@ export const Authorize = () => {
   const match = useRoute('/login')[0]
   const search = useSearch()
 
-  const updateUser = (current: User | null) => {
-    const user = current?.displayName && current.uid ? { name: current.displayName, id: current.uid } : null
+  const updateUser = (user: User | null) =>
     useAuth.setState(user ? { status: 'signed-in', user: user } : { status: 'signed-out', user: null })
-  }
 
   useEffect(() => {
     useAuth.setState({ status: 'signed-out' })
@@ -35,7 +33,8 @@ export const Authorize = () => {
 
   useEffect(() => {
     if (status !== 'signed-in' || !match) return
-    navigate(history?.state?.redirect || '/')
+    const to = !history?.state?.redirect || history?.state?.redirect === '/login' ? '/' : history?.state?.redirect
+    navigate(to)
   }, [match, status, search])
 
   useEffect(() => {
@@ -50,7 +49,14 @@ export const Authorize = () => {
       {status !== 'signed-in' && !config.allowNoAuth && <Redirect to="/login" state={{ redirect: location }} />}
       {match && (
         <div className={cn('bg-back', [config.allowNoAuth, 'h-full w-full', 'fixed inset-0 z-40'])}>
-          <Login {...config} ready={ready} onSuccess={(x) => updateUser(x.user)} />
+          <Login
+            {...config}
+            ready={ready}
+            onSuccess={(x) => {
+              console.log({ x })
+              updateUser(x.user)
+            }}
+          />
         </div>
       )}
     </>

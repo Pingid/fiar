@@ -110,7 +110,7 @@ const AuthButton = () => {
           'opacity-100',
         ])}
       >
-        {auth.status === 'signed-in' && auth.user?.name}
+        {auth.status === 'signed-in' && auth.user?.displayName}
       </p>
       {auth.status === 'signed-in' && (
         <button className="w-full" onClick={() => auth.signout()}>

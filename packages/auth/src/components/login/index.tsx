@@ -12,7 +12,7 @@ import {
 } from '@firebase/auth'
 import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
 import useMutation from 'swr/mutation'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Button, Field, FieldControl, Input, LoadingDots } from '@fiar/components'
 import { useFirebaseAuth, useAuthConfig } from '../../context/index.js'
@@ -23,12 +23,14 @@ export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?
 
   const [error, setError] = React.useState('')
 
-  const emailPassword = config.providers.find((x) => (x as any)?.providerId === 'password' || x === 'email')
-  const social = config.providers.filter((x) => (x as any)?.providerId !== 'password' && x !== 'email')
+  const providers = useMemo(() => config.providers ?? [new EmailAuthProvider()], [config.providers])
+  const emailPassword = providers.find((x) => (x as any)?.providerId === 'password' || x === 'email')
+  const social = providers.filter((x) => (x as any)?.providerId !== 'password' && x !== 'email')
   const signinEmail = useMutation(
     'auth',
-    (_, p: { arg: { email: string; password: string } }) =>
-      signInWithEmailAndPassword(auth, p.arg.email, p.arg.password),
+    (_, p: { arg: { email: string; password: string } }) => {
+      return signInWithEmailAndPassword(auth, p.arg.email, p.arg.password)
+    },
     { onError: (e) => setError(e.message), onSuccess: props.onSuccess },
   )
   const signinSocial = useMutation(
@@ -118,7 +120,7 @@ const EmailAndPasswordForm = (props: { signIn: (email: string, password: string)
         </FieldControl>
       </Field>
       <div className="flex justify-end pt-3">
-        <Button size="lg" disabled={props.loading} className="px-6 py-3">
+        <Button size="lg" disabled={props.loading} className="px-6 py-3" onClick={() => props.signIn(email, password)}>
           Login
         </Button>
       </div>

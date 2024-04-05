@@ -1,0 +1,21 @@
+{
+  "name": "simple-blog",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.9.29",
+    "@firebase/firestore": "^4.5.1",
+    "fiar": "workspace:^"
+  },
+  "devDependencies": {
+    "firebase-tools": "^13.7.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
+}

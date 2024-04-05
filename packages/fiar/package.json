@@ -14,6 +14,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm watch",
+    "css": "tailwindcss build -i ./src/style.css -o style.css",
     "build": "../../scripts/build.js",
     "watch": "../../scripts/watch.js"
   },
