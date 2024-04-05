@@ -2,9 +2,11 @@ import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore'
 import { getFunctions, connectFunctionsEmulator } from '@firebase/functions'
 import { getStorage, connectStorageEmulator } from '@firebase/storage'
 import { getAuth, connectAuthEmulator } from '@firebase/auth'
-import { initializeApp } from '@firebase/app'
+import { initializeApp, setLogLevel } from '@firebase/app'
 
 import config from '../../firebase.json'
+
+setLogLevel('debug')
 
 export const app = initializeApp({
   apiKey: process.env.FIREBASE_API_KEY,

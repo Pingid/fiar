@@ -44,8 +44,8 @@
   },
   "peerDependencies": {
     "@fiar/content": "workspace:^",
-    "@firebase/app": "^0.9.27",
-    "@firebase/storage": "^0.12.1",
+    "@firebase/app": "^0.9.29",
+    "@firebase/storage": "^0.12.3",
     "react": "^18.2.0"
   },
   "exports": {

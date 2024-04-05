@@ -14,6 +14,7 @@ import {
   useController as _useController,
   useFormState as _useFormState,
   get as _get,
+  set as _set,
 } from 'react-hook-form'
 import { createContext, useContext, useMemo } from 'react'
 import { DocumentReference } from '@firebase/firestore'
@@ -63,6 +64,7 @@ export const useFormContext = <
 export const useController = _useController
 export const useFormState = _useFormState
 export const get = _get
+export const set = _set
 
 /* ---------------------------- Form Custom Hooks --------------------------- */
 export type UseFieldForm<F extends IField> = {

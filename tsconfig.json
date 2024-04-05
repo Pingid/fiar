@@ -53,7 +53,10 @@
     { "path": "./packages/fiar" },
     { "path": "./packages/rules" },
     { "path": "./packages/schema" },
-    { "path": "./packages/workbench" }
+    { "path": "./packages/workbench" },
+
+    { "path": "./examples/react" },
+    { "path": "./examples/nosense" }
   ],
   "files": [],
   "include": ["firebase.json"],

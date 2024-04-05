@@ -19,15 +19,17 @@ const seoPageMeta = s.map({
   },
 })
 
-export const articles = s.defineCollection({
+export const articles = s.model({
+  type: 'collection',
   path: '/articles/{articleId}',
   label: 'Articles',
-  titleField: 'title',
-  columns: ['title', 'image', 'body'],
-  sort: ['title', 'asc'],
+  layout: {
+    titleField: 'title',
+    columns: ['title', 'image', 'body'],
+    sort: ['title', 'asc'],
+  },
   fields: {
     title: s.string({ label: 'Title' }),
-    // extra: s.string({ label: 'Extra' }),
     image: image({ label: 'Main image' }),
     body: s.text({ label: 'Content' }),
     meta: seoPageMeta,
@@ -35,12 +37,15 @@ export const articles = s.defineCollection({
   },
 })
 
-export const test = s.defineCollection({
+export const test = s.model({
+  type: 'collection',
   path: '/test',
   label: 'Test',
-  titleField: 'title',
-  columns: ['title', 'count', 'metadata'],
-  sort: ['title', 'asc'],
+  layout: {
+    titleField: 'title',
+    columns: ['title', 'count', 'metadata'],
+    sort: ['title', 'asc'],
+  },
   fields: {
     title: s.string({ label: 'Title', description: 'Document title' }),
     count: s.number({ label: 'Count', description: 'Document count' }),
@@ -64,12 +69,15 @@ export const test = s.defineCollection({
 
 // export type Articles = typeof articles.infer
 
-export const tags = s.defineCollection({
+export const tags = s.model({
+  type: 'collection',
   path: '/tags/{tagId}',
   label: 'Tags',
-  titleField: 'name',
-  sort: ['updatedAt', 'asc'],
-  columns: ['name', 'createdAt', 'updatedAt'],
+  layout: {
+    titleField: 'name',
+    sort: ['updatedAt', 'asc'],
+    columns: ['name', 'createdAt', 'updatedAt'],
+  },
   fields: {
     name: s.string({ label: 'Name' }),
     type: s.string({ label: 'Type', select: [{ value: 'one' }, { value: 'two' }] }),
@@ -78,7 +86,8 @@ export const tags = s.defineCollection({
   },
 })
 
-export const landing = s.defineDocument({
+export const landing = s.model({
+  type: 'document',
   path: '/pages/landing',
   label: 'Landing page',
   fields: {

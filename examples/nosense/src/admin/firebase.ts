@@ -1,4 +1,4 @@
-/// <reference types="../env" />
+/// <reference types="../env.d.ts" />
 
 import { getFirestore, connectFirestoreEmulator } from '@firebase/firestore'
 import { getFunctions, connectFunctionsEmulator } from '@firebase/functions'
@@ -18,7 +18,7 @@ export const app = initializeApp({
 
 let saved: any = null
 if (import.meta.env.PUBLIC_FIRE_EMULATE) {
-  const get = import('../../firebase.json').then((x) => ((saved = x), connect(x)))
+  const get: any = import('../../firebase.json').then((x) => ((saved = x), connect(x)))
   const connect = (config: Awaited<typeof get>) => {
     connectFunctionsEmulator(getFunctions(app), `localhost`, config.emulators.functions.port)
     connectFirestoreEmulator(getFirestore(app), `localhost`, config.emulators.firestore.port)

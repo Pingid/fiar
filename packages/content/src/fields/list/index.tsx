@@ -12,6 +12,7 @@ import {
   UseFieldForm,
   useFormContext,
   registerField,
+  get,
 } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
@@ -62,17 +63,25 @@ const useFieldList = (props: UseFieldForm<IFieldList>) => {
   const [_, rerender] = useReducer(() => ({}), {})
   const form = useFormContext()
 
-  const r = form.register(props.name)
-  useEffect(() => () => form.unregister(props.name), [props.name])
+  const r = form.register(props.name, {
+    ...props.schema,
+    validate: (x) => {
+      if (!Array.isArray(x) && !props.schema.optional) return 'Required'
+      return true
+    },
+  })
 
-  const read = () => {
-    const value = form.control._getFieldArray(props.name)
-    if (!Array.isArray(value)) return []
-    return value
-  }
+  useEffect(() => {
+    if (!props.schema.optional && !Array.isArray(get(form.getValues(), props.name))) {
+      form.setValue(props.name, [])
+    }
+    return () => form.unregister(props.name)
+  }, [props.name])
+
+  const read = () => form.control._getFieldArray(props.name)
 
   const write = (next: any[]) => {
-    form.control._updateFieldArray(props.name, next, () => {}, {})
+    form.control._updateFieldArray(props.name, next, () => {}, {}, true, false)
     form.control._names.mount = new Set(
       [...form.control._names.mount.values()].filter((x) => !x.startsWith(props.name)),
     )

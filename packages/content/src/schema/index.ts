@@ -61,14 +61,17 @@ export interface IContentDocument extends FireModel {
   fields: Record<string, IFields>
 }
 
+export interface CollectionLayout<K extends string = string> {
+  titleField?: K
+  columns?: K[]
+  sort?: [K, 'asc' | 'desc']
+}
+
 export interface IContentCollection extends FireModel {
   type: 'collection'
   label?: string
   fields: Record<string, IFields>
-
-  titleField?: keyof this['fields']
-  columns: (keyof this['fields'])[]
-  sort?: [keyof this['fields'], 'asc' | 'desc']
+  layout?: CollectionLayout<keyof this['fields'] & string>
 }
 
 export type IContentModel = IContentDocument | IContentCollection
@@ -91,6 +94,19 @@ export const map = <const T extends Omit<IFieldMap, 'type'>>(x: T) => ({ type: '
 export const list = <const T extends Omit<IFieldList, 'type'>>(x: T) => ({ type: 'list', ...x }) satisfies IFieldList
 export const ref = <const T extends Omit<IFieldRef, 'type' | 'target'>>(x: T) =>
   ({ type: 'ref', target: 'document', ...x }) as T & { readonly type: 'ref'; readonly target: 'document' }
+
+export const model: {
+  <const C extends IContentDocument>(model: C): C
+  <
+    const F extends Record<string, IFields>,
+    const M extends IContentCollection & {
+      layout?: CollectionLayout<keyof F & string>
+    },
+  >(
+    model: M,
+  ): M
+} = (model: any) => model
+
 export const defineDocument = <const T extends Omit<IContentDocument, 'type'>>(x: T) =>
   ({ type: 'document', ...x }) satisfies IContentDocument
 export const defineCollection = <const T extends Omit<IContentCollection, 'type'>>(x: T) =>

@@ -16,7 +16,8 @@ import { useModel } from '../../../context/model.js'
 export const Table = () => {
   const schema = useModel<'collection'>()
   const data = useCollectionData()
-  const [columns] = useState(schema.columns.filter((x) => !!schema.fields[x]))
+
+  const [columns] = useState((schema?.layout?.columns ?? Object.keys(schema.fields)).filter((x) => !!schema.fields[x]))
   const select = useSelectDocument()
   const [location, nav] = useLocation()
   const store = useQueryStore()
@@ -24,8 +25,10 @@ export const Table = () => {
   const ref = useCollectionRef()
 
   useEffect(() => {
-    if (schema.sort) store.getState().constrain('orderBy', orderBy(schema.sort[0], schema.sort[1]))
-  }, [schema.sort, store])
+    if (schema?.layout?.sort) {
+      store.getState().constrain('orderBy', orderBy(schema.layout.sort[0], schema.layout.sort[1]))
+    }
+  }, [schema?.layout?.sort, store])
 
   return (
     <div

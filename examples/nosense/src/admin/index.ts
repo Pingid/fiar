@@ -2,7 +2,7 @@ import { GoogleAuthProvider, GithubAuthProvider, EmailAuthProvider } from '@fire
 import { createFiar } from 'fiar'
 
 import { articles, landing } from './models.js'
-import { app } from './firebase'
+import { app } from './firebase.js'
 
 createFiar({
   app,

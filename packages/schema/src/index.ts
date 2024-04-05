@@ -133,8 +133,8 @@ export type FireSchemaTypes =
 
 export interface FireModel {
   type: 'document' | 'collection'
-  fields: Record<string, FireSchemaTypes>
   path: `/${string}`
+  fields: Record<string, FireSchemaTypes>
 }
 
 // -------------------------------------------------------------------

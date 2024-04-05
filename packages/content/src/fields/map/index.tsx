@@ -63,6 +63,7 @@ export const PreviewFieldMap = () => {
   return (
     <div className="grid grid-cols-2 text-sm">
       {Object.keys(field.schema.fields)
+        .filter(() => typeof field.value === 'object' && field.value !== null)
         .slice(0, 3)
         .map((x) => (
           <p key={x} className="col-span-2 grid-cols-subgrid">

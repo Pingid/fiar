@@ -11,4 +11,6 @@ Fiar is a set of tools for projects working with firebase. It includes a customi
 
 ## Quick Start
 
-This guide goes through setting up a simple blog.
+This guide goes through setting up a simple blog with a cms and authentication.
+
+### Define content schema

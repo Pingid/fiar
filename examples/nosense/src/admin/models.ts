@@ -7,11 +7,6 @@ const seoPageMeta = s.map({
     title: s.string({ label: 'Page title' }),
     description: s.string({
       label: 'Page description',
-      validate: (value) => ({
-        value: value ? value.slice(0, 160) : '',
-        reason: 'Description must not excede 160 characters',
-        valid: !!value && value.length < 160,
-      }),
     }),
   },
 })

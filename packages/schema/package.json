@@ -13,6 +13,6 @@
   "types": "index.d.ts",
   "type": "module",
   "peerDependencies": {
-    "@firebase/firestore": "^4.5.0"
+    "@firebase/firestore": "^4.5.1"
   }
 }

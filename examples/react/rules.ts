@@ -1,7 +1,7 @@
 import { rulset } from '@fiar/rules'
 import fs from 'node:fs'
 
-import { articles, test, landing, tags } from './src/admin/entities'
+import { articles, test, landing, tags } from './src/admin/models'
 
 const rules = rulset(({ service }) => {
   // Storage rules

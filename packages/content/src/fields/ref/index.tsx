@@ -64,8 +64,8 @@ export const FormFieldRef = () => {
         {isSet && (
           <DocCard
             model={{ ...target, path: controller.field.value.path as `/${string}` }}
-            titleField={target.titleField}
-            columns={target.columns}
+            titleField={target?.layout?.titleField}
+            columns={target?.layout?.columns || Object.keys(target.fields)}
           />
         )}
         <SelectDocumentProvider value={onSelect}>

@@ -7,7 +7,9 @@ export const DocumentFormTitle = () => {
   const model = useModel()
   const path = usePathRef()
 
-  if (model.type === 'collection' && model.titleField) return <TitleField titleField={model.titleField} />
+  if (model.type === 'collection' && model.layout?.titleField) {
+    return <TitleField titleField={model.layout.titleField} />
+  }
   if (model.type === 'collection') return path.split('/').slice(-1)[0] || model.label
   return model.label
 }
