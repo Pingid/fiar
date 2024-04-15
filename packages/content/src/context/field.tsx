@@ -87,7 +87,8 @@ export const useFieldForm = <F extends IFields>(): UseFieldForm<F> => {
     control: form.control,
     error,
     register: (options: any) => {
-      if (typeof field.schema.initialValue !== 'undefined') {
+      const existing = get(form.control._defaultValues, field.name)
+      if (typeof field.schema.initialValue !== 'undefined' && typeof existing === 'undefined') {
         set(form.control._defaultValues, field.name, field.schema.initialValue)
       }
       return form.control.register(field.name, { ...field.schema, required: !field.schema.optional, ...options })

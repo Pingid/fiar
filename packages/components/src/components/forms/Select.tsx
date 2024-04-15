@@ -7,7 +7,7 @@ export const Select = forward<'select'>((props, ref) => {
       {...props}
       ref={ref}
       className={cn(
-        'h-full w-full bg-transparent px-1 py-1 focus:outline-none focus-visible:outline-none',
+        'h-full w-full appearance-none bg-transparent px-2 py-1 focus:outline-none focus-visible:outline-none',
         props.className,
       )}
     />

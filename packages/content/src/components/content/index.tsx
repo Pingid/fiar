@@ -48,13 +48,13 @@ const CollectionCard = (props: IContentCollection) => {
         <div className="flex justify-between">
           <p className="pt-1 text-sm opacity-60">{path}</p>
           <div
-            className={cn('flex w-full justify-end gap-3 pt-1 text-sm leading-none', [
+            className={cn('flex items-end text-nowrap text-sm leading-none', [
               draft.isLoading,
               'opacity-30',
               'opacity-60',
             ])}
           >
-            {draft.error ? <span className="text-error">Error</span> : <span>{count ?? '0'} Documents</span>}
+            {draft.error ? <span className="text-error">Error</span> : <>{count ?? '0'} Documents</>}
           </div>
         </div>
       </Card>

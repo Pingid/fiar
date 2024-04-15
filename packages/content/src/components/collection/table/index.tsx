@@ -17,7 +17,11 @@ export const Table = () => {
   const schema = useModel<'collection'>()
   const data = useCollectionData()
 
-  const [columns] = useState((schema?.layout?.columns ?? Object.keys(schema.fields)).filter((x) => !!schema.fields[x]))
+  const [columns] = useState(
+    (schema?.layout?.columns ?? Object.keys(schema.fields)).filter(
+      (x) => !!schema.fields[x] && !schema.fields[x]?.optional,
+    ),
+  )
   const select = useSelectDocument()
   const [location, nav] = useLocation()
   const store = useQueryStore()

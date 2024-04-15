@@ -26,14 +26,14 @@
     "react-transition-group": "^4.4.5",
     "sonner": "^1.4.41",
     "swr": "^2.2.5",
-    "wouter": "^3.1.0",
+    "wouter": "^3.1.2",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.24",
+    "@types/react": "^18.2.78",
+    "@types/react-dom": "^18.2.25",
     "@types/react-transition-group": "^4.4.10",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "exports": {
     "./package.json": "./package.json",

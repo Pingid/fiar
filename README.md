@@ -9,11 +9,15 @@ Fiar is a set of tools for projects working with firebase. It includes a customi
 - [Dashboard Auth](packages/auth/README.md)
 - [Assets CMS](packages/assets/README.md)
 
+## Examples
+
+- [Simple Blog](examples/simple-blog/README.md)
+
 ## Quick Start
 
 This guide goes through setting up a simple blog with a cms and authentication. A complete example of this is found in [simple-blog](examples/simple-blog/README.md).
 
-You should start by setting up firebase if you haven't already. The easiest way to do this is by using the firebase cli. You can install this with npm `npm install -g firebase-tools`. Then run `firebase init` and make sure to include `firestore` and `storage`.
+Add firebase to your project with `npx firebase-tools init` and initialize `storage`, `firestore`.
 
 ### Define content schema
 
@@ -50,12 +54,18 @@ import firebaseConfig from '../firebase.config.json'
 import { post } from './models'
 
 createFiar({
-  node: document.getElementById('root')!, // Root html node to bind to
-  app: initializeApp(firebaseConfig), // Firebase config as found in the firebase console
-  storage: { folders: [{ title: 'Photos', path: '/examples/simple-blog/photos' }] }, // Add folder for images
-  content: { models: [post] }, // Add models
-  router: { type: 'hash' }, // hash | memory | browser
-  auth: true, // Configure social providers
+  // Root html node to bind to
+  node: document.getElementById('root')!,
+  // Firebase config as found in the firebase console
+  app: initializeApp(firebaseConfig),
+  // Add folder for images
+  storage: { folders: [{ title: 'Photos', path: '/examples/simple-blog/photos' }] },
+  // Add models
+  content: { models: [post] },
+  // Client side router type accepts hash, memory or browser.
+  router: { type: 'hash' },
+  // Enable email authentication
+  auth: true,
 })
 ```
 

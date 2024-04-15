@@ -12,14 +12,14 @@
     "emulate": "npx firebase-tools emulators:start"
   },
   "dependencies": {
-    "@firebase/app": "^0.9.29",
-    "@firebase/firestore": "^4.5.1",
+    "@firebase/app": "^0.10.1",
+    "@firebase/firestore": "^4.6.0",
     "dotenv": "^16.4.5",
     "fiar": "workspace:^"
   },
   "devDependencies": {
-    "firebase-tools": "^13.7.1",
-    "typescript": "^5.2.2",
+    "firebase-tools": "^13.7.2",
+    "typescript": "^5.4.5",
     "vite": "^5.2.0"
   }
 }

@@ -20,7 +20,6 @@ export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { err
 
   return (
     <div
-      {...props}
       ref={ref}
       className={cn(
         'group relative transition-[padding]',
