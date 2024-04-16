@@ -21,7 +21,7 @@ export type { ContentConfig } from './context/config.js'
 export const Content = ({ children, ...props }: { children?: React.ReactNode } & ContentConfig) => {
   if (!useContentConfig.getState().app) useContentConfig.setState(props)
   useLayoutEffect(() => useContentConfig.setState(props), [props])
-  const firebase = useContentConfig((x) => (x.app ? getFirestore(x.app) : null))
+  const firebase = useContentConfig((x) => x.firestore ?? (x.app ? getFirestore(x.app) : null))
 
   return (
     <FirestoreProvider value={firebase}>

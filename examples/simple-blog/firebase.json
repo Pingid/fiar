@@ -1,8 +1,10 @@
 {
   "firestore": {
+    "database": "example-simple-blog",
     "rules": "firebase.rules"
   },
   "storage": {
+    "bucket": "fiar-example-simple-blog",
     "rules": "firebase.rules"
   },
   "emulators": {

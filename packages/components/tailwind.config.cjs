@@ -1,4 +1,4 @@
-const typography = require('@tailwindcss/typography');
+const typography = require('@tailwindcss/typography')
 
 const light = {
   '--color-back': `0deg 0% 100%`,
@@ -28,7 +28,11 @@ const base = {
   '@media (prefers-color-scheme: dark)': { ':root': dark },
   '[data-theme="light"]': light,
   '[data-theme="dark"]': dark,
-  html: { 'background-color': `hsl(var(--color-back) / 1)`, color: `hsl(var(--color-front) / 1)`, fontFamily: `var(--font-sans)` },
+  html: {
+    'background-color': `hsl(var(--color-back) / 1)`,
+    color: `hsl(var(--color-front) / 1)`,
+    fontFamily: `var(--font-sans)`,
+  },
 }
 
 module.exports = {
@@ -39,7 +43,7 @@ module.exports = {
       fontFamily: { sans: 'var(--font-sans)' },
       borderRadius: { DEFAULT: 'var(--border-radius)' },
       borderColor: { DEFAULT: 'hsl(var(--color-line) / 1)' },
-      rotate: { '270': '270deg' },
+      rotate: { 270: '270deg' },
       colors: {
         back: { DEFAULT: 'hsl(var(--color-back) / <alpha-value>)' },
         frame: { DEFAULT: 'hsl(var(--color-frame) / <alpha-value>)' },
@@ -54,7 +58,7 @@ module.exports = {
         published: { DEFAULT: 'hsl(var(--color-published) / <alpha-value>)' },
         archived: { DEFAULT: 'hsl(var(--color-archived) / <alpha-value>)' },
       },
-      typography: (theme: any) => ({
+      typography: (theme) => ({
         DEFAULT: {
           css: {
             color: theme('colors.front'),
@@ -72,5 +76,4 @@ module.exports = {
     },
   },
   plugins: [{ handler: (x) => x.addBase(base) }, typography],
-} 
-
+}

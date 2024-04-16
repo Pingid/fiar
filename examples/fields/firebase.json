@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/firebase/firebase-tools/master/schema/firebase-config.json",
+  "firestore": {
+    "database": "example-fields",
+    "predeploy": "pnpm run generate",
+    "rules": "firebase/firestore.rules",
+    "indexes": "firebase/firestore.indexes.json"
+  },
+  "storage": {
+    "bucket": "fiar-example-fields",
+    "predeploy": "pnpm run generate",
+    "rules": "firebase/storage.rules"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "storage": {
+      "port": 9199
+    }
+  }
+}

@@ -1,7 +1,6 @@
-import type { Config } from 'tailwindcss'
-import config from '@fiar/components/tailwind.config'
+const config = require('@fiar/components/tailwind.config')
 
-const _config: Config = {
+module.exports = {
   ...config,
   content: [
     '../components/src/**/*.{ts,tsx}',
@@ -11,5 +10,3 @@ const _config: Config = {
     '../auth/src/**/*.{ts,tsx}',
   ],
 }
-
-export default _config

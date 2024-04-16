@@ -54,6 +54,9 @@
     "./rules": {
       "types": "./rules/index.d.ts",
       "import": "./rules/index.js"
+    },
+    "./tailwind.config": {
+      "require": "./tailwind.config.cjs"
     }
   }
 }
