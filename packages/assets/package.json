@@ -37,7 +37,7 @@
     "@fiar/content": "workspace:^",
     "@firebase/app": "^0.10.1",
     "@firebase/storage": "^0.12.4",
-    "@types/react": "^18.2.78",
+    "@types/react": "^18.2.79",
     "@types/three": "^0.163.0",
     "react": "^18.2.0",
     "typescript": "^5.4.5"

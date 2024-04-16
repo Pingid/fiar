@@ -31,7 +31,7 @@
   "devDependencies": {
     "@fiar/components": "workspace:^",
     "@firebase/app": "^0.10.1",
-    "@types/react": "^18.2.78",
+    "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "typescript": "^5.4.5"
   },

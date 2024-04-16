@@ -30,8 +30,8 @@ importers:
         specifier: ^3.2.5
         version: 3.2.5
       prettier-plugin-tailwindcss:
-        specifier: ^0.5.13
-        version: 0.5.13(prettier@3.2.5)
+        specifier: ^0.5.14
+        version: 0.5.14(prettier@3.2.5)
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3
@@ -49,28 +49,28 @@ importers:
         version: 0.5.10(prettier@3.2.5)(typescript@5.4.5)
       '@astrojs/react':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@18.2.25)(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.9)
+        version: 3.3.0(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.9)
       '@astrojs/starlight':
         specifier: ^0.21.5
-        version: 0.21.5(astro@4.6.1)
+        version: 0.21.5(astro@4.6.2)
       '@astrojs/starlight-tailwind':
         specifier: ^2.0.2
         version: 2.0.2(@astrojs/starlight@0.21.5)(@astrojs/tailwind@5.1.0)(tailwindcss@3.4.3)
       '@astrojs/tailwind':
         specifier: ^5.1.0
-        version: 5.1.0(astro@4.6.1)(tailwindcss@3.4.3)
+        version: 5.1.0(astro@4.6.2)(tailwindcss@3.4.3)
       '@fiar/components':
         specifier: workspace:^
         version: link:../packages/components
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
       astro:
-        specifier: ^4.6.1
-        version: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+        specifier: ^4.6.2
+        version: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
       fiar:
         specifier: workspace:^
         version: link:../packages/fiar
@@ -119,8 +119,8 @@ importers:
         version: 18.2.0(react@18.2.0)
     devDependencies:
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
@@ -153,10 +153,10 @@ importers:
     dependencies:
       '@astrojs/react':
         specifier: ^3.3.0
-        version: 3.3.0(@types/react-dom@18.2.25)(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.9)
+        version: 3.3.0(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.9)
       '@astrojs/tailwind':
         specifier: ^5.1.0
-        version: 5.1.0(astro@4.6.1)(tailwindcss@3.4.3)
+        version: 5.1.0(astro@4.6.2)(tailwindcss@3.4.3)
       '@fiar/components':
         specifier: workspace:^
         version: link:../../packages/components
@@ -177,19 +177,19 @@ importers:
         version: 0.12.4(@firebase/app@0.10.1)
       '@sentry/astro':
         specifier: ^7.110.1
-        version: 7.110.1(astro@4.6.1)
+        version: 7.110.1(astro@4.6.2)
       '@spotlightjs/astro':
         specifier: ^1.0.20
-        version: 1.0.20(@sentry/astro@7.110.1)(astro@4.6.1)
+        version: 1.0.20(@sentry/astro@7.110.1)(astro@4.6.2)
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
       astro:
-        specifier: ^4.6.1
-        version: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+        specifier: ^4.6.2
+        version: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
       fiar:
         specifier: workspace:^
         version: link:../../packages/fiar
@@ -262,14 +262,14 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
       '@vitejs/plugin-react-swc':
         specifier: ^3.6.0
-        version: 3.6.0(vite@5.2.8)
+        version: 3.6.0(vite@5.2.9)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -289,8 +289,8 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
       vite:
-        specifier: ^5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        specifier: ^5.2.9
+        version: 5.2.9(@types/node@20.12.7)
 
   examples/simple-blog:
     dependencies:
@@ -314,8 +314,8 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
       vite:
-        specifier: ^5.2.0
-        version: 5.2.8(@types/node@20.12.7)
+        specifier: ^5.2.9
+        version: 5.2.9(@types/node@20.12.7)
 
   packages/assets:
     dependencies:
@@ -330,7 +330,7 @@ importers:
         version: 2.1.3(react@18.2.0)
       '@react-three/drei':
         specifier: ^9.105.4
-        version: 9.105.4(@react-three/fiber@8.16.2)(@types/react@18.2.78)(@types/three@0.163.0)(react-dom@18.2.0)(react@18.2.0)(three@0.163.0)
+        version: 9.105.4(@react-three/fiber@8.16.2)(@types/react@18.2.79)(@types/three@0.163.0)(react-dom@18.2.0)(react@18.2.0)(three@0.163.0)
       '@react-three/fiber':
         specifier: ^8.16.2
         version: 8.16.2(react-dom@18.2.0)(react@18.2.0)(three@0.163.0)
@@ -360,7 +360,7 @@ importers:
         version: 0.163.0
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     devDependencies:
       '@fiar/content':
         specifier: workspace:^
@@ -372,8 +372,8 @@ importers:
         specifier: ^0.12.4
         version: 0.12.4(@firebase/app@0.10.1)
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/three':
         specifier: ^0.163.0
         version: 0.163.0
@@ -403,7 +403,7 @@ importers:
         version: 2.2.5(react@18.2.0)
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     devDependencies:
       '@fiar/content':
         specifier: workspace:^
@@ -415,8 +415,8 @@ importers:
         specifier: 1.7.1
         version: 1.7.1(@firebase/app@0.10.1)
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -446,20 +446,20 @@ importers:
         version: 0.0.4
       react-markdown:
         specifier: ^9.0.1
-        version: 9.0.1(@types/react@18.2.78)(react@18.2.0)
+        version: 9.0.1(@types/react@18.2.79)(react@18.2.0)
       react-select:
         specifier: ^5.8.0
-        version: 5.8.0(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0)
+        version: 5.8.0(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
       react-textarea-autosize:
         specifier: ^8.5.3
-        version: 8.5.3(@types/react@18.2.78)(react@18.2.0)
+        version: 8.5.3(@types/react@18.2.79)(react@18.2.0)
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     devDependencies:
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
@@ -513,7 +513,7 @@ importers:
         version: 2.2.5(react@18.2.0)
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     devDependencies:
       '@firebase/app':
         specifier: ^0.10.1
@@ -534,8 +534,8 @@ importers:
         specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.0.0)
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       jsdom:
         specifier: ^24.0.0
         version: 24.0.0
@@ -574,7 +574,7 @@ importers:
         version: 18.2.0(react@18.2.0)
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     devDependencies:
       '@fiar/components':
         specifier: workspace:^
@@ -583,8 +583,8 @@ importers:
         specifier: ^0.10.1
         version: 0.10.1
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
@@ -647,11 +647,11 @@ importers:
         version: 3.1.2(react@18.2.0)
       zustand:
         specifier: ^4.5.2
-        version: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     devDependencies:
       '@types/react':
-        specifier: ^18.2.78
-        version: 18.2.78
+        specifier: ^18.2.79
+        version: 18.2.79
       '@types/react-dom':
         specifier: ^18.2.25
         version: 18.2.25
@@ -771,7 +771,7 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/mdx@2.3.0(astro@4.6.1):
+  /@astrojs/mdx@2.3.0(astro@4.6.2):
     resolution: {integrity: sha512-8Lqr3kK1R6B3rukM71GSYTc4BHm5/j+UVdp7UEa18WHW/EVstmhKupabGUHj2Em2L/5AQdFMNmOBVkKzzcPO4g==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
     peerDependencies:
@@ -780,7 +780,7 @@ packages:
       '@astrojs/markdown-remark': 5.1.0
       '@mdx-js/mdx': 3.0.1
       acorn: 8.11.3
-      astro: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+      astro: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
       es-module-lexer: 1.5.0
       estree-util-visit: 2.0.0
       github-slugger: 2.0.0
@@ -804,7 +804,7 @@ packages:
       prismjs: 1.29.0
     dev: false
 
-  /@astrojs/react@3.3.0(@types/react-dom@18.2.25)(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.9):
+  /@astrojs/react@3.3.0(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)(vite@5.2.9):
     resolution: {integrity: sha512-IKHizDgYPTl9TTKcEB+PwmqHqYgCwD3jqd9hGBRITYiMmeiHVMRr2zNNXSmOOv0uWL3/EwsISsrUnjwuxIVZUA==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
     peerDependencies:
@@ -813,7 +813,7 @@ packages:
       react: ^17.0.2 || ^18.0.0
       react-dom: ^17.0.2 || ^18.0.0
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
       '@types/react-dom': 18.2.25
       '@vitejs/plugin-react': 4.2.1(vite@5.2.9)
       react: 18.2.0
@@ -838,23 +838,23 @@ packages:
       '@astrojs/tailwind': ^5.0.0
       tailwindcss: ^3.3.3
     dependencies:
-      '@astrojs/starlight': 0.21.5(astro@4.6.1)
-      '@astrojs/tailwind': 5.1.0(astro@4.6.1)(tailwindcss@3.4.3)
+      '@astrojs/starlight': 0.21.5(astro@4.6.2)
+      '@astrojs/tailwind': 5.1.0(astro@4.6.2)(tailwindcss@3.4.3)
       tailwindcss: 3.4.3
     dev: false
 
-  /@astrojs/starlight@0.21.5(astro@4.6.1):
+  /@astrojs/starlight@0.21.5(astro@4.6.2):
     resolution: {integrity: sha512-cvftxu7DM4C25KGSxqyIk81DiQGX0zx9s5sfmprd1kKQK1h/MQXaRVDCpJrK4SjrgWtpG1UoKLJZBgD5w4k9kw==}
     peerDependencies:
       astro: ^4.2.7
     dependencies:
-      '@astrojs/mdx': 2.3.0(astro@4.6.1)
+      '@astrojs/mdx': 2.3.0(astro@4.6.2)
       '@astrojs/sitemap': 3.1.2
       '@pagefind/default-ui': 1.1.0
       '@types/hast': 3.0.4
       '@types/mdast': 4.0.3
-      astro: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
-      astro-expressive-code: 0.33.5(astro@4.6.1)
+      astro: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
+      astro-expressive-code: 0.33.5(astro@4.6.2)
       bcp-47: 2.1.0
       hast-util-from-html: 2.0.1
       hast-util-select: 6.0.2
@@ -872,13 +872,13 @@ packages:
       - supports-color
     dev: false
 
-  /@astrojs/tailwind@5.1.0(astro@4.6.1)(tailwindcss@3.4.3):
+  /@astrojs/tailwind@5.1.0(astro@4.6.2)(tailwindcss@3.4.3):
     resolution: {integrity: sha512-BJoCDKuWhU9FT2qYg+fr6Nfb3qP4ShtyjXGHKA/4mHN94z7BGcmauQK23iy+YH5qWvTnhqkd6mQPQ1yTZTe9Ig==}
     peerDependencies:
       astro: ^3.0.0 || ^4.0.0
       tailwindcss: ^3.0.24
     dependencies:
-      astro: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+      astro: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
       autoprefixer: 10.4.19(postcss@8.4.38)
       postcss: 8.4.38
       postcss-load-config: 4.0.2(postcss@8.4.38)
@@ -1258,7 +1258,7 @@ packages:
     resolution: {integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==}
     dev: false
 
-  /@emotion/react@11.11.4(@types/react@18.2.78)(react@18.2.0):
+  /@emotion/react@11.11.4(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-t8AjMlF0gHpvvxk5mAtCqR4vmxiGHCeJBaQO6gncUSdklELOgtwjerNY2yuJNfwnc6vi16U/+uMF+afIawJ9iw==}
     peerDependencies:
       '@types/react': '*'
@@ -1274,7 +1274,7 @@ packages:
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.1(react@18.2.0)
       '@emotion/utils': 1.2.1
       '@emotion/weak-memoize': 0.3.1
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
     dev: false
@@ -2430,7 +2430,7 @@ packages:
     resolution: {integrity: sha512-POu8Mk0hIU3lRXB3bGIGe4VHIwwDsQyoD1F394OK7STTiX9w4dG3cTLljjYswkQN+hDSHRrj4O36kuVa7KPU8Q==}
     dev: false
 
-  /@react-three/drei@9.105.4(@react-three/fiber@8.16.2)(@types/react@18.2.78)(@types/three@0.163.0)(react-dom@18.2.0)(react@18.2.0)(three@0.163.0):
+  /@react-three/drei@9.105.4(@react-three/fiber@8.16.2)(@types/react@18.2.79)(@types/three@0.163.0)(react-dom@18.2.0)(react@18.2.0)(three@0.163.0):
     resolution: {integrity: sha512-pBZQmaV4yuBXP/TMcWJc5RNm3v9CykOqQDg2tyjZHijV4aa8jf38ae7WyQa5zDjuZcrHlQd2IGMX0Ia2UTHEUA==}
     peerDependencies:
       '@react-three/fiber': '>=8.0'
@@ -2464,7 +2464,7 @@ packages:
       three-mesh-bvh: 0.7.4(three@0.163.0)
       three-stdlib: 2.29.6(three@0.163.0)
       troika-three-text: 0.49.1(three@0.163.0)
-      tunnel-rat: 0.1.2(@types/react@18.2.78)(react@18.2.0)
+      tunnel-rat: 0.1.2(@types/react@18.2.79)(react@18.2.0)
       utility-types: 3.11.0
       uuid: 9.0.1
       zustand: 3.7.2(react@18.2.0)
@@ -2659,7 +2659,7 @@ packages:
       '@sentry/utils': 7.110.1
     dev: false
 
-  /@sentry/astro@7.110.1(astro@4.6.1):
+  /@sentry/astro@7.110.1(astro@4.6.2):
     resolution: {integrity: sha512-OpDgO7AoQuywO+G9b/0ZL3uUCq2VooEPvFMAHIRaW9fLBbEHxVoseHfZw5B1xqCBIwGA2gfMUpwy1/R2dAmIzw==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -2671,7 +2671,7 @@ packages:
       '@sentry/types': 7.110.1
       '@sentry/utils': 7.110.1
       '@sentry/vite-plugin': 2.16.1
-      astro: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+      astro: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -2856,16 +2856,16 @@ packages:
   /@sinclair/typebox@0.27.8:
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  /@spotlightjs/astro@1.0.20(@sentry/astro@7.110.1)(astro@4.6.1):
+  /@spotlightjs/astro@1.0.20(@sentry/astro@7.110.1)(astro@4.6.2):
     resolution: {integrity: sha512-3j4GqodpdaNPcsP2KbQylg2dF2nlRLe1z8UH/TgWx1MZJM16V2WP474nHUeP54kVmBaFwaJmF9OCkCMBqfKYfw==}
     peerDependencies:
       '@sentry/astro': '>=7.84.0'
       astro: '>=3.4.0 || >=4.0.0-beta'
     dependencies:
-      '@sentry/astro': 7.110.1(astro@4.6.1)
+      '@sentry/astro': 7.110.1(astro@4.6.2)
       '@spotlightjs/overlay': 1.8.3
       '@spotlightjs/sidecar': 1.4.0
-      astro: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+      astro: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
       source-map: 0.7.4
     dev: false
 
@@ -3383,6 +3383,10 @@ packages:
     dependencies:
       '@babel/types': 7.24.0
 
+  /@types/cookie@0.5.4:
+    resolution: {integrity: sha512-7z/eR6O859gyWIAjuvBWFzNURmf2oPBmJlfVWkwehU5nzIyjwBsTh7WMmEEV4JFnHuQ3ex4oyTvfKzcyJVDBNA==}
+    dev: false
+
   /@types/debug@4.1.12:
     resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==}
     dependencies:
@@ -3505,33 +3509,33 @@ packages:
   /@types/react-dom@18.2.25:
     resolution: {integrity: sha512-o/V48vf4MQh7juIKZU2QGDfli6p1+OOi5oXx36Hffpc9adsHeXjVp8rHuPkjd8VT8sOJ2Zp05HR7CdpGTIUFUA==}
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
 
   /@types/react-reconciler@0.26.7:
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
     dev: false
 
   /@types/react-reconciler@0.28.8:
     resolution: {integrity: sha512-SN9c4kxXZonFhbX4hJrZy37yw9e7EIxcpHCxQv5JUS18wDE5ovkQKlqQEkufdJCCMfuI9BnjUJvhYeJ9x5Ra7g==}
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
     dev: false
 
   /@types/react-syntax-highlighter@15.5.11:
     resolution: {integrity: sha512-ZqIJl+Pg8kD+47kxUjvrlElrraSUrYa4h0dauY/U/FTUuprSCqvUj+9PNQNQzVc6AJgIWUUxn87/gqsMHNbRjw==}
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
     dev: true
 
   /@types/react-transition-group@4.4.10:
     resolution: {integrity: sha512-hT/+s0VQs2ojCX823m60m5f0sL5idt9SO6Tj6Dg+rdphGPIeJbJ6CxvBYkgkGKrYeDjvIpKTR38UzmtHJOGW3Q==}
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
 
-  /@types/react@18.2.78:
-    resolution: {integrity: sha512-qOwdPnnitQY4xKlKayt42q5W5UQrSHjgoXNVEtxeqdITJ99k4VXJOP3vt8Rkm9HmgJpH50UNU+rlqfkfWOqp0A==}
+  /@types/react@18.2.79:
+    resolution: {integrity: sha512-RwGAGXPl9kSXwdNTafkOEuFrTBD5SA2B3iEB96xi8+xu5ddUa/cpvyVCSNn+asgLCTHkb5ZxN8gbuibYJi4s1w==}
     dependencies:
       '@types/prop-types': 15.7.12
       csstype: 3.1.3
@@ -3593,13 +3597,13 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@vitejs/plugin-react-swc@3.6.0(vite@5.2.8):
+  /@vitejs/plugin-react-swc@3.6.0(vite@5.2.9):
     resolution: {integrity: sha512-XFRbsGgpGxGzEV5i5+vRiro1bwcIaZDIdBRP16qwm+jP68ue/S8FJTBEgOeojtVDYrbSua3XFp71kC8VJE6v+g==}
     peerDependencies:
       vite: ^4 || ^5
     dependencies:
       '@swc/core': 1.4.12
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.9(@types/node@20.12.7)
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: true
@@ -3988,18 +3992,18 @@ packages:
     hasBin: true
     dev: false
 
-  /astro-expressive-code@0.33.5(astro@4.6.1):
+  /astro-expressive-code@0.33.5(astro@4.6.2):
     resolution: {integrity: sha512-9JAyllueMUN8JTl/h/yTdbKinNmfalEWcV11s3lSf/UJQbAZfWJuy+IlGcArZDI/CmD21GXhFHLqYthpdY33ug==}
     peerDependencies:
       astro: ^4.0.0-beta || ^3.3.0
     dependencies:
-      astro: 4.6.1(@types/node@20.12.7)(typescript@5.4.5)
+      astro: 4.6.2(@types/node@20.12.7)(typescript@5.4.5)
       hast-util-to-html: 8.0.4
       remark-expressive-code: 0.33.5
     dev: false
 
-  /astro@4.6.1(@types/node@20.12.7)(typescript@5.4.5):
-    resolution: {integrity: sha512-gcL22NEhuRi4wu9/x5Kn2eJf7nT6GeU5BxdN6AHbUnX6UzEDIWtpgHs5lBIZYExKbHKN9PjEGXWQzQtFwLU+5g==}
+  /astro@4.6.2(@types/node@20.12.7)(typescript@5.4.5):
+    resolution: {integrity: sha512-Kl+Wd7MJMQFnI3+V0JxF4HPbs8M67eltqQgtztReOwDLSl0VnOd39rM61W/3LEh10FZ0F13xrDgtdgfXzuLVbg==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0, npm: '>=9.6.5', pnpm: '>=7.1.0'}
     hasBin: true
     dependencies:
@@ -4014,6 +4018,7 @@ packages:
       '@babel/traverse': 7.24.1
       '@babel/types': 7.24.0
       '@types/babel__core': 7.20.5
+      '@types/cookie': 0.5.4
       acorn: 8.11.3
       aria-query: 5.3.0
       axobject-query: 4.0.0
@@ -4059,8 +4064,8 @@ packages:
       tsconfck: 3.0.3(typescript@5.4.5)
       unist-util-visit: 5.0.0
       vfile: 6.0.1
-      vite: 5.2.8(@types/node@20.12.7)
-      vitefu: 0.2.5(vite@5.2.8)
+      vite: 5.2.9(@types/node@20.12.7)
+      vitefu: 0.2.5(vite@5.2.9)
       which-pm: 2.1.1
       yargs-parser: 21.1.1
       zod: 3.22.4
@@ -8590,8 +8595,8 @@ packages:
       '@types/nlcst': 1.0.4
     dev: false
 
-  /node-abi@3.57.0:
-    resolution: {integrity: sha512-Dp+A9JWxRaKuHP35H77I4kCKesDy5HUDEmScia2FyncMTOXASMyg251F5PhFoDA5uqBrDDffiLpbqnrZmNXW+g==}
+  /node-abi@3.58.0:
+    resolution: {integrity: sha512-pXY1jnGf5T7b8UNzWzIqf0EkX4bx/w8N2AvwlGnk2SYYA/kzDVPaH0Dh0UG4EwxBB5eKOIZKPr8VAHSHL1DPGg==}
     engines: {node: '>=10'}
     requiresBuild: true
     dependencies:
@@ -9188,7 +9193,7 @@ packages:
       minimist: 1.2.8
       mkdirp-classic: 0.5.3
       napi-build-utils: 1.0.2
-      node-abi: 3.57.0
+      node-abi: 3.58.0
       pump: 3.0.0
       rc: 1.2.8
       simple-get: 4.0.1
@@ -9212,8 +9217,8 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.13(prettier@3.2.5):
-    resolution: {integrity: sha512-2tPWHCFNC+WRjAC4SIWQNSOdcL1NNkydXim8w7TDqlZi+/ulZYz2OouAI6qMtkggnPt7lGamboj6LcTMwcCvoQ==}
+  /prettier-plugin-tailwindcss@0.5.14(prettier@3.2.5):
+    resolution: {integrity: sha512-Puaz+wPUAhFp8Lo9HuciYKM2Y2XExESjeT+9NQoVFXZsPPnc9VYss2SpxdQ6vbatmt8/4+SN0oe0I1cPDABg9Q==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
@@ -9749,14 +9754,14 @@ packages:
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
-  /react-markdown@9.0.1(@types/react@18.2.78)(react@18.2.0):
+  /react-markdown@9.0.1(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-186Gw/vF1uRkydbsOIkcGXw7aHq0sZOCRFFjGrr7b9+nVZg4UfA4enXCaxm4fUzecU38sWfrNDitGhshuU7rdg==}
     peerDependencies:
       '@types/react': '>=18'
       react: '>=18'
     dependencies:
       '@types/hast': 3.0.4
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
       devlop: 1.1.0
       hast-util-to-jsx-runtime: 2.3.0
       html-url-attributes: 3.0.0
@@ -9786,7 +9791,7 @@ packages:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
 
-  /react-select@5.8.0(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0):
+  /react-select@5.8.0(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-TfjLDo58XrhP6VG5M/Mi56Us0Yt8X7xD6cDybC7yoRMUNm7BGO7qk8J0TLQOua/prb8vUOtsfnXZwfm30HGsAA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -9794,7 +9799,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.24.4
       '@emotion/cache': 11.11.0
-      '@emotion/react': 11.11.4(@types/react@18.2.78)(react@18.2.0)
+      '@emotion/react': 11.11.4(@types/react@18.2.79)(react@18.2.0)
       '@floating-ui/dom': 1.6.3
       '@types/react-transition-group': 4.4.10
       memoize-one: 6.0.0
@@ -9802,7 +9807,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.78)(react@18.2.0)
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.79)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
     dev: false
@@ -9820,7 +9825,7 @@ packages:
       refractor: 3.6.0
     dev: false
 
-  /react-textarea-autosize@8.5.3(@types/react@18.2.78)(react@18.2.0):
+  /react-textarea-autosize@8.5.3(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-XT1024o2pqCuZSuBt9FwHlaDeNtVrtCXu0Rnz88t1jUGheCLa3PhjE1GH8Ctm2axEtvdCl5SUHYschyQ0L5QHQ==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -9829,7 +9834,7 @@ packages:
       '@babel/runtime': 7.24.4
       react: 18.2.0
       use-composed-ref: 1.3.0(react@18.2.0)
-      use-latest: 1.2.1(@types/react@18.2.78)(react@18.2.0)
+      use-latest: 1.2.1(@types/react@18.2.79)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
     dev: false
@@ -11237,10 +11242,10 @@ packages:
     dev: false
     optional: true
 
-  /tunnel-rat@0.1.2(@types/react@18.2.78)(react@18.2.0):
+  /tunnel-rat@0.1.2(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-lR5VHmkPhzdhrM092lI2nACsLO4QubF0/yoOhzX7c+wIpbN1GjHNzCc91QlpxBi+cnx8vVJ+Ur6vL5cEoQPFpQ==}
     dependencies:
-      zustand: 4.5.2(@types/react@18.2.78)(react@18.2.0)
+      zustand: 4.5.2(@types/react@18.2.79)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -11590,7 +11595,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.78)(react@18.2.0):
+  /use-isomorphic-layout-effect@1.1.2(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
     peerDependencies:
       '@types/react': '*'
@@ -11599,11 +11604,11 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
       react: 18.2.0
     dev: false
 
-  /use-latest@1.2.1(@types/react@18.2.78)(react@18.2.0):
+  /use-latest@1.2.1(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==}
     peerDependencies:
       '@types/react': '*'
@@ -11612,9 +11617,9 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
       react: 18.2.0
-      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.78)(react@18.2.0)
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.79)(react@18.2.0)
     dev: false
 
   /use-sync-external-store@1.2.0(react@18.2.0):
@@ -11711,7 +11716,7 @@ packages:
       debug: 4.3.4
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.9(@types/node@20.12.7)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -11721,41 +11726,6 @@ packages:
       - sugarss
       - supports-color
       - terser
-
-  /vite@5.2.8(@types/node@20.12.7):
-    resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 20.12.7
-      esbuild: 0.20.2
-      postcss: 8.4.38
-      rollup: 4.14.3
-    optionalDependencies:
-      fsevents: 2.3.3
 
   /vite@5.2.9(@types/node@20.12.7):
     resolution: {integrity: sha512-uOQWfuZBlc6Y3W/DTuQ1Sr+oIXWvqljLvS881SVmAj00d5RdgShLcuXWxseWPd4HXwiYBFW/vXHfKFeqj9uQnw==}
@@ -11792,7 +11762,7 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
 
-  /vitefu@0.2.5(vite@5.2.8):
+  /vitefu@0.2.5(vite@5.2.9):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -11800,7 +11770,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.9(@types/node@20.12.7)
     dev: false
 
   /vitest@1.5.0(@types/node@20.12.7)(jsdom@24.0.0):
@@ -11847,7 +11817,7 @@ packages:
       strip-literal: 2.1.0
       tinybench: 2.7.0
       tinypool: 0.8.4
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.9(@types/node@20.12.7)
       vite-node: 1.5.0(@types/node@20.12.7)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
@@ -12341,7 +12311,7 @@ packages:
       react: 18.2.0
     dev: false
 
-  /zustand@4.5.2(@types/react@18.2.78)(react@18.2.0):
+  /zustand@4.5.2(@types/react@18.2.79)(react@18.2.0):
     resolution: {integrity: sha512-2cN1tPkDVkwCy5ickKrI7vijSjPksFRfqS6237NzT0vqSsztTNnQdHw9mmN7uBdk3gceVXU0a+21jFzFzAc9+g==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -12356,7 +12326,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@types/react': 18.2.78
+      '@types/react': 18.2.79
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false

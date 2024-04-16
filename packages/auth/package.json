@@ -29,7 +29,7 @@
     "@fiar/content": "workspace:^",
     "@firebase/app": "^0.10.1",
     "@firebase/auth": "1.7.1",
-    "@types/react": "^18.2.78",
+    "@types/react": "^18.2.79",
     "react": "^18.2.0",
     "typescript": "^5.4.5"
   },
