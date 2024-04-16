@@ -1,6 +1,7 @@
-import { getFirestore } from '@firebase/firestore'
+import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore'
+import { connectStorageEmulator, getStorage } from '@firebase/storage'
+import { connectAuthEmulator, getAuth } from '@firebase/auth'
 import { initializeApp } from '@firebase/app'
-import { getStorage } from '@firebase/storage'
 
 import config from '../firebase.json'
 
@@ -16,3 +17,10 @@ const auth = {
 export const app = initializeApp(auth)
 export const firestore = getFirestore(app, config.firestore.database)
 export const storage = getStorage(app, `gs://${config.storage.bucket}`)
+
+// let saved: any = null
+if (import.meta.env.VITE_FIREBASE_EMULATE) {
+  connectFirestoreEmulator(firestore, `localhost`, config.emulators.firestore.port)
+  connectStorageEmulator(storage, `localhost`, config.emulators.storage.port)
+  connectAuthEmulator(getAuth(app), `http://localhost:${config.emulators.auth.port}`)
+}

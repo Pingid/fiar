@@ -29,6 +29,7 @@ export interface IFieldBoolean extends IFieldBase, FireSchemaBool {
 
 export interface IFieldString extends IFieldBase, FireSchemaString {
   initialValue?: string
+  placeholder?: string
   multiline?: boolean
 }
 

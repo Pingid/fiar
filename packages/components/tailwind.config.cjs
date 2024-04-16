@@ -1,4 +1,5 @@
 const typography = require('@tailwindcss/typography')
+const path = require('path')
 
 const light = {
   '--color-back': `0deg 0% 100%`,
@@ -36,7 +37,7 @@ const base = {
 }
 
 module.exports = {
-  content: ['./src/**/*.{ts,tsx}'],
+  content: [path.join(__dirname, './src/**/*.{ts,tsx}')],
   darkMode: ['class', 'media'],
   theme: {
     extend: {

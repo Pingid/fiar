@@ -3,8 +3,7 @@
   "firestore": {
     "database": "example-fields",
     "predeploy": "pnpm run generate",
-    "rules": "firebase/firestore.rules",
-    "indexes": "firebase/firestore.indexes.json"
+    "rules": "firebase/firestore.rules"
   },
   "storage": {
     "bucket": "fiar-example-fields",
@@ -13,13 +12,19 @@
   },
   "emulators": {
     "auth": {
-      "port": 9099
+      "port": 9099,
+      "host": "0.0.0.0"
     },
     "firestore": {
-      "port": 8080
+      "port": 8080,
+      "host": "0.0.0.0"
     },
     "storage": {
-      "port": 9199
+      "port": 9199,
+      "host": "0.0.0.0"
+    },
+    "ui": {
+      "enabled": false
     }
   }
 }

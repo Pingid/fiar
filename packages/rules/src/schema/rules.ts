@@ -28,8 +28,8 @@ const validateString: FieldTranformer<RulesString, FireSchemaString> = (left, fi
   const rules: [RulesBoolean, ...RulesBoolean[]] = [op(left, 'is', field.type)]
   if (field.match instanceof RegExp) rules.push(left.matches(field.match.source))
   if (typeof field.match === 'string') rules.push(left.matches(field.match))
-  if (typeof field.min === 'number') rules.push(op(left.size(), '>=', field.min))
-  if (typeof field.max === 'number') rules.push(op(left.size(), '<=', field.max))
+  if (typeof field.minLength === 'number') rules.push(op(left.size(), '>=', field.minLength))
+  if (typeof field.maxLength === 'number') rules.push(op(left.size(), '<=', field.maxLength))
   if (typeof field.size === 'number') rules.push(op(left.size(), '==', field.size))
   if (field.select)
     rules.push(

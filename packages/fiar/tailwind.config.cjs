@@ -1,12 +1,13 @@
 const config = require('@fiar/components/tailwind.config')
+const path = require('path')
 
 module.exports = {
   ...config,
   content: [
-    '../components/src/**/*.{ts,tsx}',
-    '../workbench/src/**/*.{ts,tsx}',
-    '../content/src/**/*.{ts,tsx}',
-    '../assets/src/**/*.{ts,tsx}',
-    '../auth/src/**/*.{ts,tsx}',
+    ...config.content,
+    path.join(__dirname, '../workbench/src/**/*.{ts,tsx}'),
+    path.join(__dirname, '../content/src/**/*.{ts,tsx}'),
+    path.join(__dirname, '../assets/src/**/*.{ts,tsx}'),
+    path.join(__dirname, '../auth/src/**/*.{ts,tsx}'),
   ],
 }

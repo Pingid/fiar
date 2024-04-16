@@ -10,8 +10,8 @@ describe('string', () => {
   it('assert', () => match(s.string({})).toBe('data is string'))
   it('match regex', () => match(s.string({ match: /.*/g })).toBe('data is string && data.matches(".*")'))
   it('match regex string', () => match(s.string({ match: '.*' })).toBe(`data is string && data.matches(".*")`))
-  it('min length', () => match(s.string({ min: 10 })).toBe('data is string && data.size() >= 10'))
-  it('max length', () => match(s.string({ max: 10 })).toBe('data is string && data.size() <= 10'))
+  it('min length', () => match(s.string({ minLength: 10 })).toBe('data is string && data.size() >= 10'))
+  it('max length', () => match(s.string({ maxLength: 10 })).toBe('data is string && data.size() <= 10'))
   it('match length', () => match(s.string({ size: 10 })).toBe('data is string && data.size() == 10'))
 })
 

@@ -55,8 +55,10 @@
     { "path": "./packages/schema" },
     { "path": "./packages/workbench" },
 
+    { "path": "./examples/fields" },
+    { "path": "./examples/nosense" },
     { "path": "./examples/react" },
-    { "path": "./examples/nosense" }
+    { "path": "./examples/simple-blog" }
   ],
   "files": [],
   "include": ["firebase.json"],

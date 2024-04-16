@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "src",
+    "tsBuildInfoFile": ".tsbuildinfo",
     "resolveJsonModule": true,
     "noEmit": true
   },

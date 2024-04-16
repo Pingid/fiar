@@ -13,9 +13,8 @@
   "types": "index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "pnpm watch",
-    "build": "../../scripts/build.js --cjs-bundle",
-    "watch": "../../scripts/watch.js"
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.1.0",

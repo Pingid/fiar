@@ -20,5 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "vite.config.ts", "firebase"]
+  "include": ["tests", "src", "vite.config.ts", "firebase"],
+  "references": [{ "path": "../../packages/fiar" }]
 }

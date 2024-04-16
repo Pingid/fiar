@@ -13,9 +13,8 @@
   "types": "index.d.ts",
   "type": "module",
   "scripts": {
-    "dev": "pnpm watch",
-    "build": "../../scripts/build.js",
-    "watch": "../../scripts/watch.js"
+    "build": "tsc",
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "@fiar/components": "workspace:^",

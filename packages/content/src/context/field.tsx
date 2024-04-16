@@ -91,7 +91,7 @@ export const useFieldForm = <F extends IFields>(): UseFieldForm<F> => {
       if (typeof field.schema.initialValue !== 'undefined' && typeof existing === 'undefined') {
         set(form.control._defaultValues, field.name, field.schema.initialValue)
       }
-      return form.control.register(field.name, { ...field.schema, required: !field.schema.optional, ...options })
+      return form.control.register(field.name, { required: !field.schema.optional, ...options })
     },
   } as any
 }
@@ -115,7 +115,6 @@ export const useFormFieldControl = <F extends IFields>(
   const form = useFormContext()
   const field = useField()
   return useController({
-    ...field.schema,
     ...(props as {}),
     control: form.control,
     name: field.name as 'name',
@@ -129,7 +128,7 @@ export const useFieldError = () => {
   if (!err) return undefined
   if (err.message) return err.message
   if (err.type === 'required') return `Required`
-  return 'Invalid'
+  return `Failed validation ${err.type}`
 }
 
 const FieldValueContext = createContext(null)

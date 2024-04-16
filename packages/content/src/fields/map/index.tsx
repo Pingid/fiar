@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { cn } from 'mcn'
 
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -14,7 +15,6 @@ import {
   registerField,
 } from '../../context/field.js'
 import type { IFieldMap } from '../../schema/index.js'
-import { useRef } from 'react'
 
 export const FormFieldMap = () => {
   const form = useFormContext()

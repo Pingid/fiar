@@ -19,8 +19,16 @@ const local = (root: string) => {
     .flat()
 }
 
+process.env.VITE_FIREBASE_APIKEY = process.env.FIREBASE_APIKEY
+process.env.VITE_FIREBASE_AUTHDOMAIN = process.env.FIREBASE_AUTHDOMAIN
+process.env.VITE_FIREBASE_PROJECTID = process.env.FIREBASE_PROJECTID
+process.env.VITE_FIREBASE_STORAGEBUCKET = process.env.FIREBASE_STORAGEBUCKET
+process.env.VITE_FIREBASE_MESSAGINGSENDERID = process.env.FIREBASE_MESSAGINGSENDERID
+process.env.VITE_FIREBASE_APPID = process.env.FIREBASE_APPID
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   resolve: { alias: [...local('packages')] },
+  server: { host: '0.0.0.0' }
 })

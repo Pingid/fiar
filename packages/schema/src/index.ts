@@ -25,8 +25,8 @@ export interface FireSchemaBool extends FireSchemaBase {
 export interface FireSchemaString extends FireSchemaBase {
   type: 'string'
 
-  min?: number
-  max?: number
+  minLength?: number
+  maxLength?: number
   size?: number
   match?: RegExp | string
   select?: { value: string; label?: string }[]

@@ -20,5 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "rules.ts", "vite.config.ts"]
+  "include": ["src", "rules.ts", "vite.config.ts"],
+  "references": [{ "path": "../../packages/fiar" }]
 }

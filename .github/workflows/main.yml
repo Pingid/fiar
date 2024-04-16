@@ -14,36 +14,50 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 7
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
         with:
           version: 8
+          run_install: false
 
-      - name: Use Node 18
-        uses: actions/setup-node@v3
+      - uses: actions/cache@v4
+        name: Setup shared cache
         with:
-          node-version: 18
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-main-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ~/.cache
+          key: ${{ runner.os }}-cache-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-main-
+            ${{ runner.os }}-cache-
 
-      - name: Install deps
+      - name: Set pnpm cache dir
+        run: pnpm config set store-dir ~/.cache/pnpm
+
+      - name: Install dependancies
         run: pnpm install
 
-      - name: Build
+      - name: Build packages
         run: pnpm build
 
-      - name: Build
+      - name: Run generation scripts
+        run: pnpm generate
+
+      - name: Install playwright binaries
+        working-directory: ./examples/fields
+        run: pnpm playwright install --with-deps
+
+      - name: Run tests
         run: pnpm test
+        env:
+          FIREBASE_APIKEY: 'test'
+          FIREBASE_AUTHDOMAIN: 'test'
+          FIREBASE_PROJECTID: ${{ secrets.FIREBASE_PROJECTID }}
+          FIREBASE_STORAGEBUCKET: 'test'
+          FIREBASE_MESSAGINGSENDERID: 'test'
+          FIREBASE_APPID: 'test'
