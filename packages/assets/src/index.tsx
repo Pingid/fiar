@@ -10,8 +10,6 @@ import { TipTapImageTool } from './components/index.js'
 import { Folder } from './components/Folder/index.js'
 import './components/Field/index.js'
 
-export { FolderAction } from './components/Folder/index.js'
-export { image } from './schema/index.js'
 export * from './context/index.js'
 
 export const Storage = ({ children, ...config }: { children?: React.ReactNode } & AssetConfig) => {
@@ -29,7 +27,7 @@ export const Storage = ({ children, ...config }: { children?: React.ReactNode } 
                 <Folder {...x} />
               </Route>
             ))}
-            <Route path="">
+            <Route path="/">
               <FolderList />
             </Route>
           </Switch>

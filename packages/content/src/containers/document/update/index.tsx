@@ -1,9 +1,8 @@
-import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { useEffect, useMemo, useRef } from 'react'
+import { Button, Spinner } from '@nextui-org/react'
 import { doc } from '@firebase/firestore'
 
 import { useIntercept, useLocation } from '@fiar/workbench/router'
-import { Button, LoadingDots } from '@fiar/components'
 import { Header } from '@fiar/workbench'
 
 import { parameterize, useModel, usePathRef } from '../../../context/model.js'
@@ -32,12 +31,12 @@ export const DocumentUpdate = () => {
     return { data: fromFirestore(data.data.data()) }
   }, [data.data])
 
-  if (data.isLoading) {
+  if (true) {
     return (
       <Header subtitle={path} breadcrumbs={breadcrumbs}>
         <div className="flex w-full justify-end gap-2 px-3 py-2">
           <div>
-            <LoadingDots />
+            <Spinner color="default" size="sm" className="fill-black" />
           </div>
         </div>
       </Header>
@@ -58,7 +57,10 @@ export const DocumentUpdate = () => {
   }
 
   return (
-    <DocumentUpdateForm defaultValues={value} onBack={() => nav(schema.type === 'collection' ? schema.path : '/')} />
+    <DocumentUpdateForm
+      defaultValues={value as any}
+      onBack={() => nav(schema.type === 'collection' ? schema.path : '/')}
+    />
   )
 }
 
@@ -111,7 +113,7 @@ export const DocumentUpdateForm = (props: { defaultValues: { data: Record<string
             <Button type="button" color="error" onClick={() => onDelete()}>
               Delete
             </Button>
-            <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+            <DocumentPublish onClick={onSubmit} title="Publish" />
           </div>
         </Header>
         <DocumentFormFields schema={schema} />

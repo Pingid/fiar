@@ -12,7 +12,6 @@ describe('string', () => {
   it('match regex string', () => match(s.string({ match: '.*' })).toBe(`data is string && data.matches(".*")`))
   it('min length', () => match(s.string({ minLength: 10 })).toBe('data is string && data.size() >= 10'))
   it('max length', () => match(s.string({ maxLength: 10 })).toBe('data is string && data.size() <= 10'))
-  it('match length', () => match(s.string({ size: 10 })).toBe('data is string && data.size() == 10'))
 })
 
 describe('number', () => {

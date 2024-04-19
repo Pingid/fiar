@@ -67,7 +67,7 @@ export const get = _get
 export const set = _set
 
 /* ---------------------------- Form Custom Hooks --------------------------- */
-export type UseFieldForm<F extends IFields> = {
+export type UseFieldForm<F extends IFields = IFields> = {
   name: string
   schema: F
   parent?: IFields

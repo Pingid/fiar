@@ -1,7 +1,8 @@
-import { Field, Input, FieldControl, Select, TextArea } from '@fiar/components'
+import { Input, Textarea, Select, SelectItem, InputProps } from '@nextui-org/react'
 
 import { useFieldForm, useFieldPreview, registerField } from '../../context/field.js'
 import { type IFieldString } from '../../schema/index.js'
+import { Field } from '../../components/index.js'
 
 export const FormFieldString = () => {
   const field = useFieldForm<IFieldString>()
@@ -18,23 +19,30 @@ export const FormFieldString = () => {
     },
   })
 
-  const inner = field.schema.select ? (
-    <Select id={field.name} {...register}>
-      {field.schema.select.map((x) => (
-        <option key={x.value} value={x.value}>
-          {x.label || x.value}
-        </option>
-      ))}
-    </Select>
-  ) : field.schema.multiline ? (
-    <TextArea id={field.name} rows={1} style={{ height: 25 }} placeholder={field.schema.placeholder} {...register} />
-  ) : (
-    <Input id={field.name} type="text" placeholder={field.schema.placeholder} {...register} />
-  )
+  const props = {
+    id: field.name,
+    variant: 'bordered',
+    placeholder: field.schema.placeholder ?? ' ',
+    isInvalid: !!field.error,
+    'aria-label': field.schema.label,
+    ...register,
+  } satisfies InputProps
 
   return (
     <Field {...field}>
-      <FieldControl error={!!field.error}>{inner}</FieldControl>
+      {field.schema.select ? (
+        <Select {...props}>
+          {field.schema.select.map((x) => (
+            <SelectItem key={x} value={x}>
+              {x}
+            </SelectItem>
+          ))}
+        </Select>
+      ) : field.schema.multiline ? (
+        <Textarea {...props} />
+      ) : (
+        <Input type="text" {...props} />
+      )}
     </Field>
   )
 }

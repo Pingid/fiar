@@ -7,9 +7,9 @@ export const post = s.model({
   layout: {},
   fields: {
     title: s.string(),
-    image: s.image({ optional: true }),
+    image: s.asset({ optional: true }),
     body: s.text(),
-    status: s.string({ select: [{ value: 'published' }, { value: 'draft' }], initialValue: 'draft' }),
+    status: s.string({ select: ['published', 'draft'], initialValue: 'draft' }),
   },
 })
 

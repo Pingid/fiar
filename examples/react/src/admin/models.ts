@@ -1,5 +1,5 @@
 import * as s from '@fiar/content/schema'
-import { image } from '@fiar/assets/schema'
+import { asset } from '@fiar/assets/schema'
 
 const seoPageMeta = s.map({
   label: 'SEO',
@@ -30,7 +30,7 @@ export const articles = s.model({
   },
   fields: {
     title: s.string({ label: 'Title' }),
-    image: image({ label: 'Main image' }),
+    image: asset({ label: 'Main image' }),
     body: s.text({ label: 'Content' }),
     meta: seoPageMeta,
     tags: s.list({ label: 'Tags', of: s.string() }),
@@ -80,9 +80,9 @@ export const tags = s.model({
   },
   fields: {
     name: s.string({ label: 'Name' }),
-    type: s.string({ label: 'Type', select: [{ value: 'one' }, { value: 'two' }] }),
-    createdAt: s.timestamp({ computed: 'on-create' }),
-    updatedAt: s.timestamp({ computed: 'on-update' }),
+    type: s.string({ label: 'Type', select: ['one', 'two'] }),
+    createdAt: s.timestamp({ auto: 'create' }),
+    updatedAt: s.timestamp({ auto: 'update' }),
   },
 })
 

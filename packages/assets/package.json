@@ -20,6 +20,7 @@
     "@fiar/components": "workspace:^",
     "@fiar/workbench": "workspace:^",
     "@heroicons/react": "^2.1.3",
+    "@nextui-org/react": "^2.3.4",
     "@react-three/drei": "^9.105.4",
     "@react-three/fiber": "^8.16.2",
     "@tiptap/extension-image": "^2.3.0",

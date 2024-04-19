@@ -2,7 +2,6 @@ import { ArrowPathIcon, DocumentDuplicateIcon, LinkIcon, PencilIcon, XMarkIcon }
 import { DocumentReference, doc } from '@firebase/firestore'
 import { useState } from 'react'
 
-import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
 
 import { PreviewField, useFieldPreview, useFieldForm, useFormFieldControl, registerField } from '../../context/field.js'
@@ -12,6 +11,8 @@ import { EnumerableDocumentReference } from '../../util/firebase.js'
 import { SelectDocumentProvider } from '../../context/select.js'
 import { useDocumentHook } from '../../context/hooks.js'
 import { trailing } from '../../util/index.js'
+import { Field } from '../../components/index.js'
+import { Button } from '@nextui-org/react'
 
 export const FormFieldRef = () => {
   const field = useFieldForm<IFieldRef>()
@@ -32,8 +33,8 @@ export const FormFieldRef = () => {
   })
 
   return (
-    <Field {...field}>
-      <FieldControl ref={controller.field.ref}>
+    <Field {...(field as any)}>
+      <div className="border">
         {isSet && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
             <div className="flex items-center gap-1">
@@ -55,7 +56,7 @@ export const FormFieldRef = () => {
         )}
         {!isSet && (
           <div className="flex w-full items-center justify-center p-3">
-            <Button size="lg" icon={<LinkIcon />} color="active" onClick={() => setSelect(true)}>
+            <Button variant="bordered" endContent={<LinkIcon />} color="primary" onClick={() => setSelect(true)}>
               Select {target.label || target.path}
             </Button>
           </div>
@@ -79,7 +80,7 @@ export const FormFieldRef = () => {
             static
           />
         )}
-      </FieldControl>
+      </div>
     </Field>
   )
 }

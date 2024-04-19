@@ -1,9 +1,10 @@
-import { ArrowPathIcon, PhotoIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, CloudIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 
 import { useFieldPreview, useFieldForm, useFormFieldControl, registerField } from '@fiar/content/fields'
-import { Button, Field, FieldControl } from '@fiar/components'
 import { WorkbenchPageModal } from '@fiar/workbench'
+import { Field } from '@fiar/content/components'
+import { Button } from '@nextui-org/react'
 
 import { SelectAssetProvider } from '../../context/select.js'
 import { useImageMeta } from '../../context/data.js'
@@ -43,7 +44,7 @@ export const FormFieldAsset = () => {
 
   return (
     <Field {...field}>
-      <FieldControl>
+      <div className="">
         {form.field.value && (
           <div className="bg-back flex w-full justify-between border-b p-1 px-2">
             <div />
@@ -69,17 +70,18 @@ export const FormFieldAsset = () => {
         {!form.field.value && (
           <div className="flex w-full items-center justify-center">
             <Button
-              size="lg"
-              icon={<PhotoIcon />}
+              size="large"
+              startContent={<CloudIcon />}
               color={!!field.error ? 'error' : 'active'}
               className="w-full justify-center py-6"
               onClick={() => setOpen(true)}
+              variant="bordered"
             >
-              Select image
+              Pick {field.schema.label}
             </Button>
           </div>
         )}
-      </FieldControl>
+      </div>
 
       <SelectAssetProvider
         value={({ fullPath, name, bucket }) => {

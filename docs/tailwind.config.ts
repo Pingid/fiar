@@ -1,5 +1,5 @@
 import starlightPlugin from '@astrojs/starlight-tailwind'
-import config from '@fiar/components/tailwind.config'
+import config from '@fiar/workbench/tailwind.config'
 import type { Config } from 'tailwindcss'
 
 const _config = {

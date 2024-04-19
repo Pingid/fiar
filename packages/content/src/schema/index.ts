@@ -18,9 +18,9 @@ export type TypeOf<T> = T extends FireModel ? InferModelType<T> : T extends Fire
 export interface IFieldBase {
   label?: string
   description?: string
-  optional?: boolean
-  component?: string
   initialValue?: any
+  component?: string
+  hide?: boolean
 }
 
 export interface IFieldBoolean extends IFieldBase, FireSchemaBool {
@@ -35,10 +35,14 @@ export interface IFieldString extends IFieldBase, FireSchemaString {
 
 export interface IFieldNumber extends IFieldBase, FireSchemaNumber {
   initialValue?: number
+  placeholder?: string
 }
 
 export interface IFieldTimestamp extends IFieldBase, FireSchemaTimestamp {
-  computed?: 'on-update' | 'on-create'
+  auto?: 'create' | 'update'
+  timezone?: string
+  placeholder?: string | number | Date
+  granularity?: 'day' | 'hour' | 'minute' | 'second'
   initialValue?: Timestamp
 }
 
@@ -60,6 +64,8 @@ export type IField = FireSchemaTypes & IFieldBase
 export interface IContentDocument extends FireModel {
   type: 'document'
   label: string
+  group?: string
+  readonly?: boolean
   fields: Record<string, IFields>
 }
 
@@ -72,6 +78,8 @@ export interface CollectionLayout<K extends string = string> {
 export interface IContentCollection extends FireModel {
   type: 'collection'
   label?: string
+  group?: string
+  readonly?: boolean
   fields: Record<string, IFields>
   layout?: CollectionLayout<keyof this['fields'] & string>
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import {
   ArrowLeftStartOnRectangleIcon,
   ArrowRightEndOnRectangleIcon,
@@ -18,6 +18,7 @@ export const useNavState = () => useContext(NavStateContext)
 export const Nav = ({ children }: { children: React.ReactNode }) => {
   const state = useState(false)
   const [open, setOpen] = state
+  const [mode] = useLightDarkMode()
 
   return (
     <NavStateContext.Provider value={state as any}>
@@ -25,6 +26,7 @@ export const Nav = ({ children }: { children: React.ReactNode }) => {
         className={cn(
           'grid h-full w-full transition-[grid] [grid-template:var(--asside-height)_1fr_/_1fr] sm:[grid-template:1fr_/_var(--asside-width)_1fr]',
           [open, '[--asside-width:12rem]', '[--asside-width:3rem]'],
+          mode,
         )}
       >
         <aside
@@ -71,6 +73,21 @@ export const Nav = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
+export const useLightDarkMode = () => {
+  const media = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')
+  const [state, setState] = useState<'light' | 'dark'>(() => (media?.matches ? 'dark' : 'light'))
+
+  useEffect(() => {
+    if (!media) return
+    const onChange = (event: MediaQueryListEvent) => setState(event.matches ? 'dark' : 'light')
+    media.addEventListener('change', onChange)
+    return () => media.addEventListener('change', onChange)
+  }, [])
+
+  return [state, setState] as const
+}
+
+// darkMode
 export const NavActionTop = (p: { children: React.ReactElement }) => (
   <NavActionTopSlot.Place>{p.children}</NavActionTopSlot.Place>
 )

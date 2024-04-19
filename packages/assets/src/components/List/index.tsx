@@ -1,7 +1,6 @@
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
-import { Link } from '@fiar/workbench/router'
+import { LinkCard } from '@fiar/content/components'
 import { Header } from '@fiar/workbench'
-import { Card } from '@fiar/components'
 
 import { useAssetConfig } from '../../context/config.js'
 import { useUploads } from '../../context/uploads.js'
@@ -23,21 +22,18 @@ export const FolderList = () => {
       )}
       <div className="space-y-2 p-2">
         {config.folders?.map((x) => (
-          <Link key={x.path} href={x.path} asChild>
-            <Card
-              elementType="a"
-              className="block"
-              icon={
-                <>
-                  <FolderIcon className="relative group-hover/card:hidden" />
-                  <FolderOpenIcon className="relative hidden group-hover/card:block" />
-                </>
-              }
-              head={x.title}
-            >
-              <p className="text-front/60 pt-1 text-sm">{x.path}</p>
-            </Card>
-          </Link>
+          <LinkCard
+            key={x.path}
+            href={x.path}
+            icon={
+              <>
+                <FolderIcon className="relative group-hover/card:hidden" />
+                <FolderOpenIcon className="relative hidden group-hover/card:block" />
+              </>
+            }
+            label={x.title}
+            subheader={x.path}
+          ></LinkCard>
         ))}
       </div>
     </>

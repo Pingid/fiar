@@ -1,11 +1,11 @@
 import { ChevronDownIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { OrderByDirection, doc, orderBy } from '@firebase/firestore'
 import { useEffect, useState } from 'react'
+import { Button } from '@nextui-org/react'
 import { useStore } from 'zustand'
 import { cn } from 'mcn'
 
 import { useLocation } from '@fiar/workbench/router'
-import { Button } from '@fiar/components'
 
 import { useCollectionData, useCollectionRef, useDocumentMutation } from '../../../context/data.js'
 import { useSelectDocument } from '../../../context/select.js'
@@ -63,8 +63,10 @@ export const Table = () => {
           <div className="flex w-full items-start justify-end">
             <div className="hidden gap-1 sm:flex">
               <Button
-                icon={<TrashIcon />}
-                color="error"
+                endContent={<TrashIcon className="h-4 w-4" />}
+                color="danger"
+                variant="bordered"
+                size="sm"
                 onClick={(e) => (e.stopPropagation(), update.trigger({ type: 'delete', schema, ref: doc(ref, x.id) }))}
               ></Button>
             </div>

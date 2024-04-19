@@ -14,7 +14,7 @@ import { BsFacebook, BsGithub, BsTwitter, BsGoogle } from 'react-icons/bs'
 import useMutation from 'swr/mutation'
 import React, { useMemo } from 'react'
 
-import { Button, Field, FieldControl, Input, LoadingDots } from '@fiar/components'
+import { Button, Field, FocusFrame, Input, LoadingDots } from '@fiar/components'
 import { useFirebaseAuth, useAuthConfig } from '../../context/index.js'
 
 export const Login = (props: { onSuccess: (user: UserCredential) => void; ready?: boolean }): JSX.Element => {
@@ -104,12 +104,12 @@ const EmailAndPasswordForm = (props: { signIn: (email: string, password: string)
   return (
     <form className="space-y-3 px-4 py-6" onSubmit={(e) => (e.preventDefault(), props.signIn(email, password))}>
       <Field schema={{ label: 'email' }} name="email">
-        <FieldControl>
+        <FocusFrame>
           <Input id="email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </FieldControl>
+        </FocusFrame>
       </Field>
       <Field schema={{ label: 'password' }} name="password">
-        <FieldControl>
+        <FocusFrame>
           <Input
             id="password"
             type="password"
@@ -117,7 +117,7 @@ const EmailAndPasswordForm = (props: { signIn: (email: string, password: string)
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </FieldControl>
+        </FocusFrame>
       </Field>
       <div className="flex justify-end pt-3">
         <Button size="lg" disabled={props.loading} className="px-6 py-3" onClick={() => props.signIn(email, password)}>

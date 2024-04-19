@@ -1,41 +1,61 @@
 import * as s from 'fiar/schema'
 
-const seoPageMeta = s.map({
-  label: 'SEO page meta',
-  optional: true,
+const users = s.defineCollection({
+  path: '/users/{userId}',
+  label: 'Users',
+  layout: {
+    sort: ['displayName', 'desc'],
+    columns: ['picture', 'displayName', 'email'],
+  },
   fields: {
-    title: s.string({ label: 'Page title' }),
-    description: s.string({
-      label: 'Page description',
+    email: s.string({ label: 'Email' }),
+    picture: s.asset({ label: 'Photo' }),
+    displayName: s.string({ label: 'Name' }),
+    role: s.string({ select: ['admin', 'editor'] }),
+  },
+})
+
+const invites = s.defineCollection({
+  path: '/invites/{userId}',
+  label: 'Invites',
+  readonly: true,
+  fields: { email: s.string({}), role: s.string({ select: ['admin', 'editor'] }) },
+})
+
+const posts = s.defineCollection({
+  path: '/posts/{postId}',
+  label: 'Posts',
+  layout: {
+    sort: ['updatedAt', 'desc'],
+    columns: ['title', 'author', 'status', 'updatedAt'],
+  },
+  fields: {
+    title: s.string({ label: 'Title' }),
+    image: s.asset({ label: 'Image', optional: true }),
+    description: s.string({ label: 'Description', optional: true }),
+    content: s.text({ label: 'Content' }),
+    author: s.map({ fields: {} }), // custom
+    status: s.string({ select: ['published', 'draft'] }),
+    updatedAt: s.timestamp({ auto: 'update' }),
+    createdAt: s.timestamp({ auto: 'create' }),
+    meta: s.map({
+      label: 'SEO page meta',
+      optional: true,
+      fields: {
+        title: s.string({ label: 'Page meta title', optional: true }),
+        description: s.string({ label: 'Page meta description', optional: true }),
+      },
     }),
   },
 })
 
-export const articles = s.defineCollection({
-  path: '/articles/{articleId}',
-  label: 'Articles',
-  titleField: 'title',
-  columns: ['title', 'image'],
-  sort: ['title', 'asc'],
-  fields: {
-    title: s.string({ label: 'Title' }),
-    image: s.image({ label: 'Main image' }),
-    body: s.text({ label: 'Content' }),
-    // updatedAt: s.timestamp({ computed: 'on-update' }),
-    // createdAt: s.timestamp({ computed: 'on-create' }),
-    meta: seoPageMeta,
-  },
-})
-
-export const landing = s.defineDocument({
+const landing = s.defineDocument({
   path: '/pages/landing',
   label: 'Landing page',
   fields: {
-    meta: seoPageMeta,
-    // highlight: s.ref({ label: 'Main article', to: () => articles }),
-    more: s.list({ label: 'Articles', of: s.ref({ of: () => articles }) }),
+    leading: s.ref({ label: 'Leading post', of: () => posts }),
+    highlights: s.list({ label: 'Highlight posts', of: s.ref({ of: () => posts }) }),
   },
 })
 
-export const entities = [articles, landing] as const
-export type Entities = typeof entities
+export const models = [landing, users, invites, posts] as const

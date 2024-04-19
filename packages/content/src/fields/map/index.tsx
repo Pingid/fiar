@@ -1,8 +1,7 @@
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Button } from '@nextui-org/react'
 import { useRef } from 'react'
 import { cn } from 'mcn'
-
-import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Button, Field } from '@fiar/components'
 
 import {
   useFieldPreview,
@@ -15,6 +14,7 @@ import {
   registerField,
 } from '../../context/field.js'
 import type { IFieldMap } from '../../schema/index.js'
+import { Field } from '../../components/index.js'
 
 export const FormFieldMap = () => {
   const form = useFormContext()
@@ -33,11 +33,19 @@ export const FormFieldMap = () => {
             <div />
             <div className="flex items-center gap-1.5">
               {value ? (
-                <Button icon={<XMarkIcon />} variant="ghost" onClick={() => control.field.onChange(undefined)}>
+                <Button
+                  endContent={<XMarkIcon className="h-4 w-4" />}
+                  variant="bordered"
+                  onClick={() => control.field.onChange(undefined)}
+                >
                   Remove
                 </Button>
               ) : (
-                <Button icon={<PlusIcon />} variant="ghost" onClick={() => control.field.onChange({})}>
+                <Button
+                  endContent={<PlusIcon className="h-4 w-4" />}
+                  variant="bordered"
+                  onClick={() => control.field.onChange({})}
+                >
                   Add
                 </Button>
               )}
@@ -104,7 +112,7 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
   if (extra.length === 0) return null
 
   return (
-    <Field {...props} ref={ref}>
+    <>
       <div className="border-error/40 bg-error/5 z-20 border p-3">
         <p className="text-error text-sm">Found undeclared fields in document</p>
         <ul className="pt-2 text-sm">
@@ -121,6 +129,6 @@ export const UndeclaredFields = (props: { schema: IFieldMap; name: string }) => 
           </Button>
         </div>
       </div>
-    </Field>
+    </>
   )
 }

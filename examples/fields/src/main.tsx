@@ -14,4 +14,5 @@ createFiar({
 })
 
 // const className = 'bg-black'
-document.body.classList.add('bg-black')
+document.body.classList.add('bg-back')
+document.body.classList.add('fiar')

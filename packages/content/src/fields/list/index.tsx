@@ -3,7 +3,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { Timestamp } from '@firebase/firestore'
 import { cn } from 'mcn'
 
-import { Field, Sortable, SortableItem } from '@fiar/components'
+import { Sortable, SortableItem } from '@fiar/components'
 
 import {
   FieldProvider,
@@ -16,6 +16,7 @@ import {
 } from '../../context/field.js'
 import { IFieldList, IFields } from '../../schema/index.js'
 import { FormField } from '../../context/field.js'
+import { Field } from '../../components/index.js'
 
 export const PreviewFieldList = () => {
   const field = useFieldPreview<IFieldList>()
@@ -95,7 +96,7 @@ const useFieldList = (props: UseFieldForm<IFieldList>) => {
     fields: ids.current,
     append: (value: any) => {
       const next = [...read(), value]
-      ids.current.push({ id: read().length + 1 })
+      ids.current.push({ id: Date.now() + 1 })
       write(next)
     },
     remove: (index: number) => {

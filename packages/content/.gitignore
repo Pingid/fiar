@@ -6,4 +6,4 @@
 !tsconfig.json
 !.npmignore
 !README.md
-!tailwind.config.ts
+!tailwind.config.cjs

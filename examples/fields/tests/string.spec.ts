@@ -25,6 +25,14 @@ test('validates missing value on submit', async ({ page }) => {
   await expect(page.locator(`label[for="data.pattern"]:has-text("Required")`)).toBeVisible()
   await expect(page.locator(`label[for="data.min"]:has-text("Required")`)).toBeVisible()
   await expect(page.locator(`label[for="data.max"]:has-text("Required")`)).toBeVisible()
+
+  //
+  await page.locator(`label[for="data.string"]`).fill('foo')
+  await page.locator(`label[for="data.multiline"]`).fill('foo\nbar')
+  await page.locator(`label[for="data.multiline"]`).fill('foo\nbar')
+  await page.getByRole('button', { name: 'Publish' }).click()
+  await expect(page.locator(`label[for="data.string"]:has-text("Required")`)).not.toBeVisible()
+  await expect(page.locator(`label[for="data.multiline"]:has-text("Required")`)).not.toBeVisible()
 })
 
 // test('constraints', async ({ page }) => {

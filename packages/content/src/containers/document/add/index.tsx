@@ -1,9 +1,7 @@
-import { ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { collection } from '@firebase/firestore'
 import { useRef } from 'react'
 
 import { useIntercept, useLocation } from '@fiar/workbench/router'
-import { Button } from '@fiar/components'
 import { Header } from '@fiar/workbench'
 
 import { useForm, FormProvider } from '../../../context/field.js'
@@ -14,6 +12,7 @@ import { DocumentFormFields } from '../fields/index.js'
 import { DocumentFormTitle } from '../title/index.js'
 import { useModel } from '../../../context/model.js'
 import { DocumentPublish } from '../save/index.js'
+import { Button } from '@nextui-org/react'
 
 export const DocumentAdd = () => {
   const schema = useModel()
@@ -53,10 +52,15 @@ export const DocumentAdd = () => {
           ]}
         >
           <div className="flex w-full justify-end gap-2 px-3 py-2">
-            <Button type="button" onClick={() => nav(schema.path, { replace: true })}>
+            <Button
+              type="button"
+              color="default"
+              variant="bordered"
+              onClick={() => nav(schema.path, { replace: true })}
+            >
               Cancel
             </Button>
-            <DocumentPublish icon={<ArrowUpTrayIcon />} onClick={onSubmit} title="Publish" />
+            <DocumentPublish onClick={onSubmit} title="Publish" />
           </div>
         </Header>
         <DocumentFormFields schema={schema} />

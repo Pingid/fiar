@@ -3,11 +3,10 @@ import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import { useEffect } from 'react'
 import { cn } from 'mcn'
 
-import { Field, FieldControl } from '@fiar/components'
-
 import { useFormFieldControl, useFieldForm, useFieldPreview, registerField } from '../../context/field.js'
 import { TipTipTools, useTipTapExtensions } from './provider.js'
 import { IFieldString } from '../../schema/index.js'
+import { Field } from '../../components/index.js'
 
 export { TipTapTool, useTipTapExtensions } from './provider.js'
 
@@ -27,6 +26,7 @@ export const FormFieldText = () => {
     content: control.field.value,
     editorProps: {
       attributes: {
+        'aria-label': field.schema.label ?? '',
         class:
           'prose prose-sm sm:prose focus:outline-none min-h-[10rem] bg-back w-full sm:px-8 sm:py-12 py-6 px-5 !max-w-full',
       },
@@ -42,10 +42,10 @@ export const FormFieldText = () => {
 
   return (
     <Field {...field}>
-      <FieldControl error={!!field.error}>
+      <div className={cn('border', [!!field.error, 'border-danger'])}>
         {editor && <EditorControls editor={editor} />}
         <EditorContent editor={editor} />
-      </FieldControl>
+      </div>
     </Field>
   )
 }
@@ -126,6 +126,7 @@ export const TipTapToolButton = ({
   return (
     <button
       {...props}
+      type="button"
       className={cn(
         'disabled:text-front/50 hover:bg-front/5 flex items-center px-2.5 pb-1 pt-1.5',
         [!!active, 'text-active'],

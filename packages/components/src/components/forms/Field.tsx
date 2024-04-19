@@ -13,11 +13,6 @@ export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { err
   'div',
   FieldProps
 >(({ error, name, schema, children, ...props }, ref) => {
-  const DESCRIPTION =
-    typeof schema?.description === 'string' ? (
-      <Markdown className="text-front/50 pb-2 leading-snug">{schema?.description}</Markdown>
-    ) : null
-
   return (
     <div
       ref={ref}
@@ -44,13 +39,13 @@ export const Field: Forward<'div', FieldProps> & { Control: Forward<'div', { err
         {error}
       </label>
 
-      {DESCRIPTION}
+      {schema?.description && <Markdown className="text-front/50 pb-2 leading-snug">{schema?.description}</Markdown>}
       {children}
     </div>
   )
 }) as any
 
-export const FieldControl: Forward<'div', { error?: any }> = forward<'div', { error?: any }>(
+export const FocusFrame: Forward<'div', { error?: any }> = forward<'div', { error?: any }>(
   ({ error, className, ...props }, ref) => (
     <div
       {...props}

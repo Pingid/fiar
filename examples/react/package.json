@@ -13,7 +13,6 @@
   "dependencies": {
     "@fiar/assets": "workspace:^",
     "@fiar/auth": "workspace:^",
-    "@fiar/components": "workspace:^",
     "@fiar/content": "workspace:^",
     "@fiar/rules": "workspace:^",
     "@fiar/schema": "workspace:^",
